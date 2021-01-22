@@ -1,0 +1,94 @@
+---
+title: "Introduction to ChangePointTaylor"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction-to-ChangePointTaylor}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+The ChangePointTaylor package is a simple R implementation of the change in mean detection [method](https://variation.com/wp-content/uploads/change-point-analyzer/change-point-analysis-a-powerful-new-tool-for-detecting-changes.pdf) developed by Wayne Taylor and utilized in his [Change Point Analyzer](https://variation.com/product/change-point-analyzer/) software. The package recursively uses the 'MSE' change point calculation to identify candidate change points. The change points are then re-estimated and Taylor's backwards elimination process is employed to come up with a final set of change points. Many of the underlying functions are written in C++ for improved performance.   
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+## Installation
+
+You can install the released version of ChangePointTaylor from [CRAN](https://CRAN.R-project.org) with:
+
+``` r
+install.packages("ChangePointTaylor")
+```
+
+### Example
+
+Load the package and other needed libraries for this example
+```{r setup}
+library(ChangePointTaylor)
+library(dplyr)
+library(ggplot2)
+```
+
+View the example dataset of US trade deficit data from January 1987 to December 1988.
+```{r paged.print=TRUE}
+US_Trade_Deficit
+```
+Plot the data
+```{r fig.height=4, fig.width=7}
+
+trade_deficit_plot <- US_Trade_Deficit %>%
+  mutate(date = as.Date(paste(date, "1"), format = "%b '%y %d")) %>%
+  ggplot(aes(x = date, y = deficit_billions, group = 1)) +
+  geom_line() +
+  geom_point() +
+  theme_bw() +
+  scale_x_date(date_breaks = "1 month", date_labels = "%b '%y") +
+  theme(
+    axis.text.x = element_text(angle = 45, vjust = 1, hjust =1),
+    axis.title.x = element_blank()
+  ) +
+  ggtitle("US Trade Deficit: 1987-1988")
+  
+trade_deficit_plot
+```
+
+
+In its simplest form, the `change_point_analyzer()` function simply takes a numeric vector and returns the identified change points. However, the output only identifies changes by their index in the original numeric vector. 
+```{r}
+change_point_analyzer(US_Trade_Deficit$deficit_billions)
+```
+
+When a vector of labels, the same length as the `x` values, is supplied to the `label` argument, those labels will be displayed in the output dataframe.
+```{r}
+change_points <- change_point_analyzer(US_Trade_Deficit$deficit_billions, label = US_Trade_Deficit$date)
+change_points
+```
+
+Plot the change points we identified.
+```{r fig.height=4, fig.width=7}
+trade_deficit_plot +
+  geom_vline(xintercept = as.Date(paste(change_points$label, "1"), format = "%b '%y %d"), color = "steelblue", linetype = "dashed", size = 1.3)
+```
+
+
+
+The number of bootstraps can be controlled with the `n_bootstraps` argument. This can reduce stochastic differences between subsequent function calls; however, this comes at the expense of execution speed. 
+```{r message=FALSE, warning=FALSE}
+bench::mark(
+  change_point_analyzer(US_Trade_Deficit$deficit_billions, label = US_Trade_Deficit$date, n_bootstraps = 1000)
+ ,change_point_analyzer(US_Trade_Deficit$deficit_billions, label = US_Trade_Deficit$date, n_bootstraps = 10000)
+  ,check = F
+ ,min_iterations = 2
+ ,max_iterations = 5
+) %>%
+  mutate(expression = c("1000 Bootstraps", "10000 Bootstraps")) %>%
+  select(expression:mem_alloc)
+```
+
+The the user can also adjust the minimum level of confidence a change point must reach to become an initial candidate (`min_candidate_conf`) and the minimum confidence to be included in the final table of change points (`min_tbl_conf`).
+```{r}
+change_point_analyzer(US_Trade_Deficit$deficit_billions, label = US_Trade_Deficit$date, min_candidate_conf = 0.66,  min_tbl_conf = 0.95)
+```
+

@@ -1,0 +1,10 @@
+useDynLib(CautiousLearning, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+importFrom(graphics, lines)
+importFrom(stats, sd, qnorm, runif, rnorm, rchisq, ts, plot.ts)
+importFrom(spc, xewma.crit, xcusum.crit)
+importFrom(parallel, detectCores)
+export(x.cl, ewma.cl, cusum.cl,
+       hasOMP, setOMPThreads, setSITMOSeeds,
+       rcrl, ruv,
+       cautiousLearning)

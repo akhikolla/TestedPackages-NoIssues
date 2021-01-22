@@ -1,0 +1,10 @@
+#$ -N {{ job_name }}
+#$ -j y
+#$ -o {{ log_file | /dev/null }}
+#$ -cwd
+#$ -V
+#$ -t 1-{{ n_jobs }}
+#$ -pe {{ cores | 1 }}
+
+ulimit -v $(( 1024 * {{ memory | 4096 }} ))
+CMQ_AUTH={{ auth }} R --no-save --no-restore -e 'clustermq:::worker("{{ master }}")'

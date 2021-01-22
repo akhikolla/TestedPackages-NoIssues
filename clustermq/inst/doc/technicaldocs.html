@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Technical Documentation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Technical Documentation</h1>
+
+
+
+<style type="text/css">
+img {
+    border: 0px !important;
+    margin: 2em 2em 2em 2em !important;
+}
+code {
+    border: 0px !important;
+}
+</style>
+<div id="worker-api" class="section level2">
+<h2>Worker API</h2>
+<div id="base-api-and-schedulers" class="section level3">
+<h3>Base API and schedulers</h3>
+<p>The main worker functions are wrapped in an <code>R6</code> class with the name of <code>QSys</code>. This provides a standardized API to the <a href="https://mschubert.github.io/clustermq/articles/technicaldocs.html#zeromq-message-specification">lower-level messages</a> that are sent via <a href="https://zeromq.org/"><code>ZeroMQ</code></a>.</p>
+<p>The base class itself is derived in scheduler classes that add the required functions for submitting and cleaning up jobs:</p>
+<pre><code>+ QSys
+  |- Multicore
+  |- LSF
+  + SGE
+    |- PBS
+    |- Torque
+  |- etc.</code></pre>
+<p>A pool of workers can be created using the <code>workers()</code> function, which instantiates an object of the corresponding <code>QSys</code>-derived scheduler class. See <code>?workers</code> for details.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true"></a><span class="co"># start up a pool of three workers using the default scheduler</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true"></a>w =<span class="st"> </span><span class="kw">workers</span>(<span class="dt">n_jobs=</span><span class="dv">3</span>)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true"></a></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true"></a><span class="co"># if we make an unclean exit for whatever reason, clean up the jobs</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true"></a><span class="kw">on.exit</span>(w<span class="op">$</span><span class="kw">finalize</span>())</span></code></pre></div>
+</div>
+<div id="worker-startup" class="section level3">
+<h3>Worker startup</h3>
+<p>For workers that are started up via a scheduler, we do not know which machine they will run on. This is why we start up every worker with a TCP/IP address of the master socket that will distribute work.</p>
+<p>This is achieved by the call to R common to all schedulers:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="ex">R</span> --no-save --no-restore -e <span class="st">&#39;clustermq:::worker(&quot;{{ master }}&quot;)&#39;</span></span></code></pre></div>
+<p>On the master’s side, we wait until a worker connects:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true"></a><span class="co"># this will block until a worker is ready</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true"></a>msg =<span class="st"> </span>w<span class="op">$</span><span class="kw">receive_data</span>()</span></code></pre></div>
+</div>
+<div id="common-data-and-exports" class="section level3">
+<h3>Common data and exports</h3>
+<p>Workers will start up without any knowledge of what they should process or how. In order to transfer initial data to the worker, we first create and serialize a list object with the following fields:</p>
+<ul>
+<li><code>fun</code> - the function to call with iterated data</li>
+<li><code>const</code> - the constant data each function call should receive</li>
+<li><code>export</code> - objects that will be exported to the workers’ <code>.GlobalEnv</code></li>
+<li><code>rettype</code> - character string which data type to return; e.g. <code>list</code>, <code>logical</code></li>
+<li><code>common_seed</code> - random seed for function calls; will be offset by job ID</li>
+<li><code>token</code> - character string to identify this data set; this is optional, if an automatically generated token will be returned if none is given</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a><span class="co"># create a reusable, serialized ZeroMQ object with the common data on the master</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">set_common_data</span>(fun, const, export, rettype, common_seed, token)</span></code></pre></div>
+<p>Workers that connect to the master will send a list with a field <code>token</code>. This can be used to check if the worker already received the common data it is supposed to work on.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a><span class="cf">if</span> (msg<span class="op">$</span>token <span class="op">!=</span><span class="st"> </span><span class="er">&lt;</span>token<span class="op">&gt;</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a>    w<span class="op">$</span><span class="kw">send_common_data</span>()</span></code></pre></div>
+</div>
+<div id="iterated-data" class="section level3">
+<h3>Iterated data</h3>
+<p>If the worker has already received the common data, we can send it a chunk of iterated arguments to work on. These are passed as a list of iterables, e.g. a <code>data.frame</code> with a column for each iterated argument.</p>
+<p>It also needs to have a column with name <code>&lt;space&gt;id&lt;space&gt;</code>, which will be used to identify each call.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>chunk =<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">arg1=</span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dt">arg2=</span><span class="dv">5</span><span class="op">:</span><span class="dv">1</span>, <span class="st">`</span><span class="dt"> id </span><span class="st">`</span>=<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>)</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">send_job_data</span>(chunk)</span></code></pre></div>
+<p>If the worker has finished processing, it will send a message with the field <code>result</code> that is a list, containing:</p>
+<ul>
+<li><code>result</code> - a named rettype with results</li>
+<li><code>warnings</code> - a list with warning messages of individual calls</li>
+<li><code>errors</code> - a list with error messages of individual calls</li>
+</ul>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>msg =<span class="st"> </span>w<span class="op">$</span><span class="kw">receive_data</span>()</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(msg<span class="op">$</span>result)) {</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true"></a>    <span class="co"># store result here, handle errors/warnings if required</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true"></a>}</span></code></pre></div>
+</div>
+<div id="custom-calls" class="section level3">
+<h3>Custom calls</h3>
+<p>Apart from sending common and iterated data that the worker will process in chunks, it is also possible to send arbitrary calls that it will evaluate. It needs the following fields:</p>
+<ul>
+<li><code>expr</code> - the expression to be evaluated</li>
+<li><code>env</code> - list with all additional objects required to perform the call</li>
+<li><code>ref</code> - an identifier for the call; will default to the expression itself</li>
+</ul>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">send_call</span>(expr, <span class="dt">env=</span><span class="kw">list</span>(...), <span class="dt">ref=</span><span class="st">&quot;mycall1&quot;</span>)</span></code></pre></div>
+</div>
+<div id="main-event-loop" class="section level3">
+<h3>Main event loop</h3>
+<p>Putting the above together in an event loop, we get what is essentially implemented in <code>master</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a>w =<span class="st"> </span><span class="kw">workers</span>(<span class="dv">3</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a><span class="kw">on.exit</span>(w<span class="op">$</span><span class="kw">finalize</span>())</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="cf">while</span> (we have new work to send) {</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true"></a>    msg =<span class="st"> </span>w<span class="op">$</span><span class="kw">receive_data</span>()</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true"></a>    <span class="cf">if</span> (<span class="op">!</span><span class="kw">is.null</span>(msg<span class="op">$</span>result))</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true"></a>        <span class="co"># handle result</span></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true"></a>    <span class="cf">if</span> (msg<span class="op">$</span>token <span class="op">!=</span><span class="st"> </span><span class="er">&lt;</span>token<span class="op">&gt;</span>)</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true"></a>        w<span class="op">$</span><span class="kw">send_common_data</span>()</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true"></a>    <span class="cf">else</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true"></a>        w<span class="op">$</span><span class="kw">send_job_data</span>(...)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true"></a>}</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true"></a></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true"></a><span class="co"># if proper cleanup is successful, cancel kill-on-exit</span></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true"></a><span class="cf">if</span> (w<span class="op">$</span><span class="kw">cleanup</span>())</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true"></a>    <span class="kw">on.exit</span>()</span></code></pre></div>
+<p>A loop of a similar structure can be used to extend <code>clustermq</code>. As an example, <a href="https://github.com/ropensci/drake/blob/v7.9.0/R/backend_clustermq.R">this was done by <code>drake</code></a> using common data and custom calls only (no iterated chunks).</p>
+</div>
+</div>
+<div id="zeromq-message-specification" class="section level2">
+<h2>ZeroMQ message specification</h2>
+<p>Communication between the <code>master</code> (main event loop) and workers (<code>QSys</code> base class) is organised in <em>messages</em>. These are chunks of serialized data with an <code>id</code> field, and other data that is required for this type of message.</p>
+<div id="messages-per-type" class="section level3">
+<h3>Messages per type</h3>
+<p>Below, the message <code>id</code> is listed with the additional fields per message.</p>
+<div id="worker" class="section level4">
+<h4>Worker</h4>
+<p>This workflow is handled by the <code>worker()</code> event loop of <code>clustermq</code> (not to be confused with the <code>workers()</code> control). It is the function called in every job or thread to interact with the <code>master()</code>. The event loop is internal, i.e. it is not modifiable and not exported.</p>
+<div id="worker_up" class="section level5">
+<h5><code>WORKER_UP</code></h5>
+<ul>
+<li>Message ID indicating worker is accepting data</li>
+<li>Field has to be <code>worker_id</code> to master or empty to ssh_proxy</li>
+<li>Answer is serialized common data (<code>fun</code>, <code>const</code>, and <code>seed</code>) or <code>redirect</code> (with URL where worker can get data)</li>
+</ul>
+</div>
+<div id="worker_ready" class="section level5">
+<h5><code>WORKER_READY</code></h5>
+<ul>
+<li>Message ID indicating worker is accepting chunks</li>
+<li>It may contain the field <code>result</code> with a finished chunk</li>
+<li>If processing failed, <code>result</code> is an object of type <code>error</code></li>
+<li>If success, <code>result</code> is a list with the following vectors:
+<ul>
+<li><code>result</code> is a named <code>rettype</code> with results</li>
+<li><code>warnings</code> is a list with warning messages of individual calls</li>
+<li><code>errors</code> is a list with error messages of individual calls</li>
+</ul></li>
+</ul>
+</div>
+<div id="worker_done" class="section level5">
+<h5><code>WORKER_DONE</code></h5>
+<ul>
+<li>Message ID indicating worker is shutting down</li>
+<li>Worker will send this in response to <code>WORKER_STOP</code></li>
+<li>Field has to be <code>time</code> (from <code>Sys.time()</code>), <code>mem</code> (max memory used) and <code>calls</code> (number of processed calls)</li>
+</ul>
+</div>
+<div id="worker_error" class="section level5">
+<h5><code>WORKER_ERROR</code></h5>
+<ul>
+<li>Some error occurred in processing flow (not the function calls themselves)</li>
+<li>Field <code>msg</code> is describing the error</li>
+<li>Master will shut down after receiving this signal</li>
+</ul>
+</div>
+</div>
+<div id="master" class="section level4">
+<h4>Master</h4>
+<p>This workflow is handled by the <code>master()</code> function of <code>clustermq</code>. If you are using <code>Q()</code> or <code>Q_rows()</code>, this is handled under the hood. Workers created outside of these functions can be reused within <code>Q()</code>/<code>Q_rows()</code> without knowing any of the internal message structure.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>w =<span class="st"> </span><span class="kw">workers</span>(n_jobs, ...)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="co"># w$cleanup() for a clean shutdown at the end</span></span></code></pre></div>
+<p>The documentation below is to show it is possible to implement a custom control flow, e.g. if you want to evaluate arbitrary expressions on workers instead of defining one function to call and different arguments.</p>
+<div id="do_setup" class="section level5">
+<h5><code>DO_SETUP</code></h5>
+<ul>
+<li>Message contains common data, like the function to call and its arguments</li>
+<li>Required fields are: <code>fun</code>, <code>const</code>, <code>export</code>, <code>rettype</code>, <code>common_seed</code>, <code>token</code></li>
+<li>Worker will respond with <code>WORKER_READY</code></li>
+</ul>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="co"># create a reusable, serialized ZeroMQ object with the common data on the master</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">set_common_data</span>()</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a><span class="co"># send this object to a worker</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">send_common_data</span>()</span></code></pre></div>
+</div>
+<div id="do_chunk" class="section level5">
+<h5><code>DO_CHUNK</code></h5>
+<ul>
+<li>Chunk of iterated arguments for the worker</li>
+<li>Field has to be <code>chunk</code>, a <code>data.frame</code> where each row is a call and columns are arguments</li>
+<li>Row names of <code>chunk</code> are used as call IDs</li>
+</ul>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">send_job_data</span>()</span></code></pre></div>
+</div>
+<div id="do_call-new-in-0.8.5" class="section level5">
+<h5><code>DO_CALL</code> (new in <code>0.8.5</code>)</h5>
+<ul>
+<li>Evaluate a specific expression on the worker</li>
+<li>Needs fields <code>expr</code> (the expression to be evaluated) and <code>env</code> (list environment to evaluate it in)</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">send_call</span>()</span></code></pre></div>
+</div>
+<div id="worker_wait" class="section level5">
+<h5><code>WORKER_WAIT</code></h5>
+<ul>
+<li>Instruct the worker to wait <code>wait</code> seconds</li>
+<li>Worker will respond with <code>WORKER_READY</code></li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">send_wait</span>()</span></code></pre></div>
+</div>
+<div id="worker_stop" class="section level5">
+<h5><code>WORKER_STOP</code></h5>
+<ul>
+<li>Instruct the worker to exit its main event loop</li>
+<li>This message has no fields</li>
+</ul>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">send_shutdown_worker</span>()</span></code></pre></div>
+</div>
+<div id="disconnect-and-reset-socket-state" class="section level5">
+<h5>Disconnect and reset socket state</h5>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">disconnect_worker</span>()</span></code></pre></div>
+</div>
+</div>
+</div>
+<div id="control-flow-stages" class="section level3">
+<h3>Control flow stages</h3>
+<p>The convention here is</p>
+<ul>
+<li>worker &gt; master
+<ul>
+<li>master &gt; worker</li>
+</ul></li>
+</ul>
+<div id="batch-processing-no-proxy" class="section level4">
+<h4>Batch processing, no proxy</h4>
+<p>This is the default use case for <code>Q</code>, <code>Q_rows</code>. It will set the common data (<code>DO_SETUP</code>; function to call, constant arguments, exported data, random seed) once and then provide chunks of arguments (<code>DO_CHUNK</code>) as <code>data.frame</code>s for batch processing.</p>
+<ul>
+<li><code>WORKER_UP</code>
+<ul>
+<li><code>DO_SETUP</code></li>
+</ul></li>
+<li><code>WORKER_READY</code> <em>[repeat]</em>
+<ul>
+<li><code>DO_CHUNK</code> <em>[repeat]</em></li>
+</ul></li>
+<li><code>WORKER_READY</code>
+<ul>
+<li><code>WORKER_STOP</code></li>
+</ul></li>
+<li><code>WORKER_DONE</code></li>
+</ul>
+<p>These can be implemented the following way:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">set_common_data</span>(...)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a><span class="cf">while</span>(work remaining or w<span class="op">$</span>workers_running <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true"></a>    msg =<span class="st"> </span>w<span class="op">$</span><span class="kw">receive_data</span>() <span class="co"># wait until a worker is ready</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true"></a>    <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_UP&quot;</span>) { <span class="co"># treat same as WORKER_READY if no common data</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true"></a>        w<span class="op">$</span><span class="kw">send_common_data</span>()</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_READY&quot;</span>) {</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true"></a>        <span class="cf">if</span> (work remaining)</span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true"></a>            w<span class="op">$</span><span class="kw">send_job_data</span>(data.frame with arguments <span class="cf">for</span> all calls of this chunk)</span>
+<span id="cb18-10"><a href="#cb18-10" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb18-11"><a href="#cb18-11" aria-hidden="true"></a>            w<span class="op">$</span><span class="kw">send_shutdown_worker</span>()</span>
+<span id="cb18-12"><a href="#cb18-12" aria-hidden="true"></a>        <span class="co"># ..handle your result..</span></span>
+<span id="cb18-13"><a href="#cb18-13" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_DONE&quot;</span>) {</span>
+<span id="cb18-14"><a href="#cb18-14" aria-hidden="true"></a>        w<span class="op">$</span><span class="kw">disconnect_worker</span>()</span>
+<span id="cb18-15"><a href="#cb18-15" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_ERROR&quot;</span>) {</span>
+<span id="cb18-16"><a href="#cb18-16" aria-hidden="true"></a>        <span class="kw">stop</span>(<span class="st">&quot;processing error&quot;</span>)</span>
+<span id="cb18-17"><a href="#cb18-17" aria-hidden="true"></a>    }</span>
+<span id="cb18-18"><a href="#cb18-18" aria-hidden="true"></a>}</span></code></pre></div>
+</div>
+<div id="evaluating-custom-expressions" class="section level4">
+<h4>Evaluating custom expressions</h4>
+<p>This can be mixed with batch processing, as long as <code>DO_SETUP</code> is called before <code>DO_CHUNK</code> (otherwise it will cause <code>WORKER_ERROR</code> on token mismatch).</p>
+<ul>
+<li><code>WORKER_UP</code>
+<ul>
+<li><code>DO_SETUP</code> or <code>DO_CALL</code> (e.g. to export commonly used data)</li>
+</ul></li>
+<li><code>WORKER_READY</code> <em>[repeat]</em>
+<ul>
+<li><code>DO_CALL</code> <em>[repeat]</em></li>
+</ul></li>
+<li><code>WORKER_READY</code>
+<ul>
+<li><code>WORKER_STOP</code></li>
+</ul></li>
+<li><code>WORKER_DONE</code></li>
+</ul>
+<p>These can be implemented the following way:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>w<span class="op">$</span><span class="kw">set_common_data</span>(...) <span class="co"># optional, if common data required</span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a></span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a><span class="cf">while</span>(work remaining or w<span class="op">$</span>workers_running <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>) {</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true"></a>    msg =<span class="st"> </span>w<span class="op">$</span><span class="kw">receive_data</span>() <span class="co"># wait until a worker is ready</span></span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true"></a>    <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_UP&quot;</span>) { <span class="co"># treat same as WORKER_READY if no common data</span></span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true"></a>        w<span class="op">$</span><span class="kw">send_common_data</span>()</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_READY&quot;</span>) {</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true"></a>        <span class="cf">if</span> (work remaining)</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true"></a>            w<span class="op">$</span><span class="kw">send_call</span>(expr, env)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true"></a>        <span class="cf">else</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true"></a>            w<span class="op">$</span><span class="kw">send_shutdown_worker</span>()</span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true"></a>        <span class="co"># ..handle your result..</span></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_DONE&quot;</span>) {</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true"></a>        w<span class="op">$</span><span class="kw">disconnect_worker</span>()</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true"></a>    } <span class="cf">else</span> <span class="cf">if</span> (msg<span class="op">$</span>id <span class="op">==</span><span class="st"> &quot;WORKER_ERROR&quot;</span>) {</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true"></a>        <span class="kw">stop</span>(<span class="st">&quot;processing error&quot;</span>)</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true"></a>    }</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true"></a>}</span></code></pre></div>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

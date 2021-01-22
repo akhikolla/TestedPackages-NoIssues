@@ -1,0 +1,11 @@
+764c794543ee5eac13497b3d5b7d9532 *ChangeLog
+0f621f76b54c666312184ff70d2ed37a *DESCRIPTION
+67d54e3a2d85f82f81e101f26fe8b7be *NAMESPACE
+f5fa0603f3d577ed2713858dba03b644 *R/RcppExports.R
+b05ed5bdc1133226740c3ff973ea16e7 *R/cord.R
+2de1a4cba815da89ee232f49ad766995 *man/cord.Rd
+2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars
+8d46d69896a1f1d31ed76035a0e49d67 *src/Makevars.win
+12b11b81fe685012418af8298c5f390d *src/RcppExports.cpp
+0491d3f09229c1268c3652d559901d84 *src/cordDist.cpp
+b460ed375351638003505fb5077f01de *src/greedyCord.cpp

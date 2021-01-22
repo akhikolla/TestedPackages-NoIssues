@@ -1,0 +1,6 @@
+1.0.0: First public release (July 2019)
+
+1.0.1: Correction of a (de)allocation mismatch. Thanks to
+       prof. Brian D. Ripley for pointing to the problem.
+       (July 2019)
+       

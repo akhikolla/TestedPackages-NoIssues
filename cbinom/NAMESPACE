@@ -1,0 +1,7 @@
+useDynLib(cbinom, .registration=TRUE)
+export(dcbinom)
+export(pcbinom)
+export(qcbinom)
+export(rcbinom)
+importFrom(Rcpp, evalCpp)
+importFrom("stats", "pbeta", "runif")

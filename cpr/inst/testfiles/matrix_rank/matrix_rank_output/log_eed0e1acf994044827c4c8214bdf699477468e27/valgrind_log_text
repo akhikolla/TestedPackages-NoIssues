@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (cpr_deepstate_test_matrix_rank_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/cpr/inst/testfiles/matrix_rank/matrix_rank_output/eed0e1acf994044827c4c8214bdf699477468e27.pass`
+TRACE: Running: cpr_deepstate_test_matrix_rank_test from /home/akhila/fuzzer_packages/fuzzedpackages/cpr/inst/testfiles/matrix_rank/matrix_rank_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: cpr_deepstate_test_matrix_rank_test

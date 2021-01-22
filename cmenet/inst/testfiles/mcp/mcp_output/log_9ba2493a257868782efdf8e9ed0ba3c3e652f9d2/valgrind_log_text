@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (cmenet_deepstate_test_mcp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/cmenet/inst/testfiles/mcp/mcp_output/9ba2493a257868782efdf8e9ed0ba3c3e652f9d2.pass`
+TRACE: Running: cmenet_deepstate_test_mcp_test from /home/akhila/fuzzer_packages/fuzzedpackages/cmenet/inst/testfiles/mcp/mcp_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: 1.27048e-62
+lambda values: -2.88162e-134
+gamma values: 8.18711e+299
+input ends
+TRACE: Passed: cmenet_deepstate_test_mcp_test

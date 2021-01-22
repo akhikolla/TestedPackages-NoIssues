@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Jakub Nowosad" />
+
+<meta name="date" content="2020-10-10" />
+
+<title>A co-occurrence matrix (coma) representation</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">A co-occurrence matrix (coma) representation</h1>
+<h4 class="author">Jakub Nowosad</h4>
+<h4 class="date">2020-10-10</h4>
+
+
+
+<p>This vignette explains what a co-occurrence matrix (<em>coma</em>) representation is and how to calculate it using the <strong>comat</strong> package. The examples below assume the <strong>comat</strong> package is attached, and the <code>raster_x</code> dataset is loaded:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(comat)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">data</span>(raster_x, <span class="dt">package =</span> <span class="st">&quot;comat&quot;</span>)</span></code></pre></div>
+<p>Categorical raster data is used to store and analyze the spatial distribution of some distinct classes, such as land cover categories or soil classes. A simple example can be seen below:</p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAYAAAAGACAMAAACTGUWNAAAACVBMVEUARsgAZAD//2SYsk4VAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAEfElEQVR4nO3RMQEAMAzDsG78QReGjloMEs8/bjR9gKb/L4CmD9D0/wXQ9AGa/r8Amj5A0/8XQNMHaPr/Amj6AE3/XwBNH6Dp/wug6QM0/X8BNH2Apv8vgKYP0PT/BdD0AZr+vwCaPkDT/xdA0wdo+v8CaPoATf9fAE0foOn/C6DpAzT9fwE0fYCm/y+Apg/Q9P8F0PQBmv6/AJo+QNP/F0DTB2j6/wJo+gBN/18ATR+g6f8LoOkDNP1/ATR9gKb/L4CmD9D0/wXQ9AGa/r8Amj5A0/8XQNMHaPr/Amj6AE3/XwBNH6Dp/wug6QM0/X8BNH2Apv8vgKYP0PT/BdD0AZr+vwCaPkDT/xdA0wdo+v8CaPoATf9fAE0foOn/C6DpAzT9fwE0fYCm/y+Apg/Q9P8F0PQBmv6/AJo+QNP/F0DTB2j6/wJo+gBN/18ATR+g6f8LoOkDNP1/ATR9gKb/L4CmD9D0/wXQ9AGa/r8Amj5A0/8XQNMHaPr/Amj6AE3/XwBNH6Dp/wug6QM0/X8BNH2Apv8vgKYP0PT/BdD0AZr+vwCaPkDT/xdA0wdo+v8CaPoATf9fAE0foOn/C6DpAzT9Pw+g93MFwAqAFQArAFYArABYAbACYAXACoAVACsAVgCsAFgBsAJgBcAKgBUAKwBWAKwAWAGwAmAFwAqAFQArAFYArABYAbACYAXACoAVACsAVgCsAFgBsAJgBcAKgBUAKwBWAKwAWAGwAmAFwAqAFQArAFYArABYAbACYAXACoAVACsAVgCsAFgBsAJgBcAKgBUAKwBWAKwAWAGwAmAFwAqAFQArAFYArABYAbACYAXACoAVACsAVgCsAFgBsAJgBcAKgBUAKwBWAKwAWAGwAmAFwAqAFQArAFYArABYAbACYAXACoAVACsAVgCsAFgBsAJgBcAKgBUAKwBWAKwAWAGwAmAFwAqAFQArAFYArABYAbB3nP6/AJo+QNP/F0DTB2j6/wJo+gBN/18ATR+g6f8LoOkDNP1/ATR9gKb/L4CmD9D0/wXQ9AGa/r8Amj5A0/8XQNMHaPr/Amj6AE3/XwBNH6Dp/wug6QM0/X8BNH2Apv8vgKYP0PT/BdD0AZr+vwCaPkDT/xdA0wdo+v8CaPoATf9fAE0foOn/C6DpAzT9fwE0fYCm/y+Apg/Q9P8F0PQBmv6/AJo+QNP/F0DTB2j6/wJo+gBN/18ATR+g6f8LoOkDNP1/ATR9gKb/L4CmD9D0/wXQ9AGa/r8Amj5A0/8XQNMHaPr/Amj6AE3/XwBNH6Dp/wug6QM0/X8BNH2Apv8vgKYP0PT/BdD0AZr+vwCaPkDT/xdA0wdo+v8CaPoATf9fAE0foOn/C6DpAzT9fwE0fYCm/y+Apg/Q9P8F0PQBmv6/AJo+QNP/F0DTB2j6/wJo+gBN/18ATR+g6f8LoOkDNP1/ATR9gKb/L4CmD9D0/wXQ9AGa/r8Amj5A0/8XQNMHaPr/Amj6AE3/XwBNH6Dp/wug6QM0/X8BNH2Apv8vgKYP0PT/BcAWx4cAHz06gJcAAAAASUVORK5CYII=" /><!-- --></p>
+<p>We can imagine that yellow color represents agriculture, green is forest, and blue represents water. However, this data is not stored as a set of colors, but rather as a matrix, where each value can be connected to some color:</p>
+<pre><code>#&gt;      [,1] [,2] [,3]
+#&gt; [1,]    1    1    3
+#&gt; [2,]    1    3    3
+#&gt; [3,]    2    2    3</code></pre>
+<p>The value of 1 is agriculture, 2 is forest, and 3 represents water. It is reasonably easy to describe this data (landscape) in words: 4/9 (~44%) of the area is covered by water, 3/9 (~33%) by agriculture, and 2/9 (~22%). Water is located in the central and east part of the area, agriculture in the west and north part, while forest in the south-western part.</p>
+<p>This example is tiny, with just nine different square areas/cells (a grid of three by three cells). However, categorical rasters used in standard analyses are usually many times larger, with grids of millions or even billions of cells. It is not possible to concisely describe these large datasets using the same approach as above.</p>
+<p>This is exactly a role for a co-occurrence matrix (<em>coma</em>) representation. It goes to each cell, looks at its value, looks at the values of its neighbors (either four or eight direct neighbors, see below), and count how many neighbors of each class our central cell has.</p>
+<p>We can use the <code>get_coma()</code> function to calculate this co-occurrence matrix (<em>coma</em>) representation for our small raster:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">get_coma</span>(raster_x)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="co">#&gt;   1 2 3</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; 1 4 1 3</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="co">#&gt; 2 1 2 2</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; 3 3 2 6</span></span></code></pre></div>
+<p>This output shows that cells of the first category are four times adjacent to other cells of this category, two times cells of the second category are adjacent to other cells of this category, and six times cells of the third category are adjacent to cells of the third category. We can also see that one time cell of the first category is adjacent to any other cells of the second category, and so on. This way, we can compactly describe spatial relationships between categories, but also if we just count values in rows (or columns), we can see proportions of each category. Therefore, this representation describes both the composition and spatial configuration of the values.</p>
+<p>An orthogonal neighbour means that connectivity is determined by having a shared side and are thus not simply joined via a corner.</p>
+<p>By default, the <code>get_coma()</code> function uses 4-neighborhood, composed of a central cell and its four adjacent cells (they share a border/side). However, it is also possible to use 8-neighborhood, where adjacent cells with shared corners are also used:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">get_coma</span>(raster_x, <span class="dt">neighbourhood =</span> <span class="dv">8</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt;   1 2  3</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; 1 6 2  5</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="co">#&gt; 2 2 2  4</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="co">#&gt; 3 5 4 10</span></span></code></pre></div>
+<p>Finally, we are sometimes not interested in some spatial relationships. For example, we just want to know the relationship between agriculture and forest. Then we can adjust the <code>classes</code> argument in <code>get_coma()</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">get_coma</span>(raster_x, <span class="dt">classes =</span> <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt;   1 2</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; 1 4 1</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; 2 1 2</span></span></code></pre></div>
+<p>The co-occurrence matrix (<em>coma</em>) representation is two-dimensional, with values of categories in row and columns. It can be also converted into a one-dimensional representation called a co-occurrence vector (<em>cove</em>) using the <code>get_cove()</code> function. This function takes the output of <code>get_coma()</code> and restructure it into one row with many columns. It also makes it possible to normalize the output to sum to one (<code>normalization = &quot;pdf&quot;</code>).</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>my_coma =<span class="st"> </span><span class="kw">get_coma</span>(raster_x)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="kw">get_cove</span>(my_coma, <span class="dt">normalization =</span> <span class="st">&quot;pdf&quot;</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt;           [,1]       [,2]  [,3]       [,4]       [,5]       [,6]  [,7]</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; [1,] 0.1666667 0.04166667 0.125 0.04166667 0.08333333 0.08333333 0.125</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt;            [,8] [,9]</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; [1,] 0.08333333 0.25</span></span></code></pre></div>
+<p>This representation can be useful to compare many areas with each other using measures of the similarity between two probability distributions, such as Jensen–Shannon divergence.</p>
+<p>To learn more about the co-occurrence matrix (<em>coma</em>) representation, you can read two blog posts: <a href="https://nowosad.github.io/post/pattern-based-spatial-analysis-core-ideas/">Pattern-based Spatial Analysis - core ideas</a> and <a href="https://nowosad.github.io/post/ent-bp1/">Information theory provides a consistent framework for the analysis of spatial patterns</a>.</p>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

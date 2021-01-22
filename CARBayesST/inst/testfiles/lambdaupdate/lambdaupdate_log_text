@@ -1,0 +1,108 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (CARBayesST_deepstate_test_lambdaupdate_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+Nchains values: 467495432
+Missing value
+temp values: 8.54740e+170 3.67846e-273 2.86555e+90
+5.04452e-247 7.13031e-238 4.82067e+210
+8.08981e-307 2.26826e-294     nan
+2.29399e+239 1.69215e-72 2.94576e+186
+4.28533e-122     nan 3.05509e-115
+2.04438e-122 1.54154e-261    -inf
+2.80120e+306 1.75553e+70 2.44675e+228
+
+input ends
+terminate called after throwing an instance of 'Rcpp::not_compatible'
+  what():  Cannot convert object to an environment: [type=character; target=ENVSXP].
+ERROR: Failed: CARBayesST_deepstate_test_lambdaupdate_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/CARBayesST/inst/testfiles/lambdaupdate/lambdaupdate_output/14cf84c1c23948d7df9d00f722adb0ec4abcf7eb.fail`
+input starts
+EXTERNAL: qs v0.23.4.
+
+Nchains values: -498905818
+Missing value
+temp values: 3.99781e-50 5.05848e+221 4.90150e-220 1.28950e+61 5.25450e-141 9.41578e-290    -inf 5.84307e-111
+    nan 2.46496e+178 7.86225e+130 3.03913e-214 2.09809e-225 1.56771e-142 6.52422e+104    -inf
+2.80774e+128 2.50593e-73 9.07160e+161     nan 2.01913e-53 1.55225e-270 2.82187e-13 -1.17448e-142
+
+input ends
+terminate called after throwing an instance of 'Rcpp::not_compatible'
+  what():  Cannot convert object to an environment: [type=character; target=ENVSXP].
+ERROR: Failed: CARBayesST_deepstate_test_lambdaupdate_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/CARBayesST/inst/testfiles/lambdaupdate/lambdaupdate_output/1fa4c45b1e70d1e96bf416f4972a12d2176dbb8c.fail`
+input starts
+EXTERNAL: qs v0.23.4.
+
+Nchains values: -293123844
+temp values: 3.15918e-218 5.74145e+63 1.33217e+33 5.39986e+265 5.18129e+69 4.71727e-75 2.86008e-50 5.75714e-126
+3.97822e+54 3.79245e+62 9.76542e+210 5.98733e-195 6.22685e+304 2.98963e-36 2.32797e+145 2.81754e-125
+4.82988e+218 7.20083e-237 1.89087e-207 7.79026e-248 6.03441e-216 1.44019e-33 4.84344e-188 2.94390e-273
+1.47330e+15 2.40019e-123 5.96710e+222 2.56543e+139 1.46265e+159 2.16906e-76 1.52871e-30 3.69649e+59
+7.10923e-256 3.54574e-53 4.04706e+285 1.64069e+273 3.47153e-38 2.79761e-19 6.17509e+202 2.79036e+70
+6.49414e+270 4.91130e-265 3.76266e-189 6.03484e+17 8.27272e+265 9.15176e-141 1.64371e+109 8.81499e-78
+1.71178e+279 1.69739e-184 6.43237e+268 1.08393e+32 3.18678e-42 1.91851e-134 4.05909e-90 1.23373e-286
+
+input ends
+terminate called after throwing an instance of 'Rcpp::not_compatible'
+  what():  Cannot convert object to an environment: [type=character; target=ENVSXP].
+ERROR: Failed: CARBayesST_deepstate_test_lambdaupdate_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/CARBayesST/inst/testfiles/lambdaupdate/lambdaupdate_output/62234f0f324e38b856bdd8e4821e6abddd01c01f.fail`
+input starts
+EXTERNAL: qs v0.23.4.
+
+Nchains values: -1105761949
+Missing value
+temp values: 3.69023e+147 9.70185e+17
+8.93544e+274 4.70547e-157
+1.30070e+206 1.04667e-268
+1.27891e-188     nan
+3.67200e+194 9.62182e-239
+    nan     nan
+
+input ends
+terminate called after throwing an instance of 'Rcpp::not_compatible'
+  what():  Cannot convert object to an environment: [type=character; target=ENVSXP].
+ERROR: Failed: CARBayesST_deepstate_test_lambdaupdate_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/CARBayesST/inst/testfiles/lambdaupdate/lambdaupdate_output/f675d32f3934684bcdd484644ee09a780fdd2fc5.fail`
+input starts
+EXTERNAL: qs v0.23.4.
+
+Nchains values: 954479852
+temp values: 2.64700e+246 7.54373e+86 2.43883e+77 2.15982e-87 2.16047e+85 1.67932e-05 2.96637e-179 4.71464e-181
+2.58599e-226 2.55185e-198 7.04577e+103 4.33126e+67 7.04970e-26 9.79851e-176 2.50000e-27 0.326716
+1.02145e-290 4.05761e+132 2.51230e+118 7.01722e-262 8.95979e-293 3.31171e+251 3.12625e+237 3.08269e+29
+1.23758e-38 1.31508e-296 5.06900e-28 7.03907e-08 2.08892e+09 2.74202e+177 4.60981e-05 1.00786e+257
+4.13229e+222 1.47812e+236 1.23220e-289 2.59971e+193 3.56143e-35 7.74141e+146 2.77833e-194 3.40146e-106
+7.14262e+14 3.79730e-286 2.70433e-194 8.72173e+307 6.58865e-201 3.32724e-134 1.36989e+66 3.37879e-245
+2.42619e+138 3.13076e-205 1.11354e-241 7.16028e-152 5.85232e-123 1.34529e-135 4.18190e-154 7.97144e+68
+3.88028e-308 9.88890e-275 5.31005e-113 1.39401e-173 9.21294e-119 2.77702e+231 1.91541e-195 7.56171e+282
+3.92569e+223 1.56786e-249 2.65321e+185 1.47135e+192 4.09183e+219 3.34085e+137 4.02415e-106 1.17901e+101
+
+input ends
+terminate called after throwing an instance of 'Rcpp::not_compatible'
+  what():  Cannot convert object to an environment: [type=character; target=ENVSXP].
+ERROR: Failed: CARBayesST_deepstate_test_lambdaupdate_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/CARBayesST/inst/testfiles/lambdaupdate/lambdaupdate_output/9e7f6f18c0c69373e4c5c631fef91a3b8aae9b65.fail`
+input starts
+EXTERNAL: qs v0.23.4.
+
+Nchains values: 1344097580
+temp values: 2.30885e-77 5.84367e+187 7.27217e-203 1.02891e+56 1.03398e+229 4.22306e-111
+1.06309e-44 5.86656e-52 1.51480e+306 3.79716e-114 1.75912e+34 2.83776e-33
+3.56323e+31 6.42394e-13 1.35951e+221 5.98951e-240 1.04163e+24 1.56041e+288
+2.21717e+173 1.47104e-106 5.33956e-262 1.55529e-212 1.61622e+56 7.26305e-191
+5.49291e+304 9.83713e+287 6.47164e+284 4.32870e-186 1.59530e+206 1.27361e+122
+1.44435e-232 1.00257e+213 7.74348e+233 7.59061e-207 249451. 1.05089e-159
+1.05852e+159 1.12126e+42 1.91862e+112 5.17878e+275 2.20648e-22 1.12905e+58
+8.52754e-134 5.15230e-135 3.67399e+106 4.59795e+49 1.38932e+218 9.09123e+188
+2.68101e-48 1.41914e+123 1.39820e+87 6.49871e+223 1.15383e+190 1.10213e-305
+3.33033e+51 1.08958e+173 95370.8 1.06726e+296 7.31028e-227 6.12492e+144
+
+input ends
+terminate called after throwing an instance of 'Rcpp::not_compatible'
+  what():  Cannot convert object to an environment: [type=character; target=ENVSXP].
+ERROR: Failed: CARBayesST_deepstate_test_lambdaupdate_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/CARBayesST/inst/testfiles/lambdaupdate/lambdaupdate_output/d6d73546346a8458ba76042cd50191b678ead200.fail`
+INFO: Done fuzzing! Ran 6 tests (3 tests/second) with 6 failed/0 passed/0 abandoned tests

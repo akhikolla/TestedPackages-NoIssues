@@ -1,0 +1,19 @@
+WARNING: No test specified, defaulting to first test defined (crandep_deepstate_test_mcmc_upp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/crandep/inst/testfiles/mcmc_upp/mcmc_upp_output/ecb573aa2c9b1b76668ec623f112f00dcb23fce1.pass`
+TRACE: Running: crandep_deepstate_test_mcmc_upp_test from /home/akhila/fuzzer_packages/fuzzedpackages/crandep/inst/testfiles/mcmc_upp/mcmc_upp_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: 1.27891e-188 7.52749e+12 -2.14488e+105 inf -2.02048e-44 nan 3.42032e-93 8.27932e-269 -4.36409e-38 inf 0
+u values: 2069757405
+xi1 values: 3.57164e+306
+a_xi1 values: 5.10745e-90
+b_xi1 values: -2.60609e-23
+N values: 2022640883
+thin values: -334901093
+burnin values: -1137699589
+print_freq values: -2002159097
+input ends
+Exception Handled
+TRACE: Passed: crandep_deepstate_test_mcmc_upp_test

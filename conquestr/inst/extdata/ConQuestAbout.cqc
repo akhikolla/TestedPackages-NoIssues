@@ -1,0 +1,4 @@
+/* this file is used to return a few CQ settings to R */
+dir;
+about;
+/* exit; */

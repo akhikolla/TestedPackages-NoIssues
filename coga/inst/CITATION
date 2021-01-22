@@ -1,0 +1,29 @@
+citHeader("To cite coga in publications use:")
+
+citEntry(entry = "Manual",
+         Title = "{coga}: Convolution of Gamma Distributions",
+         Author = personList(as.person("Chaoran Hu"),
+                             as.person("Vladimir Pozdnyakov"),
+                             as.person("Jun Yan")),
+         Note = "R package version 1.1.0",
+         Year =	"2019",
+         Url = "https://github.com/ChaoranHu/coga",
+         
+         textVersion = paste("Hu, C., Pozdnyakov, V., Yan, J. (2019). coga:",
+                             "Convolution of Gamma Distributions.",
+                             "R package version 1.1.0",
+                             "https://github.com/ChaoranHu/coga")
+)
+
+citEntry(entry = "Article",
+         title = "Density and Distribution Evaluation for Convolution of Independent Gamma Variables",
+         author = personList(as.person("Chaoran Hu"),
+                             as.person("Vladimir Pozdnyakov"),
+                             as.person("Jun Yan")),
+         journal = "Computational Statistics",
+         year = "2019",
+         doi = "10.1007/s00180-019-00924-9",
+         textVersion =
+             paste("Hu, C., Pozdnyakov, V., and Yan, J. (2019). Density and Distribution Evaluation for Convolution of Independent Gamma Variables. Computational Statistics. (doi:10.1007/s00180-019-00924-9)")
+)
+

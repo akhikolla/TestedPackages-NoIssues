@@ -1,0 +1,17 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (colorednoise_deepstate_test_unstructured_pop_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+start values: 467495432
+timesteps values: 1827680409
+survPhi values: -1.64581e+174
+fecundPhi values: -1.66668e-49
+survMean values: 1.91698e-80
+survSd values: 2.93871e+294
+fecundMean values: 6.2389e-80
+fecundSd values: 4.73594e-68
+input ends
+ERROR: Crashed: colorednoise_deepstate_test_unstructured_pop_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/colorednoise/inst/testfiles/unstructured_pop/unstructured_pop_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+INFO: Done fuzzing! Ran 1 tests (0 tests/second) with 1 failed/0 passed/0 abandoned tests

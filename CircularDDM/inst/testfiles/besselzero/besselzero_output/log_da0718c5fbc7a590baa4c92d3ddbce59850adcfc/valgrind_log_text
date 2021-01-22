@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (CircularDDM_deepstate_test_besselzero_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/CircularDDM/inst/testfiles/besselzero/besselzero_output/da0718c5fbc7a590baa4c92d3ddbce59850adcfc.pass`
+TRACE: Running: CircularDDM_deepstate_test_besselzero_test from /home/akhila/fuzzer_packages/fuzzedpackages/CircularDDM/inst/testfiles/besselzero/besselzero_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+nu values: -2.43318e-187
+k values: -1053990400
+kind values: 77470436
+input ends
+ERROR: Crashed: CircularDDM_deepstate_test_besselzero_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/CircularDDM/inst/testfiles/besselzero/besselzero_output/da0718c5fbc7a590baa4c92d3ddbce59850adcfc.pass crashed

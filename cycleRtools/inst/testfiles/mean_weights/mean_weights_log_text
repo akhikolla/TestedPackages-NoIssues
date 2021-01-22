@@ -1,0 +1,44 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (cycleRtools_deepstate_test_mean_weights_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: -2.43318e-187
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: -1.5615e-299
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: 1.27048e-62
+input ends
+ERROR: Crashed: cycleRtools_deepstate_test_mean_weights_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/cycleRtools/inst/testfiles/mean_weights/mean_weights_output/e7932681bdc8676f0613462de28842b2945cadd5.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: -3.93045e-68
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: 9.96356e-247
+input ends
+ERROR: Crashed: cycleRtools_deepstate_test_mean_weights_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/cycleRtools/inst/testfiles/mean_weights/mean_weights_output/6cb0c614c30c5b850b9b7e50fc30f485036ca716.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: -1.71931e-91
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: 5.70876e+39
+input ends
+ERROR: Crashed: cycleRtools_deepstate_test_mean_weights_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/cycleRtools/inst/testfiles/mean_weights/mean_weights_output/de382cac220cf2d56effb4fa82af62731ab375f9.crash`
+INFO: Done fuzzing! Ran 7 tests (3 tests/second) with 3 failed/4 passed/0 abandoned tests

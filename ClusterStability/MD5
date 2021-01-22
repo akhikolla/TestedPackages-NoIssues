@@ -1,0 +1,14 @@
+ff942666a92410a18d7ec87d0a862d82 *DESCRIPTION
+db6891bde2bd8217f391d54d59c9e206 *NAMESPACE
+587d47d8f4be5c9204873f8f0e9f8e5e *NEWS
+08183d55abd34fc7cc14112fba36650b *R/ClusterStability.R
+2779c544de5b0e11bf0ccc384bea2c2a *R/RcppExports.R
+fcc0c5dbf7ca8fce3553750793a640b5 *man/ClusterStability-package.Rd
+0e5c86d31d043e676db7ecf11cd5a1b8 *man/ClusterStability.Rd
+bcd808fa2dc3565f62072dbc2bb605c8 *man/ClusterStability_exact.Rd
+e1c644efc1dad92a44c5844a02a364b2 *man/Kcombination.Rd
+39853334535a3e14ad10f2405fc975b5 *man/Reorder.Rd
+e399158d03d0331d624441c83dc81976 *man/Stirling2nd.Rd
+8b5f370db53bbdf1b12ab43f1336b392 *man/undocumented.Rd
+83fa5ddd2d46de6b1407ee30948cd976 *src/ClusterStability.cpp
+9b5ffeadf38b7bd491060a407f54cdec *src/RcppExports.cpp

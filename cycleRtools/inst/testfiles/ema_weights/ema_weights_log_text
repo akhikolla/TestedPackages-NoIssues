@@ -1,0 +1,25 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (cycleRtools_deepstate_test_ema_weights_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: -2.43318e-187
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: -1.5615e-299
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: 1.27048e-62
+input ends
+ERROR: Crashed: cycleRtools_deepstate_test_ema_weights_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/cycleRtools/inst/testfiles/ema_weights/ema_weights_output/e7932681bdc8676f0613462de28842b2945cadd5.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+len values: -3.93045e-68
+input ends
+INFO: Done fuzzing! Ran 4 tests (2 tests/second) with 1 failed/3 passed/0 abandoned tests

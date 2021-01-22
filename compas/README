@@ -1,0 +1,8 @@
+Compas: Conformational manipulations of protein atomic structures
+
+This R package provides some useful functions for performing common operations on protein structures represented in PDB (Protein Data Bank) format.
+
+Key features provided:
+- Energy evaluation of a conformation using the DFIRE potential
+- Fast RMSD calculations between two PDB conformations
+- Cartesian coordinate calculations for 3-D positions of individual atoms and entire amino acid side chains

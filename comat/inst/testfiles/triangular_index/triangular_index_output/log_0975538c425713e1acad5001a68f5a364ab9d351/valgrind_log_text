@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (comat_deepstate_test_triangular_index_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/comat/inst/testfiles/triangular_index/triangular_index_output/0975538c425713e1acad5001a68f5a364ab9d351.pass`
+TRACE: Running: comat_deepstate_test_triangular_index_test from /home/akhila/fuzzer_packages/fuzzedpackages/comat/inst/testfiles/triangular_index/triangular_index_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+r values: -498905818
+c values: 569042049
+input ends
+TRACE: Passed: comat_deepstate_test_triangular_index_test

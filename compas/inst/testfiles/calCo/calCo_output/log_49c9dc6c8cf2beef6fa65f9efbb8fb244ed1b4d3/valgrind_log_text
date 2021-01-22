@@ -1,0 +1,16 @@
+WARNING: No test specified, defaulting to first test defined (compas_deepstate_test_calCo_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/compas/inst/testfiles/calCo/calCo_output/49c9dc6c8cf2beef6fa65f9efbb8fb244ed1b4d3.pass`
+TRACE: Running: compas_deepstate_test_calCo_test from /home/akhila/fuzzer_packages/fuzzedpackages/compas/inst/testfiles/calCo/calCo_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+prev_atoms values: 1.37787e+242
+    nan
+    inf
+
+length values: 1.0875e+230
+bAngle values: 1.37869e+204
+tAngle values: -1.4758e-58
+input ends
+TRACE: Passed: compas_deepstate_test_calCo_test

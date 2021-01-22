@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (cutpointr_deepstate_test_one_unique_char_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/cutpointr/inst/testfiles/one_unique_char/one_unique_char_output/a0bf694a288bb9e1e3b122f8fb71c3363e597a39.pass`
+TRACE: Running: cutpointr_deepstate_test_one_unique_char_test from /home/akhila/fuzzer_packages/fuzzedpackages/cutpointr/inst/testfiles/one_unique_char/one_unique_char_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: "dxzacqdxrb" "afoykrklhomoufedlot" "hfltbndpjtppqwzocxzk" "wrvwmnjhqkhmpltvcl" "fooexjrodohhsxee" "NA" "NA" "wkcsnahvixeejdkyhaqo" "xnpitiwyalvhnjmtfxin" "gutvlotwtrsvevfrkbs" "vjhdxpfahts"
+input ends
+TRACE: Passed: cutpointr_deepstate_test_one_unique_char_test

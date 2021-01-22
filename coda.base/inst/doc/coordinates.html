@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Marc Comas-Cufí" />
+
+<meta name="date" content="2020-05-14" />
+
+<title>Working with log-ratio coordinates in coda.base</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Working with log-ratio coordinates in <code>coda.base</code></h1>
+<h4 class="author">Marc Comas-Cufí</h4>
+<h4 class="date">2020-05-14</h4>
+
+
+
+<p>In this vignette we show how to define log-ratio coordinates using <code>coda.base</code> package and its function <code>coordinates</code> with parameters <code>X</code>, a composition, and <code>basis</code>, defining the independent log-contrasts for building the coordinates.</p>
+<p>In this vignette we work with a subcomposition of the results obtained in different regions of Catalonia in 2017’s parliament elections:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(coda.base)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="co"># By default basis is not shown, in this vignette we turn on basis showing.</span></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">options</span>(<span class="st">'coda.base.basis'</span> =<span class="st"> </span><span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">data</span>(<span class="st">'parliament2017'</span>)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5">X =<span class="st"> </span>parliament2017[,<span class="kw">c</span>(<span class="st">'erc'</span>,<span class="st">'jxcat'</span>,<span class="st">'psc'</span>,<span class="st">'cs'</span>)]</a></code></pre></div>
+<div id="defining-classical-log-ratio-coordinates-with-coda.base" class="section level1">
+<h1>Defining classical log-ratio coordinates with <code>coda.base</code></h1>
+<div id="the-additive-logratio-alr-coordinates" class="section level2">
+<h2>The additive logratio (alr) coordinates</h2>
+<p>The alr coordinates are accessible by setting the parameter <code>basis='alr'</code> or by using the building function <code>alr_basis()</code>.</p>
+<p>If you don’t want the last part in the denominator, the easiest way to define an alr-coordinates is to set <code>basis='alr'</code>:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" data-line-number="1">H1.alr =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> <span class="st">'alr'</span>)</a>
+<a class="sourceLine" id="cb2-2" data-line-number="2"><span class="kw">head</span>(H1.alr)</a>
+<a class="sourceLine" id="cb2-3" data-line-number="3"><span class="co">#&gt;          alr1        alr2       alr3</span></a>
+<a class="sourceLine" id="cb2-4" data-line-number="4"><span class="co">#&gt; 1  0.23864536 0.446503630 -0.7201917</span></a>
+<a class="sourceLine" id="cb2-5" data-line-number="5"><span class="co">#&gt; 2 -0.10388120 0.216858085 -1.0473730</span></a>
+<a class="sourceLine" id="cb2-6" data-line-number="6"><span class="co">#&gt; 3  0.36723896 0.542010167 -0.5320675</span></a>
+<a class="sourceLine" id="cb2-7" data-line-number="7"><span class="co">#&gt; 4  0.53209369 0.798479995 -0.4799141</span></a>
+<a class="sourceLine" id="cb2-8" data-line-number="8"><span class="co">#&gt; 5  0.54918649 0.477309280 -0.1028807</span></a>
+<a class="sourceLine" id="cb2-9" data-line-number="9"><span class="co">#&gt; 6 -0.09742133 0.002856425 -0.6858265</span></a>
+<a class="sourceLine" id="cb2-10" data-line-number="10"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb2-11" data-line-number="11"><span class="co">#&gt;    alr1 alr2 alr3</span></a>
+<a class="sourceLine" id="cb2-12" data-line-number="12"><span class="co">#&gt; P1    1    0    0</span></a>
+<a class="sourceLine" id="cb2-13" data-line-number="13"><span class="co">#&gt; P2    0    1    0</span></a>
+<a class="sourceLine" id="cb2-14" data-line-number="14"><span class="co">#&gt; P3    0    0    1</span></a>
+<a class="sourceLine" id="cb2-15" data-line-number="15"><span class="co">#&gt; P4   -1   -1   -1</span></a></code></pre></div>
+<p>It defines an alr-coordinates were the first parts are used for the numerator of the log-quotient in order and the last part is used in the denominator.</p>
+<p>The basis can be reproduced using the function <code>alr_basis</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">alr_basis</span>(<span class="dt">dim =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="co">#&gt;      [,1] [,2] [,3]</span></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3"><span class="co">#&gt; [1,]    1    0    0</span></a>
+<a class="sourceLine" id="cb3-4" data-line-number="4"><span class="co">#&gt; [2,]    0    1    0</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"><span class="co">#&gt; [3,]    0    0    1</span></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="co">#&gt; [4,]   -1   -1   -1</span></a></code></pre></div>
+<p>In fact, function <code>alr_basis</code> allows to define any type of alr-like coordinate by defining the numerator and the denominator:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1">B.alr =<span class="st"> </span><span class="kw">alr_basis</span>(<span class="dt">dim =</span> <span class="dv">4</span>, <span class="dt">numerator =</span> <span class="kw">c</span>(<span class="dv">4</span>,<span class="dv">2</span>,<span class="dv">3</span>), <span class="dt">denominator =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">B.alr</a>
+<a class="sourceLine" id="cb4-3" data-line-number="3"><span class="co">#&gt;      [,1] [,2] [,3]</span></a>
+<a class="sourceLine" id="cb4-4" data-line-number="4"><span class="co">#&gt; [1,]   -1   -1   -1</span></a>
+<a class="sourceLine" id="cb4-5" data-line-number="5"><span class="co">#&gt; [2,]    0    1    0</span></a>
+<a class="sourceLine" id="cb4-6" data-line-number="6"><span class="co">#&gt; [3,]    0    0    1</span></a>
+<a class="sourceLine" id="cb4-7" data-line-number="7"><span class="co">#&gt; [4,]    1    0    0</span></a></code></pre></div>
+<p>The log-contrast matrix can be used in <code>basis</code> parameter:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">H2.alr =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> B.alr)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">head</span>(H2.alr)</a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co">#&gt;            h1          h2         h3</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4"><span class="co">#&gt; 1 -0.23864536  0.20785827 -0.9588371</span></a>
+<a class="sourceLine" id="cb5-5" data-line-number="5"><span class="co">#&gt; 2  0.10388120  0.32073928 -0.9434918</span></a>
+<a class="sourceLine" id="cb5-6" data-line-number="6"><span class="co">#&gt; 3 -0.36723896  0.17477121 -0.8993065</span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7"><span class="co">#&gt; 4 -0.53209369  0.26638630 -1.0120078</span></a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"><span class="co">#&gt; 5 -0.54918649 -0.07187721 -0.6520672</span></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co">#&gt; 6  0.09742133  0.10027776 -0.5884051</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co">#&gt;    h1 h2 h3</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="co">#&gt; P1 -1 -1 -1</span></a>
+<a class="sourceLine" id="cb5-13" data-line-number="13"><span class="co">#&gt; P2  0  1  0</span></a>
+<a class="sourceLine" id="cb5-14" data-line-number="14"><span class="co">#&gt; P3  0  0  1</span></a>
+<a class="sourceLine" id="cb5-15" data-line-number="15"><span class="co">#&gt; P4  1  0  0</span></a></code></pre></div>
+</div>
+<div id="the-centered-logratio-clr-coordinates" class="section level2">
+<h2>The centered logratio (clr) coordinates</h2>
+<p>Building centered log-ratio coordinates can be accomplished by setting parameter <code>basis='clr'</code>:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1">H.clr =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> <span class="st">'clr'</span>)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">head</span>(H.clr)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"><span class="co">#&gt;         clr1      clr2       clr3         clr4</span></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="co">#&gt; 1 0.24740605 0.4552643 -0.7114311  0.008760689</span></a>
+<a class="sourceLine" id="cb6-5" data-line-number="5"><span class="co">#&gt; 2 0.12971783 0.4504571 -0.8137740  0.233599031</span></a>
+<a class="sourceLine" id="cb6-6" data-line-number="6"><span class="co">#&gt; 3 0.27294355 0.4477148 -0.6263629 -0.094295406</span></a>
+<a class="sourceLine" id="cb6-7" data-line-number="7"><span class="co">#&gt; 4 0.31942879 0.5858151 -0.6925790 -0.212664904</span></a>
+<a class="sourceLine" id="cb6-8" data-line-number="8"><span class="co">#&gt; 5 0.31828271 0.2464055 -0.3337844 -0.230903777</span></a>
+<a class="sourceLine" id="cb6-9" data-line-number="9"><span class="co">#&gt; 6 0.09767651 0.1979543 -0.4907286  0.195097842</span></a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11"><span class="co">#&gt;     clr1  clr2  clr3  clr4</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="co">#&gt; P1  0.75 -0.25 -0.25 -0.25</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="co">#&gt; P2 -0.25  0.75 -0.25 -0.25</span></a>
+<a class="sourceLine" id="cb6-14" data-line-number="14"><span class="co">#&gt; P3 -0.25 -0.25  0.75 -0.25</span></a>
+<a class="sourceLine" id="cb6-15" data-line-number="15"><span class="co">#&gt; P4 -0.25 -0.25 -0.25  0.75</span></a></code></pre></div>
+</div>
+<div id="the-isometric-logratio-ilr-coordinates" class="section level2">
+<h2>The isometric logratio (ilr) coordinates</h2>
+<p><code>coda.base</code> allows to define a wide variety of ilr-coordinates: principal components (pc) coordinates, specific user balances coordinates, principal balances (pb) coordinates, balanced coordinates (default’s <a href="http://ima.udg.edu/codapack/">CoDaPack</a>’s coordinates).</p>
+<p>The default ilr coordinate used by <code>coda.base</code> are accessible by simply calling function <code>coordinates</code> without parameters:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1">H1.ilr =<span class="st"> </span><span class="kw">coordinates</span>(X)</a>
+<a class="sourceLine" id="cb7-2" data-line-number="2"><span class="kw">head</span>(H1.ilr)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"><span class="co">#&gt;          ilr1      ilr2        ilr3</span></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="co">#&gt; 1 -0.14697799 0.8677450 -0.01011597</span></a>
+<a class="sourceLine" id="cb7-5" data-line-number="5"><span class="co">#&gt; 2 -0.22679692 0.9012991 -0.26973693</span></a>
+<a class="sourceLine" id="cb7-6" data-line-number="6"><span class="co">#&gt; 3 -0.12358191 0.8056307  0.10888296</span></a>
+<a class="sourceLine" id="cb7-7" data-line-number="7"><span class="co">#&gt; 4 -0.18836356 0.9350526  0.24556428</span></a>
+<a class="sourceLine" id="cb7-8" data-line-number="8"><span class="co">#&gt; 5  0.05082486 0.5030669  0.26662472</span></a>
+<a class="sourceLine" id="cb7-9" data-line-number="9"><span class="co">#&gt; 6 -0.07090708 0.5213690 -0.22527958</span></a>
+<a class="sourceLine" id="cb7-10" data-line-number="10"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb7-11" data-line-number="11"><span class="co">#&gt;          ilr1       ilr2       ilr3</span></a>
+<a class="sourceLine" id="cb7-12" data-line-number="12"><span class="co">#&gt; P1  0.7071068  0.4082483  0.2886751</span></a>
+<a class="sourceLine" id="cb7-13" data-line-number="13"><span class="co">#&gt; P2 -0.7071068  0.4082483  0.2886751</span></a>
+<a class="sourceLine" id="cb7-14" data-line-number="14"><span class="co">#&gt; P3  0.0000000 -0.8164966  0.2886751</span></a>
+<a class="sourceLine" id="cb7-15" data-line-number="15"><span class="co">#&gt; P4  0.0000000  0.0000000 -0.8660254</span></a></code></pre></div>
+<p>Parameter <code>basis</code> is set to <code>ilr</code> by default:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">all.equal</span>( <span class="kw">coordinates</span>(X, <span class="dt">basis =</span> <span class="st">'ilr'</span>),</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2">           H1.ilr )</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"><span class="co">#&gt; [1] TRUE</span></a></code></pre></div>
+</div>
+<div id="other-ilr-coordinates-principal-components-and-principal-balances" class="section level2">
+<h2>Other ilr-coordinates: Principal Components and Principal balances</h2>
+<p>Other easily accessible coordinates are the Principal Component (PC) coordinates. PC coordinates define the first coordinate as the log-contrast with highest variance, the second the one independent from the first and with highest variance and so on:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">H2.ilr =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> <span class="st">'pc'</span>)</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">head</span>(H2.ilr)</a>
+<a class="sourceLine" id="cb9-3" data-line-number="3"><span class="co">#&gt;         pc1         pc2        pc3</span></a>
+<a class="sourceLine" id="cb9-4" data-line-number="4"><span class="co">#&gt; 1 0.6787536  0.35694598 -0.4319368</span></a>
+<a class="sourceLine" id="cb9-5" data-line-number="5"><span class="co">#&gt; 2 0.5581520  0.57775877 -0.5396259</span></a>
+<a class="sourceLine" id="cb9-6" data-line-number="6"><span class="co">#&gt; 3 0.7013616  0.25302877 -0.3467523</span></a>
+<a class="sourceLine" id="cb9-7" data-line-number="7"><span class="co">#&gt; 4 0.8973701  0.25915667 -0.3125234</span></a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"><span class="co">#&gt; 5 0.5362270 -0.05527103 -0.1901418</span></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co">#&gt; 6 0.2676101  0.32802497 -0.3852126</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"><span class="co">#&gt;           pc1        pc2        pc3</span></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="co">#&gt; P1  0.3469512 -0.5978990 -0.5216720</span></a>
+<a class="sourceLine" id="cb9-13" data-line-number="13"><span class="co">#&gt; P2  0.6300769  0.4877904  0.3392104</span></a>
+<a class="sourceLine" id="cb9-14" data-line-number="14"><span class="co">#&gt; P3 -0.4368610 -0.3913286  0.6371926</span></a>
+<a class="sourceLine" id="cb9-15" data-line-number="15"><span class="co">#&gt; P4 -0.5401671  0.5014372 -0.4547309</span></a>
+<a class="sourceLine" id="cb9-16" data-line-number="16"><span class="kw">barplot</span>(<span class="kw">apply</span>(H2.ilr, <span class="dv">2</span>, var))</a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>Note that the PC coordinates are independent:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">cov</span>(H2.ilr)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="co">#&gt;               pc1           pc2           pc3</span></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="co">#&gt; pc1  4.475083e-01 -5.791265e-16 -2.995221e-16</span></a>
+<a class="sourceLine" id="cb10-4" data-line-number="4"><span class="co">#&gt; pc2 -5.791265e-16  3.650673e-02 -1.781210e-18</span></a>
+<a class="sourceLine" id="cb10-5" data-line-number="5"><span class="co">#&gt; pc3 -2.995221e-16 -1.781210e-18  1.257989e-02</span></a></code></pre></div>
+<p>The Principal Balance coordinates are similar to PC coordinates but with the restriction that the log contrast are balances</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1">H3.ilr =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> <span class="st">'pb'</span>)</a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">head</span>(H3.ilr)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"><span class="co">#&gt;          pb1         pb2         pb3</span></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="co">#&gt; 1 -0.7026704 -0.14697799 -0.50925247</span></a>
+<a class="sourceLine" id="cb11-5" data-line-number="5"><span class="co">#&gt; 2 -0.5801749 -0.22679692 -0.74060456</span></a>
+<a class="sourceLine" id="cb11-6" data-line-number="6"><span class="co">#&gt; 3 -0.7206583 -0.12358191 -0.37622854</span></a>
+<a class="sourceLine" id="cb11-7" data-line-number="7"><span class="co">#&gt; 4 -0.9052439 -0.18836356 -0.33935049</span></a>
+<a class="sourceLine" id="cb11-8" data-line-number="8"><span class="co">#&gt; 5 -0.5646882  0.05082486 -0.07274761</span></a>
+<a class="sourceLine" id="cb11-9" data-line-number="9"><span class="co">#&gt; 6 -0.2956308 -0.07090708 -0.48495254</span></a>
+<a class="sourceLine" id="cb11-10" data-line-number="10"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb11-11" data-line-number="11"><span class="co">#&gt;     pb1        pb2        pb3</span></a>
+<a class="sourceLine" id="cb11-12" data-line-number="12"><span class="co">#&gt; P1 -0.5  0.7071068  0.0000000</span></a>
+<a class="sourceLine" id="cb11-13" data-line-number="13"><span class="co">#&gt; P2 -0.5 -0.7071068  0.0000000</span></a>
+<a class="sourceLine" id="cb11-14" data-line-number="14"><span class="co">#&gt; P3  0.5  0.0000000  0.7071068</span></a>
+<a class="sourceLine" id="cb11-15" data-line-number="15"><span class="co">#&gt; P4  0.5  0.0000000 -0.7071068</span></a>
+<a class="sourceLine" id="cb11-16" data-line-number="16"><span class="kw">barplot</span>(<span class="kw">apply</span>(H3.ilr, <span class="dv">2</span>, var))</a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+<p>Moreover, they are not independent:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">cor</span>(H3.ilr)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="co">#&gt;            pb1       pb2        pb3</span></a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"><span class="co">#&gt; pb1  1.0000000 0.6043786 -0.3197742</span></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4"><span class="co">#&gt; pb2  0.6043786 1.0000000  0.1594538</span></a>
+<a class="sourceLine" id="cb12-5" data-line-number="5"><span class="co">#&gt; pb3 -0.3197742 0.1594538  1.0000000</span></a></code></pre></div>
+<p>Principal Balances are hard to compute when the number of components is very high. <code>coda.base</code> allows to build PB approximations using different algorithms.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">X100 =<span class="st"> </span><span class="kw">exp</span>(<span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">1000</span><span class="op">*</span><span class="dv">100</span>), <span class="dt">ncol =</span> <span class="dv">100</span>))</a></code></pre></div>
+<ul>
+<li><em>Hierarchical clustering based algorithm</em>.</li>
+</ul>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1">PB1.ward =<span class="st"> </span><span class="kw">pb_basis</span>(X100, <span class="dt">method =</span> <span class="st">'cluster'</span>)</a></code></pre></div>
+<ul>
+<li><em>Constrained search algorithm</em></li>
+</ul>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">PB1.constrained =<span class="st"> </span><span class="kw">pb_basis</span>(X100, <span class="dt">method =</span> <span class="st">'constrained'</span>)</a></code></pre></div>
+<p>We can compare they performance (variance explained by the first balance) with respect to the principal components.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" data-line-number="1">PC_approx =<span class="st"> </span><span class="kw">coordinates</span>(X100, <span class="kw">cbind</span>(<span class="kw">pc_basis</span>(X100)[,<span class="dv">1</span>], PB1.ward[,<span class="dv">1</span>], PB1.constrained[,<span class="dv">1</span>]))</a>
+<a class="sourceLine" id="cb16-2" data-line-number="2"><span class="kw">names</span>(PC_approx) =<span class="st"> </span><span class="kw">c</span>(<span class="st">'PC'</span>, <span class="st">'Ward'</span>, <span class="st">'Constrained'</span>)</a>
+<a class="sourceLine" id="cb16-3" data-line-number="3"><span class="kw">apply</span>(PC_approx, <span class="dv">2</span>, var)</a>
+<a class="sourceLine" id="cb16-4" data-line-number="4"><span class="co">#&gt;       h1       h2       h3 </span></a>
+<a class="sourceLine" id="cb16-5" data-line-number="5"><span class="co">#&gt; 1.686637 1.334032 1.532599</span></a></code></pre></div>
+<p>Finally, <code>coda.base</code> allows to define the default CoDaPack basis which consists in defining well balanced balances, i.e. equal number of branches in each balance.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">H4.ilr =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> <span class="st">'cdp'</span>)</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">head</span>(H4.ilr)</a>
+<a class="sourceLine" id="cb17-3" data-line-number="3"><span class="co">#&gt;        cdp1        cdp2        cdp3</span></a>
+<a class="sourceLine" id="cb17-4" data-line-number="4"><span class="co">#&gt; 1 0.7026704 -0.14697799 -0.50925247</span></a>
+<a class="sourceLine" id="cb17-5" data-line-number="5"><span class="co">#&gt; 2 0.5801749 -0.22679692 -0.74060456</span></a>
+<a class="sourceLine" id="cb17-6" data-line-number="6"><span class="co">#&gt; 3 0.7206583 -0.12358191 -0.37622854</span></a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"><span class="co">#&gt; 4 0.9052439 -0.18836356 -0.33935049</span></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co">#&gt; 5 0.5646882  0.05082486 -0.07274761</span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9"><span class="co">#&gt; 6 0.2956308 -0.07090708 -0.48495254</span></a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="co">#&gt;    cdp1       cdp2       cdp3</span></a>
+<a class="sourceLine" id="cb17-12" data-line-number="12"><span class="co">#&gt; P1  0.5  0.7071068  0.0000000</span></a>
+<a class="sourceLine" id="cb17-13" data-line-number="13"><span class="co">#&gt; P2  0.5 -0.7071068  0.0000000</span></a>
+<a class="sourceLine" id="cb17-14" data-line-number="14"><span class="co">#&gt; P3 -0.5  0.0000000  0.7071068</span></a>
+<a class="sourceLine" id="cb17-15" data-line-number="15"><span class="co">#&gt; P4 -0.5  0.0000000 -0.7071068</span></a></code></pre></div>
+</div>
+</div>
+<div id="defining-coordinates-manually" class="section level1">
+<h1>Defining coordinates manually</h1>
+<div id="defining-coordinates-with-an-specific-basis" class="section level2">
+<h2>Defining coordinates with an specific basis</h2>
+<p>We can define the coordinates directly by providing the log-contrast matrix.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">B =<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="dv">2</span>,<span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2">             <span class="dv">1</span>,<span class="dv">0</span>,<span class="op">-</span><span class="fl">0.5</span>,<span class="op">-</span><span class="fl">0.5</span>,</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">             <span class="fl">-0.5</span>,<span class="fl">0.5</span>,<span class="dv">0</span>,<span class="dv">0</span>), <span class="dt">ncol =</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb18-4" data-line-number="4">H1.man =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> B)</a>
+<a class="sourceLine" id="cb18-5" data-line-number="5"><span class="kw">head</span>(H1.man)</a>
+<a class="sourceLine" id="cb18-6" data-line-number="6"><span class="co">#&gt;          h1        h2          h3</span></a>
+<a class="sourceLine" id="cb18-7" data-line-number="7"><span class="co">#&gt; 1 -2.125532 0.5987412  0.10392914</span></a>
+<a class="sourceLine" id="cb18-8" data-line-number="8"><span class="co">#&gt; 2 -2.207723 0.4198053  0.16036964</span></a>
+<a class="sourceLine" id="cb18-9" data-line-number="9"><span class="co">#&gt; 3 -1.973384 0.6332727  0.08738560</span></a>
+<a class="sourceLine" id="cb18-10" data-line-number="10"><span class="co">#&gt; 4 -2.290402 0.7720507  0.13319315</span></a>
+<a class="sourceLine" id="cb18-11" data-line-number="11"><span class="co">#&gt; 5 -1.232257 0.6006268 -0.03593861</span></a>
+<a class="sourceLine" id="cb18-12" data-line-number="12"><span class="co">#&gt; 6 -1.277088 0.2454919  0.05013888</span></a>
+<a class="sourceLine" id="cb18-13" data-line-number="13"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb18-14" data-line-number="14"><span class="co">#&gt;    h1   h2   h3</span></a>
+<a class="sourceLine" id="cb18-15" data-line-number="15"><span class="co">#&gt; P1 -1  1.0 -0.5</span></a>
+<a class="sourceLine" id="cb18-16" data-line-number="16"><span class="co">#&gt; P2 -1  0.0  0.5</span></a>
+<a class="sourceLine" id="cb18-17" data-line-number="17"><span class="co">#&gt; P3  2 -0.5  0.0</span></a>
+<a class="sourceLine" id="cb18-18" data-line-number="18"><span class="co">#&gt; P4  0 -0.5  0.0</span></a></code></pre></div>
+</div>
+<div id="defining-coordinates-using-balances" class="section level2">
+<h2>Defining coordinates using balances</h2>
+<p>We can also define balances using formula <code>numerator~denominator</code>:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">B.man =<span class="st"> </span><span class="kw">sbp_basis</span>(<span class="dt">b1 =</span> erc<span class="op">~</span>jxcat,</a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">                  <span class="dt">b2 =</span> psc<span class="op">~</span>cs,</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3">                  <span class="dt">b3 =</span> erc<span class="op">+</span>jxcat<span class="op">~</span>psc<span class="op">+</span>cs, </a>
+<a class="sourceLine" id="cb19-4" data-line-number="4">                  <span class="dt">data=</span>X)</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">H2.man =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> B.man)</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6"><span class="kw">head</span>(H2.man)</a></code></pre></div>
+<p>With <code>sbp_basis</code> we do not need to define neither a basis nor a system generator</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">B =<span class="st"> </span><span class="kw">sbp_basis</span>(<span class="dt">b1 =</span> erc<span class="op">+</span>jxcat<span class="op">~</span>psc<span class="op">+</span>cs, </a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">              <span class="dt">data=</span>X)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3"><span class="co">#&gt; Warning in sbp_basis(b1 = erc + jxcat ~ psc + cs, data = X): Given partition is</span></a>
+<a class="sourceLine" id="cb20-4" data-line-number="4"><span class="co">#&gt; not a basis</span></a>
+<a class="sourceLine" id="cb20-5" data-line-number="5">H3.man =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> B)</a>
+<a class="sourceLine" id="cb20-6" data-line-number="6"><span class="kw">head</span>(H3.man)</a>
+<a class="sourceLine" id="cb20-7" data-line-number="7"><span class="co">#&gt;          h1</span></a>
+<a class="sourceLine" id="cb20-8" data-line-number="8"><span class="co">#&gt; 1 0.7026704</span></a>
+<a class="sourceLine" id="cb20-9" data-line-number="9"><span class="co">#&gt; 2 0.5801749</span></a>
+<a class="sourceLine" id="cb20-10" data-line-number="10"><span class="co">#&gt; 3 0.7206583</span></a>
+<a class="sourceLine" id="cb20-11" data-line-number="11"><span class="co">#&gt; 4 0.9052439</span></a>
+<a class="sourceLine" id="cb20-12" data-line-number="12"><span class="co">#&gt; 5 0.5646882</span></a>
+<a class="sourceLine" id="cb20-13" data-line-number="13"><span class="co">#&gt; 6 0.2956308</span></a>
+<a class="sourceLine" id="cb20-14" data-line-number="14"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb20-15" data-line-number="15"><span class="co">#&gt;      h1</span></a>
+<a class="sourceLine" id="cb20-16" data-line-number="16"><span class="co">#&gt; P1  0.5</span></a>
+<a class="sourceLine" id="cb20-17" data-line-number="17"><span class="co">#&gt; P2  0.5</span></a>
+<a class="sourceLine" id="cb20-18" data-line-number="18"><span class="co">#&gt; P3 -0.5</span></a>
+<a class="sourceLine" id="cb20-19" data-line-number="19"><span class="co">#&gt; P4 -0.5</span></a></code></pre></div>
+<p>or</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">B =<span class="st"> </span><span class="kw">sbp_basis</span>(<span class="dt">b1 =</span> erc<span class="op">~</span>jxcat<span class="op">+</span>psc<span class="op">~</span>cs, </a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">              <span class="dt">b2 =</span> jxcat<span class="op">~</span>erc<span class="op">+</span>psc<span class="op">+</span>cs,</a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">              <span class="dt">b3 =</span> psc<span class="op">~</span>erc<span class="op">+</span>jxcat<span class="op">+</span>cs,</a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">              <span class="dt">b4 =</span> cs<span class="op">~</span>erc<span class="op">+</span>jxcat<span class="op">+</span>psc,</a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">              <span class="dt">data=</span>X)</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6"><span class="co">#&gt; Warning in sbp_basis(b1 = erc ~ jxcat + psc ~ cs, b2 = jxcat ~ erc + psc + :</span></a>
+<a class="sourceLine" id="cb21-7" data-line-number="7"><span class="co">#&gt; Given basis is not orthogonal</span></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8">H4.man =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> B)</a>
+<a class="sourceLine" id="cb21-9" data-line-number="9"><span class="kw">head</span>(H4.man)</a>
+<a class="sourceLine" id="cb21-10" data-line-number="10"><span class="co">#&gt;            h1        h2         h3          h4</span></a>
+<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="co">#&gt; 1 -0.01011597 0.5256940 -0.8214898  0.01011597</span></a>
+<a class="sourceLine" id="cb21-12" data-line-number="12"><span class="co">#&gt; 2 -0.26973693 0.5201431 -0.9396653  0.26973693</span></a>
+<a class="sourceLine" id="cb21-13" data-line-number="13"><span class="co">#&gt; 3  0.10888296 0.5169765 -0.7232616 -0.10888296</span></a>
+<a class="sourceLine" id="cb21-14" data-line-number="14"><span class="co">#&gt; 4  0.24556428 0.6764410 -0.7997213 -0.24556428</span></a>
+<a class="sourceLine" id="cb21-15" data-line-number="15"><span class="co">#&gt; 5  0.26662472 0.2845246 -0.3854211 -0.26662472</span></a>
+<a class="sourceLine" id="cb21-16" data-line-number="16"><span class="co">#&gt; 6 -0.22527958 0.2285779 -0.5666446  0.22527958</span></a>
+<a class="sourceLine" id="cb21-17" data-line-number="17"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb21-18" data-line-number="18"><span class="co">#&gt;            h1         h2         h3         h4</span></a>
+<a class="sourceLine" id="cb21-19" data-line-number="19"><span class="co">#&gt; P1  0.2886751 -0.2886751 -0.2886751 -0.2886751</span></a>
+<a class="sourceLine" id="cb21-20" data-line-number="20"><span class="co">#&gt; P2  0.2886751  0.8660254 -0.2886751 -0.2886751</span></a>
+<a class="sourceLine" id="cb21-21" data-line-number="21"><span class="co">#&gt; P3  0.2886751 -0.2886751  0.8660254 -0.2886751</span></a>
+<a class="sourceLine" id="cb21-22" data-line-number="22"><span class="co">#&gt; P4 -0.8660254 -0.2886751 -0.2886751  0.8660254</span></a></code></pre></div>
+<p>We can also define sequential binary partition using a matrix.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">P =<span class="st">  </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb22-2" data-line-number="2">              <span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb22-3" data-line-number="3">              <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>,<span class="op">-</span><span class="dv">1</span>), <span class="dt">ncol=</span> <span class="dv">3</span>)</a>
+<a class="sourceLine" id="cb22-4" data-line-number="4">B =<span class="st"> </span><span class="kw">sbp_basis</span>(P)</a>
+<a class="sourceLine" id="cb22-5" data-line-number="5">H5.man =<span class="st"> </span><span class="kw">coordinates</span>(X, <span class="dt">basis =</span> B)</a>
+<a class="sourceLine" id="cb22-6" data-line-number="6"><span class="kw">head</span>(H5.man)</a>
+<a class="sourceLine" id="cb22-7" data-line-number="7"><span class="co">#&gt;          h1          h2          h3</span></a>
+<a class="sourceLine" id="cb22-8" data-line-number="8"><span class="co">#&gt; 1 0.7026704 -0.14697799 -0.50925247</span></a>
+<a class="sourceLine" id="cb22-9" data-line-number="9"><span class="co">#&gt; 2 0.5801749 -0.22679692 -0.74060456</span></a>
+<a class="sourceLine" id="cb22-10" data-line-number="10"><span class="co">#&gt; 3 0.7206583 -0.12358191 -0.37622854</span></a>
+<a class="sourceLine" id="cb22-11" data-line-number="11"><span class="co">#&gt; 4 0.9052439 -0.18836356 -0.33935049</span></a>
+<a class="sourceLine" id="cb22-12" data-line-number="12"><span class="co">#&gt; 5 0.5646882  0.05082486 -0.07274761</span></a>
+<a class="sourceLine" id="cb22-13" data-line-number="13"><span class="co">#&gt; 6 0.2956308 -0.07090708 -0.48495254</span></a>
+<a class="sourceLine" id="cb22-14" data-line-number="14"><span class="co">#&gt;  Basis:</span></a>
+<a class="sourceLine" id="cb22-15" data-line-number="15"><span class="co">#&gt;      h1         h2         h3</span></a>
+<a class="sourceLine" id="cb22-16" data-line-number="16"><span class="co">#&gt; P1  0.5  0.7071068  0.0000000</span></a>
+<a class="sourceLine" id="cb22-17" data-line-number="17"><span class="co">#&gt; P2  0.5 -0.7071068  0.0000000</span></a>
+<a class="sourceLine" id="cb22-18" data-line-number="18"><span class="co">#&gt; P3 -0.5  0.0000000  0.7071068</span></a>
+<a class="sourceLine" id="cb22-19" data-line-number="19"><span class="co">#&gt; P4 -0.5  0.0000000 -0.7071068</span></a></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

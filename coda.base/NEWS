@@ -1,0 +1,52 @@
+coda.base 0.3.1
+===============
+* PB constrained approximation available. Adaptation of code provided by J.A.Martín-Fernández.
+* PB exact algorithm rewritten to improve performance.
+* PB local search algorithm removed.
+
+coda.base 0.2.2
+===============
+* MASS dependence removed
+* Code reorganised to avoid repetition.
+
+coda.base 0.2.1
+===============
+* ?_basis functions always return a matrix
+* consistencies between methods improved
+
+coda.base 0.1.12 (Release date: 2018-04-15)
+===============
+* coordinates function keeps row.names attribute
+* Principal components calculations are done using svd function which is faster than princomp
+* sbp_basis function does not need package to be loaded, can run as coda.base::sbp_basis()
+
+coda.base 0.1.11 (Release date: 2018-12-23)
+===============
+* Principal components coordinates uncentered.
+* Sequential binary partition can be defined using a matrix with -1,0 and 1's.
+* CoDaPack's basis included.
+* A vignette explaining how to build coordinates has been included.
+
+coda.base 0.1.10 (Release date: 2018-08-03)
+===============
+* Principal Balances included as direct method in coordinates function.
+* Coordinates function filters non-valid compositions.
+
+coda.base 0.1.9 (Release date: 2018-05-03)
+===============
+* Modifications included to rcran policies.
+
+coda.base 0.1.8 (Release date: 2017-12-03)
+===============
+* Exact algorithm for Principal Balances included.
+* Bug in lsearch base in principal components solved.
+
+coda.base 0.1.7 (Release date: 2017-08-25)
+===============
+
+* Problem with function composition using 'clr' basis solved.
+* 'coda.base.basis' option included to hide the basis when printing the coordinates.
+* New method which uses the principal components included in pb_basis.
+* Documentaion improved.
+
+

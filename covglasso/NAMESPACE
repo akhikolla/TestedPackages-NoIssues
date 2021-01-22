@@ -1,0 +1,10 @@
+useDynLib(covglasso, .registration = TRUE)
+# exportPattern("^[[:alpha:]]+")
+importFrom("Rcpp", "evalCpp")
+
+importFrom("stats", "cov", "cov2cor", "quantile")
+importFrom("utils", "packageVersion")
+
+export(covglasso, control)
+
+

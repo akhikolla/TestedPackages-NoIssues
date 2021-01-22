@@ -1,0 +1,4 @@
+useDynLib(cord)
+importFrom(Rcpp, evalCpp)
+importFrom(stats, cor)
+export(cord)

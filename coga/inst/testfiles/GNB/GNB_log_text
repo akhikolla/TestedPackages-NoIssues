@@ -1,0 +1,47 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (coga_deepstate_test_GNB_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+k values: -2.43318e-187
+r values: -1.64581e+174
+p values: -1.66668e-49
+b values: 1.91698e-80
+mu values: 2.93871e+294
+input ends
+EXTERNAL: Warning message:
+
+EXTERNAL: out of control 
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+k values: -1.5615e-299
+r values: -1.20777e+13
+p values: 2.79236e-196
+b values: 1.26379e+187
+mu values: 1.42068e+49
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+k values: 1.27048e-62
+r values: -2.88162e-134
+p values: 8.18711e+299
+b values: 0.00468189
+mu values: 9.28697e-257
+input ends
+EXTERNAL: Warning message:
+
+EXTERNAL: out of control 
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+k values: 3.16522e+06
+r values: 3.72126e-82
+p values: 5.29799e-243
+b values: 7.52749e+12
+mu values: -2.14488e+105
+input ends
+INFO: Done fuzzing! Ran 4 tests (2 tests/second) with 0 failed/4 passed/0 abandoned tests
