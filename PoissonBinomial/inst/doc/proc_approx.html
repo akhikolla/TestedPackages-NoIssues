@@ -1,0 +1,1205 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Approximate Procedures</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Approximate Procedures</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#ordinary-poisson-binomial-distribution">Ordinary Poisson Binomial Distribution</a><ul>
+<li><a href="#poisson-approximation">Poisson Approximation</a></li>
+<li><a href="#arithmetic-mean-binomial-approximation">Arithmetic Mean Binomial Approximation</a></li>
+<li><a href="#geometric-mean-binomial-approximation---variant-a">Geometric Mean Binomial Approximation - Variant A</a></li>
+<li><a href="#geometric-mean-binomial-approximation---variant-b">Geometric Mean Binomial Approximation - Variant B</a></li>
+<li><a href="#normal-approximation">Normal Approximation</a></li>
+<li><a href="#refined-normal-approximation">Refined Normal Approximation</a></li>
+<li><a href="#processing-speed-comparisons">Processing Speed Comparisons</a></li>
+</ul></li>
+<li><a href="#generalized-poisson-binomial-distribution">Generalized Poisson Binomial Distribution</a><ul>
+<li><a href="#generalized-normal-approximation">Generalized Normal Approximation</a></li>
+<li><a href="#generalized-refined-normal-approximation">Generalized Refined Normal Approximation</a></li>
+<li><a href="#processing-speed-comparisons-1">Processing Speed Comparisons</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="ordinary-poisson-binomial-distribution" class="section level2">
+<h2>Ordinary Poisson Binomial Distribution</h2>
+<div id="poisson-approximation" class="section level3">
+<h3>Poisson Approximation</h3>
+<p>The <em>Poisson Approximation</em> (DC) approach is requested with <code>method = &quot;Poisson&quot;</code>. It is based on a Poisson distribution, whose parameter is the sum of the probabilities of success.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Poisson&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt;  [1] 2.263593e-16 8.154460e-15 1.468798e-13 1.763753e-12 1.588454e-11</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt;  [6] 1.144462e-10 6.871428e-10 3.536273e-09 1.592402e-08 6.373926e-08</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt; [11] 2.296169e-07 7.519830e-07 2.257479e-06 6.255718e-06 1.609704e-05</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt; [16] 3.865908e-05 8.704191e-05 1.844490e-04 3.691482e-04 6.999128e-04</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt; [21] 1.260697e-03 2.162661e-03 3.541299e-03 5.546660e-03 8.325631e-03</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt; [26] 1.199704e-02 1.662255e-02 2.217842e-02 2.853445e-02 3.544609e-02</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt; [31] 4.256414e-02 4.946284e-02 5.568342e-02 6.078674e-02 6.440607e-02</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt; [36] 6.629115e-02 6.633610e-02 6.458699e-02 6.122916e-02 5.655755e-02</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">#&gt; [41] 5.093630e-02 4.475488e-02 3.838734e-02 3.216003e-02 2.633059e-02</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">#&gt; [46] 2.107875e-02 1.650760e-02 1.265269e-02 9.495953e-03 6.981348e-03</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co">#&gt; [51] 5.029979e-03 3.552981e-03 2.461424e-03 1.673044e-03 1.116119e-03</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">#&gt; [56] 7.310458e-04 4.702766e-04 2.972182e-04 1.846053e-04 1.127169e-04</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co">#&gt; [61] 6.767601e-05 3.996702e-05</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Poisson&quot;</span>)</span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co">#&gt;  [1] 2.263593e-16 8.380820e-15 1.552606e-13 1.919013e-12 1.780355e-11</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co">#&gt;  [6] 1.322498e-10 8.193925e-10 4.355666e-09 2.027968e-08 8.401894e-08</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="co">#&gt; [11] 3.136359e-07 1.065619e-06 3.323097e-06 9.578815e-06 2.567585e-05</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="co">#&gt; [16] 6.433494e-05 1.513768e-04 3.358259e-04 7.049740e-04 1.404887e-03</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="co">#&gt; [21] 2.665584e-03 4.828245e-03 8.369543e-03 1.391620e-02 2.224184e-02</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co">#&gt; [26] 3.423887e-02 5.086142e-02 7.303984e-02 1.015743e-01 1.370204e-01</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="co">#&gt; [31] 1.795845e-01 2.290474e-01 2.847308e-01 3.455175e-01 4.099236e-01</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="co">#&gt; [36] 4.762147e-01 5.425508e-01 6.071378e-01 6.683670e-01 7.249245e-01</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="co">#&gt; [41] 7.758608e-01 8.206157e-01 8.590031e-01 8.911631e-01 9.174937e-01</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a><span class="co">#&gt; [46] 9.385724e-01 9.550800e-01 9.677327e-01 9.772287e-01 9.842100e-01</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="co">#&gt; [51] 9.892400e-01 9.927930e-01 9.952544e-01 9.969275e-01 9.980436e-01</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="co">#&gt; [56] 9.987746e-01 9.992449e-01 9.995421e-01 9.997267e-01 9.998394e-01</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="co">#&gt; [61] 9.999071e-01 1.000000e+00</span></span></code></pre></div>
+<p>A comparison with exact computation shows that the approximation quality of the PA procedure increases with smaller probabilities of success. The reason is that the Poisson Binomial distribution approaches a Poisson distribution when the probabilities are very small.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="co"># U(0, 1) random probabilities of success</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>)</span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Poisson&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;  [1] 0.0000150619 0.0001672374 0.0009284471 0.0034362888 0.0095385726</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;  [6] 0.0211820073 0.0391985129 0.0621763578 0.0862956727 0.1064633767</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; [11] 0.1182099310 0.1193204840 0.1104046811 0.0942969970 0.0747865595</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; [16] 0.0553587178 0.0384166744 0.0250913815 0.0154776776 0.0090449448</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; [21] 0.0050214559</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt;  [1] 4.401037e-11 7.873212e-09 3.624610e-07 7.952504e-06 1.014602e-04</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt;  [6] 8.311558e-04 4.642470e-03 1.838525e-02 5.297347e-02 1.129135e-01</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; [11] 1.798080e-01 2.148719e-01 1.926468e-01 1.289706e-01 6.384266e-02</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; [16] 2.299142e-02 5.871700e-03 1.021142e-03 1.129421e-04 6.977021e-06</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; [21] 1.747603e-07</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Poisson&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; -9.555e-02  1.506e-05  9.038e-03 -2.461e-04  2.407e-02  4.379e-02</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co"># U(0, 0.01) random probabilities of success</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="dv">0</span>, <span class="fl">0.01</span>)</span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Poisson&quot;</span>)</span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="co">#&gt;  [1] 9.095763e-01 8.620639e-02 4.085167e-03 1.290592e-04 3.057942e-06</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">#&gt;  [6] 5.796418e-08 9.156063e-10 1.239684e-11 1.468661e-13 1.546605e-15</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; [11] 1.465817e-17 1.262953e-19 9.974852e-22 7.272161e-24 4.923067e-26</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="co">#&gt; [16] 3.110605e-28 1.842575e-30 1.027251e-32 5.408845e-35 2.698058e-37</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="co">#&gt; [21] 1.278562e-39</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co">#&gt;  [1] 9.093051e-01 8.672423e-02 3.861917e-03 1.066765e-04 2.048094e-06</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="co">#&gt;  [6] 2.902198e-08 3.145829e-10 2.667571e-12 1.794592e-14 9.656258e-17</span></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co">#&gt; [11] 4.170114e-19 1.444465e-21 3.994453e-24 8.738444e-27 1.490372e-29</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a><span class="co">#&gt; [16] 1.938487e-32 1.859939e-35 1.249654e-38 5.381374e-42 1.245845e-45</span></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="co">#&gt; [21] 9.511846e-50</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Poisson&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb2-37"><a href="#cb2-37"></a><span class="co">#&gt; -5.178e-04  0.000e+00  0.000e+00  0.000e+00  6.000e-10  2.712e-04</span></span></code></pre></div>
+</div>
+<div id="arithmetic-mean-binomial-approximation" class="section level3">
+<h3>Arithmetic Mean Binomial Approximation</h3>
+<p>The <em>Arithmetic Mean Binomial Approximation</em> (AMBA) approach is requested with <code>method = &quot;Mean&quot;</code>. It is based on a Binomial distribution, whose parameter is the arithmetic mean of the probabilities of success.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb3-4"><a href="#cb3-4"></a><span class="kw">mean</span>(<span class="kw">rep</span>(pp, wt))</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt; [1] 0.5905641</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Mean&quot;</span>)</span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt;  [1] 2.204668e-24 1.939788e-22 8.393759e-21 2.381049e-19 4.979863e-18</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt;  [6] 8.188480e-17 1.102354e-15 1.249300e-14 1.216331e-13 1.033156e-12</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#&gt; [11] 7.749086e-12 5.182139e-11 3.114432e-10 1.693217e-09 8.373498e-09</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="co">#&gt; [16] 3.784379e-08 1.569327e-07 5.991812e-07 2.112610e-06 6.896287e-06</span></span>
+<span id="cb3-12"><a href="#cb3-12"></a><span class="co">#&gt; [21] 2.088890e-05 5.882491e-05 1.542694e-04 3.773093e-04 8.616897e-04</span></span>
+<span id="cb3-13"><a href="#cb3-13"></a><span class="co">#&gt; [26] 1.839474e-03 3.673702e-03 6.868933e-03 1.203071e-02 1.974641e-02</span></span>
+<span id="cb3-14"><a href="#cb3-14"></a><span class="co">#&gt; [31] 3.038072e-02 4.382068e-02 5.925587e-02 7.510979e-02 8.921887e-02</span></span>
+<span id="cb3-15"><a href="#cb3-15"></a><span class="co">#&gt; [36] 9.927353e-02 1.034154e-01 1.007871e-01 9.181496e-02 7.810121e-02</span></span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="co">#&gt; [41] 6.195859e-02 4.577391e-02 3.143980e-02 2.003761e-02 1.182352e-02</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co">#&gt; [46] 6.442647e-03 3.232269e-03 1.487928e-03 6.259647e-04 2.395401e-04</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#&gt; [51] 8.292214e-05 2.579729e-05 7.155695e-06 1.752667e-06 3.745215e-07</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="co">#&gt; [56] 6.875325e-08 1.062521e-08 1.344354e-09 1.337294e-10 9.807924e-12</span></span>
+<span id="cb3-20"><a href="#cb3-20"></a><span class="co">#&gt; [61] 4.715599e-13 1.115034e-14</span></span>
+<span id="cb3-21"><a href="#cb3-21"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Mean&quot;</span>)</span>
+<span id="cb3-22"><a href="#cb3-22"></a><span class="co">#&gt;  [1] 2.204668e-24 1.961834e-22 8.589942e-21 2.466948e-19 5.226557e-18</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="co">#&gt;  [6] 8.711136e-17 1.189465e-15 1.368247e-14 1.353155e-13 1.168472e-12</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="co">#&gt; [11] 8.917558e-12 6.073895e-11 3.721822e-10 2.065399e-09 1.043890e-08</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="co">#&gt; [16] 4.828268e-08 2.052154e-07 8.043966e-07 2.917007e-06 9.813294e-06</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="co">#&gt; [21] 3.070220e-05 8.952711e-05 2.437965e-04 6.211058e-04 1.482796e-03</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="co">#&gt; [26] 3.322270e-03 6.995972e-03 1.386490e-02 2.589561e-02 4.564203e-02</span></span>
+<span id="cb3-28"><a href="#cb3-28"></a><span class="co">#&gt; [31] 7.602274e-02 1.198434e-01 1.790993e-01 2.542091e-01 3.434279e-01</span></span>
+<span id="cb3-29"><a href="#cb3-29"></a><span class="co">#&gt; [36] 4.427015e-01 5.461169e-01 6.469040e-01 7.387189e-01 8.168201e-01</span></span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="co">#&gt; [41] 8.787787e-01 9.245526e-01 9.559924e-01 9.760300e-01 9.878536e-01</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="co">#&gt; [46] 9.942962e-01 9.975285e-01 9.990164e-01 9.996424e-01 9.998819e-01</span></span>
+<span id="cb3-32"><a href="#cb3-32"></a><span class="co">#&gt; [51] 9.999648e-01 9.999906e-01 9.999978e-01 9.999995e-01 9.999999e-01</span></span>
+<span id="cb3-33"><a href="#cb3-33"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>A comparison with exact computation shows that the approximation quality of the AMBA procedure increases when the probabilities of success are closer to each other. The reason is that, although the expectation remains unchanged, the distribution’s variance becomes smaller the less the probabilities differ. Since this variance is minimized by equal probabilities (but still underestimated), the AMBA method is best suited for situations with very similar probabilities of success.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co"># U(0, 1) random probabilities of success</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Mean&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="co">#&gt;  [1] 9.203176e-08 2.297178e-06 2.723611e-05 2.039497e-04 1.081780e-03</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="co">#&gt;  [6] 4.320318e-03 1.347977e-02 3.364646e-02 6.823695e-02 1.135495e-01</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; [11] 1.558851e-01 1.768638e-01 1.655492e-01 1.271454e-01 7.934094e-02</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="co">#&gt; [16] 3.960811e-02 1.544760e-02 4.536271e-03 9.435709e-04 1.239589e-04</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; [21] 7.735255e-06</span></span>
+<span id="cb4-11"><a href="#cb4-11"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb4-12"><a href="#cb4-12"></a><span class="co">#&gt;  [1] 4.401037e-11 7.873212e-09 3.624610e-07 7.952504e-06 1.014602e-04</span></span>
+<span id="cb4-13"><a href="#cb4-13"></a><span class="co">#&gt;  [6] 8.311558e-04 4.642470e-03 1.838525e-02 5.297347e-02 1.129135e-01</span></span>
+<span id="cb4-14"><a href="#cb4-14"></a><span class="co">#&gt; [11] 1.798080e-01 2.148719e-01 1.926468e-01 1.289706e-01 6.384266e-02</span></span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="co">#&gt; [16] 2.299142e-02 5.871700e-03 1.021142e-03 1.129421e-04 6.977021e-06</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="co">#&gt; [21] 1.747603e-07</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Mean&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb4-19"><a href="#cb4-19"></a><span class="co">#&gt; -3.801e-02  2.290e-06  6.360e-04  0.000e+00  8.837e-03  1.662e-02</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a></span>
+<span id="cb4-21"><a href="#cb4-21"></a><span class="co"># U(0.3, 0.5) random probabilities of success</span></span>
+<span id="cb4-22"><a href="#cb4-22"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="fl">0.3</span>, <span class="fl">0.5</span>)</span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Mean&quot;</span>)</span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="co">#&gt;  [1] 4.348271e-05 5.672598e-04 3.515127e-03 1.375712e-02 3.813748e-02</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="co">#&gt;  [6] 7.960444e-02 1.298114e-01 1.693472e-01 1.795010e-01 1.561137e-01</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="co">#&gt; [11] 1.120132e-01 6.642197e-02 3.249439e-02 1.304339e-02 4.253984e-03</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="co">#&gt; [16] 1.109919e-03 2.262438e-04 3.472347e-05 3.774915e-06 2.591904e-07</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="co">#&gt; [21] 8.453263e-09</span></span>
+<span id="cb4-29"><a href="#cb4-29"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb4-30"><a href="#cb4-30"></a><span class="co">#&gt;  [1] 4.015121e-05 5.344728e-04 3.370391e-03 1.338738e-02 3.756479e-02</span></span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="co">#&gt;  [6] 7.915145e-02 1.299445e-01 1.702071e-01 1.806555e-01 1.569062e-01</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a><span class="co">#&gt; [11] 1.121277e-01 6.604356e-02 3.200604e-02 1.269255e-02 4.078679e-03</span></span>
+<span id="cb4-33"><a href="#cb4-33"></a><span class="co">#&gt; [16] 1.045709e-03 2.088926e-04 3.133484e-05 3.320483e-06 2.216332e-07</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a><span class="co">#&gt; [21] 7.008006e-09</span></span>
+<span id="cb4-35"><a href="#cb4-35"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Mean&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb4-36"><a href="#cb4-36"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb4-37"><a href="#cb4-37"></a><span class="co">#&gt; -1.155e-03  1.400e-09  1.735e-05  0.000e+00  3.508e-04  5.727e-04</span></span>
+<span id="cb4-38"><a href="#cb4-38"></a></span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="co"># U(0.39, 0.41) random probabilities of success</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="fl">0.39</span>, <span class="fl">0.41</span>)</span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Mean&quot;</span>)</span>
+<span id="cb4-42"><a href="#cb4-42"></a><span class="co">#&gt;  [1] 3.638616e-05 4.854405e-04 3.076305e-03 1.231262e-02 3.490673e-02</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="co">#&gt;  [6] 7.451247e-02 1.242621e-01 1.657824e-01 1.797056e-01 1.598344e-01</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a><span class="co">#&gt; [11] 1.172824e-01 7.112295e-02 3.558286e-02 1.460687e-02 4.871885e-03</span></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="co">#&gt; [16] 1.299951e-03 2.709859e-04 4.253314e-05 4.728746e-06 3.320414e-07</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a><span class="co">#&gt; [21] 1.107470e-08</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="co">#&gt;  [1] 3.636149e-05 4.851935e-04 3.075192e-03 1.230970e-02 3.490204e-02</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a><span class="co">#&gt;  [6] 7.450845e-02 1.242626e-01 1.657891e-01 1.797153e-01 1.598415e-01</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a><span class="co">#&gt; [11] 1.172840e-01 7.112011e-02 3.557873e-02 1.460374e-02 4.870251e-03</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a><span class="co">#&gt; [16] 1.299328e-03 2.708111e-04 4.249771e-05 4.723809e-06 3.316172e-07</span></span>
+<span id="cb4-52"><a href="#cb4-52"></a><span class="co">#&gt; [21] 1.105772e-08</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Mean&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb4-54"><a href="#cb4-54"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb4-55"><a href="#cb4-55"></a><span class="co">#&gt; -9.641e-06  1.700e-11  1.747e-07  0.000e+00  2.844e-06  4.689e-06</span></span></code></pre></div>
+</div>
+<div id="geometric-mean-binomial-approximation---variant-a" class="section level3">
+<h3>Geometric Mean Binomial Approximation - Variant A</h3>
+<p>The <em>Geometric Mean Binomial Approximation (Variant A)</em> (GMBA-A) approach is requested with <code>method = &quot;GeoMean&quot;</code>. It is based on a Binomial distribution, whose parameter is the geometric mean of the probabilities of success: <span class="math display">\[\hat{p} = \sqrt[n]{p_1 \cdot ... \cdot p_n}\]</span></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="kw">prod</span>(<span class="kw">rep</span>(pp, wt))<span class="op">^</span>(<span class="dv">1</span><span class="op">/</span><span class="kw">sum</span>(wt))</span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; [1] 0.4669916</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;GeoMean&quot;</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt;  [1] 2.141782e-17 1.144670e-15 3.008684e-14 5.184208e-13 6.586057e-12</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt;  [6] 6.578175e-11 5.379195e-10 3.703028e-09 2.189958e-08 1.129911e-07</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; [11] 5.147813e-07 2.091103e-06 7.633772e-06 2.520966e-05 7.572779e-05</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; [16] 2.078916e-04 5.236606e-04 1.214475e-03 2.601021e-03 5.157435e-03</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; [21] 9.489168e-03 1.623184e-02 2.585712e-02 3.841422e-02 5.328923e-02</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt; [26] 6.909972e-02 8.382634e-02 9.520502e-02 1.012875e-01 1.009827e-01</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt; [31] 9.437363e-02 8.268481e-02 6.791600e-02 5.229152e-02 3.772988e-02</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt; [36] 2.550094e-02 1.613623e-02 9.552467e-03 5.285892e-03 2.731219e-03</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; [41] 1.316117e-03 5.906156e-04 2.464113e-04 9.539397e-05 3.419132e-05</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; [46] 1.131690e-05 3.448772e-06 9.643463e-07 2.464308e-07 5.728188e-08</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">#&gt; [51] 1.204491e-08 2.276152e-09 3.835067e-10 5.705775e-11 7.406038e-12</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="co">#&gt; [56] 8.258409e-13 7.752374e-14 5.958061e-15 3.600079e-16 1.603823e-17</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">#&gt; [61] 4.683928e-19 6.727527e-21</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;GeoMean&quot;</span>)</span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="co">#&gt;  [1] 2.141782e-17 1.166088e-15 3.125293e-14 5.496737e-13 7.135731e-12</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="co">#&gt;  [6] 7.291748e-11 6.108370e-10 4.313865e-09 2.621345e-08 1.392046e-07</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="co">#&gt; [11] 6.539859e-07 2.745088e-06 1.037886e-05 3.558852e-05 1.113163e-04</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="co">#&gt; [16] 3.192079e-04 8.428685e-04 2.057343e-03 4.658364e-03 9.815799e-03</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a><span class="co">#&gt; [21] 1.930497e-02 3.553681e-02 6.139393e-02 9.980815e-02 1.530974e-01</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="co">#&gt; [26] 2.221971e-01 3.060234e-01 4.012285e-01 5.025160e-01 6.034986e-01</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="co">#&gt; [31] 6.978723e-01 7.805571e-01 8.484731e-01 9.007646e-01 9.384945e-01</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="co">#&gt; [36] 9.639954e-01 9.801316e-01 9.896841e-01 9.949700e-01 9.977012e-01</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="co">#&gt; [41] 9.990173e-01 9.996080e-01 9.998544e-01 9.999498e-01 9.999840e-01</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a><span class="co">#&gt; [46] 9.999953e-01 9.999987e-01 9.999997e-01 9.999999e-01 1.000000e+00</span></span>
+<span id="cb5-32"><a href="#cb5-32"></a><span class="co">#&gt; [51] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb5-33"><a href="#cb5-33"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb5-34"><a href="#cb5-34"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>It is known that the geometric mean of the probabilities of success is always smaller than their arithmetic mean. Thus, we get a stochastically <em>smaller</em> binomial distribution. A comparison with exact computation shows that the approximation quality of the GMBA-A procedure increases when the probabilities of success are closer to each other:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co"># U(0, 1) random probabilities of success</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMean&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt;  [1] 4.557123e-06 7.742984e-05 6.249130e-04 3.185359e-03 1.150098e-02</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt;  [6] 3.126602e-02 6.640491e-02 1.128282e-01 1.557610e-01 1.764351e-01</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [11] 1.648790e-01 1.273387e-01 8.113517e-02 4.241734e-02 1.801777e-02</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; [16] 6.122779e-03 1.625497e-03 3.249263e-04 4.600672e-05 4.114199e-06</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; [21] 1.747603e-07</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt;  [1] 4.401037e-11 7.873212e-09 3.624610e-07 7.952504e-06 1.014602e-04</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt;  [6] 8.311558e-04 4.642470e-03 1.838525e-02 5.297347e-02 1.129135e-01</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co">#&gt; [11] 1.798080e-01 2.148719e-01 1.926468e-01 1.289706e-01 6.384266e-02</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">#&gt; [16] 2.299142e-02 5.871700e-03 1.021142e-03 1.129421e-04 6.977021e-06</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; [21] 1.747603e-07</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMean&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt;     Min.  1st Qu.   Median     Mean  3rd Qu.     Max. </span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; -0.11151 -0.01493  0.00000  0.00000  0.01140  0.10279</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co"># U(0.4, 0.6) random probabilities of success</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMean&quot;</span>)</span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="co">#&gt;  [1] 1.317886e-06 2.551200e-05 2.345875e-04 1.362363e-03 5.604265e-03</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="co">#&gt;  [6] 1.735823e-02 4.200318e-02 8.131092e-02 1.278907e-01 1.650496e-01</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="co">#&gt; [11] 1.757292e-01 1.546280e-01 1.122499e-01 6.686047e-02 3.235759e-02</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="co">#&gt; [16] 1.252775e-02 3.789307e-03 8.629936e-04 1.392173e-04 1.418425e-05</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="co">#&gt; [21] 6.864565e-07</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="co">#&gt;  [1] 1.046635e-06 2.098187e-05 1.993006e-04 1.192678e-03 5.043114e-03</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="co">#&gt;  [6] 1.601621e-02 3.964022e-02 7.829406e-02 1.253351e-01 1.642218e-01</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="co">#&gt; [11] 1.770816e-01 1.574210e-01 1.151700e-01 6.896627e-02 3.347297e-02</span></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="co">#&gt; [16] 1.296524e-02 3.913788e-03 8.873960e-04 1.421738e-04 1.435144e-05</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="co">#&gt; [21] 6.864565e-07</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMean&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb6-36"><a href="#cb6-36"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb6-37"><a href="#cb6-37"></a><span class="co">#&gt; -0.0029201 -0.0004375  0.0000000  0.0000000  0.0005612  0.0030169</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a></span>
+<span id="cb6-39"><a href="#cb6-39"></a><span class="co"># U(0.49, 0.51) random probabilities of success</span></span>
+<span id="cb6-40"><a href="#cb6-40"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="fl">0.49</span>, <span class="fl">0.51</span>)</span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMean&quot;</span>)</span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="co">#&gt;  [1] 9.491177e-07 1.899145e-05 1.805052e-04 1.083550e-03 4.607292e-03</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="co">#&gt;  [6] 1.475040e-02 3.689366e-02 7.382266e-02 1.200193e-01 1.601024e-01</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="co">#&gt; [11] 1.761970e-01 1.602558e-01 1.202494e-01 7.403508e-02 3.703527e-02</span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="co">#&gt; [16] 1.482120e-02 4.633845e-03 1.090839e-03 1.818935e-04 1.915586e-05</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a><span class="co">#&gt; [21] 9.582517e-07</span></span>
+<span id="cb6-47"><a href="#cb6-47"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb6-48"><a href="#cb6-48"></a><span class="co">#&gt;  [1] 9.472606e-07 1.895984e-05 1.802539e-04 1.082315e-03 4.603107e-03</span></span>
+<span id="cb6-49"><a href="#cb6-49"></a><span class="co">#&gt;  [6] 1.474011e-02 3.687497e-02 7.379784e-02 1.199969e-01 1.600932e-01</span></span>
+<span id="cb6-50"><a href="#cb6-50"></a><span class="co">#&gt; [11] 1.762060e-01 1.602781e-01 1.202742e-01 7.405383e-02 3.704562e-02</span></span>
+<span id="cb6-51"><a href="#cb6-51"></a><span class="co">#&gt; [16] 1.482542e-02 4.635093e-03 1.091093e-03 1.819256e-04 1.915775e-05</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a><span class="co">#&gt; [21] 9.582517e-07</span></span>
+<span id="cb6-53"><a href="#cb6-53"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMean&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb6-54"><a href="#cb6-54"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb6-55"><a href="#cb6-55"></a><span class="co">#&gt; -2.485e-05 -4.219e-06  0.000e+00  0.000e+00  4.185e-06  2.482e-05</span></span></code></pre></div>
+</div>
+<div id="geometric-mean-binomial-approximation---variant-b" class="section level3">
+<h3>Geometric Mean Binomial Approximation - Variant B</h3>
+<p>The <em>Geometric Mean Binomial Approximation (Variant B)</em> (GMBA-B) approach is requested with <code>method = &quot;GeoMeanCounter&quot;</code>. It is based on a Binomial distribution, whose parameter is 1 minus the geometric mean of the probabilities of <strong>failure</strong>: <span class="math display">\[\hat{p} = 1 - \sqrt[n]{(1 - p_1) \cdot ... \cdot (1 - p_n)}\]</span></p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">prod</span>(<span class="dv">1</span> <span class="op">-</span><span class="st"> </span><span class="kw">rep</span>(pp, wt))<span class="op">^</span>(<span class="dv">1</span><span class="op">/</span><span class="kw">sum</span>(wt))</span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="co">#&gt; [1] 0.7275426</span></span>
+<span id="cb7-6"><a href="#cb7-6"></a></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;GeoMeanCounter&quot;</span>)</span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="co">#&gt;  [1] 3.574462e-35 5.822379e-33 4.664248e-31 2.449471e-29 9.484189e-28</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="co">#&gt;  [6] 2.887121e-26 7.195512e-25 1.509685e-23 2.721134e-22 4.279009e-21</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co">#&gt; [11] 5.941642e-20 7.356037e-19 8.184508e-18 8.237686e-17 7.541858e-16</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="co">#&gt; [16] 6.310225e-15 4.844429e-14 3.424255e-13 2.235148e-12 1.350769e-11</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="co">#&gt; [21] 7.574609e-11 3.948978e-10 1.917264e-09 8.681177e-09 3.670379e-08</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="co">#&gt; [26] 1.450549e-07 5.363170e-07 1.856461e-06 6.019586e-06 1.829121e-05</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="co">#&gt; [31] 5.209921e-05 1.391205e-04 3.482749e-04 8.172712e-04 1.797236e-03</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="co">#&gt; [36] 3.702208e-03 7.139892e-03 1.288219e-02 2.172588e-02 3.421374e-02</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="co">#&gt; [41] 5.024851e-02 6.872559e-02 8.738947e-02 1.031108e-01 1.126377e-01</span></span>
+<span id="cb7-17"><a href="#cb7-17"></a><span class="co">#&gt; [46] 1.136267e-01 1.055364e-01 8.994057e-02 7.004907e-02 4.962603e-02</span></span>
+<span id="cb7-18"><a href="#cb7-18"></a><span class="co">#&gt; [51] 3.180393e-02 1.831737e-02 9.406320e-03 4.265268e-03 1.687339e-03</span></span>
+<span id="cb7-19"><a href="#cb7-19"></a><span class="co">#&gt; [56] 5.734528e-04 1.640669e-04 3.843049e-05 7.077304e-06 9.609416e-07</span></span>
+<span id="cb7-20"><a href="#cb7-20"></a><span class="co">#&gt; [61] 8.553338e-08 3.744258e-09</span></span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;GeoMeanCounter&quot;</span>)</span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="co">#&gt;  [1] 3.574462e-35 5.858123e-33 4.722829e-31 2.496699e-29 9.733859e-28</span></span>
+<span id="cb7-23"><a href="#cb7-23"></a><span class="co">#&gt;  [6] 2.984460e-26 7.493958e-25 1.584624e-23 2.879597e-22 4.566969e-21</span></span>
+<span id="cb7-24"><a href="#cb7-24"></a><span class="co">#&gt; [11] 6.398339e-20 7.995871e-19 8.984095e-18 9.136095e-17 8.455467e-16</span></span>
+<span id="cb7-25"><a href="#cb7-25"></a><span class="co">#&gt; [16] 7.155772e-15 5.560007e-14 3.980256e-13 2.633173e-12 1.614086e-11</span></span>
+<span id="cb7-26"><a href="#cb7-26"></a><span class="co">#&gt; [21] 9.188695e-11 4.867847e-10 2.404049e-09 1.108523e-08 4.778901e-08</span></span>
+<span id="cb7-27"><a href="#cb7-27"></a><span class="co">#&gt; [26] 1.928440e-07 7.291610e-07 2.585622e-06 8.605207e-06 2.689642e-05</span></span>
+<span id="cb7-28"><a href="#cb7-28"></a><span class="co">#&gt; [31] 7.899562e-05 2.181161e-04 5.663910e-04 1.383662e-03 3.180899e-03</span></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="co">#&gt; [36] 6.883107e-03 1.402300e-02 2.690519e-02 4.863107e-02 8.284481e-02</span></span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="co">#&gt; [41] 1.330933e-01 2.018189e-01 2.892084e-01 3.923192e-01 5.049569e-01</span></span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="co">#&gt; [46] 6.185836e-01 7.241200e-01 8.140606e-01 8.841097e-01 9.337357e-01</span></span>
+<span id="cb7-32"><a href="#cb7-32"></a><span class="co">#&gt; [51] 9.655396e-01 9.838570e-01 9.932633e-01 9.975286e-01 9.992159e-01</span></span>
+<span id="cb7-33"><a href="#cb7-33"></a><span class="co">#&gt; [56] 9.997894e-01 9.999534e-01 9.999919e-01 9.999989e-01 9.999999e-01</span></span>
+<span id="cb7-34"><a href="#cb7-34"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>It is known that the geometric mean of the probabilities of <strong>failure</strong> is always smaller than their arithmetic mean. As a result, 1 minus the geometric mean is larger than 1 minus the arithmetic mean. Thus, we get a stochastically <em>larger</em> binomial distribution. A comparison with exact computation shows that the approximation quality of the GMBA-B procedure again increases when the probabilities of success are closer to each other:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="co"># U(0, 1) random probabilities of success</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMeanCounter&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="co">#&gt;  [1] 4.401037e-11 2.019854e-09 4.403304e-08 6.062685e-07 5.912743e-06</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="co">#&gt;  [6] 4.341843e-05 2.490859e-04 1.143179e-03 4.262876e-03 1.304297e-02</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co">#&gt; [11] 3.292337e-02 6.868258e-02 1.182069e-01 1.669263e-01 1.915269e-01</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="co">#&gt; [16] 1.758024e-01 1.260695e-01 6.807004e-02 2.603394e-02 6.288561e-03</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; [21] 7.215333e-04</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt;  [1] 4.401037e-11 7.873212e-09 3.624610e-07 7.952504e-06 1.014602e-04</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt;  [6] 8.311558e-04 4.642470e-03 1.838525e-02 5.297347e-02 1.129135e-01</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt; [11] 1.798080e-01 2.148719e-01 1.926468e-01 1.289706e-01 6.384266e-02</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt; [16] 2.299142e-02 5.871700e-03 1.021142e-03 1.129421e-04 6.977021e-06</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="co">#&gt; [21] 1.747603e-07</span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMeanCounter&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb8-18"><a href="#cb8-18"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="co">#&gt; -1.469e-01 -1.724e-02 -3.200e-07  0.000e+00  2.592e-02  1.528e-01</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="co"># U(0.4, 0.6) random probabilities of success</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="fl">0.4</span>, <span class="fl">0.6</span>)</span>
+<span id="cb8-23"><a href="#cb8-23"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMeanCounter&quot;</span>)</span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="co">#&gt;  [1] 1.046635e-06 2.073844e-05 1.951870e-04 1.160254e-03 4.885321e-03</span></span>
+<span id="cb8-25"><a href="#cb8-25"></a><span class="co">#&gt;  [6] 1.548796e-02 3.836059e-02 7.600922e-02 1.223688e-01 1.616443e-01</span></span>
+<span id="cb8-26"><a href="#cb8-26"></a><span class="co">#&gt; [11] 1.761588e-01 1.586582e-01 1.178895e-01 7.187414e-02 3.560358e-02</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="co">#&gt; [16] 1.410928e-02 4.368234e-03 1.018282e-03 1.681387e-04 1.753458e-05</span></span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="co">#&gt; [21] 8.685930e-07</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb8-30"><a href="#cb8-30"></a><span class="co">#&gt;  [1] 1.046635e-06 2.098187e-05 1.993006e-04 1.192678e-03 5.043114e-03</span></span>
+<span id="cb8-31"><a href="#cb8-31"></a><span class="co">#&gt;  [6] 1.601621e-02 3.964022e-02 7.829406e-02 1.253351e-01 1.642218e-01</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="co">#&gt; [11] 1.770816e-01 1.574210e-01 1.151700e-01 6.896627e-02 3.347297e-02</span></span>
+<span id="cb8-33"><a href="#cb8-33"></a><span class="co">#&gt; [16] 1.296524e-02 3.913788e-03 8.873960e-04 1.421738e-04 1.435144e-05</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="co">#&gt; [21] 6.864565e-07</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMeanCounter&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb8-36"><a href="#cb8-36"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb8-37"><a href="#cb8-37"></a><span class="co">#&gt; -0.0029663 -0.0005283  0.0000000  0.0000000  0.0004544  0.0029079</span></span>
+<span id="cb8-38"><a href="#cb8-38"></a></span>
+<span id="cb8-39"><a href="#cb8-39"></a><span class="co"># U(0.49, 0.51) random probabilities of success</span></span>
+<span id="cb8-40"><a href="#cb8-40"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">20</span>, <span class="fl">0.49</span>, <span class="fl">0.51</span>)</span>
+<span id="cb8-41"><a href="#cb8-41"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMeanCounter&quot;</span>)</span>
+<span id="cb8-42"><a href="#cb8-42"></a><span class="co">#&gt;  [1] 9.472606e-07 1.895800e-05 1.802225e-04 1.082065e-03 4.601880e-03</span></span>
+<span id="cb8-43"><a href="#cb8-43"></a><span class="co">#&gt;  [6] 1.473596e-02 3.686475e-02 7.377926e-02 1.199722e-01 1.600709e-01</span></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="co">#&gt; [11] 1.761969e-01 1.602871e-01 1.202964e-01 7.407854e-02 3.706427e-02</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a><span class="co">#&gt; [16] 1.483571e-02 4.639289e-03 1.092334e-03 1.821786e-04 1.918963e-05</span></span>
+<span id="cb8-46"><a href="#cb8-46"></a><span class="co">#&gt; [21] 9.601293e-07</span></span>
+<span id="cb8-47"><a href="#cb8-47"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb8-48"><a href="#cb8-48"></a><span class="co">#&gt;  [1] 9.472606e-07 1.895984e-05 1.802539e-04 1.082315e-03 4.603107e-03</span></span>
+<span id="cb8-49"><a href="#cb8-49"></a><span class="co">#&gt;  [6] 1.474011e-02 3.687497e-02 7.379784e-02 1.199969e-01 1.600932e-01</span></span>
+<span id="cb8-50"><a href="#cb8-50"></a><span class="co">#&gt; [11] 1.762060e-01 1.602781e-01 1.202742e-01 7.405383e-02 3.704562e-02</span></span>
+<span id="cb8-51"><a href="#cb8-51"></a><span class="co">#&gt; [16] 1.482542e-02 4.635093e-03 1.091093e-03 1.819256e-04 1.915775e-05</span></span>
+<span id="cb8-52"><a href="#cb8-52"></a><span class="co">#&gt; [21] 9.582517e-07</span></span>
+<span id="cb8-53"><a href="#cb8-53"></a><span class="kw">summary</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;GeoMeanCounter&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp))</span>
+<span id="cb8-54"><a href="#cb8-54"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb8-55"><a href="#cb8-55"></a><span class="co">#&gt; -2.467e-05 -4.159e-06  0.000e+00  0.000e+00  4.196e-06  2.470e-05</span></span></code></pre></div>
+</div>
+<div id="normal-approximation" class="section level3">
+<h3>Normal Approximation</h3>
+<p>The <em>Normal Approximation</em> (NA) approach is requested with <code>method = &quot;Normal&quot;</code>. It is based on a Normal distribution, whose parameters are derived from the theoretical mean and variance of the input probabilities of success.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;  [1] 2.552770e-32 1.207834e-30 5.219650e-29 2.022022e-27 7.021785e-26</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;  [6] 2.185917e-24 6.100302e-23 1.526188e-21 3.423032e-20 6.882841e-19</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt; [11] 1.240755e-17 2.005270e-16 2.905604e-15 3.774712e-14 4.396661e-13</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt; [16] 4.591569e-12 4.299381e-11 3.609645e-10 2.717342e-09 1.834224e-08</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; [21] 1.110185e-07 6.025326e-07 2.932337e-06 1.279682e-05 5.007841e-05</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt; [26] 1.757379e-04 5.530339e-04 1.560683e-03 3.949650e-03 8.963710e-03</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; [31] 1.824341e-02 3.329786e-02 5.450317e-02 8.000636e-02 1.053238e-01</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt; [36] 1.243451e-01 1.316535e-01 1.250080e-01 1.064497e-01 8.129267e-02</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt; [41] 5.567468e-02 3.419491e-02 1.883477e-02 9.303614e-03 4.121280e-03</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt; [46] 1.637186e-03 5.832371e-04 1.863241e-04 5.337829e-05 1.371282e-05</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; [51] 3.159002e-06 6.525712e-07 1.208800e-07 2.007813e-08 2.990389e-09</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; [56] 3.993563e-10 4.782059e-11 5.134327e-12 4.942641e-13 4.266130e-14</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; [61] 3.301422e-15 2.441468e-16</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt;  [1] 2.552770e-32 1.233362e-30 5.342987e-29 2.075452e-27 7.229330e-26</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt;  [6] 2.258210e-24 6.326123e-23 1.589449e-21 3.581977e-20 7.241039e-19</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt; [11] 1.313165e-17 2.136587e-16 3.119262e-15 4.086639e-14 4.805325e-13</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt; [16] 5.072102e-12 4.806591e-11 4.090305e-10 3.126373e-09 2.146861e-08</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt; [21] 1.324871e-07 7.350197e-07 3.667357e-06 1.646417e-05 6.654258e-05</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt; [26] 2.422805e-04 7.953144e-04 2.355997e-03 6.305647e-03 1.526936e-02</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt; [31] 3.351276e-02 6.681062e-02 1.213138e-01 2.013201e-01 3.066439e-01</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt; [36] 4.309891e-01 5.626426e-01 6.876506e-01 7.941003e-01 8.753930e-01</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="co">#&gt; [41] 9.310676e-01 9.652625e-01 9.840973e-01 9.934009e-01 9.975222e-01</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt; [46] 9.991594e-01 9.997426e-01 9.999290e-01 9.999823e-01 9.999960e-01</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#&gt; [51] 9.999992e-01 9.999999e-01 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>A comparison with exact computation shows that the approximation quality of the NA procedure increases with larger numbers of probabilities of success:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co"># 10 random probabilities of success</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb10-5"><a href="#cb10-5"></a>dpn &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb10-6"><a href="#cb10-6"></a>dpd &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb10-7"><a href="#cb10-7"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; -0.0053305 -0.0010422  0.0005271  0.0000000  0.0016579  0.0026553</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co"># 1000 random probabilities of success</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1000</span>)</span>
+<span id="cb10-14"><a href="#cb10-14"></a>dpn &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb10-15"><a href="#cb10-15"></a>dpd &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb10-16"><a href="#cb10-16"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">#&gt; -8.412e-06  0.000e+00  0.000e+00  0.000e+00  0.000e+00  3.815e-06</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="co"># 100000 random probabilities of success</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100000</span>)</span>
+<span id="cb10-23"><a href="#cb10-23"></a>dpn &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb10-24"><a href="#cb10-24"></a>dpd &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb10-25"><a href="#cb10-25"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb10-28"><a href="#cb10-28"></a><span class="co">#&gt; -4.484e-09  0.000e+00  8.720e-13  0.000e+00  4.914e-10  2.734e-09</span></span></code></pre></div>
+</div>
+<div id="refined-normal-approximation" class="section level3">
+<h3>Refined Normal Approximation</h3>
+<p>The <em>Refined Normal Approximation</em> (RNA) approach is requested with <code>method = &quot;RefinedNormal&quot;</code>. It is based on a Normal distribution, whose parameters are derived from the theoretical mean, variance and skewness of the input probabilities of success.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt;  [1] 2.579548e-31 1.128297e-29 4.507210e-28 1.611452e-26 5.156486e-25</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co">#&gt;  [6] 1.476806e-23 3.785627e-22 8.685911e-21 1.783953e-19 3.280039e-18</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; [11] 5.399492e-17 7.959230e-16 1.050796e-14 1.242802e-13 1.317210e-12</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="co">#&gt; [16] 1.251531e-11 1.066498e-10 8.155390e-10 5.599786e-09 3.455053e-08</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="co">#&gt; [21] 1.917106e-07 9.574753e-07 4.308224e-06 1.748069e-05 6.401569e-05</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; [26] 2.117447e-04 6.329842e-04 1.710740e-03 4.180480e-03 9.234968e-03</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="co">#&gt; [31] 1.843341e-02 3.322175e-02 5.401115e-02 7.912655e-02 1.043358e-01</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="co">#&gt; [36] 1.236782e-01 1.316360e-01 1.256489e-01 1.074322e-01 8.218619e-02</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="co">#&gt; [41] 5.618825e-02 3.428872e-02 1.865323e-02 9.032795e-03 3.886960e-03</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; [46] 1.483178e-03 5.004545e-04 1.487517e-04 3.873113e-05 8.757189e-06</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="co">#&gt; [51] 1.693868e-06 2.722346e-07 3.388544e-08 2.218356e-09 0.000000e+00</span></span>
+<span id="cb11-17"><a href="#cb11-17"></a><span class="co">#&gt; [56] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb11-18"><a href="#cb11-18"></a><span class="co">#&gt; [61] 0.000000e+00 0.000000e+00</span></span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="co">#&gt;  [1] 2.579548e-31 1.154092e-29 4.622620e-28 1.657678e-26 5.322254e-25</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="co">#&gt;  [6] 1.530028e-23 3.938629e-22 9.079774e-21 1.874750e-19 3.467514e-18</span></span>
+<span id="cb11-22"><a href="#cb11-22"></a><span class="co">#&gt; [11] 5.746244e-17 8.533855e-16 1.136134e-14 1.356415e-13 1.452852e-12</span></span>
+<span id="cb11-23"><a href="#cb11-23"></a><span class="co">#&gt; [16] 1.396817e-11 1.206179e-10 9.361569e-10 6.535943e-09 4.108647e-08</span></span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#&gt; [21] 2.327971e-07 1.190272e-06 5.498496e-06 2.297918e-05 8.699487e-05</span></span>
+<span id="cb11-25"><a href="#cb11-25"></a><span class="co">#&gt; [26] 2.987396e-04 9.317238e-04 2.642463e-03 6.822944e-03 1.605791e-02</span></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="co">#&gt; [31] 3.449132e-02 6.771307e-02 1.217242e-01 2.008508e-01 3.051866e-01</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="co">#&gt; [36] 4.288648e-01 5.605008e-01 6.861497e-01 7.935820e-01 8.757682e-01</span></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="co">#&gt; [41] 9.319564e-01 9.662451e-01 9.848984e-01 9.939312e-01 9.978181e-01</span></span>
+<span id="cb11-29"><a href="#cb11-29"></a><span class="co">#&gt; [46] 9.993013e-01 9.998018e-01 9.999505e-01 9.999892e-01 9.999980e-01</span></span>
+<span id="cb11-30"><a href="#cb11-30"></a><span class="co">#&gt; [51] 9.999997e-01 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb11-31"><a href="#cb11-31"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb11-32"><a href="#cb11-32"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>A comparison with exact computation shows that the approximation quality of the RNA procedure increases with larger numbers of probabilities of success:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co"># 10 random probabilities of success</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb12-5"><a href="#cb12-5"></a>dpn &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb12-6"><a href="#cb12-6"></a>dpd &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb12-7"><a href="#cb12-7"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb12-8"><a href="#cb12-8"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="co">#&gt; -0.0039538 -0.0006920  0.0003543  0.0000000  0.0017167  0.0023597</span></span>
+<span id="cb12-11"><a href="#cb12-11"></a></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="co"># 1000 random probabilities of success</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1000</span>)</span>
+<span id="cb12-14"><a href="#cb12-14"></a>dpn &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb12-15"><a href="#cb12-15"></a>dpd &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb12-16"><a href="#cb12-16"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="co">#&gt; -2.974e-06  0.000e+00  0.000e+00  0.000e+00  0.000e+00  2.270e-06</span></span>
+<span id="cb12-20"><a href="#cb12-20"></a></span>
+<span id="cb12-21"><a href="#cb12-21"></a><span class="co"># 100000 random probabilities of success</span></span>
+<span id="cb12-22"><a href="#cb12-22"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100000</span>)</span>
+<span id="cb12-23"><a href="#cb12-23"></a>dpn &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb12-24"><a href="#cb12-24"></a>dpd &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp)</span>
+<span id="cb12-25"><a href="#cb12-25"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb12-26"><a href="#cb12-26"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb12-27"><a href="#cb12-27"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb12-28"><a href="#cb12-28"></a><span class="co">#&gt; -3.126e-09  0.000e+00  6.200e-13  0.000e+00  4.616e-10  2.293e-09</span></span></code></pre></div>
+</div>
+<div id="processing-speed-comparisons" class="section level3">
+<h3>Processing Speed Comparisons</h3>
+<p>To assess the performance of the approximation procedures, we use the <code>microbenchmark</code> package. Each algorithm has to calculate the PMF repeatedly based on random probability vectors. The run times are then summarized in a table that presents, among other statistics, their minima, maxima and means. The following results were recorded on an AMD Ryzen 7 1800X with 32 GiB of RAM and Windows 10 Education (20H2).</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">library</span>(microbenchmark)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a></span>
+<span id="cb13-4"><a href="#cb13-4"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">4000</span>), <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>f2 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">4000</span>), <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb13-6"><a href="#cb13-6"></a>f3 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">4000</span>), <span class="dt">method =</span> <span class="st">&quot;Poisson&quot;</span>)</span>
+<span id="cb13-7"><a href="#cb13-7"></a>f4 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">4000</span>), <span class="dt">method =</span> <span class="st">&quot;Mean&quot;</span>)</span>
+<span id="cb13-8"><a href="#cb13-8"></a>f5 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">4000</span>), <span class="dt">method =</span> <span class="st">&quot;GeoMean&quot;</span>)</span>
+<span id="cb13-9"><a href="#cb13-9"></a>f6 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">4000</span>), <span class="dt">method =</span> <span class="st">&quot;GeoMeanCounter&quot;</span>)</span>
+<span id="cb13-10"><a href="#cb13-10"></a>f7 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">4000</span>), <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb13-11"><a href="#cb13-11"></a></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="kw">microbenchmark</span>(<span class="kw">f1</span>(), <span class="kw">f2</span>(), <span class="kw">f3</span>(), <span class="kw">f4</span>(), <span class="kw">f5</span>(), <span class="kw">f6</span>(), <span class="kw">f7</span>())</span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co">#&gt; Unit: microseconds</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt;  expr    min      lq     mean  median      uq     max neval    cld</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt;  f1()  599.2  637.80  697.765  649.50  669.00  2716.5   100 a     </span></span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt;  f2()  754.1  806.20  867.631  820.05  841.30  2949.5   100  b    </span></span>
+<span id="cb13-17"><a href="#cb13-17"></a><span class="co">#&gt;  f3()  909.9  984.95 1035.070  993.30 1008.35  3635.5   100   c   </span></span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="co">#&gt;  f4() 1313.2 1413.40 1481.377 1428.50 1447.95  3635.5   100    d  </span></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="co">#&gt;  f5() 1464.7 1587.60 1616.613 1600.80 1618.45  2884.4   100    de </span></span>
+<span id="cb13-20"><a href="#cb13-20"></a><span class="co">#&gt;  f6() 1453.8 1572.10 1645.180 1586.45 1605.20  3901.6   100     e </span></span>
+<span id="cb13-21"><a href="#cb13-21"></a><span class="co">#&gt;  f7() 7513.9 7729.15 7988.867 7805.40 7869.70 12405.8   100      f</span></span></code></pre></div>
+<p>Clearly, the NA procedure is the fastest, followed by the RNA and PA methods, which need approximately 25% (RNA) and 50% (PA) more time, and the AMBA and GMBA approaches that need 2.5 times as long as the NA algorithm. AMBA, GMBA-A and GMBA-B procedures exhibit almost equal mean execution speed, with the AMBA algorithm being slightly faster. All of the approximation procedures outperform the fastest exact approach, DC-FFT, by far. Even the slowest approximate algorithm is roughly five times as fast as DC-FFT.</p>
+</div>
+</div>
+<div id="generalized-poisson-binomial-distribution" class="section level2">
+<h2>Generalized Poisson Binomial Distribution</h2>
+<div id="generalized-normal-approximation" class="section level3">
+<h3>Generalized Normal Approximation</h3>
+<p>The <em>Generalized Normal Approximation</em> (G-NA) approach is requested with <code>method = &quot;Normal&quot;</code>. It is based on a Normal distribution, whose parameters are derived from the theoretical mean and variance of the input probabilities of success (see <a href="intro.html">Introduction</a>.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb14-3"><a href="#cb14-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a></span>
+<span id="cb14-7"><a href="#cb14-7"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt;   [1] 5.607923e-34 8.868899e-34 2.266907e-33 5.759009e-33 1.454159e-32</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a><span class="co">#&gt;   [6] 3.649437e-32 9.103112e-32 2.256856e-31 5.561194e-31 1.362016e-30</span></span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt;  [11] 3.315478e-30 8.021587e-30 1.928965e-29 4.610400e-29 1.095224e-28</span></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="co">#&gt;  [16] 2.585931e-28 6.068497e-28 1.415453e-27 3.281403e-27 7.560907e-27</span></span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt;  [21] 1.731562e-26 3.941418e-26 8.916960e-26 2.005077e-25 4.481212e-25</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt;  [26] 9.954281e-25 2.197730e-24 4.822684e-24 1.051849e-23 2.280173e-23</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt;  [31] 4.912836e-23 1.052075e-22 2.239296e-22 4.737247e-22 9.960718e-22</span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt;  [36] 2.081639e-21 4.323844e-21 8.926573e-21 1.831680e-20 3.735634e-20</span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt;  [41] 7.572323e-20 1.525612e-19 3.054984e-19 6.080284e-19 1.202787e-18</span></span>
+<span id="cb14-17"><a href="#cb14-17"></a><span class="co">#&gt;  [46] 2.364851e-18 4.621350e-18 8.976023e-18 1.732802e-17 3.324790e-17</span></span>
+<span id="cb14-18"><a href="#cb14-18"></a><span class="co">#&gt;  [51] 6.340586e-17 1.201834e-16 2.264174e-16 4.239603e-16 7.890246e-16</span></span>
+<span id="cb14-19"><a href="#cb14-19"></a><span class="co">#&gt;  [56] 1.459506e-15 2.683313e-15 4.903282e-15 8.905378e-15 1.607563e-14</span></span>
+<span id="cb14-20"><a href="#cb14-20"></a><span class="co">#&gt;  [61] 2.884254e-14 5.143387e-14 9.116221e-14 1.605945e-13 2.811877e-13</span></span>
+<span id="cb14-21"><a href="#cb14-21"></a><span class="co">#&gt;  [66] 4.893417e-13 8.464047e-13 1.455104e-12 2.486337e-12 4.222561e-12</span></span>
+<span id="cb14-22"><a href="#cb14-22"></a><span class="co">#&gt;  [71] 7.127579e-12 1.195799e-11 1.993996e-11 3.304764e-11 5.443857e-11</span></span>
+<span id="cb14-23"><a href="#cb14-23"></a><span class="co">#&gt;  [76] 8.912982e-11 1.450405e-10 2.345880e-10 3.771137e-10 6.025440e-10</span></span>
+<span id="cb14-24"><a href="#cb14-24"></a><span class="co">#&gt;  [81] 9.568753e-10 1.510330e-09 2.369401e-09 3.694497e-09 5.725614e-09</span></span>
+<span id="cb14-25"><a href="#cb14-25"></a><span class="co">#&gt;  [86] 8.819398e-09 1.350224e-08 2.054578e-08 3.107347e-08 4.670967e-08</span></span>
+<span id="cb14-26"><a href="#cb14-26"></a><span class="co">#&gt;  [91] 6.978689e-08 1.036313e-07 1.529531e-07 2.243755e-07 3.271469e-07</span></span>
+<span id="cb14-27"><a href="#cb14-27"></a><span class="co">#&gt;  [96] 4.740893e-07 6.828536e-07 9.775638e-07 1.390954e-06 1.967117e-06</span></span>
+<span id="cb14-28"><a href="#cb14-28"></a><span class="co">#&gt; [101] 2.765018e-06 3.862920e-06 5.363935e-06 7.402890e-06 1.015475e-05</span></span>
+<span id="cb14-29"><a href="#cb14-29"></a><span class="co">#&gt; [106] 1.384482e-05 1.876097e-05 2.526814e-05 3.382528e-05 4.500488e-05</span></span>
+<span id="cb14-30"><a href="#cb14-30"></a><span class="co">#&gt; [111] 5.951520e-05 7.822512e-05 1.021915e-04 1.326884e-04 1.712386e-04</span></span>
+<span id="cb14-31"><a href="#cb14-31"></a><span class="co">#&gt; [116] 2.196444e-04 2.800198e-04 3.548195e-04 4.468649e-04 5.593647e-04</span></span>
+<span id="cb14-32"><a href="#cb14-32"></a><span class="co">#&gt; [121] 6.959275e-04 8.605635e-04 1.057674e-03 1.292025e-03 1.568701e-03</span></span>
+<span id="cb14-33"><a href="#cb14-33"></a><span class="co">#&gt; [126] 1.893038e-03 2.270537e-03 2.706749e-03 3.207136e-03 3.776912e-03</span></span>
+<span id="cb14-34"><a href="#cb14-34"></a><span class="co">#&gt; [131] 4.420856e-03 5.143112e-03 5.946968e-03 6.834635e-03 7.807017e-03</span></span>
+<span id="cb14-35"><a href="#cb14-35"></a><span class="co">#&gt; [136] 8.863494e-03 1.000172e-02 1.121747e-02 1.250446e-02 1.385431e-02</span></span>
+<span id="cb14-36"><a href="#cb14-36"></a><span class="co">#&gt; [141] 1.525651e-02 1.669842e-02 1.816543e-02 1.964112e-02 2.110749e-02</span></span>
+<span id="cb14-37"><a href="#cb14-37"></a><span class="co">#&gt; [146] 2.254536e-02 2.393468e-02 2.525505e-02 2.648616e-02 2.760831e-02</span></span>
+<span id="cb14-38"><a href="#cb14-38"></a><span class="co">#&gt; [151] 2.860294e-02 2.945314e-02 3.014411e-02 3.066363e-02 3.100235e-02</span></span>
+<span id="cb14-39"><a href="#cb14-39"></a><span class="co">#&gt; [156] 3.115414e-02 3.111624e-02 3.088932e-02 3.047753e-02 2.988830e-02</span></span>
+<span id="cb14-40"><a href="#cb14-40"></a><span class="co">#&gt; [161] 2.913216e-02 2.822242e-02 2.717477e-02 2.600684e-02 2.473770e-02</span></span>
+<span id="cb14-41"><a href="#cb14-41"></a><span class="co">#&gt; [166] 2.338736e-02 2.197622e-02 2.052462e-02 1.905228e-02 1.757799e-02</span></span>
+<span id="cb14-42"><a href="#cb14-42"></a><span class="co">#&gt; [171] 1.611912e-02 1.469141e-02 1.330871e-02 1.198280e-02 1.072335e-02</span></span>
+<span id="cb14-43"><a href="#cb14-43"></a><span class="co">#&gt; [176] 9.537908e-03 8.431904e-03 7.408807e-03 6.470249e-03 5.616215e-03</span></span>
+<span id="cb14-44"><a href="#cb14-44"></a><span class="co">#&gt; [181] 4.845254e-03 4.154698e-03 3.540890e-03 2.999407e-03 2.525274e-03</span></span>
+<span id="cb14-45"><a href="#cb14-45"></a><span class="co">#&gt; [186] 2.113156e-03 1.757538e-03 1.452874e-03 1.193717e-03 9.748208e-04</span></span>
+<span id="cb14-46"><a href="#cb14-46"></a><span class="co">#&gt; [191] 7.912218e-04 6.382955e-04 5.117942e-04 4.078674e-04 3.230671e-04</span></span>
+<span id="cb14-47"><a href="#cb14-47"></a><span class="co">#&gt; [196] 2.543411e-04 1.990171e-04 1.547798e-04 1.196432e-04 9.192046e-05</span></span>
+<span id="cb14-48"><a href="#cb14-48"></a><span class="co">#&gt; [201] 7.019178e-05 5.327340e-05 4.018691e-05 3.013068e-05 2.245346e-05</span></span>
+<span id="cb14-49"><a href="#cb14-49"></a><span class="co">#&gt; [206] 1.663059e-05 1.224284e-05 8.957907e-06 6.514501e-06 1.614725e-05</span></span>
+<span id="cb14-50"><a href="#cb14-50"></a><span class="kw">pgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb14-51"><a href="#cb14-51"></a><span class="co">#&gt;   [1] 5.607923e-34 1.447682e-33 3.714589e-33 9.473598e-33 2.401518e-32</span></span>
+<span id="cb14-52"><a href="#cb14-52"></a><span class="co">#&gt;   [6] 6.050955e-32 1.515407e-31 3.772263e-31 9.333457e-31 2.295361e-30</span></span>
+<span id="cb14-53"><a href="#cb14-53"></a><span class="co">#&gt;  [11] 5.610840e-30 1.363243e-29 3.292208e-29 7.902608e-29 1.885484e-28</span></span>
+<span id="cb14-54"><a href="#cb14-54"></a><span class="co">#&gt;  [16] 4.471416e-28 1.053991e-27 2.469444e-27 5.750847e-27 1.331175e-26</span></span>
+<span id="cb14-55"><a href="#cb14-55"></a><span class="co">#&gt;  [21] 3.062738e-26 7.004156e-26 1.592112e-25 3.597189e-25 8.078401e-25</span></span>
+<span id="cb14-56"><a href="#cb14-56"></a><span class="co">#&gt;  [26] 1.803268e-24 4.000998e-24 8.823682e-24 1.934217e-23 4.214390e-23</span></span>
+<span id="cb14-57"><a href="#cb14-57"></a><span class="co">#&gt;  [31] 9.127226e-23 1.964798e-22 4.204093e-22 8.941340e-22 1.890206e-21</span></span>
+<span id="cb14-58"><a href="#cb14-58"></a><span class="co">#&gt;  [36] 3.971844e-21 8.295689e-21 1.722226e-20 3.553906e-20 7.289540e-20</span></span>
+<span id="cb14-59"><a href="#cb14-59"></a><span class="co">#&gt;  [41] 1.486186e-19 3.011798e-19 6.066782e-19 1.214707e-18 2.417494e-18</span></span>
+<span id="cb14-60"><a href="#cb14-60"></a><span class="co">#&gt;  [46] 4.782345e-18 9.403695e-18 1.837972e-17 3.570774e-17 6.895564e-17</span></span>
+<span id="cb14-61"><a href="#cb14-61"></a><span class="co">#&gt;  [51] 1.323615e-16 2.525449e-16 4.789624e-16 9.029227e-16 1.691947e-15</span></span>
+<span id="cb14-62"><a href="#cb14-62"></a><span class="co">#&gt;  [56] 3.151453e-15 5.834767e-15 1.073805e-14 1.964343e-14 3.571905e-14</span></span>
+<span id="cb14-63"><a href="#cb14-63"></a><span class="co">#&gt;  [61] 6.456159e-14 1.159955e-13 2.071577e-13 3.677521e-13 6.489399e-13</span></span>
+<span id="cb14-64"><a href="#cb14-64"></a><span class="co">#&gt;  [66] 1.138282e-12 1.984686e-12 3.439790e-12 5.926127e-12 1.014869e-11</span></span>
+<span id="cb14-65"><a href="#cb14-65"></a><span class="co">#&gt;  [71] 1.727627e-11 2.923425e-11 4.917421e-11 8.222186e-11 1.366604e-10</span></span>
+<span id="cb14-66"><a href="#cb14-66"></a><span class="co">#&gt;  [76] 2.257903e-10 3.708308e-10 6.054188e-10 9.825325e-10 1.585076e-09</span></span>
+<span id="cb14-67"><a href="#cb14-67"></a><span class="co">#&gt;  [81] 2.541952e-09 4.052282e-09 6.421683e-09 1.011618e-08 1.584179e-08</span></span>
+<span id="cb14-68"><a href="#cb14-68"></a><span class="co">#&gt;  [86] 2.466119e-08 3.816343e-08 5.870922e-08 8.978268e-08 1.364924e-07</span></span>
+<span id="cb14-69"><a href="#cb14-69"></a><span class="co">#&gt;  [91] 2.062792e-07 3.099106e-07 4.628636e-07 6.872392e-07 1.014386e-06</span></span>
+<span id="cb14-70"><a href="#cb14-70"></a><span class="co">#&gt;  [96] 1.488475e-06 2.171329e-06 3.148893e-06 4.539847e-06 6.506964e-06</span></span>
+<span id="cb14-71"><a href="#cb14-71"></a><span class="co">#&gt; [101] 9.271982e-06 1.313490e-05 1.849884e-05 2.590173e-05 3.605648e-05</span></span>
+<span id="cb14-72"><a href="#cb14-72"></a><span class="co">#&gt; [106] 4.990129e-05 6.866226e-05 9.393040e-05 1.277557e-04 1.727606e-04</span></span>
+<span id="cb14-73"><a href="#cb14-73"></a><span class="co">#&gt; [111] 2.322758e-04 3.105009e-04 4.126924e-04 5.453808e-04 7.166194e-04</span></span>
+<span id="cb14-74"><a href="#cb14-74"></a><span class="co">#&gt; [116] 9.362638e-04 1.216284e-03 1.571103e-03 2.017968e-03 2.577333e-03</span></span>
+<span id="cb14-75"><a href="#cb14-75"></a><span class="co">#&gt; [121] 3.273260e-03 4.133824e-03 5.191498e-03 6.483523e-03 8.052224e-03</span></span>
+<span id="cb14-76"><a href="#cb14-76"></a><span class="co">#&gt; [126] 9.945263e-03 1.221580e-02 1.492255e-02 1.812968e-02 2.190660e-02</span></span>
+<span id="cb14-77"><a href="#cb14-77"></a><span class="co">#&gt; [131] 2.632745e-02 3.147056e-02 3.741753e-02 4.425217e-02 5.205918e-02</span></span>
+<span id="cb14-78"><a href="#cb14-78"></a><span class="co">#&gt; [136] 6.092268e-02 7.092440e-02 8.214187e-02 9.464633e-02 1.085006e-01</span></span>
+<span id="cb14-79"><a href="#cb14-79"></a><span class="co">#&gt; [141] 1.237572e-01 1.404556e-01 1.586210e-01 1.782621e-01 1.993696e-01</span></span>
+<span id="cb14-80"><a href="#cb14-80"></a><span class="co">#&gt; [146] 2.219150e-01 2.458497e-01 2.711047e-01 2.975909e-01 3.251992e-01</span></span>
+<span id="cb14-81"><a href="#cb14-81"></a><span class="co">#&gt; [151] 3.538021e-01 3.832553e-01 4.133994e-01 4.440630e-01 4.750653e-01</span></span>
+<span id="cb14-82"><a href="#cb14-82"></a><span class="co">#&gt; [156] 5.062195e-01 5.373357e-01 5.682250e-01 5.987026e-01 6.285909e-01</span></span>
+<span id="cb14-83"><a href="#cb14-83"></a><span class="co">#&gt; [161] 6.577230e-01 6.859454e-01 7.131202e-01 7.391271e-01 7.638648e-01</span></span>
+<span id="cb14-84"><a href="#cb14-84"></a><span class="co">#&gt; [166] 7.872521e-01 8.092283e-01 8.297529e-01 8.488052e-01 8.663832e-01</span></span>
+<span id="cb14-85"><a href="#cb14-85"></a><span class="co">#&gt; [171] 8.825023e-01 8.971938e-01 9.105025e-01 9.224853e-01 9.332086e-01</span></span>
+<span id="cb14-86"><a href="#cb14-86"></a><span class="co">#&gt; [176] 9.427465e-01 9.511784e-01 9.585872e-01 9.650575e-01 9.706737e-01</span></span>
+<span id="cb14-87"><a href="#cb14-87"></a><span class="co">#&gt; [181] 9.755189e-01 9.796736e-01 9.832145e-01 9.862139e-01 9.887392e-01</span></span>
+<span id="cb14-88"><a href="#cb14-88"></a><span class="co">#&gt; [186] 9.908524e-01 9.926099e-01 9.940628e-01 9.952565e-01 9.962313e-01</span></span>
+<span id="cb14-89"><a href="#cb14-89"></a><span class="co">#&gt; [191] 9.970225e-01 9.976608e-01 9.981726e-01 9.985805e-01 9.989036e-01</span></span>
+<span id="cb14-90"><a href="#cb14-90"></a><span class="co">#&gt; [196] 9.991579e-01 9.993569e-01 9.995117e-01 9.996314e-01 9.997233e-01</span></span>
+<span id="cb14-91"><a href="#cb14-91"></a><span class="co">#&gt; [201] 9.997935e-01 9.998467e-01 9.998869e-01 9.999171e-01 9.999395e-01</span></span>
+<span id="cb14-92"><a href="#cb14-92"></a><span class="co">#&gt; [206] 9.999561e-01 9.999684e-01 9.999773e-01 9.999839e-01 1.000000e+00</span></span></code></pre></div>
+<p>A comparison with exact computation shows that the approximation quality of the NA procedure increases with larger numbers of probabilities of success:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb15-2"><a href="#cb15-2"></a></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co"># 10 random probabilities of success</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb15-5"><a href="#cb15-5"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb15-6"><a href="#cb15-6"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb15-7"><a href="#cb15-7"></a>dpn &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb15-8"><a href="#cb15-8"></a>dpd &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb)</span>
+<span id="cb15-9"><a href="#cb15-9"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co">#&gt; -0.0346309 -0.0042919  0.0001378  0.0000000  0.0038447  0.0317044</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a></span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co"># 100 random probabilities of success</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb15-16"><a href="#cb15-16"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">100</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb15-17"><a href="#cb15-17"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">100</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb15-18"><a href="#cb15-18"></a>dpn &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb15-19"><a href="#cb15-19"></a>dpd &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb)</span>
+<span id="cb15-20"><a href="#cb15-20"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb15-21"><a href="#cb15-21"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb15-22"><a href="#cb15-22"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb15-23"><a href="#cb15-23"></a><span class="co">#&gt; -3.006e-05 -1.126e-09  0.000e+00  0.000e+00  1.854e-09  2.967e-05</span></span>
+<span id="cb15-24"><a href="#cb15-24"></a></span>
+<span id="cb15-25"><a href="#cb15-25"></a><span class="co"># 1000 random probabilities of success</span></span>
+<span id="cb15-26"><a href="#cb15-26"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1000</span>)</span>
+<span id="cb15-27"><a href="#cb15-27"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1000</span>, <span class="dv">1000</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb15-28"><a href="#cb15-28"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1000</span>, <span class="dv">1000</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb15-29"><a href="#cb15-29"></a>dpn &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb15-30"><a href="#cb15-30"></a>dpd &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb)</span>
+<span id="cb15-31"><a href="#cb15-31"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb15-32"><a href="#cb15-32"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb15-33"><a href="#cb15-33"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb15-34"><a href="#cb15-34"></a><span class="co">#&gt; -3.152e-08  0.000e+00  3.060e-12  0.000e+00  8.991e-10  3.707e-08</span></span></code></pre></div>
+</div>
+<div id="generalized-refined-normal-approximation" class="section level3">
+<h3>Generalized Refined Normal Approximation</h3>
+<p>The <em>Generalized Refined Normal Approximation</em> (G-RNA) approach is requested with <code>method = &quot;RefinedNormal&quot;</code>. It is based on a Normal distribution, whose parameters are derived from the theoretical mean, variance and skewness of the input probabilities of success.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb16-3"><a href="#cb16-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb16-4"><a href="#cb16-4"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb16-5"><a href="#cb16-5"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb16-6"><a href="#cb16-6"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt;   [1] 5.100768e-32 7.816039e-32 1.959106e-31 4.880045e-31 1.208047e-30</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a><span class="co">#&gt;   [6] 2.971921e-30 7.265798e-30 1.765311e-29 4.262362e-29 1.022751e-28</span></span>
+<span id="cb16-9"><a href="#cb16-9"></a><span class="co">#&gt;  [11] 2.438814e-28 5.779315e-28 1.361012e-27 3.185186e-27 7.407878e-27</span></span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt;  [16] 1.712136e-26 3.932484e-26 8.975930e-26 2.035985e-25 4.589352e-25</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="co">#&gt;  [21] 1.028037e-24 2.288476e-24 5.062470e-24 1.112900e-23 2.431235e-23</span></span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="co">#&gt;  [26] 5.278047e-23 1.138660e-22 2.441116e-22 5.200621e-22 1.101015e-21</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a><span class="co">#&gt;  [31] 2.316333e-21 4.842591e-21 1.006056e-20 2.076983e-20 4.260973e-20</span></span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="co">#&gt;  [36] 8.686571e-20 1.759748e-19 3.542530e-19 7.086575e-19 1.408697e-18</span></span>
+<span id="cb16-15"><a href="#cb16-15"></a><span class="co">#&gt;  [41] 2.782630e-18 5.461965e-18 1.065359e-17 2.064884e-17 3.976912e-17</span></span>
+<span id="cb16-16"><a href="#cb16-16"></a><span class="co">#&gt;  [46] 7.611065e-17 1.447413e-16 2.735176e-16 5.135966e-16 9.582999e-16</span></span>
+<span id="cb16-17"><a href="#cb16-17"></a><span class="co">#&gt;  [51] 1.776730e-15 3.273256e-15 5.992053e-15 1.089949e-14 1.970017e-14</span></span>
+<span id="cb16-18"><a href="#cb16-18"></a><span class="co">#&gt;  [56] 3.538058e-14 6.313772e-14 1.119541e-13 1.972495e-13 3.453144e-13</span></span>
+<span id="cb16-19"><a href="#cb16-19"></a><span class="co">#&gt;  [61] 6.006676e-13 1.038179e-12 1.782897e-12 3.042246e-12 5.157913e-12</span></span>
+<span id="cb16-20"><a href="#cb16-20"></a><span class="co">#&gt;  [66] 8.688860e-12 1.454315e-11 2.418568e-11 3.996319e-11 6.560867e-11</span></span>
+<span id="cb16-21"><a href="#cb16-21"></a><span class="co">#&gt;  [71] 1.070186e-10 1.734408e-10 2.792769e-10 4.467944e-10 7.101774e-10</span></span>
+<span id="cb16-22"><a href="#cb16-22"></a><span class="co">#&gt;  [76] 1.121527e-09 1.759679e-09 2.743061e-09 4.248282e-09 6.536785e-09</span></span>
+<span id="cb16-23"><a href="#cb16-23"></a><span class="co">#&gt;  [81] 9.992759e-09 1.517660e-08 2.289965e-08 3.432780e-08 5.112383e-08</span></span>
+<span id="cb16-24"><a href="#cb16-24"></a><span class="co">#&gt;  [86] 7.564129e-08 1.111860e-07 1.623661e-07 2.355550e-07 3.394997e-07</span></span>
+<span id="cb16-25"><a href="#cb16-25"></a><span class="co">#&gt;  [91] 4.861107e-07 6.914779e-07 9.771650e-07 1.371840e-06 1.913307e-06</span></span>
+<span id="cb16-26"><a href="#cb16-26"></a><span class="co">#&gt;  [96] 2.651012e-06 3.649099e-06 4.990081e-06 6.779222e-06 9.149662e-06</span></span>
+<span id="cb16-27"><a href="#cb16-27"></a><span class="co">#&gt; [101] 1.226837e-05 1.634294e-05 2.162919e-05 2.843967e-05 3.715276e-05</span></span>
+<span id="cb16-28"><a href="#cb16-28"></a><span class="co">#&gt; [106] 4.822249e-05 6.218875e-05 7.968764e-05 1.014618e-04 1.283702e-04</span></span>
+<span id="cb16-29"><a href="#cb16-29"></a><span class="co">#&gt; [111] 1.613972e-04 2.016606e-04 2.504176e-04 3.090698e-04 3.791651e-04</span></span>
+<span id="cb16-30"><a href="#cb16-30"></a><span class="co">#&gt; [116] 4.623982e-04 5.606082e-04 6.757744e-04 8.100102e-04 9.655553e-04</span></span>
+<span id="cb16-31"><a href="#cb16-31"></a><span class="co">#&gt; [121] 1.144767e-03 1.350110e-03 1.584150e-03 1.849543e-03 2.149024e-03</span></span>
+<span id="cb16-32"><a href="#cb16-32"></a><span class="co">#&gt; [126] 2.485405e-03 2.861561e-03 3.280420e-03 3.744950e-03 4.258135e-03</span></span>
+<span id="cb16-33"><a href="#cb16-33"></a><span class="co">#&gt; [131] 4.822941e-03 5.442277e-03 6.118927e-03 6.855467e-03 7.654163e-03</span></span>
+<span id="cb16-34"><a href="#cb16-34"></a><span class="co">#&gt; [136] 8.516833e-03 9.444692e-03 1.043817e-02 1.149671e-02 1.261856e-02</span></span>
+<span id="cb16-35"><a href="#cb16-35"></a><span class="co">#&gt; [141] 1.380053e-02 1.503782e-02 1.632377e-02 1.764978e-02 1.900514e-02</span></span>
+<span id="cb16-36"><a href="#cb16-36"></a><span class="co">#&gt; [146] 2.037702e-02 2.175055e-02 2.310888e-02 2.443348e-02 2.570445e-02</span></span>
+<span id="cb16-37"><a href="#cb16-37"></a><span class="co">#&gt; [151] 2.690096e-02 2.800177e-02 2.898579e-02 2.983278e-02 3.052397e-02</span></span>
+<span id="cb16-38"><a href="#cb16-38"></a><span class="co">#&gt; [156] 3.104271e-02 3.137515e-02 3.151071e-02 3.144261e-02 3.116818e-02</span></span>
+<span id="cb16-39"><a href="#cb16-39"></a><span class="co">#&gt; [161] 3.068902e-02 3.001109e-02 2.914456e-02 2.810352e-02 2.690563e-02</span></span>
+<span id="cb16-40"><a href="#cb16-40"></a><span class="co">#&gt; [166] 2.557147e-02 2.412399e-02 2.258773e-02 2.098813e-02 1.935073e-02</span></span>
+<span id="cb16-41"><a href="#cb16-41"></a><span class="co">#&gt; [171] 1.770044e-02 1.606093e-02 1.445398e-02 1.289904e-02 1.141287e-02</span></span>
+<span id="cb16-42"><a href="#cb16-42"></a><span class="co">#&gt; [176] 1.000927e-02 8.699011e-03 7.489773e-03 6.386301e-03 5.390581e-03</span></span>
+<span id="cb16-43"><a href="#cb16-43"></a><span class="co">#&gt; [181] 4.502114e-03 3.718233e-03 3.034469e-03 2.444914e-03 1.942594e-03</span></span>
+<span id="cb16-44"><a href="#cb16-44"></a><span class="co">#&gt; [186] 1.519822e-03 1.168521e-03 8.805066e-04 6.477360e-04 4.625001e-04</span></span>
+<span id="cb16-45"><a href="#cb16-45"></a><span class="co">#&gt; [191] 2.621189e-04 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb16-46"><a href="#cb16-46"></a><span class="co">#&gt; [196] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb16-47"><a href="#cb16-47"></a><span class="co">#&gt; [201] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb16-48"><a href="#cb16-48"></a><span class="co">#&gt; [206] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb16-49"><a href="#cb16-49"></a><span class="kw">pgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb16-50"><a href="#cb16-50"></a><span class="co">#&gt;   [1] 5.100768e-32 1.291681e-31 3.250786e-31 8.130831e-31 2.021130e-30</span></span>
+<span id="cb16-51"><a href="#cb16-51"></a><span class="co">#&gt;   [6] 4.993051e-30 1.225885e-29 2.991196e-29 7.253558e-29 1.748106e-28</span></span>
+<span id="cb16-52"><a href="#cb16-52"></a><span class="co">#&gt;  [11] 4.186920e-28 9.966236e-28 2.357636e-27 5.542822e-27 1.295070e-26</span></span>
+<span id="cb16-53"><a href="#cb16-53"></a><span class="co">#&gt;  [16] 3.007206e-26 6.939690e-26 1.591562e-25 3.627547e-25 8.216899e-25</span></span>
+<span id="cb16-54"><a href="#cb16-54"></a><span class="co">#&gt;  [21] 1.849727e-24 4.138203e-24 9.200673e-24 2.032968e-23 4.464203e-23</span></span>
+<span id="cb16-55"><a href="#cb16-55"></a><span class="co">#&gt;  [26] 9.742250e-23 2.112885e-22 4.554002e-22 9.754623e-22 2.076477e-21</span></span>
+<span id="cb16-56"><a href="#cb16-56"></a><span class="co">#&gt;  [31] 4.392810e-21 9.235402e-21 1.929596e-20 4.006579e-20 8.267552e-20</span></span>
+<span id="cb16-57"><a href="#cb16-57"></a><span class="co">#&gt;  [36] 1.695412e-19 3.455160e-19 6.997690e-19 1.408427e-18 2.817123e-18</span></span>
+<span id="cb16-58"><a href="#cb16-58"></a><span class="co">#&gt;  [41] 5.599754e-18 1.106172e-17 2.171531e-17 4.236415e-17 8.213328e-17</span></span>
+<span id="cb16-59"><a href="#cb16-59"></a><span class="co">#&gt;  [46] 1.582439e-16 3.029852e-16 5.765028e-16 1.090099e-15 2.048399e-15</span></span>
+<span id="cb16-60"><a href="#cb16-60"></a><span class="co">#&gt;  [51] 3.825129e-15 7.098385e-15 1.309044e-14 2.398993e-14 4.369010e-14</span></span>
+<span id="cb16-61"><a href="#cb16-61"></a><span class="co">#&gt;  [56] 7.907068e-14 1.422084e-13 2.541625e-13 4.514120e-13 7.967264e-13</span></span>
+<span id="cb16-62"><a href="#cb16-62"></a><span class="co">#&gt;  [61] 1.397394e-12 2.435573e-12 4.218470e-12 7.260717e-12 1.241863e-11</span></span>
+<span id="cb16-63"><a href="#cb16-63"></a><span class="co">#&gt;  [66] 2.110749e-11 3.565064e-11 5.983632e-11 9.979950e-11 1.654082e-10</span></span>
+<span id="cb16-64"><a href="#cb16-64"></a><span class="co">#&gt;  [71] 2.724267e-10 4.458675e-10 7.251445e-10 1.171939e-09 1.882116e-09</span></span>
+<span id="cb16-65"><a href="#cb16-65"></a><span class="co">#&gt;  [76] 3.003643e-09 4.763322e-09 7.506383e-09 1.175466e-08 1.829145e-08</span></span>
+<span id="cb16-66"><a href="#cb16-66"></a><span class="co">#&gt;  [81] 2.828421e-08 4.346081e-08 6.636046e-08 1.006883e-07 1.518121e-07</span></span>
+<span id="cb16-67"><a href="#cb16-67"></a><span class="co">#&gt;  [86] 2.274534e-07 3.386394e-07 5.010055e-07 7.365605e-07 1.076060e-06</span></span>
+<span id="cb16-68"><a href="#cb16-68"></a><span class="co">#&gt;  [91] 1.562171e-06 2.253649e-06 3.230814e-06 4.602653e-06 6.515960e-06</span></span>
+<span id="cb16-69"><a href="#cb16-69"></a><span class="co">#&gt;  [96] 9.166972e-06 1.281607e-05 1.780615e-05 2.458537e-05 3.373504e-05</span></span>
+<span id="cb16-70"><a href="#cb16-70"></a><span class="co">#&gt; [101] 4.600341e-05 6.234634e-05 8.397554e-05 1.124152e-04 1.495680e-04</span></span>
+<span id="cb16-71"><a href="#cb16-71"></a><span class="co">#&gt; [106] 1.977905e-04 2.599792e-04 3.396668e-04 4.411286e-04 5.694988e-04</span></span>
+<span id="cb16-72"><a href="#cb16-72"></a><span class="co">#&gt; [111] 7.308960e-04 9.325566e-04 1.182974e-03 1.492044e-03 1.871209e-03</span></span>
+<span id="cb16-73"><a href="#cb16-73"></a><span class="co">#&gt; [116] 2.333607e-03 2.894215e-03 3.569990e-03 4.380000e-03 5.345555e-03</span></span>
+<span id="cb16-74"><a href="#cb16-74"></a><span class="co">#&gt; [121] 6.490322e-03 7.840432e-03 9.424583e-03 1.127413e-02 1.342315e-02</span></span>
+<span id="cb16-75"><a href="#cb16-75"></a><span class="co">#&gt; [126] 1.590855e-02 1.877011e-02 2.205053e-02 2.579549e-02 3.005362e-02</span></span>
+<span id="cb16-76"><a href="#cb16-76"></a><span class="co">#&gt; [131] 3.487656e-02 4.031884e-02 4.643777e-02 5.329323e-02 6.094740e-02</span></span>
+<span id="cb16-77"><a href="#cb16-77"></a><span class="co">#&gt; [136] 6.946423e-02 7.890892e-02 8.934709e-02 1.008438e-01 1.134624e-01</span></span>
+<span id="cb16-78"><a href="#cb16-78"></a><span class="co">#&gt; [141] 1.272629e-01 1.423007e-01 1.586245e-01 1.762743e-01 1.952794e-01</span></span>
+<span id="cb16-79"><a href="#cb16-79"></a><span class="co">#&gt; [146] 2.156564e-01 2.374070e-01 2.605159e-01 2.849493e-01 3.106538e-01</span></span>
+<span id="cb16-80"><a href="#cb16-80"></a><span class="co">#&gt; [151] 3.375548e-01 3.655565e-01 3.945423e-01 4.243751e-01 4.548991e-01</span></span>
+<span id="cb16-81"><a href="#cb16-81"></a><span class="co">#&gt; [156] 4.859418e-01 5.173169e-01 5.488276e-01 5.802702e-01 6.114384e-01</span></span>
+<span id="cb16-82"><a href="#cb16-82"></a><span class="co">#&gt; [161] 6.421274e-01 6.721385e-01 7.012831e-01 7.293866e-01 7.562922e-01</span></span>
+<span id="cb16-83"><a href="#cb16-83"></a><span class="co">#&gt; [166] 7.818637e-01 8.059877e-01 8.285754e-01 8.495636e-01 8.689143e-01</span></span>
+<span id="cb16-84"><a href="#cb16-84"></a><span class="co">#&gt; [171] 8.866147e-01 9.026757e-01 9.171296e-01 9.300287e-01 9.414415e-01</span></span>
+<span id="cb16-85"><a href="#cb16-85"></a><span class="co">#&gt; [176] 9.514508e-01 9.601498e-01 9.676396e-01 9.740259e-01 9.794165e-01</span></span>
+<span id="cb16-86"><a href="#cb16-86"></a><span class="co">#&gt; [181] 9.839186e-01 9.876368e-01 9.906713e-01 9.931162e-01 9.950588e-01</span></span>
+<span id="cb16-87"><a href="#cb16-87"></a><span class="co">#&gt; [186] 9.965786e-01 9.977471e-01 9.986276e-01 9.992754e-01 9.997379e-01</span></span>
+<span id="cb16-88"><a href="#cb16-88"></a><span class="co">#&gt; [191] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb16-89"><a href="#cb16-89"></a><span class="co">#&gt; [196] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb16-90"><a href="#cb16-90"></a><span class="co">#&gt; [201] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb16-91"><a href="#cb16-91"></a><span class="co">#&gt; [206] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>A comparison with exact computation shows that the approximation quality of the RNA procedure increases with larger numbers of probabilities of success:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="kw">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb17-2"><a href="#cb17-2"></a></span>
+<span id="cb17-3"><a href="#cb17-3"></a><span class="co"># 10 random probabilities of success</span></span>
+<span id="cb17-4"><a href="#cb17-4"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb17-5"><a href="#cb17-5"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb17-6"><a href="#cb17-6"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb17-7"><a href="#cb17-7"></a>dpn &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb17-8"><a href="#cb17-8"></a>dpd &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb)</span>
+<span id="cb17-9"><a href="#cb17-9"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb17-10"><a href="#cb17-10"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb17-11"><a href="#cb17-11"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb17-12"><a href="#cb17-12"></a><span class="co">#&gt; -3.045e-02 -4.084e-03  1.727e-04  1.179e-05  4.324e-03  3.161e-02</span></span>
+<span id="cb17-13"><a href="#cb17-13"></a></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co"># 100 random probabilities of success</span></span>
+<span id="cb17-15"><a href="#cb17-15"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">100</span>)</span>
+<span id="cb17-16"><a href="#cb17-16"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">100</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb17-17"><a href="#cb17-17"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">100</span>, <span class="dv">100</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb17-18"><a href="#cb17-18"></a>dpn &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb17-19"><a href="#cb17-19"></a>dpd &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb)</span>
+<span id="cb17-20"><a href="#cb17-20"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb17-21"><a href="#cb17-21"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb17-22"><a href="#cb17-22"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb17-23"><a href="#cb17-23"></a><span class="co">#&gt; -8.831e-06  0.000e+00  1.000e-12  9.000e-12  3.642e-07  1.333e-05</span></span>
+<span id="cb17-24"><a href="#cb17-24"></a></span>
+<span id="cb17-25"><a href="#cb17-25"></a><span class="co"># 1000 random probabilities of success</span></span>
+<span id="cb17-26"><a href="#cb17-26"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1000</span>)</span>
+<span id="cb17-27"><a href="#cb17-27"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1000</span>, <span class="dv">1000</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb17-28"><a href="#cb17-28"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">1000</span>, <span class="dv">1000</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb17-29"><a href="#cb17-29"></a>dpn &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb17-30"><a href="#cb17-30"></a>dpd &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb)</span>
+<span id="cb17-31"><a href="#cb17-31"></a>idx &lt;-<span class="st"> </span><span class="kw">which</span>(dpn <span class="op">!=</span><span class="st"> </span><span class="dv">0</span> <span class="op">&amp;</span><span class="st"> </span>dpd <span class="op">!=</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb17-32"><a href="#cb17-32"></a><span class="kw">summary</span>((dpn <span class="op">-</span><span class="st"> </span>dpd)[idx])</span>
+<span id="cb17-33"><a href="#cb17-33"></a><span class="co">#&gt;       Min.    1st Qu.     Median       Mean    3rd Qu.       Max. </span></span>
+<span id="cb17-34"><a href="#cb17-34"></a><span class="co">#&gt; -1.980e-08  0.000e+00  4.960e-12  0.000e+00  1.561e-09  3.197e-08</span></span></code></pre></div>
+</div>
+<div id="processing-speed-comparisons-1" class="section level3">
+<h3>Processing Speed Comparisons</h3>
+<p>To assess the performance of the approximation procedures, we use the <code>microbenchmark</code> package. Each algorithm has to calculate the PMF repeatedly based on random probability vectors. The run times are then summarized in a table that presents, among other statistics, their minima, maxima and means. The following results were recorded on an AMD Ryzen 7 1800X with 32 GiB of RAM and Windows 10 Education (20H2).</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1"></a><span class="kw">library</span>(microbenchmark)</span>
+<span id="cb18-2"><a href="#cb18-2"></a>n &lt;-<span class="st"> </span><span class="dv">1500</span></span>
+<span id="cb18-3"><a href="#cb18-3"></a><span class="kw">set.seed</span>(<span class="dv">2</span>)</span>
+<span id="cb18-4"><a href="#cb18-4"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>, n, <span class="ot">TRUE</span>)</span>
+<span id="cb18-5"><a href="#cb18-5"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>, n, <span class="ot">TRUE</span>)</span>
+<span id="cb18-6"><a href="#cb18-6"></a></span>
+<span id="cb18-7"><a href="#cb18-7"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(n), va, vb, <span class="dt">method =</span> <span class="st">&quot;Normal&quot;</span>)</span>
+<span id="cb18-8"><a href="#cb18-8"></a>f2 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(n), va, vb, <span class="dt">method =</span> <span class="st">&quot;RefinedNormal&quot;</span>)</span>
+<span id="cb18-9"><a href="#cb18-9"></a>f3 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(n), va, vb, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb18-10"><a href="#cb18-10"></a></span>
+<span id="cb18-11"><a href="#cb18-11"></a><span class="kw">microbenchmark</span>(<span class="kw">f1</span>(), <span class="kw">f2</span>(), <span class="kw">f3</span>())</span>
+<span id="cb18-12"><a href="#cb18-12"></a><span class="co">#&gt; Unit: milliseconds</span></span>
+<span id="cb18-13"><a href="#cb18-13"></a><span class="co">#&gt;  expr     min       lq      mean   median       uq      max neval cld</span></span>
+<span id="cb18-14"><a href="#cb18-14"></a><span class="co">#&gt;  f1()  7.6607  8.07170  9.705939  8.14100  8.64070 106.7701   100  a </span></span>
+<span id="cb18-15"><a href="#cb18-15"></a><span class="co">#&gt;  f2()  9.1814  9.61555 10.250806  9.74215 10.01675  13.7779   100  a </span></span>
+<span id="cb18-16"><a href="#cb18-16"></a><span class="co">#&gt;  f3() 42.7156 43.67715 44.416052 43.92380 44.33145  55.8752   100   b</span></span></code></pre></div>
+<p>Clearly, the G-NA procedure is the fastest, followed by the G-RNA method. Both are roughly 4-5 times as fast as G-DC-FFT.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

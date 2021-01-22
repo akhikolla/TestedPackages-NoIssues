@@ -1,0 +1,72 @@
+---
+title: "UDPipe Natural Language Processing - Try it out"
+author: "Jan Wijffels"
+date: "`r Sys.Date()`"
+output:
+  html_document:
+    fig_caption: false
+    toc: false
+vignette: >
+  %\VignetteIndexEntry{UDPipe Natural Language Processing - Try it out}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE, cache=FALSE}
+options(width = 1000)
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, comment = NA, eval = TRUE)
+```
+
+Install the R package. 
+
+```{r, eval=FALSE}
+install.packages("udpipe")
+```
+
+## Example
+
+Get your language model and start annotating.
+
+```{r, results='hide'}
+library(udpipe)
+udmodel <- udpipe_download_model(language = "dutch")
+```
+
+```{r, echo=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE, comment = NA, eval = !udmodel$download_failed)
+```
+
+```{r, results='hide'}
+udmodel <- udpipe_load_model(file = udmodel$file_model)
+x <- udpipe_annotate(udmodel, 
+                     x = "Ik ging op reis en ik nam mee: mijn laptop, mijn zonnebril en goed humeur.")
+x <- as.data.frame(x, detailed = TRUE)
+```
+
+Or just do as follows.
+
+```{r, results='hide', eval=FALSE}
+library(udpipe)
+x <- udpipe(x = "Ik ging op reis en ik nam mee: mijn laptop, mijn zonnebril en goed humeur.",
+            object = "dutch")
+```
+
+The annotation returns paragraphs, sentences, tokens, the location of the token in the original text, morphology elements like the lemma, the universal part of speech tag and the treebank-specific parts of speech tag, morphosyntactic features and returns as well the dependency relationship. More information at https://universaldependencies.org/guidelines.html
+
+```{r}
+str(x)
+```
+
+## A small note on encodings
+
+Mark that it is important that the `x` argument to `udpipe_annotate` is in UTF-8 encoding. 
+You can check the encoding of your text with `Encoding('your text')`. You can convert your text to UTF-8, using standard R utilities: as in `iconv('your text', from = 'latin1', to = 'UTF-8')` where you replace the `from` part with whichever encoding you have your text in, possible your computers default as defined in `localeToCharset()`. So annotation would look something like this if your text is not already in UTF-8 encoding: 
+
+- `udpipe_annotate(udmodel, x = iconv('your text', to = 'UTF-8'))` if your text is in the encoding of the current locale of your computer.
+- `udpipe_annotate(udmodel, x = iconv('your text', from = 'latin1', to = 'UTF-8'))` if your text is in latin1 encoding. 
+- `udpipe_annotate(udmodel, x = iconv('your text', from = 'CP949', to = 'UTF-8'))` if your text is in CP949 encoding. 
+
+
+```{r, results='hide', echo=FALSE}
+invisible(if(file.exists(udmodel$file)) file.remove(udmodel$file))
+```

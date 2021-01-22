@@ -1,0 +1,14 @@
+0dc58441b733b66b35d994e280fb3fe0 *DESCRIPTION
+1aad982a74ab64f61da5045e6ade582f *NAMESPACE
+4a657ff70bb3a09c6d6e8cc974d906b0 *NEWS
+5b7b14e8e6cf706d40fc410a7183d156 *R/LOPART.R
+b78e82cbc9e9aa9139bcf0fd2f30a588 *R/RcppExports.R
+ff5b67b3854ba6e0ff6e40980463ad8c *inst/examples/LOPART.R
+2fb681dad1356df5f50f25d5fe78018e *man/LOPART.Rd
+64a5125a586a2290ba643cc03781650b *man/LOPART_interface.Rd
+d419ed2a6664eee0c0ecc776a5d8cbca *src/LOPART.cpp
+13bbf568cc472e2fb2f72e808e5ad0d9 *src/LOPART.h
+709d25e1bf1b555990d0af9e34ce98d3 *src/RcppExports.cpp
+b4f259c84ab2d8933da67bde2363c4ff *src/interface.cpp
+0f75a333ece3a2b371aa1c3cb87aa685 *tests/testthat.R
+c9083cd2c1dc020b8fe621fcfdfc5352 *tests/testthat/test-LOPART.R

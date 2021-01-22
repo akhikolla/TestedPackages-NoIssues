@@ -1,0 +1,18 @@
+useDynLib(MiSPU)
+importFrom(Rcpp, evalCpp)
+import(
+vegan,
+ape,
+aSPU,
+cluster
+)
+importFrom("stats", "as.dist", "cophenetic", "fitted.values", "glm",
+             "rgamma", "rmultinom", "rnbinom")
+importFrom("utils", "data")
+export(MiSPU)
+export(rdirichlet)
+export(GUniFrac)
+export(ranking)
+export(simulateData)
+export(correspLeaves)
+

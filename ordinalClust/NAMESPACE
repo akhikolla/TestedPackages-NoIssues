@@ -1,0 +1,7 @@
+useDynLib(ordinalClust)
+export("bosclassif","bosclust","boscoclust","predict","pejSim","plot","summary")
+importFrom(Rcpp, evalCpp)
+importFrom("methods", "setClass") 
+importFrom("graphics", "plot") 
+importFrom("grDevices", "gray")
+importFrom("graphics", "abline", "image", "legend", "par")

@@ -1,0 +1,3 @@
+## change / FastGaSP 0.5.1
+ * Add a case where sigma_2 is fixed when performing the prediction.
+ * In the addition to Matern kernel with smoothness parameter being 2.5, we implement the fast computation approach on the exponential kernel.

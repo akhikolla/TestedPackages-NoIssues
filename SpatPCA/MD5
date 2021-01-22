@@ -1,0 +1,15 @@
+15ab319b66deb14b4c9d2c6a077d92dd *DESCRIPTION
+beea7927930406682f9029cebdb1bb09 *NAMESPACE
+8b57c1038e8b5ce43016f56a27d7cac5 *R/RcppExports.R
+80f5aa9ff08312f266b9eda6d2c49483 *R/SpatPCA.R
+b3ec67365c31cfba7a3b2618a5746092 *man/SpatPCA-package.Rd
+d5b4426cc08b28807306a9302e8681b9 *man/SpatPCAinternal1.Rd
+53a6a01193a9f4b3a6889c270e12b166 *man/SpatPCAinternal2.Rd
+556c64e90cca96cd28eb6726f3872792 *man/SpatPCAinternal3.Rd
+5b123ea059aa8602436f27748aa869dd *man/SpatPCAinternal4.Rd
+5e003d89eddc17cc44884fa7920c4427 *man/spatpca.Rd
+7a86c725c8936547414a6bb4ab6dcd70 *src/Makevars
+8cd1b4380d7fe594bf2e89e127e289ed *src/Makevars.win
+6fb37a5f7f43719b518c885f39994bb1 *src/RcppExports.cpp
+632f0a94bc128b5a1106e790ee02c4f2 *src/rcpp_SpatPCA.cpp
+7c22b1b500cab25872924e218f1645f5 *src/registerDynamicSymbol.c

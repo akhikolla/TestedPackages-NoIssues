@@ -1,0 +1,16 @@
+WARNING: No test specified, defaulting to first test defined (vegclust_deepstate_test_ismetric_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/vegclust/inst/testfiles/ismetric/ismetric_output/7d9bc59bc93e21efc6ab60ba0851632d0b8c117d.pass`
+TRACE: Running: vegclust_deepstate_test_ismetric_test from /home/akhila/fuzzer_packages/fuzzedpackages/vegclust/inst/testfiles/ismetric/ismetric_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+dmat values: 1.02532e+261 1.12756e-57     nan
+1.46340e+288     inf 4.12846e-51
+5.67165e-306 4.85713e-272     inf
+    nan     inf 61.3403
+5.43908e-105 3.30698e+94 6.30847e-13
+
+tol values: -1.016e-235
+input ends
+TRACE: Passed: vegclust_deepstate_test_ismetric_test

@@ -1,0 +1,56 @@
+WARNING: No test specified, defaulting to first test defined (mwaved_deepstate_test_multiProj_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiProj/multiProj_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash`
+TRACE: Running: mwaved_deepstate_test_multiProj_test from /home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiProj/multiProj_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: -9.91228e-57 -1.64036e-118 1.05391e+182 8.05607e-38 -3.84354e+136 2.36082e-100 3.01724e-124 9.57301e+229 -7.99809e-243 3.0603e-110 3.27696e-93 -2.10374e+36 -5.29515e-20 9.81127e+30 -3403.88 -364840 -8.45394e+179 -4.53552e+269 3.95635e-268
+j0 values: 1848989453
+j1 values: 2037305148
+deg values: 452184840
+input ends
+
+valgrind: m_mallocfree.c:305 (get_bszB_as_is): Assertion 'bszB_lo == bszB_hi' failed.
+valgrind: Heap block lo/hi size mismatch: lo = 29217, hi = 9223372036905380125.
+This is probably caused by your program erroneously writing past the
+end of a heap block and corrupting heap metadata.  If you fix any
+invalid writes reported by Memcheck, this assertion failure will
+probably go away.  Please try that before reporting this as a bug.
+
+
+host stacktrace:
+==2231054==    at 0x58046FFA: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x58047127: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x580472CB: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x580514B4: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x5803DE9A: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x5803CD9F: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x58041F04: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x5803C1D8: ??? (in /usr/lib/x86_64-linux-gnu/valgrind/memcheck-amd64-linux)
+==2231054==    by 0x1003C3730B: ???
+==2231054==    by 0x1002DB1F2F: ???
+==2231054==    by 0x1002DB1F17: ???
+==2231054==    by 0x1002DB1F2F: ???
+==2231054==    by 0x1002DB1F3F: ???
+
+sched status:
+  running_tid=1
+
+Thread 1: status = VgTs_Runnable (lwpid 2231054)
+client stack range: [0x1FFEF77000 0x1FFF000FFF] client SP: 0x1FFEFFF6C0
+valgrind stack range: [0x1002CB2000 0x1002DB1FFF] top usage: 14592 of 1048576
+
+
+Note: see also the FAQ in the source distribution.
+It contains workarounds to several common problems.
+In particular, if Valgrind aborted or crashed after
+identifying problems in your program, there's a good chance
+that fixing those problems will prevent Valgrind aborting or
+crashing, especially if it happened in m_mallocfree.c.
+
+If that doesn't help, please report this bug to: www.valgrind.org
+
+In the bug report, send all the above text, the valgrind
+version, and what OS and version you are using.  Thanks.
+
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiProj/multiProj_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash failed

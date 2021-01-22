@@ -1,0 +1,75 @@
+useDynLib(varbvs,.registration = TRUE,.fixes = "C_")
+
+importFrom(methods,is)
+importFrom(Matrix,forceSymmetric)
+importFrom(Matrix,solve)
+importFrom(stats,pnorm)
+importFrom(stats,qnorm)
+importFrom(stats,quantile)
+importFrom(stats,runif)
+importFrom(stats,rnorm)
+importFrom(stats,var)
+importFrom(stats,nobs)
+importFrom(stats,case.names)
+importFrom(stats,variable.names)
+importFrom(stats,coef)
+importFrom(stats,confint)
+importFrom(stats,fitted)
+importFrom(stats,resid)
+importFrom(stats,residuals)
+importFrom(graphics,plot)
+importFrom(lattice,xyplot)
+importFrom(lattice,panel.xyplot)
+importFrom(lattice,panel.abline)
+importFrom(latticeExtra,as.layer)
+importFrom(Rcpp,evalCpp)
+importFrom(nor1mix,norMix)
+importFrom(nor1mix,qnorMix)
+export(normalizelogweights,
+       cred,varbvs,
+       varbvsnorm,
+       varbvsbin,
+       varbvsbinz,
+       varbvsmix,
+       varbvsindep,
+       varbvspve,
+       varbvs,
+       varbvsbf,
+       bayesfactor,
+       rand,
+       randn,
+       var1,
+       var1.cols,
+       varbvsproxybf)
+export(nobs.varbvs,
+       labels.varbvs,
+       case.names.varbvs,
+       variable.names.varbvs,
+       coef.varbvs,
+       confint.varbvs,
+       fitted.varbvs,
+       resid.varbvs,
+       residuals.varbvs,
+       deviance.varbvs,
+       summary.varbvs,
+       predict.varbvs,
+       subset.varbvs,
+       print.varbvs,
+       plot.varbvs,
+       print.summary.varbvs)
+S3method(nobs,varbvs)
+S3method(labels,varbvs)
+S3method(case.names,varbvs)
+S3method(variable.names,varbvs)
+S3method(coef,varbvs)
+S3method(confint,varbvs)
+S3method(fitted,varbvs)
+S3method(resid,varbvs)
+S3method(residuals,varbvs)
+S3method(deviance,varbvs)
+S3method(summary,varbvs)
+S3method(predict,varbvs)
+S3method(subset,varbvs)
+S3method(print,varbvs)
+S3method(plot,varbvs)
+S3method(print,summary.varbvs)

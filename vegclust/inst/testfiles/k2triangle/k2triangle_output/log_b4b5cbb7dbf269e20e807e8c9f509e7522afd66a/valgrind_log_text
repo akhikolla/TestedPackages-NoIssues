@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (vegclust_deepstate_test_k2triangle_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/vegclust/inst/testfiles/k2triangle/k2triangle_output/b4b5cbb7dbf269e20e807e8c9f509e7522afd66a.pass`
+TRACE: Running: vegclust_deepstate_test_k2triangle_test from /home/akhila/fuzzer_packages/fuzzedpackages/vegclust/inst/testfiles/k2triangle/k2triangle_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+d1 values: -1.5615e-299
+d2 values: -1.20777e+13
+d3 values: 2.79236e-196
+input ends
+TRACE: Passed: vegclust_deepstate_test_k2triangle_test

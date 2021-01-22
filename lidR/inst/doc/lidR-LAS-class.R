@@ -1,0 +1,60 @@
+## ----setup, include = FALSE---------------------------------------------------
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+rgl::setupKnitr()
+options(rmarkdown.html_vignette.check_title = FALSE)
+library(lidR)
+
+## -----------------------------------------------------------------------------
+LASfile <- system.file("extdata", "Megaplot.laz", package="lidR")
+las <- readLAS(LASfile)
+print(las)
+
+## -----------------------------------------------------------------------------
+print(las@header)
+
+## -----------------------------------------------------------------------------
+projection(las) <- sp::CRS("+init=epsg:26917")
+projection(las)
+
+# Header has been updated but users do not need to take care of that
+las@header@VLR[["GeoKeyDirectoryTag"]][["tags"]][[2]][["value offset"]]
+
+## -----------------------------------------------------------------------------
+las@header@PHB[["Global Encoding"]][["WKT"]] = TRUE
+
+projection(las) <- sp::CRS("+init=epsg:26917")
+projection(las)
+
+# Header has been updated but users do not need to take care of that
+las@header@VLR[["WKT OGC CS"]][["WKT OGC COORDINATE SYSTEM"]]
+
+## -----------------------------------------------------------------------------
+las$Classification <- 0L
+
+## -----------------------------------------------------------------------------
+las@data$R <- 0
+
+## ---- echo = FALSE------------------------------------------------------------
+las@data$R <- NULL
+
+## -----------------------------------------------------------------------------
+las  <- add_attribute(las, 1:81590, "ID")
+las2 <- filter_poi(las, ID > 50000)
+
+## -----------------------------------------------------------------------------
+las  <- add_lasattribute(las, 1:81590, "ID", "An ID for each point")
+
+## -----------------------------------------------------------------------------
+las_check(las)
+
+## ----echo = FALSE, rgl=TRUE, dev='png'----------------------------------------
+LASfile <- system.file("extdata", "MixedConifer.laz", package="lidR")
+las = readLAS(LASfile)
+m = structure(c(0.921, -0.146, 0.362, 0, 0.386, 0.482, -0.787, 0, 
+-0.06, 0.864, 0.5, 0, 0, 0, 0, 1), .Dim = c(4L, 4L))
+plot(las)
+rgl::rgl.viewpoint(fov = 50, userMatrix = m)
+

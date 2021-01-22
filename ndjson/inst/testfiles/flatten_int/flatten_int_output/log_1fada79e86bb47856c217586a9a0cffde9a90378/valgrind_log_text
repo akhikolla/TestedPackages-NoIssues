@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (ndjson_deepstate_test_flatten_int_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ndjson/inst/testfiles/flatten_int/flatten_int_output/1fada79e86bb47856c217586a9a0cffde9a90378.pass`
+TRACE: Running: ndjson_deepstate_test_flatten_int_test from /home/akhila/fuzzer_packages/fuzzedpackages/ndjson/inst/testfiles/flatten_int/flatten_int_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+lines values: "dxzacqdxrb" "afoykrklhomoufedlot" "hfltbndpjtppqwzocxzk" "wrvwmnjhqkhmpltvcl" "fooexjrodohhsxee" "NA" "NA" "wkcsnahvixeejdkyhaqo" "xnpitiwyalvhnjmtfxin" "gutvlotwtrsvevfrkbs" "vjhdxpfahts"
+input ends
+EXTERNAL: There were 11 warnings (use warnings() to see them)
+EXTERNAL: 
+
+TRACE: Passed: ndjson_deepstate_test_flatten_int_test

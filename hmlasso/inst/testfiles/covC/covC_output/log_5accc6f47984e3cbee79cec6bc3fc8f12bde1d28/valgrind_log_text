@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (hmlasso_deepstate_test_covC_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/hmlasso/inst/testfiles/covC/covC_output/5accc6f47984e3cbee79cec6bc3fc8f12bde1d28.pass`
+TRACE: Running: hmlasso_deepstate_test_covC_test from /home/akhila/fuzzer_packages/fuzzedpackages/hmlasso/inst/testfiles/covC/covC_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+X values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: hmlasso_deepstate_test_covC_test

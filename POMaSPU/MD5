@@ -1,0 +1,11 @@
+15326fd2272558cc7b4d578ce72cde1f *DESCRIPTION
+ef0a9f0a65975ce930843eef90a7d838 *NAMESPACE
+6aad2a796a9b3edd985960c987c14ed9 *R/RcppExports.R
+a9a8de16633657fecdbd067708ab6206 *R/pom.R
+4746a3efc3f2061eec62715dcd19ede8 *man/POMaSPU-package.Rd
+401ed3a74f08a79c92e5612526f70a1f *man/POMaSPU.Rd
+2a6f9e9e044a78154d3cfda5936d6f48 *src/Makevars
+8d46d69896a1f1d31ed76035a0e49d67 *src/Makevars.win
+1625a9dea776bdf108fb759aac707809 *src/RcppExports.cpp
+e87961658784fe033587aa4f88f3e167 *src/pom.cpp
+7c22b1b500cab25872924e218f1645f5 *src/registerDynamicSymbol.c

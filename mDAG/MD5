@@ -1,0 +1,17 @@
+7d939376ee5fada7ccde7f69d615fb28 *DESCRIPTION
+bfad0b4b5b7705b22b30e48dea8f89ac *NAMESPACE
+acaf74202486eb2561635a6801f9d0f5 *R/ConditionalTestPermute.R
+b7f9052b65fe74f93bc8493efc2ff34b *R/PenPC_source.R
+271da73fcba89535c9e040bdf435da3c *R/RcppExports.R
+6d2df2b3e0b488dcaef1b7b3cb266bfe *R/mDAG.R
+7cba7bbc6a83647225e53972c3b76e43 *R/main.R
+9b8b3e0584615e652ab5d5a36f61c35f *R/multinom_BIC.R
+33bd3236276a013e95ff1b6cc220260d *R/pair_fast_mgm.R
+a0482286f06901c40598eb1f5ea282a3 *R/skeletonPENstable_modified.R
+810a159a09d67b064456475bd90c127e *data/example_data.rda
+dcba031b07f5cda2751c49c2610dd19c *man/example_data.Rd
+0d43deac45205e2cf1601924780de284 *man/mDAG.Rd
+0241ea67ea35b0bf49cb61c04a43cff8 *src/Greedy_Search.cpp
+e4a9a47c4a3aca98677ab8b16336e5de *src/Makevars
+e4a9a47c4a3aca98677ab8b16336e5de *src/Makevars.win
+16b21bd4765643d623a2f7a3960b69a0 *src/RcppExports.cpp

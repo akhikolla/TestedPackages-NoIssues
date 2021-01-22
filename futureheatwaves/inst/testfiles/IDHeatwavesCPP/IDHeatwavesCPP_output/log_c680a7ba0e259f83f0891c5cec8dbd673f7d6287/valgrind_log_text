@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (futureheatwaves_deepstate_test_IDHeatwavesCPP_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/futureheatwaves/inst/testfiles/IDHeatwavesCPP/IDHeatwavesCPP_output/c680a7ba0e259f83f0891c5cec8dbd673f7d6287.pass`
+TRACE: Running: futureheatwaves_deepstate_test_IDHeatwavesCPP_test from /home/akhila/fuzzer_packages/fuzzedpackages/futureheatwaves/inst/testfiles/IDHeatwavesCPP/IDHeatwavesCPP_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+heatwaveLength values: -1105761949
+Missing value
+tempsExceedingCutoff values: 1.79371e+195 -inf -3.98953e+09 -3.57884e+73 -6.38154e+212 nan nan 1.93761e+269 -0.0415881 -inf -1.66877e-96 6.45644e-174 5.50641e+255 -inf
+input ends
+TRACE: Passed: futureheatwaves_deepstate_test_IDHeatwavesCPP_test

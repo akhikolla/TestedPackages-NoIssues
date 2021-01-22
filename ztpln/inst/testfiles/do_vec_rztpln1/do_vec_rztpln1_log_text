@@ -1,0 +1,9 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (ztpln_deepstate_test_do_vec_rztpln1_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+n values: 467495432
+mu values: 8.08981e-307
+sig values: 3.76873e+222
+input ends

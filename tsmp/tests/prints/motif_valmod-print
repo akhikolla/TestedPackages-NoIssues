@@ -1,0 +1,13 @@
+Valmod Matrix Profile
+---------------------
+Profile size = 971 
+Window size = 30 - 40 
+Exclusion zone = 0.5 times the windows size
+Contains 1 set of data with 1000 observations and 1 dimension 
+
+Valmod Motif
+------------
+Motif pairs found = 3 
+Motif pairs indexes = [388, 589] [414, 818] [2, 210]  
+Motif pairs neighbors = [] [] []  
+Motif pairs windows = [30] [39] [30]  

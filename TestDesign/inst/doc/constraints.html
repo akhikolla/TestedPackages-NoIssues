@@ -1,0 +1,1322 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Sangdon Lim" />
+
+
+<title>Creating constraints in TestDesign package</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<script>$(document).ready(function(){
+    if (typeof $('[data-toggle="tooltip"]').tooltip === 'function') {
+        $('[data-toggle="tooltip"]').tooltip();
+    }
+    if ($('[data-toggle="popover"]').popover === 'function') {
+        $('[data-toggle="popover"]').popover();
+    }
+});
+</script>
+<style type="text/css">
+.lightable-minimal {
+border-collapse: separate;
+border-spacing: 16px 1px;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-minimal td {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal th {
+margin-left: 5px;
+margin-right: 5px;
+}
+.lightable-minimal thead tr:last-child th {
+border-bottom: 2px solid #00000050;
+empty-cells: hide;
+}
+.lightable-minimal tbody tr:first-child td {
+padding-top: 0.5em;
+}
+.lightable-minimal.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-minimal.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic {
+border-top: 0.16em solid #111111;
+width: 100%;
+margin-bottom: 10px;
+margin: 10px 5px;
+}
+.lightable-classic caption {
+color: #222222;
+}
+.lightable-classic td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic thead tr:last-child th {
+border-bottom: 0.10em solid #111111;
+}
+.lightable-classic tbody tr:last-child td {
+border-bottom: 0.14em solid #111111;
+}
+.lightable-classic.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-classic-2 {
+border-top: 3px double #111111;
+width: 100%;
+margin-bottom: 10px;
+}
+.lightable-classic-2 caption {
+color: #222222;
+}
+.lightable-classic-2 td {
+padding-left: 5px;
+padding-right: 5px;
+color: #222222;
+}
+.lightable-classic-2 th {
+padding-left: 5px;
+padding-right: 5px;
+font-weight: normal;
+color: #222222;
+}
+.lightable-classic-2 tbody tr:last-child td {
+border-bottom: 3px double #111111;
+}
+.lightable-classic-2 thead tr:last-child th {
+border-bottom: 1px solid #111111;
+}
+.lightable-classic-2.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-classic-2.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #EEE;
+border-collapse: collapse;
+margin-bottom: 10px;
+}
+.lightable-material th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+}
+.lightable-material td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+border-top: 1px solid #eeeeee;
+}
+.lightable-material.lightable-hover tbody tr:hover {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody tr:nth-child(even) {
+background-color: #f5f5f5;
+}
+.lightable-material.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #ddd;
+}
+.lightable-material-dark {
+min-width: 100%;
+white-space: nowrap;
+table-layout: fixed;
+font-family: Roboto, sans-serif;
+border: 1px solid #FFFFFF12;
+border-collapse: collapse;
+margin-bottom: 10px;
+background-color: #363640;
+}
+.lightable-material-dark th {
+height: 56px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF60;
+}
+.lightable-material-dark td {
+height: 52px;
+padding-left: 16px;
+padding-right: 16px;
+color: #FFFFFF;
+border-top: 1px solid #FFFFFF12;
+}
+.lightable-material-dark.lightable-hover tbody tr:hover {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody tr:nth-child(even) {
+background-color: #FFFFFF12;
+}
+.lightable-material-dark.lightable-striped tbody td {
+border: 0;
+}
+.lightable-material-dark.lightable-striped thead tr:last-child th {
+border-bottom: 1px solid #FFFFFF12;
+}
+.lightable-paper {
+width: 100%;
+margin-bottom: 10px;
+color: #444;
+}
+.lightable-paper thead tr:last-child th {
+color: #666;
+vertical-align: bottom;
+border-bottom: 1px solid #00000020;
+line-height: 1.15em;
+padding: 10px 5px;
+}
+.lightable-paper td {
+vertical-align: middle;
+border-bottom: 1px solid #00000010;
+line-height: 1.15em;
+padding: 7px 5px;
+}
+.lightable-paper.lightable-hover tbody tr:hover {
+background-color: #F9EEC1;
+}
+.lightable-paper.lightable-striped tbody tr:nth-child(even) {
+background-color: #00000008;
+}
+.lightable-paper.lightable-striped tbody td {
+border: 0;
+}
+</style>
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Creating constraints in TestDesign package</h1>
+<h4 class="author">Sangdon Lim</h4>
+
+
+
+<p><br /></p>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>This document explains how to create constraints data for <code>loadConstraints()</code>. In test assembly, practitioners often want to select items satisfying various types of constraints. As of <em>TestDesign</em> version 1.1.0, constraints can be read in from <code>data.frame</code> objects or <code>.csv</code> spreadsheet files. Data is expected to be in the following structure:</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+1
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+30
+</td>
+<td style="text-align:left;width: 3em; ">
+30
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 5em; ">
+2
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+LEVEL == 3
+</td>
+<td style="text-align:left;width: 3em; ">
+10
+</td>
+<td style="text-align:left;width: 3em; ">
+10
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 5em; ">
+3
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+LEVEL == 4
+</td>
+<td style="text-align:left;width: 3em; ">
+10
+</td>
+<td style="text-align:left;width: 3em; ">
+10
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 5em; ">
+4
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+LEVEL == 5
+</td>
+<td style="text-align:left;width: 3em; ">
+10
+</td>
+<td style="text-align:left;width: 3em; ">
+10
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+<tr>
+<td style="text-align:left;width: 5em; ">
+5
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+STANDARD == 1
+</td>
+<td style="text-align:left;width: 3em; ">
+17
+</td>
+<td style="text-align:left;width: 3em; ">
+20
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p>Constraints data must have seven columns, named as <code>CONSTRAINT</code>, <code>TYPE</code>, <code>WHAT</code>, <code>CONDITION</code>, <code>LB</code>, <code>UB</code>, <code>ONOFF</code> on the first row. Beginning from the second row, each row must have corresponding values for each column. A convenient way to creating constraints is to use a spreadsheet application (e.g. Excel) and work on the content from there.</p>
+<p><br /></p>
+<hr />
+<div id="constraint" class="section level4">
+<h4>CONSTRAINT</h4>
+<p>This column serves as indices. One number must be put into each row, beginning from 1 and incrementing by 1. <code>loadConstraints()</code> recreates these if necessary.</p>
+<p><br /></p>
+<hr />
+</div>
+<div id="type" class="section level4">
+<h4>TYPE</h4>
+<p>This column specifies the type of constraint. Following values are expected: <code>Number</code>, <code>Order</code>, <code>Enemy</code>, <code>Include</code>, <code>Exclude</code>, <code>AllorNone</code>.</p>
+<p><br /></p>
+<ul>
+<li><code>Number</code> specifies the constraint to be applied to the number of selected items (if <code>WHAT</code> column is <code>Item</code>), or to the number of selected item sets (if <code>WHAT</code> column is <code>Stimulus</code>). For example, the following row tells the solver to select a total of 30 items.</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+1
+</td>
+<td style="text-align:left;width: 5em; background-color: cyan !important;">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+30
+</td>
+<td style="text-align:left;width: 3em; ">
+30
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <br /></p>
+<ul>
+<li><code>Sum</code> specifies the constraint to be applied to the sum of attributes of selected items (if <code>WHAT</code> column is <code>Item</code>), or of selected item sets (if <code>WHAT</code> column is <code>Stimulus</code>). For example, the following row tells the solver to keep the sum of <code>WORDS</code> between 500–600.</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:right;">
+LB
+</th>
+<th style="text-align:right;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+2
+</td>
+<td style="text-align:left;width: 5em; background-color: cyan !important;">
+Sum
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+WORDS
+</td>
+<td style="text-align:right;width: 3em; ">
+500
+</td>
+<td style="text-align:right;width: 3em; ">
+600
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <br /></p>
+<ul>
+<li><code>Order</code> specifies the selection to be made in ascending order. The following row tells the solver to select the items in ascending <code>LEVEL</code>, based on supplied attributes.</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+32
+</td>
+<td style="text-align:left;width: 5em; background-color: cyan !important;">
+Order
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+LEVEL
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <br /></p>
+<ul>
+<li><code>Enemy</code> specifies the items (or item sets) matching the condition to be treated as enemy items. To tell the solver to select at most one of the two items:</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+33
+</td>
+<td style="text-align:left;width: 5em; background-color: cyan !important;">
+Enemy
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+ID %in% c(“SC00001”, “SC00002”)
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <br /></p>
+<ul>
+<li><code>Include</code> specifies the items matching the condition to be always included in selection. For example, the following row tells the solver to include items <code>SC00003</code> and <code>SC00004</code>:</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+34
+</td>
+<td style="text-align:left;width: 5em; background-color: cyan !important;">
+Include
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+ID %in% c(“SC00003”, “SC00004”)
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <br /></p>
+<ul>
+<li><code>Exclude</code> specifies the items matching the condition to be always excluded from selection. The following row tells the solver to exclude items that match <code>PTBIS &lt; 0.15</code>, based on supplied item attributes.</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+35
+</td>
+<td style="text-align:left;width: 5em; background-color: cyan !important;">
+Exclude
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+PTBIS &lt; 0.15
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <br /></p>
+<ul>
+<li><code>AllOrNone</code> specifies the items matching the condition to be either all included or all excluded. To tell the solver to either select items <code>SC00005</code> and <code>SC00006</code> at the same time or exclude them at the same time:</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+36
+</td>
+<td style="text-align:left;width: 5em; background-color: cyan !important;">
+AllOrNone
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+ID %in% c(“SC00005”, “SC00006”)
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /></p>
+<hr />
+</div>
+<div id="what" class="section level4">
+<h4>WHAT</h4>
+<p>This column specifies the unit of assembly the constraint uses. Expected values are <code>Item</code> or <code>Stimulus</code>.</p>
+<p><br /></p>
+<hr />
+</div>
+<div id="condition" class="section level4">
+<h4>CONDITION</h4>
+<p>This column specifies the condition of the constraint. An R expression returning logical values (<code>TRUE</code> or <code>FALSE</code>) is expected. The variables supplied in item attributes can be used in the expression as variable names.</p>
+<p>Some examples are:</p>
+<ul>
+<li><code>&quot;STANDARD %in% c(2, 4)&quot;</code> tells the solver to select when <code>STANDARD</code> is either 2 or 4.</li>
+<li><code>&quot;STANDARD %in% c(2, 4) &amp; DOK &gt;= 3&quot;</code> tells the solver to select when <code>STANDARD</code> is either 2 or 4, and also <code>DOK</code> is at least 3.</li>
+<li><code>!is.na(FACIT)</code> tells the solver to select when <code>FACIT</code> is not empty.</li>
+<li>Leave it empty to not specify any condition. This is useful in constraining the total number of items.</li>
+</ul>
+<p>For <code>TYPE == SUM</code>, using a variable name imposes the constraint on the sum of the variable. The following row tells the solver to keep the sum of <code>WORDS</code> between 500–600.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:right;">
+LB
+</th>
+<th style="text-align:right;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+2
+</td>
+<td style="text-align:left;width: 5em; ">
+Sum
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; background-color: cyan !important;">
+WORDS
+</td>
+<td style="text-align:right;width: 3em; ">
+500
+</td>
+<td style="text-align:right;width: 3em; ">
+600
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p>For <code>TYPE == SUM</code>, constraints on conditional sums can be imposed by using a variable name, placing a comma, and then giving an R expression returning logical values. The following row tells the solver to keep the sum of <code>WORDS</code> within <code>DOK == 1</code> items between 50–80.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:right;">
+LB
+</th>
+<th style="text-align:right;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+3
+</td>
+<td style="text-align:left;width: 5em; ">
+Sum
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; background-color: cyan !important;">
+WORDS, DOK == 1
+</td>
+<td style="text-align:right;width: 3em; ">
+50
+</td>
+<td style="text-align:right;width: 3em; ">
+80
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p>In set-based assembly, <code>Per Stimulus</code> can be used to specify the number of items to select in each stimulus. For example, the following row tells the solver to select 4 to 6 items per stimulus:</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+3
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; background-color: cyan !important;">
+Per Stimulus
+</td>
+<td style="text-align:left;width: 3em; ">
+4
+</td>
+<td style="text-align:left;width: 3em; ">
+6
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /></p>
+<hr />
+</div>
+<div id="lb-and-ub" class="section level4">
+<h4>LB and UB</h4>
+<p>These two columns specify lower and upper bounds on the number of selected items. These must be specified when <code>TYPE</code> is <code>Number</code>, and otherwise must be left empty.</p>
+<p>Some example rows are provided.</p>
+<ul>
+<li>To select a total of 12 items:</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+1
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+</td>
+<td style="text-align:left;width: 3em; background-color: cyan !important;">
+12
+</td>
+<td style="text-align:left;width: 3em; background-color: cyan !important;">
+12
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /> <br /></p>
+<ul>
+<li>To select 15 to 30 items satisfying <code>DOK &gt;= 2</code>:</li>
+</ul>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+17
+</td>
+<td style="text-align:left;width: 5em; ">
+Number
+</td>
+<td style="text-align:left;width: 5em; ">
+Item
+</td>
+<td style="text-align:left;width: 10em; ">
+DOK &gt;= 2
+</td>
+<td style="text-align:left;width: 3em; background-color: cyan !important;">
+15
+</td>
+<td style="text-align:left;width: 3em; background-color: cyan !important;">
+30
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /></p>
+<hr />
+</div>
+<div id="onoff" class="section level4">
+<h4>ONOFF</h4>
+<p>Set this to <code>OFF</code> to turn off the constraint from being applied. <code>ON</code> or leaving it blank applies the constraint. The following example specifies the order constraint to be not applied.</p>
+<table class="table table-striped table-hover table-condensed table-responsive" style="margin-left: auto; margin-right: auto;">
+<thead>
+<tr>
+<th style="text-align:left;">
+CONSTRAINT
+</th>
+<th style="text-align:left;">
+TYPE
+</th>
+<th style="text-align:left;">
+WHAT
+</th>
+<th style="text-align:left;">
+CONDITION
+</th>
+<th style="text-align:left;">
+LB
+</th>
+<th style="text-align:left;">
+UB
+</th>
+<th style="text-align:left;">
+ONOFF
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left;width: 5em; ">
+18
+</td>
+<td style="text-align:left;width: 5em; ">
+Order
+</td>
+<td style="text-align:left;width: 5em; ">
+Passage
+</td>
+<td style="text-align:left;width: 10em; ">
+CONTENT
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; ">
+</td>
+<td style="text-align:left;width: 3em; background-color: cyan !important;">
+OFF
+</td>
+</tr>
+</tbody>
+</table>
+<p><br /></p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

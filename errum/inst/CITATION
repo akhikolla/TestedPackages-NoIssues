@@ -1,0 +1,34 @@
+citHeader("To cite the 'errum' R package and methods paper in publications use:")
+
+citEntry(entry = "Manual",
+         title        = "{errum: Bayesian Estimation of an Exploratory Reduced Reparameterized Unified Model}",
+         author       = personList(
+                                   as.person("James Joseph Balamuta"),
+                                   as.person("Steven Andrew Culpepper"),
+                                   as.person("Jeffrey A. Douglas")
+                                  ),
+         year         = 2019,
+         textVersion  = paste("Balamuta, J. J., Culpepper, S. A., and Douglas, J. A. (2019).",
+                              "errum: Bayesian Estimation of an Exploratory Reduced Reparameterized Unified Model.",
+                              "URL https://cran.r-project.org/package=errum.")
+)
+
+citEntry(entry   = "Article",
+         title   = "{Development and Application of an Exploratory Reduced Reparameterized Unified Model}",
+         author  = personList(
+                      as.person("Steven Andrew Culpepper"),
+                      as.person("Yinghan Chen")
+                   ),
+         journal = "Journal of Educational and Behavioral Statistics",
+         year    = "2019",
+         url     = "https://doi.org/10.3102/1076998618791306",
+         volume  = "44",
+         number  = "1",
+         pages   = "3-24",
+         doi     = "10.3102/1076998618791306",
+         textVersion = paste("Culpepper, S. A. and Chen, Y. (2019).",
+                             "Development and Application of an Exploratory Reduced Reparameterized Unified Model.",
+                             "Journal of Educational and Behavioral Statistics. 44, 3-24.",
+                             "DOI: 10.3102/1076998618791306.")
+)
+

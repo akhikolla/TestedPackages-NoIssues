@@ -1,0 +1,39 @@
+useDynLib(EMbC)
+importFrom(Rcpp, evalCpp)
+
+import(methods)
+import(RColorBrewer)
+import(sp)
+
+importFrom("grDevices", "rainbow")
+importFrom("graphics", "axis", "grid", "layout", "legend", "lines", "par", "points", "rect")
+importFrom("stats", "median", "runif")
+importFrom("utils", "browseURL")
+
+importFrom(mnormt, dmnorm)
+importFrom(mnormt, rmnorm)
+importFrom(mnormt, pd.solve)
+importFrom(maptools, solarpos)
+
+export(embc)
+export(stbc)
+
+export(setc)
+export(slct)
+
+export(lkhp)
+export(stts)
+export(sctr)
+export(sct3)
+export(lblp)
+export(chkp)
+export(cnfm)
+export(smth)
+export(rlbl)
+
+export(varp)
+export(view)
+export(pkml)
+export(bkml)
+export(pmap)
+export(bmap)

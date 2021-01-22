@@ -1,0 +1,84 @@
+mwaved 1.1.6
+============
+
+* Fixed AC code declarations
+
+mwaved 1.1.5
+============
+
+* Fixed bug in plot code in direct setting using ggplot
+* Maintenance update adhering to CRAN policies
+
+mwaved 1.1.4
+============
+
+* Scripts to have LF (Unix style) line endings.
+
+mwaved 1.1.3
+============
+
+* Updated `testthat` function calls to be compatible with the new `testthat` package. i.e. new `testthat` version is backwards incompatible.
+
+mwaved 1.1.2
+============
+
+* Update maintainer's email address.
+
+
+mwaved 1.1.1
+============
+
+* Fixed Makevars.in to adhere to POSIX standard.
+* Removed the `require` commands from the source code.
+* Dropped `Suggests gridExtra` in favour of leaner import of a few select functions from the `r-base grid` package.
+* Cleaned some code to improve readability.
+
+mwaved 1.1.0
+============
+
+* Added HTML vignette to document the package.
+* Added unit tests via the testthat package.
+* Fixed plotting errors for smooth resolution method.
+* Fixed ggplot labelling issue.
+* Fixed bug in coarse coefficient computation in multiWaveD code.
+* Added blur detection function, detectBlur, to validate input G matches structure of direct or box.car blur and returns character string 'direct' or 'box.car' respectively,  (returns 'smooth' otherwise). This removes the need to specify the blur argument to control inversion type in functions since detectBlur can identify the appropriate inversion required. 
+* Added resolution argument so that the user can specify the resolution selection method, warnings are thrown if the detectBlur function does not match the desired selection type.
+* Slightly tweaked directBlur input arguments to be (n, m) instead of (dim(G)) for consistency between Blur functions.
+
+mwaved 1.0.1
+============
+
+* Fixed memory leak in multiProj
+* Fixed code to ensure windows binary computes j1 correctly
+* Changed C code to allow compilation on OSX Snow Leopard (avoid overloaded int in pow statements)
+
+mwaved 1.0.0
+============
+
+* Added `which` argument to plot.mWaveD method to specify certain plots to be output.
+
+mwaved 0.9.0 (development)
+============
+
+* Added ggplot2 support as a suggested package (also included a suggestion of gridExtra to help facilitate multiple ggplot outputs on same window)
+* Added interactive Shiny applet to showcase the method, can run by calling mWaveDDemo() at R prompt
+
+mwaved 0.2.0 (development)
+============
+
+* Standardised the mWaveD object to contain wavelet coefficients for the empirical and hard-shrinked coefficients both in the format of `waveletCoef` objects. Standardises the plotting of such coefficients using the `plot.waveletCoef` method.
+* Defensively programmed input arguments to avoid infeasible input being processed (throws warnings or errors)
+
+mwaved 0.1.1 (development)
+============
+
+* Proof read and updated documentation and added references.
+
+mwaved 0.1 (development)
+===========
+
+* new set of functions included with a `multi` prefix that handle Multichannel deconvolution using the WaveD paradigm.
+* plot and summary methods for the `mWaveD` objects created by the `multiWaveD` function.
+* Added a `waveletCoef` object with a `plot` method to help ease plotting of wavelet coefficients.
+* included simulation functions using a `make` prefix (including LIDAR, Doppler, Blocks, Bumps and Cusp).
+* included `gammaBlur` and `blurSignal` functions to help ease simulation.

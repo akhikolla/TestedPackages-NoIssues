@@ -1,0 +1,12 @@
+7137aa586945f221d985b0edff0f7123 *DESCRIPTION
+6ebd1c9a850db60126cfd6eea1bd0590 *NAMESPACE
+00986ec0fd6d81ef72f0ce7c715687b4 *R/RcppExports.R
+1c05abeb19c8d7d18e49e094e7fa3f34 *R/functions-code.R
+344a5a9282cf7f9e633a3514bb0ff603 *man/Cdboot_multi.Rd
+5923466962ecbb1553db9fbc28b0ee53 *man/Cquantile.Rd
+eab124c5da47cba00b908229d360fad6 *man/perccal-package.Rd
+d1c1e0a9d3ea030ca2bd0f1354c1c445 *man/perccal_interval.Rd
+1fda748862ea4c31684cf2e6a89bc93f *man/sample_rcpp.Rd
+899e256fbab14d837ea44d49b1c974b9 *src/Makevars
+fa318843a746835da902d47bc8eb2970 *src/RcppExports.cpp
+309ea63b5fe6fc65d4eea4484214fb06 *src/dboot_multi.cpp

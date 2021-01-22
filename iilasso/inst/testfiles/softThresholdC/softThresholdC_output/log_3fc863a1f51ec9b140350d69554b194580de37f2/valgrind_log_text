@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (iilasso_deepstate_test_softThresholdC_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/iilasso/inst/testfiles/softThresholdC/softThresholdC_output/3fc863a1f51ec9b140350d69554b194580de37f2.pass`
+TRACE: Running: iilasso_deepstate_test_softThresholdC_test from /home/akhila/fuzzer_packages/fuzzedpackages/iilasso/inst/testfiles/softThresholdC/softThresholdC_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+z values: 1.27048e-62
+g values: -2.88162e-134
+input ends
+TRACE: Passed: iilasso_deepstate_test_softThresholdC_test

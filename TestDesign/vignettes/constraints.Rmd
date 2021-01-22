@@ -1,0 +1,310 @@
+---
+title: "Creating constraints in TestDesign package"
+author: Sangdon Lim
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Creating constraints in TestDesign package}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+
+<br/>
+
+### Introduction
+
+This document explains how to create constraints data for `loadConstraints()`. In test assembly, practitioners often want to select items satisfying various types of constraints. As of *TestDesign* version 1.1.0, constraints can be read in from `data.frame` objects or `.csv` spreadsheet files. Data is expected to be in the following structure:
+
+```{r echo = FALSE, message = FALSE}
+library(knitr)
+library(kableExtra)
+library(TestDesign)
+
+constraints_science_data[is.na(constraints_science_data)] <- ""
+constraints_reading_data[is.na(constraints_reading_data)] <- ""
+constraints_fatigue_data[is.na(constraints_fatigue_data)] <- ""
+constraints_bayes_data[is.na(constraints_bayes_data)] <- ""
+```
+
+```{r echo = FALSE}
+knitr::kable(constraints_science_data[1:5, ]) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em") %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+Constraints data must have seven columns, named as `CONSTRAINT`, `TYPE`, `WHAT`, `CONDITION`, `LB`, `UB`, `ONOFF` on the first row. Beginning from the second row, each row must have corresponding values for each column. A convenient way to creating constraints is to use a spreadsheet application (e.g. Excel) and work on the content from there.
+
+<br/>
+
+***
+
+#### CONSTRAINT
+
+This column serves as indices. One number must be put into each row, beginning from 1 and incrementing by 1. `loadConstraints()` recreates these if necessary.
+
+<br/>
+
+***
+
+#### TYPE
+
+This column specifies the type of constraint. Following values are expected: `Number`, `Order`, `Enemy`, `Include`, `Exclude`, `AllorNone`.
+
+<br/>
+
+* `Number` specifies the constraint to be applied to the number of selected items (if `WHAT` column is `Item`), or to the number of selected item sets (if `WHAT` column is `Stimulus`). For example, the following row tells the solver to select a total of 30 items.
+
+```{r, echo = FALSE}
+knitr::kable(constraints_science_data[1, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em", background = 'cyan') %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+<br/>
+
+* `Sum` specifies the constraint to be applied to the sum of attributes of selected items (if `WHAT` column is `Item`), or of selected item sets (if `WHAT` column is `Stimulus`). For example, the following row tells the solver to keep the sum of `WORDS` between 500--600.
+
+```{r, echo = FALSE}
+tmp = constraints_bayes_data[2, ]
+tmp$ONOFF = ""
+knitr::kable(tmp, row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em", background = 'cyan') %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+<br/>
+
+* `Order` specifies the selection to be made in ascending order. The following row tells the solver to select the items in ascending `LEVEL`, based on supplied attributes.
+
+```{r, echo = FALSE}
+knitr::kable(constraints_science_data[32, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em", background = 'cyan') %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+<br/>
+
+* `Enemy` specifies the items (or item sets) matching the condition to be treated as enemy items. To tell the solver to select at most one of the two items:
+
+```{r, echo = FALSE}
+knitr::kable(constraints_science_data[33, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em", background = 'cyan') %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+<br/>
+
+* `Include` specifies the items matching the condition to be always included in selection. For example, the following row tells the solver to include items `SC00003` and `SC00004`:
+
+```{r, echo = FALSE}
+knitr::kable(constraints_science_data[34, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em", background = 'cyan') %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+<br/>
+
+* `Exclude` specifies the items matching the condition to be always excluded from selection. The following row tells the solver to exclude items that match `PTBIS < 0.15`, based on supplied item attributes.
+
+```{r, echo = FALSE}
+knitr::kable(constraints_science_data[35, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em", background = 'cyan') %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+<br/>
+
+* `AllOrNone` specifies the items matching the condition to be either all included or all excluded. To tell the solver to either select items `SC00005` and `SC00006` at the same time or exclude them at the same time:
+
+```{r, echo = FALSE}
+knitr::kable(constraints_science_data[36, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em", background = 'cyan') %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+
+***
+
+#### WHAT
+
+This column specifies the unit of assembly the constraint uses. Expected values are `Item` or `Stimulus`.
+
+<br/>
+
+***
+
+#### CONDITION
+
+This column specifies the condition of the constraint. An R expression returning logical values (`TRUE` or `FALSE`) is expected. The variables supplied in item attributes can be used in the expression as variable names.
+
+Some examples are:
+
+* `"STANDARD %in% c(2, 4)"` tells the solver to select when `STANDARD` is either 2 or 4.
+* `"STANDARD %in% c(2, 4) & DOK >= 3"` tells the solver to select when `STANDARD` is either 2 or 4, and also `DOK` is at least 3.
+* `!is.na(FACIT)` tells the solver to select when `FACIT` is not empty.
+* Leave it empty to not specify any condition. This is useful in constraining the total number of items.
+
+For `TYPE == SUM`, using a variable name imposes the constraint on the sum of the variable. The following row tells the solver to keep the sum of `WORDS` between 500--600.
+
+```{r, echo = FALSE}
+tmp = constraints_bayes_data[2, ]
+tmp$ONOFF = ""
+knitr::kable(tmp, row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em") %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em", background = 'cyan') %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+For `TYPE == SUM`, constraints on conditional sums can be imposed by using a variable name, placing a comma, and then giving an R expression returning logical values. The following row tells the solver to keep the sum of `WORDS` within `DOK == 1` items between 50--80.
+
+```{r, echo = FALSE}
+tmp = constraints_bayes_data[3, ]
+tmp$ONOFF = ""
+knitr::kable(tmp, row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em") %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em", background = 'cyan') %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+In set-based assembly, `Per Stimulus` can be used to specify the number of items to select in each stimulus. For example, the following row tells the solver to select 4 to 6 items per stimulus:
+
+```{r, echo = FALSE}
+knitr::kable(constraints_reading_data[3, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em") %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em", background = 'cyan') %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+
+***
+
+#### LB and UB
+
+These two columns specify lower and upper bounds on the number of selected items. These must be specified when `TYPE` is `Number`, and otherwise must be left empty.
+
+Some example rows are provided.
+
+* To select a total of 12 items:
+
+```{r, echo = FALSE}
+knitr::kable(constraints_fatigue_data[1, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em") %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em", background = 'cyan') %>%
+  column_spec(6, "3em", background = 'cyan') %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+<br/>
+
+* To select 15 to 30 items satisfying `DOK >= 2`:
+
+```{r, echo = FALSE}
+knitr::kable(constraints_reading_data[17, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em") %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em", background = 'cyan') %>%
+  column_spec(6, "3em", background = 'cyan') %>%
+  column_spec(7, "3em")
+```
+
+<br/>
+
+***
+
+#### ONOFF
+
+Set this to `OFF` to turn off the constraint from being applied. `ON` or leaving it blank applies the constraint. The following example specifies the order constraint to be not applied.
+
+```{r, echo = FALSE}
+knitr::kable(constraints_reading_data[18, ], row.names = FALSE) %>%
+  kableExtra::kable_styling(bootstrap_options = c("striped", "hover", "condensed", "responsive")) %>%
+  column_spec(1, "5em") %>%
+  column_spec(2, "5em") %>%
+  column_spec(3, "5em") %>%
+  column_spec(4, "10em") %>%
+  column_spec(5, "3em") %>%
+  column_spec(6, "3em") %>%
+  column_spec(7, "3em", background = 'cyan')
+```
+
+<br/>

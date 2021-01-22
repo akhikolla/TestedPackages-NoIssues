@@ -1,0 +1,5 @@
+PKG_CXXFLAGS=-I../inst/include
+PKG_CPPFLAGS= 
+PKG_LIBS= -lfftw3
+
+all: $(SHLIB)

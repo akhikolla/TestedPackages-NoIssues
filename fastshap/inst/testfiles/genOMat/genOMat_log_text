@@ -1,0 +1,93 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (fastshap_deepstate_test_genOMat_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: 467495432
+num_cols values: 1827680409
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: -498905818
+num_cols values: 569042049
+input ends
+EXTERNAL: Error: negative length vectors are not allowed
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: -293123844
+num_cols values: -555281357
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: -1105761949
+num_cols values: 304498753
+input ends
+EXTERNAL: Error: negative length vectors are not allowed
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: 954479852
+num_cols values: -194229631
+input ends
+EXTERNAL: Error: negative length vectors are not allowed
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: 1344097580
+num_cols values: -1433424706
+input ends
+EXTERNAL: Error: negative length vectors are not allowed
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: -823343871
+num_cols values: -1944840741
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: -469638059
+num_cols values: -912555523
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+num_rows values: -1885057419
+num_cols values: 722601599
+input ends
+EXTERNAL: Error: negative length vectors are not allowed
+
+EXTERNAL: Execution halted
+
+INFO: Done fuzzing! Ran 9 tests (4 tests/second) with 9 failed/0 passed/0 abandoned tests

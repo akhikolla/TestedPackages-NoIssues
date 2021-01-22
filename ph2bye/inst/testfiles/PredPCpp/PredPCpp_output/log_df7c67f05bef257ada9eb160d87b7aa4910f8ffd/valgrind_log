@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./PredPCpp_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/ph2bye/inst/testfiles/PredPCpp/PredPCpp_output/df7c67f05bef257ada9eb160d87b7aa4910f8ffd.pass</line>
+</preamble>
+
+<pid>2237326</pid>
+<ppid>2237325</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/ph2bye/inst/testfiles/PredPCpp/PredPCpp_output/log_df7c67f05bef257ada9eb160d87b7aa4910f8ffd/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./PredPCpp_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/ph2bye/inst/testfiles/PredPCpp/PredPCpp_output/df7c67f05bef257ada9eb160d87b7aa4910f8ffd.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.028 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:02:31:04.892 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:02:31:05.434 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

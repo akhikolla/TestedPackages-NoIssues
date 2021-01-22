@@ -1,0 +1,182 @@
+---
+title: "Get Started with landscapemetrics"
+date: "`r Sys.Date()`"
+output:
+  rmarkdown::html_vignette:
+    toc: true
+    html_preview: false
+vignette: >
+  %\VignetteIndexEntry{Get Started}
+  %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
+---
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r load_libraries_hidden, eval=TRUE, echo=FALSE, message=FALSE, results='hide'}
+library(landscapemetrics)
+library(raster)
+library(dplyr)
+```
+
+## Design
+
+All functions in `landscapemetrics` start with `lsm_` (for landscapemetrics). The second part of the name specifies the level (patch - `p`, class - `c` or landscape - `l`). The last part of the function name is the abbreviation of the corresponding metric (e.g. `enn`for the euclidean nearest-neighbor distance): 
+
+```
+# general structure
+lsm_"level"_"metric"
+
+# Patch level
+## lsm_p_"metric"
+lsm_p_enn()
+
+# Class level
+## lsm_c_"metric"
+lsm_c_enn()
+
+# Landscape level
+## lsm_p_"metric"
+lsm_l_enn()
+```
+
+All functions return an identical structured tibble:
+
+<p style="text-align:center;">
+
+| layer  | level | class | id | metric | value
+| ------------- | -------------  | ------------- | ------------- | ------------- | ------------- | 
+| 1 | patch  | 1 | 1 | landscape metric | x |
+| 1 | class  | 1 | NA | landscape metric | x |
+| 1 | landscape  | NA | NA | landscape metric | x |
+
+</p>
+
+## Checking your landscape
+
+Before using `landscapemetrics` and calculating landscape metrics in general,
+it makes sense to check your landscape. If your landscape has some properties that restrict the calculation or interpretation of landscape metrics, that should be detected with `check_landscape`:
+
+```{r}
+# import raster
+# for local file: raster("pathtoyourraster/raster.asc")
+# ... or any other raster file type, geotiff, ...
+
+# Check your landscape
+check_landscape(landscapemetrics::landscape) # because CRS is unkown, not clear
+
+check_landscape(landscapemetrics::podlasie_ccilc) # wrong units
+
+check_landscape(landscapemetrics::augusta_nlcd) # everything is ok
+```
+
+The **requirements** to calculate meaningful landscape metrics are:
+
+1. The distance units of your projection are **meter**, as the package converts units internally and returns results in either meters, square meters or hectares. For more information see the help file of each function. 
+
+2. Your raster encodes landscape classes as integers (1, 2, 3, 4, ..., *n*).
+
+3. Landscape metrics describe *categorical* landscapes, that means that your landscape needs to be classified (we throw a warning if you have more than 30 classes to make sure you work with a classified landscape).
+
+## Using `landscapemetrics`
+
+If you are sure that your landscape is suitable for the calculation of landscape metrics, `landscapemetrics` makes this quite easy:
+
+```{r, message=FALSE}
+# import raster
+# for local file: raster("pathtoyourraster/raster.asc")
+# ... or any other raster file type, geotiff, ...
+
+# Calculate e.g. perimeter of all patches
+lsm_p_perim(landscape)
+```
+
+### Using `landscapemetrics` in a tidy workflow
+
+Every function in *landscapemetrics* accept data as its first argument, which makes piping a natural workflow. A possible use case is that you would load your spatial data, calculate some landscape metrics and then use the resulting tibble in further analyses.
+
+```{r, message=FALSE}
+# all patch IDs of class 2 with an ENN > 2.5
+subsample_patches <- landscape %>% 
+    lsm_p_enn() %>%
+    dplyr::filter(class == 2 & value > 2.5) %>%
+    dplyr::pull(id)
+
+# show results
+subsample_patches
+``` 
+
+### Use multiple metric functions
+
+To list all available metrics, just use the `list_lsm()` function. Here, you can specify e.g. a level or type of metrics. 
+
+```{r}
+# list all available metrics
+list_lsm()
+
+# list only aggregation metrics at landscape level and just return function name
+list_lsm(level = "landscape", 
+         type = "aggregation metric", 
+         simplify = TRUE)
+
+# you can also combine arguments and only return the function names
+list_lsm(level = c("patch", "landscape"), 
+         type = "core area metric", 
+         simplify = TRUE)
+```
+
+As the result of every function always returns a `tibble`, combining the metrics that were selected for your research question is straightforward:
+
+```{r, message=FALSE}
+# bind results from different metric functions
+patch_metrics <- dplyr::bind_rows(
+  lsm_p_cai(landscape),
+  lsm_p_circle(landscape),
+  lsm_p_enn(landscape)
+)
+
+# look at the results
+patch_metrics 
+```
+
+All metrics are abbreviated in the result `tibble`. Therefore, we provide a `tibble` containing the full metric names, as well as the class of each metric (`lsm_abbreviations_names`). Using e.g. the `left_join()` function of the `dplyr` package one could join a result `tibble` and the abbrevations `tibble`.
+
+```{r, message=FALSE}
+
+# bind results from different metric functions
+patch_metrics <- dplyr::bind_rows(
+  lsm_p_cai(landscape),
+  lsm_p_circle(landscape),
+  lsm_p_enn(landscape)
+  )
+# look at the results
+patch_metrics_full_names <- dplyr::left_join(x = patch_metrics,
+                                             y = lsm_abbreviations_names, 
+                                             by = "metric")
+patch_metrics_full_names
+```
+
+
+Additionally, we provide a wrapper where the desired metrics can be specified as a vector of strings. Because all metrics regardless of the level return an identical `tibble`, different levels can be mixed. It is also possible to calculate all available metrics at a certain level using e.g. `level = "patch"`. Additionally, similar to `list_lsm()` you can also specify e.g. a certain group of metrics. Of course, you can also include the full names and information of all metrics using `full_name = TRUE`.
+
+```{r, message=FALSE}
+# calculate certain metrics
+calculate_lsm(landscape, 
+              what = c("lsm_c_pland", "lsm_l_ta", "lsm_l_te"))
+
+# calculate all aggregation metrics on patch and landscape level
+calculate_lsm(landscape, 
+              type = "aggregation metric", 
+              level = c("patch", "landscape"))
+
+# show full information of all metrics
+calculate_lsm(landscape, 
+              what = c("lsm_c_pland", "lsm_l_ta", "lsm_l_te"),
+              full_name = TRUE)
+```

@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (frailtySurv_deepstate_test_zeta_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/zeta/zeta_output/87924a1ccaa323d8907afe67c483b9b30455e61a.pass`
+TRACE: Running: frailtySurv_deepstate_test_zeta_test from /home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/zeta/zeta_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+s values: -3.59873e+296
+input ends
+TRACE: Passed: frailtySurv_deepstate_test_zeta_test

@@ -1,0 +1,948 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Exact Procedures</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Exact Procedures</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#ordinary-poisson-binomial-distribution">Ordinary Poisson Binomial Distribution</a><ul>
+<li><a href="#direct-convolution">Direct Convolution</a></li>
+<li><a href="#divide-conquer-fft-tree-convolution">Divide &amp; Conquer FFT Tree Convolution</a></li>
+<li><a href="#discrete-fourier-transformation-of-the-characteristic-function">Discrete Fourier Transformation of the Characteristic Function</a></li>
+<li><a href="#recursive-formula">Recursive Formula</a></li>
+<li><a href="#processing-speed-comparisons">Processing Speed Comparisons</a></li>
+</ul></li>
+<li><a href="#generalized-poisson-binomial-distribution">Generalized Poisson Binomial Distribution</a><ul>
+<li><a href="#generalized-direct-convolution">Generalized Direct Convolution</a></li>
+<li><a href="#generalized-divide-conquer-fft-tree-convolution">Generalized Divide &amp; Conquer FFT Tree Convolution</a></li>
+<li><a href="#generalized-discrete-fourier-transformation-of-the-characteristic-function">Generalized Discrete Fourier Transformation of the Characteristic Function</a></li>
+<li><a href="#processing-speed-comparisons-1">Processing Speed Comparisons</a></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="ordinary-poisson-binomial-distribution" class="section level2">
+<h2>Ordinary Poisson Binomial Distribution</h2>
+<div id="direct-convolution" class="section level3">
+<h3>Direct Convolution</h3>
+<p>The <em>Direct Convolution</em> (DC) approach is requested with <code>method = &quot;Convolve&quot;</code>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb1-3"><a href="#cb1-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt;  [1] 3.574462e-35 1.120280e-32 1.685184e-30 1.620524e-28 1.119523e-26</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt;  [6] 5.920060e-25 2.493263e-23 8.591850e-22 2.470125e-20 6.011429e-19</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="co">#&gt; [11] 1.252345e-17 2.253115e-16 3.525477e-15 4.825171e-14 5.803728e-13</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="co">#&gt; [16] 6.158735e-12 5.784692e-11 4.822437e-10 3.576566e-09 2.364563e-08</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt; [21] 1.395965e-07 7.370448e-07 3.484836e-06 1.477208e-05 5.619632e-05</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="co">#&gt; [26] 1.920240e-04 5.897928e-04 1.629272e-03 4.049768e-03 9.060183e-03</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt; [31] 1.824629e-02 3.307754e-02 5.396724e-02 7.921491e-02 1.045505e-01</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="co">#&gt; [36] 1.239854e-01 1.319896e-01 1.259938e-01 1.077029e-01 8.232174e-02</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co">#&gt; [41] 5.616422e-02 3.413623e-02 1.844304e-02 8.835890e-03 3.743554e-03</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">#&gt; [46] 1.398320e-03 4.589049e-04 1.318064e-04 3.298425e-05 7.154649e-06</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="co">#&gt; [51] 1.337083e-06 2.137543e-07 2.898296e-08 3.298587e-09 3.110922e-10</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">#&gt; [56] 2.392070e-11 1.468267e-12 6.991155e-14 2.478218e-15 6.130807e-17</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a><span class="co">#&gt; [61] 9.411166e-19 6.727527e-21</span></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="co">#&gt;  [1] 3.574462e-35 1.123854e-32 1.696423e-30 1.637488e-28 1.135898e-26</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co">#&gt;  [6] 6.033650e-25 2.553600e-23 8.847210e-22 2.558597e-20 6.267289e-19</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="co">#&gt; [11] 1.315018e-17 2.384617e-16 3.763939e-15 5.201565e-14 6.323884e-13</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="co">#&gt; [16] 6.791123e-12 6.463805e-11 5.468818e-10 4.123448e-09 2.776908e-08</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a><span class="co">#&gt; [21] 1.673656e-07 9.044104e-07 4.389247e-06 1.916133e-05 7.535765e-05</span></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co">#&gt; [26] 2.673817e-04 8.571745e-04 2.486446e-03 6.536215e-03 1.559640e-02</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="co">#&gt; [31] 3.384269e-02 6.692022e-02 1.208875e-01 2.001024e-01 3.046529e-01</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="co">#&gt; [36] 4.286383e-01 5.606280e-01 6.866217e-01 7.943246e-01 8.766463e-01</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="co">#&gt; [41] 9.328105e-01 9.669468e-01 9.853898e-01 9.942257e-01 9.979692e-01</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a><span class="co">#&gt; [46] 9.993676e-01 9.998265e-01 9.999583e-01 9.999913e-01 9.999984e-01</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="co">#&gt; [51] 9.999998e-01 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+</div>
+<div id="divide-conquer-fft-tree-convolution" class="section level3">
+<h3>Divide &amp; Conquer FFT Tree Convolution</h3>
+<p>The <em>Divide &amp; Conquer FFT Tree Convolution</em> (DC-FFT) approach is requested with <code>method = &quot;DivideFFT&quot;</code>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co">#&gt;  [1] 3.574462e-35 1.120280e-32 1.685184e-30 1.620524e-28 1.119523e-26</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="co">#&gt;  [6] 5.920060e-25 2.493263e-23 8.591850e-22 2.470125e-20 6.011429e-19</span></span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; [11] 1.252345e-17 2.253115e-16 3.525477e-15 4.825171e-14 5.803728e-13</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; [16] 6.158735e-12 5.784692e-11 4.822437e-10 3.576566e-09 2.364563e-08</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="co">#&gt; [21] 1.395965e-07 7.370448e-07 3.484836e-06 1.477208e-05 5.619632e-05</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; [26] 1.920240e-04 5.897928e-04 1.629272e-03 4.049768e-03 9.060183e-03</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; [31] 1.824629e-02 3.307754e-02 5.396724e-02 7.921491e-02 1.045505e-01</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="co">#&gt; [36] 1.239854e-01 1.319896e-01 1.259938e-01 1.077029e-01 8.232174e-02</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="co">#&gt; [41] 5.616422e-02 3.413623e-02 1.844304e-02 8.835890e-03 3.743554e-03</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; [46] 1.398320e-03 4.589049e-04 1.318064e-04 3.298425e-05 7.154649e-06</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; [51] 1.337083e-06 2.137543e-07 2.898296e-08 3.298587e-09 3.110922e-10</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="co">#&gt; [56] 2.392070e-11 1.468267e-12 6.991155e-14 2.478218e-15 6.130807e-17</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; [61] 9.411166e-19 6.727527e-21</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="co">#&gt;  [1] 3.574462e-35 1.123854e-32 1.696423e-30 1.637488e-28 1.135898e-26</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="co">#&gt;  [6] 6.033650e-25 2.553600e-23 8.847210e-22 2.558597e-20 6.267289e-19</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt; [11] 1.315018e-17 2.384617e-16 3.763939e-15 5.201565e-14 6.323884e-13</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt; [16] 6.791123e-12 6.463805e-11 5.468818e-10 4.123448e-09 2.776908e-08</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="co">#&gt; [21] 1.673656e-07 9.044104e-07 4.389247e-06 1.916133e-05 7.535765e-05</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">#&gt; [26] 2.673817e-04 8.571745e-04 2.486446e-03 6.536215e-03 1.559640e-02</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; [31] 3.384269e-02 6.692022e-02 1.208875e-01 2.001024e-01 3.046529e-01</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="co">#&gt; [36] 4.286383e-01 5.606280e-01 6.866217e-01 7.943246e-01 8.766463e-01</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="co">#&gt; [41] 9.328105e-01 9.669468e-01 9.853898e-01 9.942257e-01 9.979692e-01</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="co">#&gt; [46] 9.993676e-01 9.998265e-01 9.999583e-01 9.999913e-01 9.999984e-01</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co">#&gt; [51] 9.999998e-01 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>By design, as proposed by <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a>, its results are identical to the DC procedure, if <span class="math inline">\(n \leq 750\)</span>. Thus, differences can be observed for larger <span class="math inline">\(n &gt; 750\)</span>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb3-2"><a href="#cb3-2"></a>pp1 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">751</span>)</span>
+<span id="cb3-3"><a href="#cb3-3"></a>pp2 &lt;-<span class="st"> </span>pp1[<span class="dv">1</span><span class="op">:</span><span class="dv">750</span>]</span>
+<span id="cb3-4"><a href="#cb3-4"></a></span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp2, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp2, <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)))</span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp1, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp1, <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)))</span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>The reason is that the DC-FFT method splits the input <code>probs</code> vector into as equally sized parts as possible and computes their distributions separately with the DC approach. The results of the portions are then convoluted by means of the Fast Fourier Transformation. As proposed by <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a>, no splitting is done for <span class="math inline">\(n \leq 750\)</span>. In addition, the DC-FFT procedure does not produce probabilities <span class="math inline">\(\leq 5.55e\text{-}17\)</span>, i.e. smaller values are rounded off to 0, if <span class="math inline">\(n &gt; 750\)</span>, whereas the smallest possible result of the DC algorithm is <span class="math inline">\(\sim 1e\text{-}323\)</span>. This is most likely caused by the used FFTW3 library.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>pp1 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">751</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a>d1 &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp1, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb4-5"><a href="#cb4-5"></a>d2 &lt;-<span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp1, <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="kw">min</span>(d1[d1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>])</span>
+<span id="cb4-8"><a href="#cb4-8"></a><span class="co">#&gt; [1] 1.635357e-321</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a><span class="kw">min</span>(d2[d2 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>])</span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="co">#&gt; [1] 1.635357e-321</span></span></code></pre></div>
+</div>
+<div id="discrete-fourier-transformation-of-the-characteristic-function" class="section level3">
+<h3>Discrete Fourier Transformation of the Characteristic Function</h3>
+<p>The <em>Discrete Fourier Transformation of the Characteristic Function</em> (DFT-CF) approach is requested with <code>method = &quot;Characteristic&quot;</code>.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb5-2"><a href="#cb5-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb5-3"><a href="#cb5-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Characteristic&quot;</span>)</span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt;  [1] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a><span class="co">#&gt;  [6] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="co">#&gt; [11] 0.000000e+00 2.238353e-16 3.549132e-15 4.829828e-14 5.804377e-13</span></span>
+<span id="cb5-9"><a href="#cb5-9"></a><span class="co">#&gt; [16] 6.158818e-12 5.784702e-11 4.822438e-10 3.576566e-09 2.364563e-08</span></span>
+<span id="cb5-10"><a href="#cb5-10"></a><span class="co">#&gt; [21] 1.395965e-07 7.370448e-07 3.484836e-06 1.477208e-05 5.619632e-05</span></span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="co">#&gt; [26] 1.920240e-04 5.897928e-04 1.629272e-03 4.049768e-03 9.060183e-03</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="co">#&gt; [31] 1.824629e-02 3.307754e-02 5.396724e-02 7.921491e-02 1.045505e-01</span></span>
+<span id="cb5-13"><a href="#cb5-13"></a><span class="co">#&gt; [36] 1.239854e-01 1.319896e-01 1.259938e-01 1.077029e-01 8.232174e-02</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="co">#&gt; [41] 5.616422e-02 3.413623e-02 1.844304e-02 8.835890e-03 3.743554e-03</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="co">#&gt; [46] 1.398320e-03 4.589049e-04 1.318064e-04 3.298425e-05 7.154649e-06</span></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co">#&gt; [51] 1.337083e-06 2.137543e-07 2.898296e-08 3.298587e-09 3.110923e-10</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#&gt; [56] 2.392079e-11 1.468354e-12 6.994931e-14 2.513558e-15 0.000000e+00</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a><span class="co">#&gt; [61] 0.000000e+00 0.000000e+00</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Characteristic&quot;</span>)</span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="co">#&gt;  [1] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="co">#&gt;  [6] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="co">#&gt; [11] 0.000000e+00 2.238353e-16 3.772968e-15 5.207125e-14 6.325089e-13</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="co">#&gt; [16] 6.791327e-12 6.463834e-11 5.468822e-10 4.123448e-09 2.776908e-08</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="co">#&gt; [21] 1.673656e-07 9.044104e-07 4.389247e-06 1.916133e-05 7.535765e-05</span></span>
+<span id="cb5-25"><a href="#cb5-25"></a><span class="co">#&gt; [26] 2.673817e-04 8.571745e-04 2.486446e-03 6.536215e-03 1.559640e-02</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a><span class="co">#&gt; [31] 3.384269e-02 6.692022e-02 1.208875e-01 2.001024e-01 3.046529e-01</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="co">#&gt; [36] 4.286383e-01 5.606280e-01 6.866217e-01 7.943246e-01 8.766463e-01</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="co">#&gt; [41] 9.328105e-01 9.669468e-01 9.853898e-01 9.942257e-01 9.979692e-01</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="co">#&gt; [46] 9.993676e-01 9.998265e-01 9.999583e-01 9.999913e-01 9.999984e-01</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="co">#&gt; [51] 9.999998e-01 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb5-31"><a href="#cb5-31"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb5-32"><a href="#cb5-32"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>As can be seen, the DFT-CF procedure does not produce probabilities <span class="math inline">\(\leq 2.22e\text{-}16\)</span>, i.e. smaller values are rounded off to 0, most likely due to the used FFTW3 library.</p>
+</div>
+<div id="recursive-formula" class="section level3">
+<h3>Recursive Formula</h3>
+<p>The <em>Recursive Formula</em> (RF) approach is requested with <code>method = &quot;Recursive&quot;</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb6-3"><a href="#cb6-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb6-4"><a href="#cb6-4"></a></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Recursive&quot;</span>)</span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt;  [1] 3.574462e-35 1.120280e-32 1.685184e-30 1.620524e-28 1.119523e-26</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="co">#&gt;  [6] 5.920060e-25 2.493263e-23 8.591850e-22 2.470125e-20 6.011429e-19</span></span>
+<span id="cb6-8"><a href="#cb6-8"></a><span class="co">#&gt; [11] 1.252345e-17 2.253115e-16 3.525477e-15 4.825171e-14 5.803728e-13</span></span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; [16] 6.158735e-12 5.784692e-11 4.822437e-10 3.576566e-09 2.364563e-08</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; [21] 1.395965e-07 7.370448e-07 3.484836e-06 1.477208e-05 5.619632e-05</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; [26] 1.920240e-04 5.897928e-04 1.629272e-03 4.049768e-03 9.060183e-03</span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; [31] 1.824629e-02 3.307754e-02 5.396724e-02 7.921491e-02 1.045505e-01</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt; [36] 1.239854e-01 1.319896e-01 1.259938e-01 1.077029e-01 8.232174e-02</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a><span class="co">#&gt; [41] 5.616422e-02 3.413623e-02 1.844304e-02 8.835890e-03 3.743554e-03</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co">#&gt; [46] 1.398320e-03 4.589049e-04 1.318064e-04 3.298425e-05 7.154649e-06</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co">#&gt; [51] 1.337083e-06 2.137543e-07 2.898296e-08 3.298587e-09 3.110922e-10</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="co">#&gt; [56] 2.392070e-11 1.468267e-12 6.991155e-14 2.478218e-15 6.130807e-17</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="co">#&gt; [61] 9.411166e-19 6.727527e-21</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="kw">ppbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Recursive&quot;</span>)</span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt;  [1] 3.574462e-35 1.123854e-32 1.696423e-30 1.637488e-28 1.135898e-26</span></span>
+<span id="cb6-21"><a href="#cb6-21"></a><span class="co">#&gt;  [6] 6.033650e-25 2.553600e-23 8.847210e-22 2.558597e-20 6.267289e-19</span></span>
+<span id="cb6-22"><a href="#cb6-22"></a><span class="co">#&gt; [11] 1.315018e-17 2.384617e-16 3.763939e-15 5.201565e-14 6.323884e-13</span></span>
+<span id="cb6-23"><a href="#cb6-23"></a><span class="co">#&gt; [16] 6.791123e-12 6.463805e-11 5.468818e-10 4.123448e-09 2.776908e-08</span></span>
+<span id="cb6-24"><a href="#cb6-24"></a><span class="co">#&gt; [21] 1.673656e-07 9.044104e-07 4.389247e-06 1.916133e-05 7.535765e-05</span></span>
+<span id="cb6-25"><a href="#cb6-25"></a><span class="co">#&gt; [26] 2.673817e-04 8.571745e-04 2.486446e-03 6.536215e-03 1.559640e-02</span></span>
+<span id="cb6-26"><a href="#cb6-26"></a><span class="co">#&gt; [31] 3.384269e-02 6.692022e-02 1.208875e-01 2.001024e-01 3.046529e-01</span></span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="co">#&gt; [36] 4.286383e-01 5.606280e-01 6.866217e-01 7.943246e-01 8.766463e-01</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="co">#&gt; [41] 9.328105e-01 9.669468e-01 9.853898e-01 9.942257e-01 9.979692e-01</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="co">#&gt; [46] 9.993676e-01 9.998265e-01 9.999583e-01 9.999913e-01 9.999984e-01</span></span>
+<span id="cb6-30"><a href="#cb6-30"></a><span class="co">#&gt; [51] 9.999998e-01 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb6-31"><a href="#cb6-31"></a><span class="co">#&gt; [56] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="co">#&gt; [61] 1.000000e+00 1.000000e+00</span></span></code></pre></div>
+<p>Obviously, the RF procedure does produce probabilities <span class="math inline">\(\leq 5.55e\text{-}17\)</span>, because it does not rely on the FFTW3 library. Furthermore, it yields the same results as the DC method.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">1000</span>)</span>
+<span id="cb7-3"><a href="#cb7-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">1000</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Convolve&quot;</span>) <span class="op">-</span><span class="st"> </span><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp, wt, <span class="st">&quot;Recursive&quot;</span>)))</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+</div>
+<div id="processing-speed-comparisons" class="section level3">
+<h3>Processing Speed Comparisons</h3>
+<p>To assess the performance of the exact procedures, we use the <code>microbenchmark</code> package. Each algorithm has to calculate the PMF repeatedly based on random probability vectors. The run times are then summarized in a table that presents, among other statistics, their minima, maxima and means. The following results were recorded on an AMD Ryzen 7 1800X with 32 GiB of RAM and Windows 10 Education (20H2).</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">library</span>(microbenchmark)</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb8-3"><a href="#cb8-3"></a></span>
+<span id="cb8-4"><a href="#cb8-4"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">5000</span>), <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb8-5"><a href="#cb8-5"></a>f2 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">5000</span>), <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a>f3 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">5000</span>), <span class="dt">method =</span> <span class="st">&quot;Recursive&quot;</span>)</span>
+<span id="cb8-7"><a href="#cb8-7"></a>f4 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(<span class="dv">5000</span>), <span class="dt">method =</span> <span class="st">&quot;Characteristic&quot;</span>)</span>
+<span id="cb8-8"><a href="#cb8-8"></a></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="kw">microbenchmark</span>(<span class="kw">f1</span>(), <span class="kw">f2</span>(), <span class="kw">f3</span>(), <span class="kw">f4</span>())</span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="co">#&gt; Unit: milliseconds</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="co">#&gt;  expr     min       lq     mean   median       uq     max neval  cld</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="co">#&gt;  f1() 13.7388 13.98920 14.24036 14.07430 14.18050 18.6597   100 a   </span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="co">#&gt;  f2() 20.8997 21.40085 21.51780 21.52930 21.61505 22.7991   100  b  </span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="co">#&gt;  f3() 28.3662 28.80610 29.00823 28.96065 29.07945 31.8566   100   c </span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co">#&gt;  f4() 66.7758 67.37795 67.66081 67.63415 67.92170 69.4124   100    d</span></span></code></pre></div>
+<p>Clearly, the DC-FFT procedure is the fastest, followed by the DC method, which needs roughly 1.5 times as much time here. RF and DFT-CF are almost two and five times, respectively, slower than DC-FFT, respectively (although RF has some advantages in precision, as stated before).</p>
+</div>
+</div>
+<div id="generalized-poisson-binomial-distribution" class="section level2">
+<h2>Generalized Poisson Binomial Distribution</h2>
+<div id="generalized-direct-convolution" class="section level3">
+<h3>Generalized Direct Convolution</h3>
+<p>The <em>Generalized Direct Convolution</em> (G-DC) approach is requested with <code>method = &quot;Convolve&quot;</code>.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb9-2"><a href="#cb9-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb9-4"><a href="#cb9-4"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb9-6"><a href="#cb9-6"></a></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt;   [1] 1.140600e-31 5.349930e-30 1.164698e-28 1.572037e-27 1.491024e-26</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt;   [6] 1.077204e-25 6.336147e-25 3.215011e-24 1.466295e-23 6.127671e-23</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt;  [11] 2.363402e-22 8.484857e-22 2.866109e-21 9.171228e-21 2.788507e-20</span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt;  [16] 8.091940e-20 2.254155e-19 6.051395e-19 1.570129e-18 3.953458e-18</span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt;  [21] 9.696098e-18 2.321913e-17 5.442392e-17 1.251302e-16 2.824507e-16</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;  [26] 6.264454e-16 1.366745e-15 2.934598e-15 6.203639e-15 1.292697e-14</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt;  [31] 2.657759e-14 5.394727e-14 1.081983e-13 2.144873e-13 4.201625e-13</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a><span class="co">#&gt;  [36] 8.135609e-13 1.557745e-12 2.949821e-12 5.527695e-12 1.025815e-11</span></span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt;  [41] 1.885777e-11 3.434641e-11 6.196981e-11 1.106787e-10 1.956340e-10</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt;  [46] 3.425394e-10 5.948077e-10 1.025224e-09 1.753751e-09 2.972596e-09</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt;  [51] 4.985314e-09 8.275458e-09 1.362195e-08 2.227979e-08 3.622799e-08</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a><span class="co">#&gt;  [56] 5.845270e-08 9.332219e-08 1.473012e-07 2.302797e-07 3.576650e-07</span></span>
+<span id="cb9-20"><a href="#cb9-20"></a><span class="co">#&gt;  [61] 5.529336e-07 8.496291e-07 1.292864e-06 1.943382e-06 2.888042e-06</span></span>
+<span id="cb9-21"><a href="#cb9-21"></a><span class="co">#&gt;  [66] 4.257944e-06 6.248675e-06 9.128095e-06 1.322640e-05 1.893515e-05</span></span>
+<span id="cb9-22"><a href="#cb9-22"></a><span class="co">#&gt;  [71] 2.675612e-05 3.741507e-05 5.199255e-05 7.194684e-05 9.895330e-05</span></span>
+<span id="cb9-23"><a href="#cb9-23"></a><span class="co">#&gt;  [76] 1.347017e-04 1.809349e-04 2.399008e-04 3.150314e-04 4.112231e-04</span></span>
+<span id="cb9-24"><a href="#cb9-24"></a><span class="co">#&gt;  [81] 5.341537e-04 6.888863e-04 8.788234e-04 1.106198e-03 1.374340e-03</span></span>
+<span id="cb9-25"><a href="#cb9-25"></a><span class="co">#&gt;  [86] 1.690272e-03 2.065290e-03 2.511885e-03 3.037800e-03 3.641214e-03</span></span>
+<span id="cb9-26"><a href="#cb9-26"></a><span class="co">#&gt;  [91] 4.311837e-03 5.039293e-03 5.824625e-03 6.686091e-03 7.651765e-03</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a><span class="co">#&gt;  [96] 8.740859e-03 9.945159e-03 1.122411e-02 1.252016e-02 1.378863e-02</span></span>
+<span id="cb9-28"><a href="#cb9-28"></a><span class="co">#&gt; [101] 1.502576e-02 1.627450e-02 1.759663e-02 1.902489e-02 2.052786e-02</span></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co">#&gt; [106] 2.201243e-02 2.336424e-02 2.450429e-02 2.543095e-02 2.622065e-02</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#&gt; [111] 2.697857e-02 2.776636e-02 2.855637e-02 2.924236e-02 2.969655e-02</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a><span class="co">#&gt; [116] 2.983772e-02 2.967384e-02 2.929746e-02 2.883252e-02 2.836282e-02</span></span>
+<span id="cb9-32"><a href="#cb9-32"></a><span class="co">#&gt; [121] 2.788971e-02 2.734351e-02 2.663438e-02 2.570794e-02 2.457639e-02</span></span>
+<span id="cb9-33"><a href="#cb9-33"></a><span class="co">#&gt; [126] 2.331289e-02 2.201380e-02 2.075053e-02 1.954176e-02 1.836001e-02</span></span>
+<span id="cb9-34"><a href="#cb9-34"></a><span class="co">#&gt; [131] 1.716200e-02 1.592047e-02 1.464084e-02 1.335803e-02 1.211826e-02</span></span>
+<span id="cb9-35"><a href="#cb9-35"></a><span class="co">#&gt; [136] 1.095708e-02 9.886542e-03 8.897658e-03 7.972694e-03 7.098018e-03</span></span>
+<span id="cb9-36"><a href="#cb9-36"></a><span class="co">#&gt; [141] 6.270583e-03 5.496952e-03 4.787457e-03 4.149442e-03 3.583427e-03</span></span>
+<span id="cb9-37"><a href="#cb9-37"></a><span class="co">#&gt; [146] 3.083701e-03 2.641746e-03 2.249767e-03 1.902455e-03 1.596805e-03</span></span>
+<span id="cb9-38"><a href="#cb9-38"></a><span class="co">#&gt; [151] 1.330879e-03 1.102475e-03 9.084265e-04 7.447312e-04 6.071616e-04</span></span>
+<span id="cb9-39"><a href="#cb9-39"></a><span class="co">#&gt; [156] 4.918629e-04 3.956251e-04 3.158260e-04 2.502339e-04 1.968330e-04</span></span>
+<span id="cb9-40"><a href="#cb9-40"></a><span class="co">#&gt; [161] 1.537458e-04 1.192445e-04 9.179821e-05 7.010494e-05 5.308547e-05</span></span>
+<span id="cb9-41"><a href="#cb9-41"></a><span class="co">#&gt; [166] 3.984854e-05 2.965115e-05 2.187013e-05 1.598631e-05 1.157497e-05</span></span>
+<span id="cb9-42"><a href="#cb9-42"></a><span class="co">#&gt; [171] 8.295941e-06 5.881266e-06 4.121776e-06 2.854642e-06 1.953341e-06</span></span>
+<span id="cb9-43"><a href="#cb9-43"></a><span class="co">#&gt; [176] 1.320224e-06 8.809465e-07 5.799307e-07 3.763587e-07 2.406488e-07</span></span>
+<span id="cb9-44"><a href="#cb9-44"></a><span class="co">#&gt; [181] 1.515662e-07 9.401686e-08 5.742327e-08 3.451481e-08 2.039831e-08</span></span>
+<span id="cb9-45"><a href="#cb9-45"></a><span class="co">#&gt; [186] 1.184350e-08 6.751380e-09 3.777327e-09 2.073644e-09 1.116337e-09</span></span>
+<span id="cb9-46"><a href="#cb9-46"></a><span class="co">#&gt; [191] 5.887148e-10 3.036829e-10 1.529887e-10 7.516829e-11 3.598151e-11</span></span>
+<span id="cb9-47"><a href="#cb9-47"></a><span class="co">#&gt; [196] 1.676154e-11 7.585978e-12 3.326429e-12 1.407527e-12 5.717370e-13</span></span>
+<span id="cb9-48"><a href="#cb9-48"></a><span class="co">#&gt; [201] 2.216349e-13 8.149241e-14 2.824954e-14 9.179165e-15 2.780017e-15</span></span>
+<span id="cb9-49"><a href="#cb9-49"></a><span class="co">#&gt; [206] 7.803525e-16 2.018046e-16 4.775552e-17 1.025798e-17 1.979767e-18</span></span>
+<span id="cb9-50"><a href="#cb9-50"></a><span class="co">#&gt; [211] 3.386554e-19 5.038594e-20 6.336865e-21 6.424747e-22 4.821385e-23</span></span>
+<span id="cb9-51"><a href="#cb9-51"></a><span class="co">#&gt; [216] 2.108301e-24</span></span>
+<span id="cb9-52"><a href="#cb9-52"></a><span class="kw">pgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb9-53"><a href="#cb9-53"></a><span class="co">#&gt;   [1] 1.140600e-31 5.463990e-30 1.219337e-28 1.693971e-27 1.660421e-26</span></span>
+<span id="cb9-54"><a href="#cb9-54"></a><span class="co">#&gt;   [6] 1.243246e-25 7.579393e-25 3.972950e-24 1.863590e-23 7.991261e-23</span></span>
+<span id="cb9-55"><a href="#cb9-55"></a><span class="co">#&gt;  [11] 3.162528e-22 1.164739e-21 4.030847e-21 1.320208e-20 4.108715e-20</span></span>
+<span id="cb9-56"><a href="#cb9-56"></a><span class="co">#&gt;  [16] 1.220065e-19 3.474220e-19 9.525615e-19 2.522691e-18 6.476149e-18</span></span>
+<span id="cb9-57"><a href="#cb9-57"></a><span class="co">#&gt;  [21] 1.617225e-17 3.939138e-17 9.381530e-17 2.189455e-16 5.013962e-16</span></span>
+<span id="cb9-58"><a href="#cb9-58"></a><span class="co">#&gt;  [26] 1.127842e-15 2.494586e-15 5.429184e-15 1.163282e-14 2.455979e-14</span></span>
+<span id="cb9-59"><a href="#cb9-59"></a><span class="co">#&gt;  [31] 5.113739e-14 1.050847e-13 2.132829e-13 4.277703e-13 8.479327e-13</span></span>
+<span id="cb9-60"><a href="#cb9-60"></a><span class="co">#&gt;  [36] 1.661494e-12 3.219239e-12 6.169059e-12 1.169675e-11 2.195491e-11</span></span>
+<span id="cb9-61"><a href="#cb9-61"></a><span class="co">#&gt;  [41] 4.081268e-11 7.515909e-11 1.371289e-10 2.478076e-10 4.434415e-10</span></span>
+<span id="cb9-62"><a href="#cb9-62"></a><span class="co">#&gt;  [46] 7.859810e-10 1.380789e-09 2.406013e-09 4.159763e-09 7.132360e-09</span></span>
+<span id="cb9-63"><a href="#cb9-63"></a><span class="co">#&gt;  [51] 1.211767e-08 2.039313e-08 3.401508e-08 5.629487e-08 9.252285e-08</span></span>
+<span id="cb9-64"><a href="#cb9-64"></a><span class="co">#&gt;  [56] 1.509756e-07 2.442977e-07 3.915989e-07 6.218786e-07 9.795436e-07</span></span>
+<span id="cb9-65"><a href="#cb9-65"></a><span class="co">#&gt;  [61] 1.532477e-06 2.382106e-06 3.674970e-06 5.618352e-06 8.506394e-06</span></span>
+<span id="cb9-66"><a href="#cb9-66"></a><span class="co">#&gt;  [66] 1.276434e-05 1.901301e-05 2.814111e-05 4.136751e-05 6.030266e-05</span></span>
+<span id="cb9-67"><a href="#cb9-67"></a><span class="co">#&gt;  [71] 8.705877e-05 1.244738e-04 1.764664e-04 2.484132e-04 3.473665e-04</span></span>
+<span id="cb9-68"><a href="#cb9-68"></a><span class="co">#&gt;  [76] 4.820683e-04 6.630032e-04 9.029039e-04 1.217935e-03 1.629158e-03</span></span>
+<span id="cb9-69"><a href="#cb9-69"></a><span class="co">#&gt;  [81] 2.163312e-03 2.852198e-03 3.731022e-03 4.837220e-03 6.211560e-03</span></span>
+<span id="cb9-70"><a href="#cb9-70"></a><span class="co">#&gt;  [86] 7.901832e-03 9.967122e-03 1.247901e-02 1.551681e-02 1.915802e-02</span></span>
+<span id="cb9-71"><a href="#cb9-71"></a><span class="co">#&gt;  [91] 2.346986e-02 2.850915e-02 3.433378e-02 4.101987e-02 4.867163e-02</span></span>
+<span id="cb9-72"><a href="#cb9-72"></a><span class="co">#&gt;  [96] 5.741249e-02 6.735765e-02 7.858176e-02 9.110192e-02 1.048906e-01</span></span>
+<span id="cb9-73"><a href="#cb9-73"></a><span class="co">#&gt; [101] 1.199163e-01 1.361908e-01 1.537874e-01 1.728123e-01 1.933402e-01</span></span>
+<span id="cb9-74"><a href="#cb9-74"></a><span class="co">#&gt; [106] 2.153526e-01 2.387169e-01 2.632211e-01 2.886521e-01 3.148727e-01</span></span>
+<span id="cb9-75"><a href="#cb9-75"></a><span class="co">#&gt; [111] 3.418513e-01 3.696177e-01 3.981740e-01 4.274164e-01 4.571130e-01</span></span>
+<span id="cb9-76"><a href="#cb9-76"></a><span class="co">#&gt; [116] 4.869507e-01 5.166245e-01 5.459220e-01 5.747545e-01 6.031173e-01</span></span>
+<span id="cb9-77"><a href="#cb9-77"></a><span class="co">#&gt; [121] 6.310070e-01 6.583505e-01 6.849849e-01 7.106929e-01 7.352692e-01</span></span>
+<span id="cb9-78"><a href="#cb9-78"></a><span class="co">#&gt; [126] 7.585821e-01 7.805959e-01 8.013465e-01 8.208882e-01 8.392482e-01</span></span>
+<span id="cb9-79"><a href="#cb9-79"></a><span class="co">#&gt; [131] 8.564102e-01 8.723307e-01 8.869715e-01 9.003296e-01 9.124478e-01</span></span>
+<span id="cb9-80"><a href="#cb9-80"></a><span class="co">#&gt; [136] 9.234049e-01 9.332914e-01 9.421891e-01 9.501618e-01 9.572598e-01</span></span>
+<span id="cb9-81"><a href="#cb9-81"></a><span class="co">#&gt; [141] 9.635304e-01 9.690273e-01 9.738148e-01 9.779642e-01 9.815477e-01</span></span>
+<span id="cb9-82"><a href="#cb9-82"></a><span class="co">#&gt; [146] 9.846314e-01 9.872731e-01 9.895229e-01 9.914253e-01 9.930221e-01</span></span>
+<span id="cb9-83"><a href="#cb9-83"></a><span class="co">#&gt; [151] 9.943530e-01 9.954555e-01 9.963639e-01 9.971087e-01 9.977158e-01</span></span>
+<span id="cb9-84"><a href="#cb9-84"></a><span class="co">#&gt; [156] 9.982077e-01 9.986033e-01 9.989191e-01 9.991694e-01 9.993662e-01</span></span>
+<span id="cb9-85"><a href="#cb9-85"></a><span class="co">#&gt; [161] 9.995199e-01 9.996392e-01 9.997310e-01 9.998011e-01 9.998542e-01</span></span>
+<span id="cb9-86"><a href="#cb9-86"></a><span class="co">#&gt; [166] 9.998940e-01 9.999237e-01 9.999455e-01 9.999615e-01 9.999731e-01</span></span>
+<span id="cb9-87"><a href="#cb9-87"></a><span class="co">#&gt; [171] 9.999814e-01 9.999873e-01 9.999914e-01 9.999943e-01 9.999962e-01</span></span>
+<span id="cb9-88"><a href="#cb9-88"></a><span class="co">#&gt; [176] 9.999975e-01 9.999984e-01 9.999990e-01 9.999994e-01 9.999996e-01</span></span>
+<span id="cb9-89"><a href="#cb9-89"></a><span class="co">#&gt; [181] 9.999998e-01 9.999999e-01 9.999999e-01 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-90"><a href="#cb9-90"></a><span class="co">#&gt; [186] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-91"><a href="#cb9-91"></a><span class="co">#&gt; [191] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-92"><a href="#cb9-92"></a><span class="co">#&gt; [196] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-93"><a href="#cb9-93"></a><span class="co">#&gt; [201] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-94"><a href="#cb9-94"></a><span class="co">#&gt; [206] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-95"><a href="#cb9-95"></a><span class="co">#&gt; [211] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb9-96"><a href="#cb9-96"></a><span class="co">#&gt; [216] 1.000000e+00</span></span></code></pre></div>
+</div>
+<div id="generalized-divide-conquer-fft-tree-convolution" class="section level3">
+<h3>Generalized Divide &amp; Conquer FFT Tree Convolution</h3>
+<p>The <em>Generalized Divide &amp; Conquer FFT Tree Convolution</em> (G-DC-FFT) approach is requested with <code>method = &quot;DivideFFT&quot;</code>.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb10-3"><a href="#cb10-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb10-4"><a href="#cb10-4"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb10-5"><a href="#cb10-5"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt;   [1] 1.140600e-31 5.349930e-30 1.164698e-28 1.572037e-27 1.491024e-26</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt;   [6] 1.077204e-25 6.336147e-25 3.215011e-24 1.466295e-23 6.127671e-23</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt;  [11] 2.363402e-22 8.484857e-22 2.866109e-21 9.171228e-21 2.788507e-20</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt;  [16] 8.091940e-20 2.254155e-19 6.051395e-19 1.570129e-18 3.953458e-18</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt;  [21] 9.696098e-18 2.321913e-17 5.442392e-17 1.251302e-16 2.824507e-16</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt;  [26] 6.264454e-16 1.366745e-15 2.934598e-15 6.203639e-15 1.292697e-14</span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt;  [31] 2.657759e-14 5.394727e-14 1.081983e-13 2.144873e-13 4.201625e-13</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt;  [36] 8.135609e-13 1.557745e-12 2.949821e-12 5.527695e-12 1.025815e-11</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="co">#&gt;  [41] 1.885777e-11 3.434641e-11 6.196981e-11 1.106787e-10 1.956340e-10</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="co">#&gt;  [46] 3.425394e-10 5.948077e-10 1.025224e-09 1.753751e-09 2.972596e-09</span></span>
+<span id="cb10-18"><a href="#cb10-18"></a><span class="co">#&gt;  [51] 4.985314e-09 8.275458e-09 1.362195e-08 2.227979e-08 3.622799e-08</span></span>
+<span id="cb10-19"><a href="#cb10-19"></a><span class="co">#&gt;  [56] 5.845270e-08 9.332219e-08 1.473012e-07 2.302797e-07 3.576650e-07</span></span>
+<span id="cb10-20"><a href="#cb10-20"></a><span class="co">#&gt;  [61] 5.529336e-07 8.496291e-07 1.292864e-06 1.943382e-06 2.888042e-06</span></span>
+<span id="cb10-21"><a href="#cb10-21"></a><span class="co">#&gt;  [66] 4.257944e-06 6.248675e-06 9.128095e-06 1.322640e-05 1.893515e-05</span></span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="co">#&gt;  [71] 2.675612e-05 3.741507e-05 5.199255e-05 7.194684e-05 9.895330e-05</span></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="co">#&gt;  [76] 1.347017e-04 1.809349e-04 2.399008e-04 3.150314e-04 4.112231e-04</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="co">#&gt;  [81] 5.341537e-04 6.888863e-04 8.788234e-04 1.106198e-03 1.374340e-03</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a><span class="co">#&gt;  [86] 1.690272e-03 2.065290e-03 2.511885e-03 3.037800e-03 3.641214e-03</span></span>
+<span id="cb10-26"><a href="#cb10-26"></a><span class="co">#&gt;  [91] 4.311837e-03 5.039293e-03 5.824625e-03 6.686091e-03 7.651765e-03</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="co">#&gt;  [96] 8.740859e-03 9.945159e-03 1.122411e-02 1.252016e-02 1.378863e-02</span></span>
+<span id="cb10-28"><a href="#cb10-28"></a><span class="co">#&gt; [101] 1.502576e-02 1.627450e-02 1.759663e-02 1.902489e-02 2.052786e-02</span></span>
+<span id="cb10-29"><a href="#cb10-29"></a><span class="co">#&gt; [106] 2.201243e-02 2.336424e-02 2.450429e-02 2.543095e-02 2.622065e-02</span></span>
+<span id="cb10-30"><a href="#cb10-30"></a><span class="co">#&gt; [111] 2.697857e-02 2.776636e-02 2.855637e-02 2.924236e-02 2.969655e-02</span></span>
+<span id="cb10-31"><a href="#cb10-31"></a><span class="co">#&gt; [116] 2.983772e-02 2.967384e-02 2.929746e-02 2.883252e-02 2.836282e-02</span></span>
+<span id="cb10-32"><a href="#cb10-32"></a><span class="co">#&gt; [121] 2.788971e-02 2.734351e-02 2.663438e-02 2.570794e-02 2.457639e-02</span></span>
+<span id="cb10-33"><a href="#cb10-33"></a><span class="co">#&gt; [126] 2.331289e-02 2.201380e-02 2.075053e-02 1.954176e-02 1.836001e-02</span></span>
+<span id="cb10-34"><a href="#cb10-34"></a><span class="co">#&gt; [131] 1.716200e-02 1.592047e-02 1.464084e-02 1.335803e-02 1.211826e-02</span></span>
+<span id="cb10-35"><a href="#cb10-35"></a><span class="co">#&gt; [136] 1.095708e-02 9.886542e-03 8.897658e-03 7.972694e-03 7.098018e-03</span></span>
+<span id="cb10-36"><a href="#cb10-36"></a><span class="co">#&gt; [141] 6.270583e-03 5.496952e-03 4.787457e-03 4.149442e-03 3.583427e-03</span></span>
+<span id="cb10-37"><a href="#cb10-37"></a><span class="co">#&gt; [146] 3.083701e-03 2.641746e-03 2.249767e-03 1.902455e-03 1.596805e-03</span></span>
+<span id="cb10-38"><a href="#cb10-38"></a><span class="co">#&gt; [151] 1.330879e-03 1.102475e-03 9.084265e-04 7.447312e-04 6.071616e-04</span></span>
+<span id="cb10-39"><a href="#cb10-39"></a><span class="co">#&gt; [156] 4.918629e-04 3.956251e-04 3.158260e-04 2.502339e-04 1.968330e-04</span></span>
+<span id="cb10-40"><a href="#cb10-40"></a><span class="co">#&gt; [161] 1.537458e-04 1.192445e-04 9.179821e-05 7.010494e-05 5.308547e-05</span></span>
+<span id="cb10-41"><a href="#cb10-41"></a><span class="co">#&gt; [166] 3.984854e-05 2.965115e-05 2.187013e-05 1.598631e-05 1.157497e-05</span></span>
+<span id="cb10-42"><a href="#cb10-42"></a><span class="co">#&gt; [171] 8.295941e-06 5.881266e-06 4.121776e-06 2.854642e-06 1.953341e-06</span></span>
+<span id="cb10-43"><a href="#cb10-43"></a><span class="co">#&gt; [176] 1.320224e-06 8.809465e-07 5.799307e-07 3.763587e-07 2.406488e-07</span></span>
+<span id="cb10-44"><a href="#cb10-44"></a><span class="co">#&gt; [181] 1.515662e-07 9.401686e-08 5.742327e-08 3.451481e-08 2.039831e-08</span></span>
+<span id="cb10-45"><a href="#cb10-45"></a><span class="co">#&gt; [186] 1.184350e-08 6.751380e-09 3.777327e-09 2.073644e-09 1.116337e-09</span></span>
+<span id="cb10-46"><a href="#cb10-46"></a><span class="co">#&gt; [191] 5.887148e-10 3.036829e-10 1.529887e-10 7.516829e-11 3.598151e-11</span></span>
+<span id="cb10-47"><a href="#cb10-47"></a><span class="co">#&gt; [196] 1.676154e-11 7.585978e-12 3.326429e-12 1.407527e-12 5.717370e-13</span></span>
+<span id="cb10-48"><a href="#cb10-48"></a><span class="co">#&gt; [201] 2.216349e-13 8.149241e-14 2.824954e-14 9.179165e-15 2.780017e-15</span></span>
+<span id="cb10-49"><a href="#cb10-49"></a><span class="co">#&gt; [206] 7.803525e-16 2.018046e-16 4.775552e-17 1.025798e-17 1.979767e-18</span></span>
+<span id="cb10-50"><a href="#cb10-50"></a><span class="co">#&gt; [211] 3.386554e-19 5.038594e-20 6.336865e-21 6.424747e-22 4.821385e-23</span></span>
+<span id="cb10-51"><a href="#cb10-51"></a><span class="co">#&gt; [216] 2.108301e-24</span></span>
+<span id="cb10-52"><a href="#cb10-52"></a><span class="kw">pgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb10-53"><a href="#cb10-53"></a><span class="co">#&gt;   [1] 1.140600e-31 5.463990e-30 1.219337e-28 1.693971e-27 1.660421e-26</span></span>
+<span id="cb10-54"><a href="#cb10-54"></a><span class="co">#&gt;   [6] 1.243246e-25 7.579393e-25 3.972950e-24 1.863590e-23 7.991261e-23</span></span>
+<span id="cb10-55"><a href="#cb10-55"></a><span class="co">#&gt;  [11] 3.162528e-22 1.164739e-21 4.030847e-21 1.320208e-20 4.108715e-20</span></span>
+<span id="cb10-56"><a href="#cb10-56"></a><span class="co">#&gt;  [16] 1.220065e-19 3.474220e-19 9.525615e-19 2.522691e-18 6.476149e-18</span></span>
+<span id="cb10-57"><a href="#cb10-57"></a><span class="co">#&gt;  [21] 1.617225e-17 3.939138e-17 9.381530e-17 2.189455e-16 5.013962e-16</span></span>
+<span id="cb10-58"><a href="#cb10-58"></a><span class="co">#&gt;  [26] 1.127842e-15 2.494586e-15 5.429184e-15 1.163282e-14 2.455979e-14</span></span>
+<span id="cb10-59"><a href="#cb10-59"></a><span class="co">#&gt;  [31] 5.113739e-14 1.050847e-13 2.132829e-13 4.277703e-13 8.479327e-13</span></span>
+<span id="cb10-60"><a href="#cb10-60"></a><span class="co">#&gt;  [36] 1.661494e-12 3.219239e-12 6.169059e-12 1.169675e-11 2.195491e-11</span></span>
+<span id="cb10-61"><a href="#cb10-61"></a><span class="co">#&gt;  [41] 4.081268e-11 7.515909e-11 1.371289e-10 2.478076e-10 4.434415e-10</span></span>
+<span id="cb10-62"><a href="#cb10-62"></a><span class="co">#&gt;  [46] 7.859810e-10 1.380789e-09 2.406013e-09 4.159763e-09 7.132360e-09</span></span>
+<span id="cb10-63"><a href="#cb10-63"></a><span class="co">#&gt;  [51] 1.211767e-08 2.039313e-08 3.401508e-08 5.629487e-08 9.252285e-08</span></span>
+<span id="cb10-64"><a href="#cb10-64"></a><span class="co">#&gt;  [56] 1.509756e-07 2.442977e-07 3.915989e-07 6.218786e-07 9.795436e-07</span></span>
+<span id="cb10-65"><a href="#cb10-65"></a><span class="co">#&gt;  [61] 1.532477e-06 2.382106e-06 3.674970e-06 5.618352e-06 8.506394e-06</span></span>
+<span id="cb10-66"><a href="#cb10-66"></a><span class="co">#&gt;  [66] 1.276434e-05 1.901301e-05 2.814111e-05 4.136751e-05 6.030266e-05</span></span>
+<span id="cb10-67"><a href="#cb10-67"></a><span class="co">#&gt;  [71] 8.705877e-05 1.244738e-04 1.764664e-04 2.484132e-04 3.473665e-04</span></span>
+<span id="cb10-68"><a href="#cb10-68"></a><span class="co">#&gt;  [76] 4.820683e-04 6.630032e-04 9.029039e-04 1.217935e-03 1.629158e-03</span></span>
+<span id="cb10-69"><a href="#cb10-69"></a><span class="co">#&gt;  [81] 2.163312e-03 2.852198e-03 3.731022e-03 4.837220e-03 6.211560e-03</span></span>
+<span id="cb10-70"><a href="#cb10-70"></a><span class="co">#&gt;  [86] 7.901832e-03 9.967122e-03 1.247901e-02 1.551681e-02 1.915802e-02</span></span>
+<span id="cb10-71"><a href="#cb10-71"></a><span class="co">#&gt;  [91] 2.346986e-02 2.850915e-02 3.433378e-02 4.101987e-02 4.867163e-02</span></span>
+<span id="cb10-72"><a href="#cb10-72"></a><span class="co">#&gt;  [96] 5.741249e-02 6.735765e-02 7.858176e-02 9.110192e-02 1.048906e-01</span></span>
+<span id="cb10-73"><a href="#cb10-73"></a><span class="co">#&gt; [101] 1.199163e-01 1.361908e-01 1.537874e-01 1.728123e-01 1.933402e-01</span></span>
+<span id="cb10-74"><a href="#cb10-74"></a><span class="co">#&gt; [106] 2.153526e-01 2.387169e-01 2.632211e-01 2.886521e-01 3.148727e-01</span></span>
+<span id="cb10-75"><a href="#cb10-75"></a><span class="co">#&gt; [111] 3.418513e-01 3.696177e-01 3.981740e-01 4.274164e-01 4.571130e-01</span></span>
+<span id="cb10-76"><a href="#cb10-76"></a><span class="co">#&gt; [116] 4.869507e-01 5.166245e-01 5.459220e-01 5.747545e-01 6.031173e-01</span></span>
+<span id="cb10-77"><a href="#cb10-77"></a><span class="co">#&gt; [121] 6.310070e-01 6.583505e-01 6.849849e-01 7.106929e-01 7.352692e-01</span></span>
+<span id="cb10-78"><a href="#cb10-78"></a><span class="co">#&gt; [126] 7.585821e-01 7.805959e-01 8.013465e-01 8.208882e-01 8.392482e-01</span></span>
+<span id="cb10-79"><a href="#cb10-79"></a><span class="co">#&gt; [131] 8.564102e-01 8.723307e-01 8.869715e-01 9.003296e-01 9.124478e-01</span></span>
+<span id="cb10-80"><a href="#cb10-80"></a><span class="co">#&gt; [136] 9.234049e-01 9.332914e-01 9.421891e-01 9.501618e-01 9.572598e-01</span></span>
+<span id="cb10-81"><a href="#cb10-81"></a><span class="co">#&gt; [141] 9.635304e-01 9.690273e-01 9.738148e-01 9.779642e-01 9.815477e-01</span></span>
+<span id="cb10-82"><a href="#cb10-82"></a><span class="co">#&gt; [146] 9.846314e-01 9.872731e-01 9.895229e-01 9.914253e-01 9.930221e-01</span></span>
+<span id="cb10-83"><a href="#cb10-83"></a><span class="co">#&gt; [151] 9.943530e-01 9.954555e-01 9.963639e-01 9.971087e-01 9.977158e-01</span></span>
+<span id="cb10-84"><a href="#cb10-84"></a><span class="co">#&gt; [156] 9.982077e-01 9.986033e-01 9.989191e-01 9.991694e-01 9.993662e-01</span></span>
+<span id="cb10-85"><a href="#cb10-85"></a><span class="co">#&gt; [161] 9.995199e-01 9.996392e-01 9.997310e-01 9.998011e-01 9.998542e-01</span></span>
+<span id="cb10-86"><a href="#cb10-86"></a><span class="co">#&gt; [166] 9.998940e-01 9.999237e-01 9.999455e-01 9.999615e-01 9.999731e-01</span></span>
+<span id="cb10-87"><a href="#cb10-87"></a><span class="co">#&gt; [171] 9.999814e-01 9.999873e-01 9.999914e-01 9.999943e-01 9.999962e-01</span></span>
+<span id="cb10-88"><a href="#cb10-88"></a><span class="co">#&gt; [176] 9.999975e-01 9.999984e-01 9.999990e-01 9.999994e-01 9.999996e-01</span></span>
+<span id="cb10-89"><a href="#cb10-89"></a><span class="co">#&gt; [181] 9.999998e-01 9.999999e-01 9.999999e-01 1.000000e+00 1.000000e+00</span></span>
+<span id="cb10-90"><a href="#cb10-90"></a><span class="co">#&gt; [186] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb10-91"><a href="#cb10-91"></a><span class="co">#&gt; [191] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb10-92"><a href="#cb10-92"></a><span class="co">#&gt; [196] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb10-93"><a href="#cb10-93"></a><span class="co">#&gt; [201] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb10-94"><a href="#cb10-94"></a><span class="co">#&gt; [206] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb10-95"><a href="#cb10-95"></a><span class="co">#&gt; [211] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb10-96"><a href="#cb10-96"></a><span class="co">#&gt; [216] 1.000000e+00</span></span></code></pre></div>
+<p>By design, similar to the ordinary DC-FFT algorithm by <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a>, its results are identical to the G-DC procedure, if <span class="math inline">\(n\)</span> and the number of possible observed values is small. Thus, differences can be observed for larger numbers:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a>pp1 &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">250</span>)</span>
+<span id="cb11-3"><a href="#cb11-3"></a>va1 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">50</span>, <span class="dv">250</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a>vb1 &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">50</span>, <span class="dv">250</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb11-5"><a href="#cb11-5"></a>pp2 &lt;-<span class="st"> </span>pp1[<span class="dv">1</span><span class="op">:</span><span class="dv">248</span>]</span>
+<span id="cb11-6"><a href="#cb11-6"></a>va2 &lt;-<span class="st"> </span>va1[<span class="dv">1</span><span class="op">:</span><span class="dv">248</span>]</span>
+<span id="cb11-7"><a href="#cb11-7"></a>vb2 &lt;-<span class="st"> </span>vb1[<span class="dv">1</span><span class="op">:</span><span class="dv">248</span>]</span>
+<span id="cb11-8"><a href="#cb11-8"></a></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp1, va1, vb1, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb11-10"><a href="#cb11-10"></a>        <span class="op">-</span><span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp1, va1, vb1, <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)))</span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="kw">sum</span>(<span class="kw">abs</span>(<span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp2, va2, vb2, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb11-14"><a href="#cb11-14"></a>        <span class="op">-</span><span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp2, va2, vb2, <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)))</span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="co">#&gt; [1] 0</span></span></code></pre></div>
+<p>The reason is that the G-DC-FFT method splits the input <code>probs</code>, <code>val_p</code> and <code>val_q</code> vectors into parts such that the numbers of possible observations of all parts are as equally sized as possible. Their distributions are then computed separately with the G-DC approach. The results of the portions are then convoluted by means of the Fast Fourier Transformation. For small <span class="math inline">\(n\)</span> and small distribution sizes, no splitting is needed. In addition, the G-DC-FFT procedure, just like the DC-FFT method, does not produce probabilities <span class="math inline">\(\leq 5.55e\text{-}17\)</span>, i.e. smaller values are rounded off to <span class="math inline">\(0\)</span>, if the total number of possible observations is smaller than <span class="math inline">\(750\)</span>, whereas the smallest possible result of the DC algorithm is <span class="math inline">\(\sim 1e\text{-}323\)</span>. This is most likely caused by the used FFTW3 library.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>d1 &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp1, va1, vb1, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>d2 &lt;-<span class="st"> </span><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp1, va1, vb1, <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a><span class="kw">min</span>(d1[d1 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>])</span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; [1] 2.839368e-99</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="kw">min</span>(d2[d2 <span class="op">&gt;</span><span class="st"> </span><span class="dv">0</span>])</span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; [1] 2.839368e-99</span></span></code></pre></div>
+</div>
+<div id="generalized-discrete-fourier-transformation-of-the-characteristic-function" class="section level3">
+<h3>Generalized Discrete Fourier Transformation of the Characteristic Function</h3>
+<p>The <em>Generalized Discrete Fourier Transformation of the Characteristic Function</em> (G-DFT-CF) approach is requested with <code>method = &quot;Characteristic&quot;</code>.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">10</span>)</span>
+<span id="cb13-3"><a href="#cb13-3"></a>wt &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb13-4"><a href="#cb13-4"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb13-5"><a href="#cb13-5"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">10</span>, <span class="dv">10</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb13-6"><a href="#cb13-6"></a></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;Characteristic&quot;</span>)</span>
+<span id="cb13-8"><a href="#cb13-8"></a><span class="co">#&gt;   [1] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="co">#&gt;   [6] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-10"><a href="#cb13-10"></a><span class="co">#&gt;  [11] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-11"><a href="#cb13-11"></a><span class="co">#&gt;  [16] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-12"><a href="#cb13-12"></a><span class="co">#&gt;  [21] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 2.837237e-16</span></span>
+<span id="cb13-13"><a href="#cb13-13"></a><span class="co">#&gt;  [26] 6.270062e-16 1.364746e-15 2.935666e-15 6.201829e-15 1.292176e-14</span></span>
+<span id="cb13-14"><a href="#cb13-14"></a><span class="co">#&gt;  [31] 2.657237e-14 5.394193e-14 1.081902e-13 2.144802e-13 4.201557e-13</span></span>
+<span id="cb13-15"><a href="#cb13-15"></a><span class="co">#&gt;  [36] 8.135509e-13 1.557735e-12 2.949809e-12 5.527683e-12 1.025814e-11</span></span>
+<span id="cb13-16"><a href="#cb13-16"></a><span class="co">#&gt;  [41] 1.885776e-11 3.434640e-11 6.196980e-11 1.106787e-10 1.956340e-10</span></span>
+<span id="cb13-17"><a href="#cb13-17"></a><span class="co">#&gt;  [46] 3.425394e-10 5.948077e-10 1.025224e-09 1.753750e-09 2.972596e-09</span></span>
+<span id="cb13-18"><a href="#cb13-18"></a><span class="co">#&gt;  [51] 4.985314e-09 8.275458e-09 1.362195e-08 2.227979e-08 3.622799e-08</span></span>
+<span id="cb13-19"><a href="#cb13-19"></a><span class="co">#&gt;  [56] 5.845270e-08 9.332219e-08 1.473012e-07 2.302797e-07 3.576650e-07</span></span>
+<span id="cb13-20"><a href="#cb13-20"></a><span class="co">#&gt;  [61] 5.529336e-07 8.496291e-07 1.292864e-06 1.943382e-06 2.888042e-06</span></span>
+<span id="cb13-21"><a href="#cb13-21"></a><span class="co">#&gt;  [66] 4.257944e-06 6.248675e-06 9.128095e-06 1.322640e-05 1.893515e-05</span></span>
+<span id="cb13-22"><a href="#cb13-22"></a><span class="co">#&gt;  [71] 2.675612e-05 3.741507e-05 5.199255e-05 7.194684e-05 9.895330e-05</span></span>
+<span id="cb13-23"><a href="#cb13-23"></a><span class="co">#&gt;  [76] 1.347017e-04 1.809349e-04 2.399008e-04 3.150314e-04 4.112231e-04</span></span>
+<span id="cb13-24"><a href="#cb13-24"></a><span class="co">#&gt;  [81] 5.341537e-04 6.888863e-04 8.788234e-04 1.106198e-03 1.374340e-03</span></span>
+<span id="cb13-25"><a href="#cb13-25"></a><span class="co">#&gt;  [86] 1.690272e-03 2.065290e-03 2.511885e-03 3.037800e-03 3.641214e-03</span></span>
+<span id="cb13-26"><a href="#cb13-26"></a><span class="co">#&gt;  [91] 4.311837e-03 5.039293e-03 5.824625e-03 6.686091e-03 7.651765e-03</span></span>
+<span id="cb13-27"><a href="#cb13-27"></a><span class="co">#&gt;  [96] 8.740859e-03 9.945159e-03 1.122411e-02 1.252016e-02 1.378863e-02</span></span>
+<span id="cb13-28"><a href="#cb13-28"></a><span class="co">#&gt; [101] 1.502576e-02 1.627450e-02 1.759663e-02 1.902489e-02 2.052786e-02</span></span>
+<span id="cb13-29"><a href="#cb13-29"></a><span class="co">#&gt; [106] 2.201243e-02 2.336424e-02 2.450429e-02 2.543095e-02 2.622065e-02</span></span>
+<span id="cb13-30"><a href="#cb13-30"></a><span class="co">#&gt; [111] 2.697857e-02 2.776636e-02 2.855637e-02 2.924236e-02 2.969655e-02</span></span>
+<span id="cb13-31"><a href="#cb13-31"></a><span class="co">#&gt; [116] 2.983772e-02 2.967384e-02 2.929746e-02 2.883252e-02 2.836282e-02</span></span>
+<span id="cb13-32"><a href="#cb13-32"></a><span class="co">#&gt; [121] 2.788971e-02 2.734351e-02 2.663438e-02 2.570794e-02 2.457639e-02</span></span>
+<span id="cb13-33"><a href="#cb13-33"></a><span class="co">#&gt; [126] 2.331289e-02 2.201380e-02 2.075053e-02 1.954176e-02 1.836001e-02</span></span>
+<span id="cb13-34"><a href="#cb13-34"></a><span class="co">#&gt; [131] 1.716200e-02 1.592047e-02 1.464084e-02 1.335803e-02 1.211826e-02</span></span>
+<span id="cb13-35"><a href="#cb13-35"></a><span class="co">#&gt; [136] 1.095708e-02 9.886542e-03 8.897658e-03 7.972694e-03 7.098018e-03</span></span>
+<span id="cb13-36"><a href="#cb13-36"></a><span class="co">#&gt; [141] 6.270583e-03 5.496952e-03 4.787457e-03 4.149442e-03 3.583427e-03</span></span>
+<span id="cb13-37"><a href="#cb13-37"></a><span class="co">#&gt; [146] 3.083701e-03 2.641746e-03 2.249767e-03 1.902455e-03 1.596805e-03</span></span>
+<span id="cb13-38"><a href="#cb13-38"></a><span class="co">#&gt; [151] 1.330879e-03 1.102475e-03 9.084265e-04 7.447312e-04 6.071616e-04</span></span>
+<span id="cb13-39"><a href="#cb13-39"></a><span class="co">#&gt; [156] 4.918629e-04 3.956251e-04 3.158260e-04 2.502339e-04 1.968330e-04</span></span>
+<span id="cb13-40"><a href="#cb13-40"></a><span class="co">#&gt; [161] 1.537458e-04 1.192445e-04 9.179821e-05 7.010494e-05 5.308547e-05</span></span>
+<span id="cb13-41"><a href="#cb13-41"></a><span class="co">#&gt; [166] 3.984854e-05 2.965115e-05 2.187013e-05 1.598631e-05 1.157497e-05</span></span>
+<span id="cb13-42"><a href="#cb13-42"></a><span class="co">#&gt; [171] 8.295941e-06 5.881266e-06 4.121776e-06 2.854642e-06 1.953341e-06</span></span>
+<span id="cb13-43"><a href="#cb13-43"></a><span class="co">#&gt; [176] 1.320224e-06 8.809465e-07 5.799307e-07 3.763587e-07 2.406488e-07</span></span>
+<span id="cb13-44"><a href="#cb13-44"></a><span class="co">#&gt; [181] 1.515662e-07 9.401686e-08 5.742327e-08 3.451481e-08 2.039831e-08</span></span>
+<span id="cb13-45"><a href="#cb13-45"></a><span class="co">#&gt; [186] 1.184350e-08 6.751380e-09 3.777327e-09 2.073644e-09 1.116337e-09</span></span>
+<span id="cb13-46"><a href="#cb13-46"></a><span class="co">#&gt; [191] 5.887148e-10 3.036829e-10 1.529887e-10 7.516829e-11 3.598151e-11</span></span>
+<span id="cb13-47"><a href="#cb13-47"></a><span class="co">#&gt; [196] 1.676154e-11 7.585978e-12 3.326430e-12 1.407529e-12 5.717381e-13</span></span>
+<span id="cb13-48"><a href="#cb13-48"></a><span class="co">#&gt; [201] 2.216360e-13 8.149551e-14 2.825209e-14 9.182470e-15 2.781725e-15</span></span>
+<span id="cb13-49"><a href="#cb13-49"></a><span class="co">#&gt; [206] 7.813323e-16 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-50"><a href="#cb13-50"></a><span class="co">#&gt; [211] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-51"><a href="#cb13-51"></a><span class="co">#&gt; [216] 0.000000e+00</span></span>
+<span id="cb13-52"><a href="#cb13-52"></a><span class="kw">pgpbinom</span>(<span class="ot">NULL</span>, pp, va, vb, wt, <span class="st">&quot;Characteristic&quot;</span>)</span>
+<span id="cb13-53"><a href="#cb13-53"></a><span class="co">#&gt;   [1] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-54"><a href="#cb13-54"></a><span class="co">#&gt;   [6] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-55"><a href="#cb13-55"></a><span class="co">#&gt;  [11] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-56"><a href="#cb13-56"></a><span class="co">#&gt;  [16] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00</span></span>
+<span id="cb13-57"><a href="#cb13-57"></a><span class="co">#&gt;  [21] 0.000000e+00 0.000000e+00 0.000000e+00 0.000000e+00 2.837237e-16</span></span>
+<span id="cb13-58"><a href="#cb13-58"></a><span class="co">#&gt;  [26] 9.107298e-16 2.275475e-15 5.211141e-15 1.141297e-14 2.433473e-14</span></span>
+<span id="cb13-59"><a href="#cb13-59"></a><span class="co">#&gt;  [31] 5.090710e-14 1.048490e-13 2.130392e-13 4.275194e-13 8.476751e-13</span></span>
+<span id="cb13-60"><a href="#cb13-60"></a><span class="co">#&gt;  [36] 1.661226e-12 3.218961e-12 6.168770e-12 1.169645e-11 2.195459e-11</span></span>
+<span id="cb13-61"><a href="#cb13-61"></a><span class="co">#&gt;  [41] 4.081235e-11 7.515875e-11 1.371285e-10 2.478072e-10 4.434412e-10</span></span>
+<span id="cb13-62"><a href="#cb13-62"></a><span class="co">#&gt;  [46] 7.859806e-10 1.380788e-09 2.406013e-09 4.159763e-09 7.132359e-09</span></span>
+<span id="cb13-63"><a href="#cb13-63"></a><span class="co">#&gt;  [51] 1.211767e-08 2.039313e-08 3.401508e-08 5.629487e-08 9.252285e-08</span></span>
+<span id="cb13-64"><a href="#cb13-64"></a><span class="co">#&gt;  [56] 1.509756e-07 2.442977e-07 3.915989e-07 6.218786e-07 9.795436e-07</span></span>
+<span id="cb13-65"><a href="#cb13-65"></a><span class="co">#&gt;  [61] 1.532477e-06 2.382106e-06 3.674970e-06 5.618352e-06 8.506394e-06</span></span>
+<span id="cb13-66"><a href="#cb13-66"></a><span class="co">#&gt;  [66] 1.276434e-05 1.901301e-05 2.814111e-05 4.136751e-05 6.030266e-05</span></span>
+<span id="cb13-67"><a href="#cb13-67"></a><span class="co">#&gt;  [71] 8.705877e-05 1.244738e-04 1.764664e-04 2.484132e-04 3.473665e-04</span></span>
+<span id="cb13-68"><a href="#cb13-68"></a><span class="co">#&gt;  [76] 4.820683e-04 6.630032e-04 9.029039e-04 1.217935e-03 1.629158e-03</span></span>
+<span id="cb13-69"><a href="#cb13-69"></a><span class="co">#&gt;  [81] 2.163312e-03 2.852198e-03 3.731022e-03 4.837220e-03 6.211560e-03</span></span>
+<span id="cb13-70"><a href="#cb13-70"></a><span class="co">#&gt;  [86] 7.901832e-03 9.967122e-03 1.247901e-02 1.551681e-02 1.915802e-02</span></span>
+<span id="cb13-71"><a href="#cb13-71"></a><span class="co">#&gt;  [91] 2.346986e-02 2.850915e-02 3.433378e-02 4.101987e-02 4.867163e-02</span></span>
+<span id="cb13-72"><a href="#cb13-72"></a><span class="co">#&gt;  [96] 5.741249e-02 6.735765e-02 7.858176e-02 9.110192e-02 1.048906e-01</span></span>
+<span id="cb13-73"><a href="#cb13-73"></a><span class="co">#&gt; [101] 1.199163e-01 1.361908e-01 1.537874e-01 1.728123e-01 1.933402e-01</span></span>
+<span id="cb13-74"><a href="#cb13-74"></a><span class="co">#&gt; [106] 2.153526e-01 2.387169e-01 2.632211e-01 2.886521e-01 3.148727e-01</span></span>
+<span id="cb13-75"><a href="#cb13-75"></a><span class="co">#&gt; [111] 3.418513e-01 3.696177e-01 3.981740e-01 4.274164e-01 4.571130e-01</span></span>
+<span id="cb13-76"><a href="#cb13-76"></a><span class="co">#&gt; [116] 4.869507e-01 5.166245e-01 5.459220e-01 5.747545e-01 6.031173e-01</span></span>
+<span id="cb13-77"><a href="#cb13-77"></a><span class="co">#&gt; [121] 6.310070e-01 6.583505e-01 6.849849e-01 7.106929e-01 7.352692e-01</span></span>
+<span id="cb13-78"><a href="#cb13-78"></a><span class="co">#&gt; [126] 7.585821e-01 7.805959e-01 8.013465e-01 8.208882e-01 8.392482e-01</span></span>
+<span id="cb13-79"><a href="#cb13-79"></a><span class="co">#&gt; [131] 8.564102e-01 8.723307e-01 8.869715e-01 9.003296e-01 9.124478e-01</span></span>
+<span id="cb13-80"><a href="#cb13-80"></a><span class="co">#&gt; [136] 9.234049e-01 9.332914e-01 9.421891e-01 9.501618e-01 9.572598e-01</span></span>
+<span id="cb13-81"><a href="#cb13-81"></a><span class="co">#&gt; [141] 9.635304e-01 9.690273e-01 9.738148e-01 9.779642e-01 9.815477e-01</span></span>
+<span id="cb13-82"><a href="#cb13-82"></a><span class="co">#&gt; [146] 9.846314e-01 9.872731e-01 9.895229e-01 9.914253e-01 9.930221e-01</span></span>
+<span id="cb13-83"><a href="#cb13-83"></a><span class="co">#&gt; [151] 9.943530e-01 9.954555e-01 9.963639e-01 9.971087e-01 9.977158e-01</span></span>
+<span id="cb13-84"><a href="#cb13-84"></a><span class="co">#&gt; [156] 9.982077e-01 9.986033e-01 9.989191e-01 9.991694e-01 9.993662e-01</span></span>
+<span id="cb13-85"><a href="#cb13-85"></a><span class="co">#&gt; [161] 9.995199e-01 9.996392e-01 9.997310e-01 9.998011e-01 9.998542e-01</span></span>
+<span id="cb13-86"><a href="#cb13-86"></a><span class="co">#&gt; [166] 9.998940e-01 9.999237e-01 9.999455e-01 9.999615e-01 9.999731e-01</span></span>
+<span id="cb13-87"><a href="#cb13-87"></a><span class="co">#&gt; [171] 9.999814e-01 9.999873e-01 9.999914e-01 9.999943e-01 9.999962e-01</span></span>
+<span id="cb13-88"><a href="#cb13-88"></a><span class="co">#&gt; [176] 9.999975e-01 9.999984e-01 9.999990e-01 9.999994e-01 9.999996e-01</span></span>
+<span id="cb13-89"><a href="#cb13-89"></a><span class="co">#&gt; [181] 9.999998e-01 9.999999e-01 9.999999e-01 1.000000e+00 1.000000e+00</span></span>
+<span id="cb13-90"><a href="#cb13-90"></a><span class="co">#&gt; [186] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb13-91"><a href="#cb13-91"></a><span class="co">#&gt; [191] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb13-92"><a href="#cb13-92"></a><span class="co">#&gt; [196] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb13-93"><a href="#cb13-93"></a><span class="co">#&gt; [201] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb13-94"><a href="#cb13-94"></a><span class="co">#&gt; [206] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb13-95"><a href="#cb13-95"></a><span class="co">#&gt; [211] 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00 1.000000e+00</span></span>
+<span id="cb13-96"><a href="#cb13-96"></a><span class="co">#&gt; [216] 1.000000e+00</span></span></code></pre></div>
+<p>As can be seen, the G-DFT-CF procedure does not produce probabilities <span class="math inline">\(\leq 2.2e\text{-}16\)</span>, i.e. smaller values are rounded off to 0, most likely due to the used FFTW3 library.</p>
+</div>
+<div id="processing-speed-comparisons-1" class="section level3">
+<h3>Processing Speed Comparisons</h3>
+<p>To assess the performance of the exact procedures, we use the <code>microbenchmark</code> package. Each algorithm has to calculate the PMF repeatedly based on random probability and value vectors. The run times are then summarized in a table that presents, among other statistics, their minima, maxima and means. The following results were recorded on an AMD Ryzen 7 1800X with 32 GiB of RAM and Windows 10 Education (20H2).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a><span class="kw">library</span>(microbenchmark)</span>
+<span id="cb14-2"><a href="#cb14-2"></a>n &lt;-<span class="st"> </span><span class="dv">2500</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb14-4"><a href="#cb14-4"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>, n, <span class="ot">TRUE</span>)</span>
+<span id="cb14-5"><a href="#cb14-5"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">50</span>, n, <span class="ot">TRUE</span>)</span>
+<span id="cb14-6"><a href="#cb14-6"></a></span>
+<span id="cb14-7"><a href="#cb14-7"></a>f1 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(n), va, vb, <span class="dt">method =</span> <span class="st">&quot;DivideFFT&quot;</span>)</span>
+<span id="cb14-8"><a href="#cb14-8"></a>f2 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(n), va, vb, <span class="dt">method =</span> <span class="st">&quot;Convolve&quot;</span>)</span>
+<span id="cb14-9"><a href="#cb14-9"></a>f3 &lt;-<span class="st"> </span><span class="cf">function</span>() <span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">runif</span>(n), va, vb, <span class="dt">method =</span> <span class="st">&quot;Characteristic&quot;</span>)</span>
+<span id="cb14-10"><a href="#cb14-10"></a></span>
+<span id="cb14-11"><a href="#cb14-11"></a><span class="kw">microbenchmark</span>(<span class="kw">f1</span>(), <span class="kw">f2</span>(), <span class="kw">f3</span>())</span>
+<span id="cb14-12"><a href="#cb14-12"></a><span class="co">#&gt; Unit: milliseconds</span></span>
+<span id="cb14-13"><a href="#cb14-13"></a><span class="co">#&gt;  expr      min        lq      mean    median        uq      max neval cld</span></span>
+<span id="cb14-14"><a href="#cb14-14"></a><span class="co">#&gt;  f1()  55.4850  58.28000  63.65059  58.79150  60.58415 333.5652   100 a  </span></span>
+<span id="cb14-15"><a href="#cb14-15"></a><span class="co">#&gt;  f2()  89.4355  93.52265  95.50789  94.32915  95.95510 195.0174   100  b </span></span>
+<span id="cb14-16"><a href="#cb14-16"></a><span class="co">#&gt;  f3() 511.4210 524.34290 528.88073 528.69490 532.80085 563.9598   100   c</span></span></code></pre></div>
+<p>Clearly, the G-DC-FFT procedure is the fastest one. If <span class="math inline">\(n\)</span> and <span class="math inline">\(m\)</span> are large enough, it outperforms both the G-DC and G-DFT-CF approaches. The latter one needs almost six times as much time as G-DC. Generally, the computational speed advantage of the G-DC-FFT procedure increases with larger <span class="math inline">\(n\)</span> (and <span class="math inline">\(m\)</span>).</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,178 @@
+---
+title: Interfacing with python package 'umap-learn'
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Interfacing with 'umap-learn'}
+  %\usepackage[UTF-8]{inputenc}
+---
+
+<style>
+h1.title {
+  margin-top: 1em;
+  margin-bottom: 1.5em;
+}
+h2 {
+  font-size: 26px;
+}
+h3 {
+  font-size: 22px;
+}
+h2, h3 {
+  margin-top: 2em;
+  margin-bottom: 0.7em;
+}
+p {
+  font-size: 17px;
+  margin-bottom: 0.7em;
+}
+pre {
+  font-size: 16px;
+  line-height: 1.35;
+}
+body {
+  max-width: 800px;
+}
+</style>
+
+
+
+```{r, echo=FALSE}
+## block with some startup/background objects functions
+library(umap)
+iris.colors = c("#ff7f00", "#e377c2", "#17becf")
+plot.iris = function(x, labels,
+         main="A UMAP visualization of the Iris dataset",
+         pad=0.02, cex=0.65, pch=19,
+         cex.main=1, cex.legend=1) {
+
+  layout = x$layout
+  par(mar=c(0.2,0.7,1.2,0.7), ps=10)
+  xylim = range(layout)
+  xylim = xylim + ((xylim[2]-xylim[1])*pad)*c(-0.5, 0.5)
+  plot(xylim, xylim, type="n", axes=F, frame=F)
+  xylim = par()$usr
+  rect(xylim[1], xylim[1], xylim[2], xylim[2], border="#aaaaaa", lwd=0.2)
+  points(layout[,1], layout[,2], col=iris.colors[as.integer(labels)],
+         cex=cex, pch=pch)
+  mtext(side=3, main, cex=cex.main)
+
+  labels.u = unique(labels)
+  legend("topright", legend=as.character(labels.u),
+         col=iris.colors[as.integer(labels.u)],
+         bty="n", pch=pch, cex=cex.legend)
+}
+
+set.seed(123456)
+```
+
+
+
+## Introduction
+
+R package `umap` provides an interface to uniform manifold approximation and projection (UMAP) algorithms. There are now several implementations, including versions of python package `umap-learn`. This vignette explains some aspects of interfacing with the python package.
+
+(For general information on usage of package `umap`, see the [introductory vignette](https://CRAN.R-project.org/package=umap).)
+
+
+
+## Usage
+
+As prep, let's load the package and prepare a small dataset.
+
+```{r}
+library(umap)
+iris.data = iris[, grep("Sepal|Petal", colnames(iris))]
+```
+
+The basic command to perform dimensional reduction is `umap`. By default, this function uses an implementation written in R. To use the python package `umap-learn` instead, that package and its dependencies must be installed separately (see [python package index](https://pypi.org/project/umap-learn/) or the [package source](https://github.com/lmcinnes/umap)). The R package `reticulate` is also required (use `install.packages('reticulate') and library('reticulate')`).
+
+After completing installations, the python implementation is activated by specifying a `method` argument.
+
+```{r umap.learn, eval=FALSE}
+library(reticulate)
+iris.umap_learn = umap(iris.data, method="umap-learn")
+```
+
+
+
+
+## Tuning umap-learn
+
+As covered in the introductory vignette, tuning parameters can be set via a configuration object and via explicit arguments in the `umap` function call. The default configuration is accessible as object `umap.defaults`.
+
+
+```{r defaults, eval=FALSE}
+umap.defaults
+```
+
+```{r defaults2, eval=TRUE, echo=FALSE, collapse=TRUE}
+umap.defaults
+```	
+
+Note the entry `umap_learn_args` toward the end. This is set to `NA` by default, indicating that appropriate arguments will be selected automatically and passed to umap-learn.
+
+After executing dimensional reduction, the output object contains a copy of the configuration with the values actually used to produce the output. 
+
+```{r umap.learn.config, eval=FALSE}
+## should display a configuration summary
+iris.umap_learn$config
+```
+
+Note that the entry for `umap_learn_args` contains a vector of all the arguments passed from the configuration object to the python package. An entry in the configuration should also reveal the version of the python package used to perform the calculation.
+
+
+
+
+## Discussion
+
+### Verifying arguments
+
+A configuration object can contain many components, but not all may be used in a calculation. To verify that a setting is actually used, ensure that it appears in `umap_learn_args` in the output.
+
+As an example, consider setting `foo` and `n_epochs` during the function call. 
+
+```{r iris.foo, eval=FALSE}
+## (not evaluated in vignette)
+iris.foo = umap(iris.data, method="umap-learn", foo=4, n_epochs=100)
+iris.foo$config
+```
+
+Inspecting the output configuration will reveal that both `foo` and `n_epochs` are recorded (in the latter case, the default value is replaced by the new value). However, `foo` does not appear in `umap_learn_args`, revealing that this setting was not actually used in the calculation. 
+
+
+### Versions
+
+Various version of `umap-learn` take different parameters as input. The R package is coded to work with `umap-learn` versions 0.2, 0.3, and 0.4. It will adjust arguments automatically to suit those versions.
+
+Note, however, that some arguments that are acceptable in new versions of umap-learn are not set in the default configuration object. To use those features (see python package documentation), set the appropriate arguments manually, either by preparing a custom configuration object or by specifying the arguments during the `umap` function call.
+
+
+
+### Custom constructors
+
+It is possible to set `umap_learn_args` manually while calling `umap`.
+
+```{r iris.custom, eval=FALSE}
+## (not evaluated in vignette) 
+iris.custom = umap(iris.data, method="umap-learn",
+                   umap_learn_args=c("n_neighbors", "n_epochs"))
+iris.custom$config
+```
+
+Here, only the two specified arguments have been passed on to the calculation.
+
+
+
+
+&nbsp;
+
+## Appendix
+
+Summary of R session:
+
+```{r}
+sessionInfo()
+```
+
+&nbsp;

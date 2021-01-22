@@ -1,0 +1,15 @@
+bibentry(bibtype = "Article",
+  title        = "{PPtreeViz}: An {R} Package for Visualizing Projection Pursuit Classification Trees",
+  author       = person(given = "Eun-Kyung",
+                        family = "Lee",
+                        email = "lee.eunk@ewha.ac.kr"),
+  journal      = "Journal of Statistical Software",
+  year         = "2018",
+  volume       = "83",
+  number       = "8",
+  pages        = "1--30",
+  doi          = "10.18637/jss.v083.i08",
+
+  header       = "To cite PPtreeViz in publications use:"
+)
+

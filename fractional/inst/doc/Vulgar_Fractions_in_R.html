@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="author" content="Bill Venables" />
+
+<meta name="date" content="2016-02-10" />
+
+<title>Vulgar Fractions in R</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css;charset=utf-8,body%20%7B%0Abackground%2Dcolor%3A%20%23fff%3B%0Amargin%3A%201em%20auto%3B%0Amax%2Dwidth%3A%20700px%3B%0Aoverflow%3A%20visible%3B%0Apadding%2Dleft%3A%202em%3B%0Apadding%2Dright%3A%202em%3B%0Afont%2Dfamily%3A%20%22Open%20Sans%22%2C%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0Afont%2Dsize%3A%2014px%3B%0Aline%2Dheight%3A%201%2E35%3B%0A%7D%0A%23header%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0A%23TOC%20%7B%0Aclear%3A%20both%3B%0Amargin%3A%200%200%2010px%2010px%3B%0Apadding%3A%204px%3B%0Awidth%3A%20400px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Aborder%2Dradius%3A%205px%3B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Afont%2Dsize%3A%2013px%3B%0Aline%2Dheight%3A%201%2E3%3B%0A%7D%0A%23TOC%20%2Etoctitle%20%7B%0Afont%2Dweight%3A%20bold%3B%0Afont%2Dsize%3A%2015px%3B%0Amargin%2Dleft%3A%205px%3B%0A%7D%0A%23TOC%20ul%20%7B%0Apadding%2Dleft%3A%2040px%3B%0Amargin%2Dleft%3A%20%2D1%2E5em%3B%0Amargin%2Dtop%3A%205px%3B%0Amargin%2Dbottom%3A%205px%3B%0A%7D%0A%23TOC%20ul%20ul%20%7B%0Amargin%2Dleft%3A%20%2D2em%3B%0A%7D%0A%23TOC%20li%20%7B%0Aline%2Dheight%3A%2016px%3B%0A%7D%0Atable%20%7B%0Amargin%3A%201em%20auto%3B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dcolor%3A%20%23DDDDDD%3B%0Aborder%2Dstyle%3A%20outset%3B%0Aborder%2Dcollapse%3A%20collapse%3B%0Afont%2Dfamily%3A%20Consolas%2C%20Inconsolata%2C%20%27Courier%20New%27%2C%20Monaco%2C%20monospace%3B%20%0Afont%2Dsize%3A%20125%25%3B%0A%7D%0Atable%20th%20%7B%0Aborder%2Dwidth%3A%202px%3B%0Apadding%3A%205px%3B%0Aborder%2Dstyle%3A%20inset%3B%0A%7D%0Atable%20td%20%7B%0Aborder%2Dwidth%3A%201px%3B%0Aborder%2Dstyle%3A%20inset%3B%0Aline%2Dheight%3A%2018px%3B%0Apadding%3A%205px%205px%3B%0A%7D%0Atable%2C%20table%20th%2C%20table%20td%20%7B%0Aborder%2Dleft%2Dstyle%3A%20none%3B%0Aborder%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%20thead%2C%20table%20tr%2Eeven%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Ap%20%7B%0Amargin%3A%200%2E5em%200%3B%0A%7D%0Ablockquote%20%7B%0Abackground%2Dcolor%3A%20%23f6f6f6%3B%0Apadding%3A%200%2E25em%200%2E75em%3B%0A%7D%0Ahr%20%7B%0Aborder%2Dstyle%3A%20solid%3B%0Aborder%3A%20none%3B%0Aborder%2Dtop%3A%201px%20solid%20%23777%3B%0Amargin%3A%2028px%200%3B%0A%7D%0Adl%20%7B%0Amargin%2Dleft%3A%200%3B%0A%7D%0Adl%20dd%20%7B%0Amargin%2Dbottom%3A%2013px%3B%0Amargin%2Dleft%3A%2013px%3B%0A%7D%0Adl%20dt%20%7B%0Afont%2Dweight%3A%20bold%3B%0A%7D%0Aul%20%7B%0Amargin%2Dtop%3A%200%3B%0A%7D%0Aul%20li%20%7B%0Alist%2Dstyle%3A%20circle%20outside%3B%0A%7D%0Aul%20ul%20%7B%0Amargin%2Dbottom%3A%200%3B%0A%7D%0Apre%2C%20code%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0Aborder%2Dradius%3A%203px%3B%0Acolor%3A%20%23333%3B%0A%7D%0Apre%20%7B%0Awhite%2Dspace%3A%20pre%2Dwrap%3B%20%0Aborder%2Dradius%3A%203px%3B%0Amargin%3A%205px%200%2010px%200%3B%0Apadding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0Abackground%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0Acode%20%7B%0Afont%2Dfamily%3A%20Consolas%2C%20Inconsolata%2C%20%27Courier%20New%27%2C%20Monaco%2C%20monospace%3B%0Afont%2Dsize%3A%20125%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0Apadding%3A%202px%200%3B%0A%7D%0Adiv%20%7B%0Atext%2Dalign%3A%20justify%3B%0Atext%2Djustify%3A%20inter%2Dword%3B%0A%7D%0Adiv%2Efigure%20%7B%0Atext%2Dalign%3A%20center%3B%0A%7D%0Aimg%20%7B%0A%0Abackground%2Dcolor%3A%20%23C0E8F6%3B%0Apadding%3A%202px%3B%0A%0Aborder%2Dradius%3A%203px%3B%0Aborder%3A%201px%20solid%20%23CCCCCC%3B%0Amargin%3A%200%205px%3B%0A%7D%0Ah1%20%7B%0Amargin%2Dtop%3A%200%3B%0Afont%2Dsize%3A%2025px%3B%0Aline%2Dheight%3A%2040px%3B%0A%7D%0Ah2%20%7B%0Aborder%2Dbottom%3A%204px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Apadding%2Dbottom%3A%202px%3B%0Afont%2Dsize%3A%20135%25%3B%0A%7D%0Ah3%20%7B%0Aborder%2Dbottom%3A%202px%20solid%20%23f7f7f7%3B%0Apadding%2Dtop%3A%2010px%3B%0Afont%2Dsize%3A%20120%25%3B%0A%7D%0Ah4%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23f7f7f7%3B%0Amargin%2Dleft%3A%208px%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Ah5%2C%20h6%20%7B%0Aborder%2Dbottom%3A%201px%20solid%20%23ccc%3B%0Afont%2Dsize%3A%20105%25%3B%0A%7D%0Aa%20%7B%0Acolor%3A%20%230033dd%3B%0Atext%2Ddecoration%3A%20none%3B%0A%7D%0Aa%3Ahover%20%7B%0Acolor%3A%20%236666ff%3B%20%7D%0Aa%3Avisited%20%7B%0Acolor%3A%20%23800080%3B%20%7D%0Aa%3Avisited%3Ahover%20%7B%0Acolor%3A%20%23BB00BB%3B%20%7D%0Aa%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0Aa%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0Atext%2Ddecoration%3A%20underline%3B%20%7D%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%0A" rel="stylesheet" type="text/css" />
+
+</head>
+
+<body>
+
+
+
+<div id="header">
+<h1 class="title">Vulgar Fractions in R</h1>
+<h4 class="author"><em>Bill Venables</em></h4>
+<h4 class="date"><em>2016-02-10</em></h4>
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction"><span class="toc-section-number">1</span> Introduction</a><ul>
+<li><a href="#caveat"><span class="toc-section-number">1.1</span> Caveat</a></li>
+</ul></li>
+<li><a href="#functions"><span class="toc-section-number">2</span> Functions</a><ul>
+<li><a href="#fractional-and-unfractional"><span class="toc-section-number">2.1</span> <code>fractional</code> and <code>unfractional</code></a><ul>
+<li><a href="#unfractional"><span class="toc-section-number">2.1.1</span> <code>unfractional</code></a></li>
+<li><a href="#use-of-fractional-objects-in-arithmetic-operations."><span class="toc-section-number">2.1.2</span> Use of <code>fractional</code> objects in arithmetic operations.</a></li>
+</ul></li>
+<li><a href="#as.character"><span class="toc-section-number">2.2</span> <code>as.character</code></a></li>
+<li><a href="#numerators-and-denominators"><span class="toc-section-number">2.3</span> <code>numerators</code> and <code>denominators</code></a></li>
+<li><a href="#numerical"><span class="toc-section-number">2.4</span> <code>numerical</code></a></li>
+<li><a href="#rat-ratr-and-.ratr"><span class="toc-section-number">2.5</span> <code>rat</code>, <code>ratr</code> and <code>.ratr</code></a></li>
+<li><a href="#vfractional"><span class="toc-section-number">2.6</span> <code>vfractional</code></a></li>
+<li><a href="#some-simple-examples"><span class="toc-section-number">2.7</span> Some simple examples</a><ul>
+<li><a href="#arithmetic-operations"><span class="toc-section-number">2.7.1</span> Arithmetic operations</a></li>
+<li><a href="#the-golden-ratio-and-fibonacci-numbers"><span class="toc-section-number">2.7.2</span> The Golden Ratio and Fibonacci numbers</a></li>
+<li><a href="#random-fractions"><span class="toc-section-number">2.7.3</span> Random fractions</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level1">
+<h1><span class="header-section-number">1</span> Introduction</h1>
+<p>The <code>MASS</code> package contains two small helper functions called <code>fractions</code> and <code>rational</code>. Originally these were included to allow patterns in patterned matrices to be more easily exhibited and hence, detected. This happens when the entries are expressible in the form of “vulgar” fractions, i.e. numerator/denominator, rather than as recurring decimals.</p>
+<p>For example a Hilbert matrix:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="center">C1</th>
+<th align="center">C2</th>
+<th align="center">C3</th>
+<th align="center">C4</th>
+<th align="center">C5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">R1</td>
+<td align="center">1.0000000</td>
+<td align="center">0.5000000</td>
+<td align="center">0.3333333</td>
+<td align="center">0.2500000</td>
+<td align="center">0.2000000</td>
+</tr>
+<tr class="even">
+<td align="left">R2</td>
+<td align="center">0.5000000</td>
+<td align="center">0.3333333</td>
+<td align="center">0.2500000</td>
+<td align="center">0.2000000</td>
+<td align="center">0.1666667</td>
+</tr>
+<tr class="odd">
+<td align="left">R3</td>
+<td align="center">0.3333333</td>
+<td align="center">0.2500000</td>
+<td align="center">0.2000000</td>
+<td align="center">0.1666667</td>
+<td align="center">0.1428571</td>
+</tr>
+<tr class="even">
+<td align="left">R4</td>
+<td align="center">0.2500000</td>
+<td align="center">0.2000000</td>
+<td align="center">0.1666667</td>
+<td align="center">0.1428571</td>
+<td align="center">0.1250000</td>
+</tr>
+<tr class="odd">
+<td align="left">R5</td>
+<td align="center">0.2000000</td>
+<td align="center">0.1666667</td>
+<td align="center">0.1428571</td>
+<td align="center">0.1250000</td>
+<td align="center">0.1111111</td>
+</tr>
+</tbody>
+</table>
+<p>has a pattern much easier to appreciate if the entries are expressed as vulgar fractions:</p>
+<table>
+<thead>
+<tr class="header">
+<th align="left"></th>
+<th align="right">C1</th>
+<th align="right">C2</th>
+<th align="right">C3</th>
+<th align="right">C4</th>
+<th align="right">C5</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">R1</td>
+<td align="right">1</td>
+<td align="right">1/2</td>
+<td align="right">1/3</td>
+<td align="right">1/4</td>
+<td align="right">1/5</td>
+</tr>
+<tr class="even">
+<td align="left">R2</td>
+<td align="right">1/2</td>
+<td align="right">1/3</td>
+<td align="right">1/4</td>
+<td align="right">1/5</td>
+<td align="right">1/6</td>
+</tr>
+<tr class="odd">
+<td align="left">R3</td>
+<td align="right">1/3</td>
+<td align="right">1/4</td>
+<td align="right">1/5</td>
+<td align="right">1/6</td>
+<td align="right">1/7</td>
+</tr>
+<tr class="even">
+<td align="left">R4</td>
+<td align="right">1/4</td>
+<td align="right">1/5</td>
+<td align="right">1/6</td>
+<td align="right">1/7</td>
+<td align="right">1/8</td>
+</tr>
+<tr class="odd">
+<td align="left">R5</td>
+<td align="right">1/5</td>
+<td align="right">1/6</td>
+<td align="right">1/7</td>
+<td align="right">1/8</td>
+<td align="right">1/9</td>
+</tr>
+</tbody>
+</table>
+<p>This package facilitates the calculation and presentation of numerical quantities as rational approximations.</p>
+<p>To be more specific, a rational approximation to a real number is a ratio of two <strong><em>integers</em></strong>, the <em>numerator</em> and <em>denominator</em>, with the denominator <em>positive</em>. For uniqueness of representation we assume that the numerator and denominator are <em>relatively prime</em>, that is, have no common factor, or in other words the fraction is expressed in its <em>lowest terms</em>.</p>
+<p>A second vignette, <em>Theory</em>, outlines, for the curious reader, the standard method used to find them, using continued fractions, and some basic mathematical properties. It is of mathematical interest, but not necessary to use the package itself.</p>
+<div id="caveat" class="section level2">
+<h2><span class="header-section-number">1.1</span> Caveat</h2>
+<p>This small package offers merely a way to present numerical values by means of close rational approximations, displayed as vulgar fractions. It does <em>not</em> provide exact rational arithmetic. Such a facility would require unlimited precision rational arithmetic, which is well beyond the scope of this package. In fact, integer overflow is a constant limitation in our use of fractions in the present package.</p>
+</div>
+</div>
+<div id="functions" class="section level1">
+<h1><span class="header-section-number">2</span> Functions</h1>
+<p>The package provides two main functions: <strong><code>fractional</code></strong> and <strong><code>numerical</code></strong>, and several auxiliaries. We discuss these in sequence now.</p>
+<p>Readers interested in the details of the algorithm used and its implementation in <code>R</code> should refer to the <em>Theory</em> vignette.</p>
+<div id="fractional-and-unfractional" class="section level2">
+<h2><span class="header-section-number">2.1</span> <code>fractional</code> and <code>unfractional</code></h2>
+<p><code>fractional</code> is the main function of the package. The argument list is as follows:</p>
+<pre><code>function (x, eps = 1e-06, maxConv = 20, sync = FALSE) </code></pre>
+<ul>
+<li><strong><code>x</code></strong> A numeric vector, matrix or array.<br />
+</li>
+<li><strong><code>eps = 1e-06</code></strong> An absolute error tolerance. The rational approximation is the first convergent for which the absolute error falls below this bound.<br />
+</li>
+<li><strong><code>maxConv = 20</code></strong> A secondary stopping criterion. An upper limit on the number of convergents (See <em>Theory</em> vignette) to consider.<br />
+</li>
+<li><strong><code>sync = FALSE</code></strong> Should the numerical value be “synchronized” with the displayed numerical approximation? See below.</li>
+</ul>
+<p>The value returned is a numeric vector like <code>x</code>, but inheriting from class <code>fractional</code>. It may be used in arithmetic operations in the normal way and retains full floating point accuracy, unless <code>sync = TRUE</code>. When printed, or coerced to character, however, the rational approximation is used as the representation, which as a numerical value may not precisely equal the full floating point value.</p>
+<p>If <code>sync = TRUE</code> is set, then the numerical value is changed to agree with the numerical value and this agreement is maintained in synchrony, as much as possible with floating point arithmetic, during future numerical operations.</p>
+<div id="unfractional" class="section level3">
+<h3><span class="header-section-number">2.1.1</span> <code>unfractional</code></h3>
+<p>The function <strong><code>unfractional</code></strong> is a convenience function that strips the class and some additional attributes from an object of class <code>&quot;fractional&quot;</code>, thus demoting it back to a numerical object like the one from which it was generated.</p>
+</div>
+<div id="use-of-fractional-objects-in-arithmetic-operations." class="section level3">
+<h3><span class="header-section-number">2.1.2</span> Use of <code>fractional</code> objects in arithmetic operations.</h3>
+<p>Methods are provided for the <code>S3</code> group generic functions <code>Ops</code> and <code>Math</code>, allowing the mathematical operators and simple mathematical functions to be used with them. The normal rules apply. In an expression <code>e1 + e2</code> (where <code>+</code> can be any of the operators) the <code>fractional</code> method is dispatched if <em>either</em> <code>e1</code> <em>or</em> <code>e2</code> <em>(or both)</em> is/are of class <code>fractional</code>, and the result is of class <code>fractional</code>.</p>
+<p>For the <code>Math</code> group generic, operations are conducted but treating the objects as a normal numeric object, that is, ignoring the <code>fractional</code> class.</p>
+</div>
+</div>
+<div id="as.character" class="section level2">
+<h2><span class="header-section-number">2.2</span> <code>as.character</code></h2>
+<p>The package provides a method for the primitive generic function <code>base::as.character</code> for objects of class <code>&quot;fractional&quot;</code>. The arguments are as follows:</p>
+<pre><code>function (x, eps = attr(x, &quot;eps&quot;), maxConv = attr(x, &quot;maxConv&quot;), ...)</code></pre>
+<p>That is, the values for <code>eps</code> and <code>maxConv</code> are carried forward from the original call. This is because it is only when the object is displayed or coerced to character that the computation of the continued fraction is carried out.</p>
+<p>The result is a character string object of primary class <code>charFrac</code>. This primary class membership essentially ensures that the object is printed without quotation marks.</p>
+</div>
+<div id="numerators-and-denominators" class="section level2">
+<h2><span class="header-section-number">2.3</span> <code>numerators</code> and <code>denominators</code></h2>
+<p>These two <code>S3</code> generic functions will extract the numerators and denominators, respectively.</p>
+<p>The argument is a single object, <code>x</code>, and the result is an object of type <code>integer</code>, but carrying attributes such as <code>dim</code> or <code>dimnames</code> from the original.</p>
+<p>Methods are provided for objects of <code>S3</code> class <code>fractional</code> or <code>charFrac</code></p>
+</div>
+<div id="numerical" class="section level2">
+<h2><span class="header-section-number">2.4</span> <code>numerical</code></h2>
+<p>This is essentially a method function for <code>base::as.numeric</code> providing coercion to numeric for objects of <code>S3</code> class <code>fractional</code> or <code>charFrac</code>.</p>
+<p>It is written as an S3 generic function, and the main methods uses <code>numerators</code> and <code>denominators</code> in an obvious way.</p>
+<p>The <code>default</code> method passes the object to <code>base::as.numeric</code>.</p>
+</div>
+<div id="rat-ratr-and-.ratr" class="section level2">
+<h2><span class="header-section-number">2.5</span> <code>rat</code>, <code>ratr</code> and <code>.ratr</code></h2>
+<p>The function <code>rat</code> is a front-end to the <code>C++</code> function that carries out the continued fraction computations. It would normally not be called directly by users.</p>
+<p>The functions <code>ratr</code> and <code>.ratr</code>, in combination, provide the identical computation but done in pure <code>R</code>. They are provided for pedagogical and timing purposes only.</p>
+</div>
+<div id="vfractional" class="section level2">
+<h2><span class="header-section-number">2.6</span> <code>vfractional</code></h2>
+<p>This is a variant on <code>fractional</code>, without the <code>sync</code> argument, but <em>vectorized</em> with respect to the three arguments <code>x</code>, <code>eps</code> and <code>maxConv</code>. It is mainly used for examples.</p>
+</div>
+<div id="some-simple-examples" class="section level2">
+<h2><span class="header-section-number">2.7</span> Some simple examples</h2>
+<p>The <em>Theory</em> vignette provides many example in context, but the following very elementary examples may give the flavour of how the functions are used.</p>
+<div id="arithmetic-operations" class="section level3">
+<h3><span class="header-section-number">2.7.1</span> Arithmetic operations</h3>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(dplyr)
+(x &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="dv">1</span>:<span class="dv">9</span>/<span class="dv">12</span>, <span class="dv">3</span>, <span class="dv">3</span>) %&gt;%<span class="st"> </span>fractional)</code></pre></div>
+<pre><code>     [,1] [,2] [,3]
+[1,] 1/12  1/3 7/12
+[2,]  1/6 5/12  2/3
+[3,]  1/4  1/2  3/4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(xr &lt;-<span class="st"> </span><span class="dv">1</span>/x)</code></pre></div>
+<pre><code>     [,1] [,2] [,3]
+[1,]   12    3 12/7
+[2,]    6 12/5  3/2
+[3,]    4    2  4/3</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">x +<span class="st"> </span><span class="dv">10</span></code></pre></div>
+<pre><code>     [,1]   [,2]   [,3]  
+[1,] 121/12   31/3 127/12
+[2,]   61/6 125/12   32/3
+[3,]   41/4   21/2   43/4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(x2 &lt;-<span class="st"> </span>x^<span class="dv">2</span>)</code></pre></div>
+<pre><code>     [,1]   [,2]   [,3]  
+[1,]  1/144    1/9 49/144
+[2,]   1/36 25/144    4/9
+[3,]   1/16    1/4   9/16</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(sx2 &lt;-<span class="st"> </span><span class="kw">sqrt</span>(x2))  ## demoted back to numeric by sqrt()</code></pre></div>
+<pre><code>           [,1]      [,2]      [,3]
+[1,] 0.08333333 0.3333333 0.5833333
+[2,] 0.16666667 0.4166667 0.6666667
+[3,] 0.25000000 0.5000000 0.7500000</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">fractional</span>(sx2)    ## reinstated</code></pre></div>
+<pre><code>     [,1] [,2] [,3]
+[1,] 1/12  1/3 7/12
+[2,]  1/6 5/12  2/3
+[3,]  1/4  1/2  3/4</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">solve</span>(xr) %&gt;%<span class="st"> </span>fractional  ## xr is non-singular with a simple inverse</code></pre></div>
+<pre><code>     [,1]  [,2]  [,3] 
+[1,]  7/18 -10/9   3/4
+[2,] -35/9 160/9   -15
+[3,]  14/3 -70/3    21</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">numerators</span>(x2)     ## numerators and denominators are available</code></pre></div>
+<pre><code>     [,1] [,2] [,3]
+[1,]    1    1   49
+[2,]    1   25    4
+[3,]    1    1    9</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">denominators</span>(x2)</code></pre></div>
+<pre><code>     [,1] [,2] [,3]
+[1,]  144    9  144
+[2,]   36  144    9
+[3,]   16    4   16</code></pre>
+</div>
+<div id="the-golden-ratio-and-fibonacci-numbers" class="section level3">
+<h3><span class="header-section-number">2.7.2</span> The Golden Ratio and Fibonacci numbers</h3>
+<p>The <em>golden ratio</em> of the ancient Greeks, <span class="math inline">\(\phi = \left(\sqrt{5}+1\right)/2 = 1.61803398874989490\dots\)</span> is well-known to be the limit of the ratio of successive Fibonacci numbers. As a partial indication of this result, the following demonstration is at least suggestive:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">F &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">1</span>,<span class="dv">1</span>,<span class="kw">numeric</span>(<span class="dv">15</span>))
+for(i in <span class="dv">3</span>:<span class="dv">17</span>) ## Fibonacci sequence by recurrence
+  F[i] &lt;-<span class="st"> </span>F[i<span class="dv">-1</span>] +<span class="st"> </span>F[i<span class="dv">-2</span>]  
+F</code></pre></div>
+<pre><code> [1]    1    1    2    3    5    8   13   21   34   55   89  144  233  377  610
+[16]  987 1597</code></pre>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">(phi &lt;-<span class="st"> </span>(<span class="kw">sqrt</span>(<span class="dv">5</span>) +<span class="st"> </span><span class="dv">1</span>)/<span class="dv">2</span>)</code></pre></div>
+<pre><code>[1] 1.618034</code></pre>
+<p>The function <em><code>vfractional</code></em> may be used to provide a sequence of optimal<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a> rational approximations with non-decreasing denominators:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">vfractional</span>(phi, <span class="dt">eps =</span> <span class="dv">0</span>, <span class="dt">maxConv =</span> <span class="dv">1</span>:<span class="dv">16</span>)</code></pre></div>
+<pre><code> [1] 1        2        3/2      5/3      8/5      13/8     21/13    34/21   
+ [9] 55/34    89/55    144/89   233/144  377/233  610/377  987/610  1597/987</code></pre>
+</div>
+<div id="random-fractions" class="section level3">
+<h3><span class="header-section-number">2.7.3</span> Random fractions</h3>
+<p>With random numbers it is mildly interesting from a theoretical point of view to look at the distribution of the number of convergents in the continued fraction expansion needed to achieve a specific error tolerance. We have the tools to explore this somewhat arcane issue:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(ggplot2)
+N &lt;-<span class="st"> </span><span class="dv">500000</span>
+<span class="kw">set.seed</span>(<span class="dv">3210</span>)
+
+<span class="kw">rat</span>(<span class="kw">rnorm</span>(N), <span class="dt">eps =</span> <span class="fl">1.0e-07</span>)[, <span class="st">&quot;n&quot;</span>] %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">table</span>(<span class="dt">x =</span> .)                      %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">as.data.frame</span>(<span class="dt">responseName =</span> <span class="st">&quot;f&quot;</span>) %&gt;%<span class="st"> </span>
+<span class="st">  </span><span class="kw">ggplot</span>(.) +<span class="st"> </span><span class="kw">aes</span>(<span class="dt">x =</span> x, <span class="dt">y =</span> f/N) +
+<span class="st">  </span><span class="kw">geom_bar</span>(<span class="dt">stat =</span> <span class="st">&quot;identity&quot;</span>, <span class="dt">fill =</span> <span class="st">&quot;steel blue&quot;</span>) +
+<span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Relative frequency&quot;</span>) +<span class="st"> </span><span class="kw">xlab</span>(<span class="st">&quot;Convergents&quot;</span>)</code></pre></div>
+<p><img src="data:image/png;base64,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" title alt width="690px" height="426px" /></p>
+<p>In particular this appears to justify the choice of <code>maxConv = 20</code> as a suitable default<a href="#fn2" class="footnoteRef" id="fnref2"><sup>2</sup></a>.</p>
+<div id="refs" class="references">
+
+</div>
+</div>
+</div>
+</div>
+<div class="footnotes">
+<hr />
+<ol>
+<li id="fn1"><p>Optimal in a sense to be described in the <em>Theory</em> vignette.<a href="#fnref1">↩</a></p></li>
+<li id="fn2"><p>The visual aspect ratio of this figure is <span class="math inline">\(y/x \approx 1/\phi\)</span>, giving it nearly the ideal proportions according to the ancient Greek aesthetic rules.<a href="#fnref2">↩</a></p></li>
+</ol>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

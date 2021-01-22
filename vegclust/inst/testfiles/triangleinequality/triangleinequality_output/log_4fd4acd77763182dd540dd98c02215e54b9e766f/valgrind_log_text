@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (vegclust_deepstate_test_triangleinequality_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/vegclust/inst/testfiles/triangleinequality/triangleinequality_output/4fd4acd77763182dd540dd98c02215e54b9e766f.pass`
+TRACE: Running: vegclust_deepstate_test_triangleinequality_test from /home/akhila/fuzzer_packages/fuzzedpackages/vegclust/inst/testfiles/triangleinequality/triangleinequality_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+d1 values: -1.5615e-299
+d2 values: -1.20777e+13
+d3 values: 2.79236e-196
+tol values: 1.26379e+187
+input ends
+TRACE: Passed: vegclust_deepstate_test_triangleinequality_test

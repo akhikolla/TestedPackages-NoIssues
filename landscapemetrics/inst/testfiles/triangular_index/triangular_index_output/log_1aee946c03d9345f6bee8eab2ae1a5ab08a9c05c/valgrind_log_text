@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (landscapemetrics_deepstate_test_triangular_index_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/landscapemetrics/inst/testfiles/triangular_index/triangular_index_output/1aee946c03d9345f6bee8eab2ae1a5ab08a9c05c.pass`
+TRACE: Running: landscapemetrics_deepstate_test_triangular_index_test from /home/akhila/fuzzer_packages/fuzzedpackages/landscapemetrics/inst/testfiles/triangular_index/triangular_index_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+r values: -293123844
+c values: -555281357
+input ends
+TRACE: Passed: landscapemetrics_deepstate_test_triangular_index_test

@@ -1,0 +1,22 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (fctbases_deepstate_test_init_pol_basis_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+pol_order values: 467495432
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+pol_order values: -498905818
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: fctbases_deepstate_test_init_pol_basis_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+pol_order values: -293123844
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: fctbases_deepstate_test_init_pol_basis_test
+INFO: Done fuzzing! Ran 3 tests (1 tests/second) with 0 failed/1 passed/2 abandoned tests

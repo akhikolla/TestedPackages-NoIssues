@@ -1,0 +1,15 @@
+To Do list:
+
+-Make an example for MuNCut.
+-For the bml make sure it works for clsutering variables only first. Since, if we let R=1 it should simplify to that.
+-bml gives a weird error message sometimes.
+-I think you have a problem with the intercept when doing glmnet in MuNCut.
+-Extend this example to bml.
+-I am still getting the error message for the muncut function 'Error in if (J2 > J) { : missing value where TRUE/FALSE needed'
+ This error tends to happen when p=100,200; that is when the dimension is small.I think it is also a problem of the gaussian kernel getting really small values. 
+-I get erros message when I use dist='correlation' in muncut.
+-Make sure ncut with CME works for K>2.
+-Make sure spawn2 works for K>2.
+-Currently you have spawn and spawn2. Join them into one function with option between SA and CEM.
+-OOP for the plot() and summary().
+-Get ride and coalesce the C++ functions. They are too many. 

@@ -1,0 +1,53 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (frailtySurv_deepstate_test_lt_dposstab_c_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: 467495432
+s values: 8.08981e-307
+alpha values: 3.76873e+222
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_lt_dposstab_c_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dposstab_c/lt_dposstab_c_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: 1520036990
+s values: -1.96437e+262
+alpha values: -2.50808e+199
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_lt_dposstab_c_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dposstab_c/lt_dposstab_c_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: -1294723540
+s values: -4.56102e+108
+alpha values: 2.11097e-190
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: 528078711
+s values: -0.0415881
+alpha values: 6.18892e+205
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_lt_dposstab_c_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dposstab_c/lt_dposstab_c_output/f496d81e149496561855eb4a68ad77d6b6d9ee7f.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: 42021756
+s values: 1.29613e+300
+alpha values: -2.77607e+87
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_lt_dposstab_c_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dposstab_c/lt_dposstab_c_output/d6ab488e957fb664b978d0f2c73352f389ec16ab.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: -604894602
+s values: -7.27341e-202
+alpha values: -5.24884e-38
+input ends
+INFO: Done fuzzing! Ran 6 tests (3 tests/second) with 4 failed/2 passed/0 abandoned tests

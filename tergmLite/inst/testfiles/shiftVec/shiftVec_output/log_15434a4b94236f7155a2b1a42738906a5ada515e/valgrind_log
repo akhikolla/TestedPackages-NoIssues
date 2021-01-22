@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./shiftVec_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/tergmLite/inst/testfiles/shiftVec/shiftVec_output/15434a4b94236f7155a2b1a42738906a5ada515e.pass</line>
+</preamble>
+
+<pid>517708</pid>
+<ppid>517707</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/tergmLite/inst/testfiles/shiftVec/shiftVec_output/log_15434a4b94236f7155a2b1a42738906a5ada515e/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./shiftVec_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/tergmLite/inst/testfiles/shiftVec/shiftVec_output/15434a4b94236f7155a2b1a42738906a5ada515e.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.098 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:17.825 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:19.172 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

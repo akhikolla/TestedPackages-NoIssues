@@ -1,0 +1,20 @@
+WARNING: No test specified, defaulting to first test defined (mwaved_deepstate_test_multiSigma_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiSigma/multiSigma_output/63ab3e68a65a5073bb136b6229ce722d5c98af15.pass`
+TRACE: Running: mwaved_deepstate_test_multiSigma_test from /home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiSigma/multiSigma_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+signal values: 1.71990e-51 1.51667e-225 1.86531e+250 1.44529e+91
+4.07917e+165 6.61249e-257 1.02818e-81 4.09428e+146
+11.4127 2.62736e-264 1.83374e-104 8.78821e+143
+5.71162e+62 8.62422e-89 9.93170e-171 1.60646e-158
+3.92548e+14 1.01363e+74 1088.08 2.54096e-21
+4.49653e+83 2.14829e+78 8.88077e+282 2.36295e+123
+8.29783e+300 1.56356e-81 5.10578e-14 1.93465e-43
+1.44694e-22 1.87145e+289 9.71140e-241 0.00892625
+5.24924e+272 4.33714e-104 7.70719e-71 1.30327e+122
+4.59987e+18 8.95062e-07 1.49741e+196 4.33867e+27
+
+deg values: -342746351
+input ends
+TRACE: Passed: mwaved_deepstate_test_multiSigma_test

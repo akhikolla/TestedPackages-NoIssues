@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (text2vec_deepstate_test_rowMaxs_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/text2vec/inst/testfiles/rowMaxs/rowMaxs_output/874cac723503960644560def0b11c5d5c116d991.pass`
+TRACE: Running: text2vec_deepstate_test_rowMaxs_test from /home/akhila/fuzzer_packages/fuzzedpackages/text2vec/inst/testfiles/rowMaxs/rowMaxs_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: text2vec_deepstate_test_rowMaxs_test

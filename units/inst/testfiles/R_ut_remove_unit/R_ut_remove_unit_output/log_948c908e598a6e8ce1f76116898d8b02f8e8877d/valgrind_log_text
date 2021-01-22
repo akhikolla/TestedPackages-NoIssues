@@ -1,0 +1,14 @@
+WARNING: No test specified, defaulting to first test defined (units_deepstate_test_R_ut_remove_unit_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/units/inst/testfiles/R_ut_remove_unit/R_ut_remove_unit_output/948c908e598a6e8ce1f76116898d8b02f8e8877d.pass`
+TRACE: Running: units_deepstate_test_R_ut_remove_unit_test from /home/akhila/fuzzer_packages/fuzzedpackages/units/inst/testfiles/R_ut_remove_unit/R_ut_remove_unit_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+name values: "mozzwixsehisnavbbddi" "qlticntqpfnnscjohrgy" "nhtu" "i" "NA" "qnlycdwvtkfvzzoccnok" "uwipaisslycgbssjilab" "glgvvpthbifdhynnnhde" "NA" "NA" "NA" "cvcpdqbsreswfdvdrnug" "brmenikbxdebyxnxpq" "NA" "nmxn" "NA" "NA" "llkvpktmolaaewly" "NA" "NA" "m" "NA" "hgwkqhcahwyy" "NA" "fgrtsaew" "iggputknaunv" "bansvuushyvlzobrvkxf" "dpteytnatxnznsqgchow" "smuwpxzavzaaiazroiqx" "NA" "pxhxvsphrwgosziwpohu" "hrvjerojzkytyodcbzya" "czfnkwkfqtjlzihedjet" "io" "ywphvwvawjlikwq" "NA" "tfklrynvjaplktclgz" "NA" "NA" "NA" "NA" "yfhakygjujzifwonnxlc" "eqkaybzxrhiuxyerozlj" "bqwcenwloascalhacoo" "lgvypdqtctpyvijwuwvl" "" "esifsdnqpeasirdw" "fiysxeatzsidgjnqoswq" "NA" "wxweopnavjspwjaghzkj" "NA" "NA" "NA" "bdkjeejrftbjcykunrse" "NA" "NA" "amrobelckuahkbafbsbx"
+input ends
+EXTERNAL: getUnitById(): NULL unit-system argument
+
+EXTERNAL: getUnitById(): NULL unit-system argument
+
+Exception Handled
+TRACE: Passed: units_deepstate_test_R_ut_remove_unit_test

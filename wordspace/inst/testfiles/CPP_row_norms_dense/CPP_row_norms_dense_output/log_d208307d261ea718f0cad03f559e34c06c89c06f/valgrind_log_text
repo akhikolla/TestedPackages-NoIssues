@@ -1,0 +1,18 @@
+WARNING: No test specified, defaulting to first test defined (wordspace_deepstate_test_CPP_row_norms_dense_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/wordspace/inst/testfiles/CPP_row_norms_dense/CPP_row_norms_dense_output/d208307d261ea718f0cad03f559e34c06c89c06f.pass`
+TRACE: Running: wordspace_deepstate_test_CPP_row_norms_dense_test from /home/akhila/fuzzer_packages/fuzzedpackages/wordspace/inst/testfiles/CPP_row_norms_dense/CPP_row_norms_dense_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: 1.02532e+261 1.12756e-57     nan
+1.46340e+288     inf 4.12846e-51
+5.67165e-306 4.85713e-272     inf
+    nan     inf 61.3403
+5.43908e-105 3.30698e+94 6.30847e-13
+
+norm_code values: -1622927679
+p_norm values: -8.45394e+179
+input ends
+Exception Handled
+TRACE: Passed: wordspace_deepstate_test_CPP_row_norms_dense_test

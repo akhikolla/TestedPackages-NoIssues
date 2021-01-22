@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (hdbinseg_deepstate_test_func_cusum_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/hdbinseg/inst/testfiles/func_cusum/func_cusum_output/ba6c9c0eeb06ad43e4a84c57e2937fe3a4f30f1f.pass`
+TRACE: Running: hdbinseg_deepstate_test_func_cusum_test from /home/akhila/fuzzer_packages/fuzzedpackages/hdbinseg/inst/testfiles/func_cusum/func_cusum_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+z values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: hdbinseg_deepstate_test_func_cusum_test

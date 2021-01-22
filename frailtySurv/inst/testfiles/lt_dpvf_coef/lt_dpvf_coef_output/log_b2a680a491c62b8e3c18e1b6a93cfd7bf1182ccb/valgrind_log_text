@@ -1,0 +1,26 @@
+WARNING: No test specified, defaulting to first test defined (frailtySurv_deepstate_test_lt_dpvf_coef_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dpvf_coef/lt_dpvf_coef_output/b2a680a491c62b8e3c18e1b6a93cfd7bf1182ccb.crash`
+TRACE: Running: frailtySurv_deepstate_test_lt_dpvf_coef_test from /home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dpvf_coef/lt_dpvf_coef_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 205943663
+j values: 1482483795
+alpha values: 1.56396e+138
+input ends
+==818908== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==818908== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==818908==  If you believe this happened as a result of a stack
+==818908==  overflow in your program's main thread (unlikely but
+==818908==  possible), you can try to increase the size of the
+==818908==  main thread stack using the --main-stacksize= flag.
+==818908==  The main thread stack size used in this run was 8388608.
+==818908== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==818908== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==818908==  If you believe this happened as a result of a stack
+==818908==  overflow in your program's main thread (unlikely but
+==818908==  possible), you can try to increase the size of the
+==818908==  main thread stack using the --main-stacksize= flag.
+==818908==  The main thread stack size used in this run was 8388608.
+ERROR: Crashed: frailtySurv_deepstate_test_lt_dpvf_coef_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dpvf_coef/lt_dpvf_coef_output/b2a680a491c62b8e3c18e1b6a93cfd7bf1182ccb.crash crashed

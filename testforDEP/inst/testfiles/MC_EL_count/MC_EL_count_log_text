@@ -1,0 +1,25 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (testforDEP_deepstate_test_MC_EL_count_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+tn values: -2.43318e-187
+n values: -1053990400
+sn values: 77470436
+input ends
+EXTERNAL: Error: negative length vectors are not allowed
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+tn values: -1.5615e-299
+n values: 1273656994
+sn values: 603497922
+input ends
+terminate called after throwing an instance of 'std::bad_alloc'
+  what():  std::bad_alloc
+ERROR: Failed: testforDEP_deepstate_test_MC_EL_count_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_EL_count/MC_EL_count_output/9f01e4c42d834a03ca2fd0c4f3b0cf05e06c5207.fail`
+INFO: Done fuzzing! Ran 2 tests (0 tests/second) with 2 failed/0 passed/0 abandoned tests

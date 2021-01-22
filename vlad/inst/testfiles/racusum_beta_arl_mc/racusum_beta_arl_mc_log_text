@@ -1,0 +1,55 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (vlad_deepstate_test_racusum_beta_arl_mc_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: -2.43318e-187
+RA values: -1.64581e+174
+g0 values: -1.66668e-49
+g1 values: 1.91698e-80
+shape1 values: 2.93871e+294
+shape2 values: 6.2389e-80
+r values: 1906416959
+method values: -831654863
+RQ values: 1.92375e+304
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: -1.5615e-299
+RA values: -1.20777e+13
+g0 values: 2.79236e-196
+g1 values: 1.26379e+187
+shape1 values: 1.42068e+49
+shape2 values: 2.58036e-206
+r values: 1844863990
+method values: -709423862
+RQ values: -9.91228e-57
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: 1.27048e-62
+RA values: -2.88162e-134
+g0 values: 8.18711e+299
+g1 values: 0.00468189
+shape1 values: 9.28697e-257
+shape2 values: -4.47314e+269
+r values: -1125445590
+method values: 2051319948
+RQ values: -1.0696e+114
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: 3.16522e+06
+RA values: 3.72126e-82
+g0 values: 5.29799e-243
+g1 values: 7.52749e+12
+shape1 values: -2.14488e+105
+shape2 values: -3.93045e-68
+r values: 1782658255
+method values: 1473698998
+RQ values: 1.36993e-76
+input ends
+INFO: Done fuzzing! Ran 4 tests (2 tests/second) with 0 failed/4 passed/0 abandoned tests

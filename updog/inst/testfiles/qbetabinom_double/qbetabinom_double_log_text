@@ -1,0 +1,48 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (updog_deepstate_test_qbetabinom_double_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -2.43318e-187
+size values: -1053990400
+mu values: 3.76873e+222
+rho values: 2.1759e+276
+input ends
+Exception Handled
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -1.5615e-299
+size values: 1273656994
+mu values: 2.30186e+66
+rho values: 7.98472e+52
+input ends
+Exception Handled
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 1.27048e-62
+size values: 1746767833
+mu values: 2.98766e-188
+rho values: -3.73785e+59
+input ends
+Exception Handled
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 3.16522e+06
+size values: -1417810920
+mu values: -1.09367e-292
+rho values: 1.79371e+195
+input ends
+Exception Handled
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -1.92672e-302
+size values: -1020009618
+mu values: -2.0456e+54
+rho values: -1.01057e-119
+input ends
+Exception Handled
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 0 failed/5 passed/0 abandoned tests

@@ -1,0 +1,87 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (abtest_deepstate_test_minlplus_cpp_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: -2.43318e-187
+xi values: -1.64581e+174
+y1 values: 484058222
+y2 values: -835858507
+n1 values: 1668042617
+n2 values: 338649647
+mu_beta values: 2.93871e+294
+sigma_beta values: 6.2389e-80
+mu_psi values: 4.73594e-68
+sigma_psi values: 1.92375e+304
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: -1.5615e-299
+xi values: -1.20777e+13
+y1 values: -2065975987
+y2 values: -1981852649
+n1 values: 900590154
+n2 values: -2076391578
+mu_beta values: 1.42068e+49
+sigma_beta values: 2.58036e-206
+mu_psi values: 3.02006e-260
+sigma_psi values: -9.91228e-57
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: 1.27048e-62
+xi values: -2.88162e-134
+y1 values: -1331494887
+y2 values: 1854878590
+n1 values: 314985932
+n2 values: 1361933119
+mu_beta values: 9.28697e-257
+sigma_beta values: -4.47314e+269
+mu_psi values: -1.08462e-247
+sigma_psi values: -1.0696e+114
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: 3.16522e+06
+xi values: 3.72126e-82
+y1 values: 1618366851
+y2 values: 1679204877
+n1 values: 1586657384
+n2 values: -2073912510
+mu_beta values: -2.14488e+105
+sigma_beta values: -3.93045e-68
+mu_psi values: -2.02048e-44
+sigma_psi values: 1.36993e-76
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: -1.92672e-302
+xi values: -4.2952e-278
+y1 values: 1767585227
+y2 values: 586654020
+n1 values: 1930967719
+n2 values: 1510650770
+mu_beta values: 8.07634e-201
+sigma_beta values: 9.96356e-247
+mu_psi values: 2.90007e+287
+sigma_psi values: -3.62253e+84
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: -8.5119e-07
+xi values: -5.48117e-145
+y1 values: 1216778795
+y2 values: -1083036916
+n1 values: 805659460
+n2 values: 715973754
+mu_beta values: 5.00463e-274
+sigma_beta values: 7.52379e-133
+mu_psi values: -2.04487e-51
+sigma_psi values: 10.9345
+input ends
+INFO: Done fuzzing! Ran 6 tests (3 tests/second) with 0 failed/6 passed/0 abandoned tests

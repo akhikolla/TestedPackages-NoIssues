@@ -1,0 +1,19 @@
+LOG of the CHANGES in the package ICtest
+
+Version 0.3-2:
+* plot.ictest, plot.ladle, ggplot.ictest and ggplot.ladle can now also handle sources which are of class zoo and xts
+* adding the ggplot.ladle function
+
+Version 0.3-1:
+* modfiying some plotting functions to use time series plots if S is a multivariate time series
+
+Version 0.3:
+* several bug fixes
+* improving documentation
+* new function PCAschott
+* adding the ladle methdology together with methods
+
+
+Version 0.2:
+
+First version released on CRAN

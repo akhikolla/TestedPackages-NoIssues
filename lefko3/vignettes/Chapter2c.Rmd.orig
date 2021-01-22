@@ -1,0 +1,329 @@
+---
+title: "Lathyrus vernus IPMs"
+author: Richard P. Shefferson, Shun Kurokawa, and Johan Ehrlén
+output: rmarkdown::html_vignette
+bibliography: Lefko3Tutorial.bib
+vignette: >
+  %\VignetteIndexEntry{Lathyrus vernus IPMs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+This document was built in Markdown in R `r getRversion()`, and covers package `lefko3` version 3.1.0.
+
+## CASE STUDIES OF SWEDISH *Lathyrus vernus* POPULATION
+
+### ORGANISM AND POPULATION
+
+  <p style="text-indent: 20px">*Lathyrus vernus* (family Fabaceae) is a long-lived forest herb, native to Europe and large parts of northern Asia. Individuals increase slowly in size and usually flower only after 10-15 years of vegetative growth. Flowering individuals have an average conditional lifespan of 44.3 years [@ehrlen_how_2002]. *Lathyrus vernus* lacks organs for vegetative spread and individuals are well delimited [@ehrlen_assessing_2002]. One or several erect shoots of up to 40 cm height emerge from a subterranean rhizome in March-April. Flowering occurs about four weeks after shoot emergence. Shoot growth is determinate, and the number of flowers is determined in the previous year [@ehrlen_storage_2001]. Individuals may not produce aboveground structures every year but can remain dormant in one season. *Lathyrus vernus* is self-compatible but requires visits from bumble-bees to produce seeds. Individuals produce few, large seeds and establishment from seeds is relatively frequent [@ehrlen_seedling_1996]. The pre-dispersal seed predator *Bruchus atomarius* often consumes a large fraction of developing seeds, and roe deer (*Capreolus capreolus*) sometimes consume the shoots [@ehrlen_timing_2009].</p>
+  
+  <p style="text-indent: 20px">Data for this study were collected from six permanent plots in a population of *L. vernus* located in a deciduous forest in the Tullgarn area, SE Sweden (58.9496 N, 17.6097 E), during 1988–1991 [@ehrlen_demography_1995]. The six plots were relatively similar with regard to soil type, elevation, slope, and canopy cover. Within each plot, all individuals were marked with numbered tags that remained over the study period, and their locations were carefully mapped. New individuals were included in the study in each year. Individuals were recorded at least three times every growth season. At the time of shoot emergence, we recorded whether individuals were alive and produced above-ground shoots, and if shoots had been grazed. During flowering, we recorded flower number and the height and diameter of all shoots. At fruit maturation, we counted the number of intact and damaged seeds. To derive a measure of above-ground size for each individual, we calculated the volume of each shoot as $\pi × (\frac{1}{2} diameter)^2 × height$, and summed the volumes of all shoots. This measure is closely correlated with the dry mass of aboveground tissues ($R^2 = 0.924$, $P < 0.001$, $n = 50$, log-transformed values; Ehrlén 1995). Size of individuals that had been grazed was estimated based on measures of shoot diameter in grazed shoots, and the relationship between shoot diameter and shoot height in non-grazed individuals. Only individuals with an aboveground volume of more than 230 mm<sup>3</sup> flowered and produced fruits during this study. Individuals that lacked aboveground structures in one season but reappeared in the following year were considered dormant. Individuals that lacked aboveground structures in two subsequent seasons were considered dead from the year in which they first lacked aboveground structures. Probabilities of seeds surviving to the next year, and of being present as seedlings or seeds in the soil seed bank, were derived from separate yearly sowing experiments in separate plots adjacent to each subplot [@ehrlen_seedling_1996].</p>
+
+### ANALYSES WITH *LATHYRUS* DATA
+
+  <p style="text-indent: 20px">We will complete three different analyses to illustrate some of the ways in which package `lefko3` can be used:</p> 
+  
+  1) through the estimation of **raw MPMs**, with the intention of producing matrices similar to those published in Ehrlén [-@ehrlen_dynamics_2000]; 
+  
+  2) through the estimation of **function-based MPMs** using a stage classification different from Ehrlén [-@ehrlen_dynamics_2000], developed using the natural logarithm of the size measure used in that study; and
+  
+  3) through the construction of a complex **integral projection model**.
+  
+  <p style="text-indent: 20px">In this vignette, we focus on analysis (3).
+  
+
+### Analysis 3: Integral projection models (IPMs)
+
+  <p style="text-indent: 20px">In this analysis, we will build historical and ahistorical integral projection models (IPMs). An IPM is a kind of function-based matrix in which transitions are modeled on a continuous state variable rather than discrete stages [@ellner_integral_2006]. A size measure is often used as this continuous state variable. In practice, the matrix requires discrete size classes, and so size is modeled as Gaussian and the size distribution is broken up into many fine-scale, equally sized classes or size bins. Although the number of these bins varies from analysis to analysis, package `lefko3` uses a default of 100 (this can be changed as an option). Because vital rates are modeled rather than directly calculated from the data, the number of individuals  moving through particular size classes at any time does not need to be considered in determining stage boundaries (as they would be in raw MPM estimation). IPMs are often complex, meaning that they include some life history stages that fall outside of the size classifications developed for the matrices, such as dormant seeds or juveniles. `Lefko3` can handle all of this.</p>
+  
+#### Step 1. Life history model development
+
+  <p style="text-indent: 20px">To begin, we need to create a stageframe for this dataset, in which we identify the key stages used in analysis. We will base all of this on Ehrlén [-@ehrlen_dynamics_2000], but use a different size classification to allow IPM construction and make all mature stages other than vegetative dormancy reproductive.</p>
+  
+  <p style="text-indent: 20px">In the stageframe code below, we show that we want an IPM by choosing two stages that serve as the size limits for IPM size classification. These two size classes should have exactly the same characteristics in the stageframe other than size. By choosing these two, we can skip adding and describing the many size classes that will fall between these limits - `sf_create()` will create all of these for us. We mark these limits in the vector that we load into the `stagenames` option using the string `ipm`. Package `lefko3` will then rename all IPM size classes according to its own conventions. The default number of size classes is 100 bins. We can alter this if we wish using the `ipmbins` option.</p>
+```{r Ch2can3.1}
+rm(list=ls(all=TRUE))
+
+library(lefko3)
+
+data(lathyrus)
+
+sizevector <- c(0, 100, 0, 1, 7100)
+stagevector <- c("Sd", "Sdl", "Dorm", "ipm", "ipm")
+repvector <- c(0, 0, 0, 1, 1)
+obsvector <- c(0, 1, 0, 1, 1)
+matvector <- c(0, 0, 1, 1, 1)
+immvector <- c(1, 1, 0, 0, 0)
+propvector <- c(1, 0, 0, 0, 0)
+indataset <- c(0, 1, 1, 1, 1)
+binvec <- c(0, 100, 0.5, 1, 1)
+
+lathframeipm <- sf_create(sizes = sizevector, stagenames = stagevector, 
+                          repstatus = repvector, obsstatus = obsvector, 
+                          matstatus = matvector, immstatus = immvector, 
+                          indataset = indataset, binhalfwidth = binvec, 
+                          propstatus = propvector, ipmbins = 100, roundsize = 3)
+```
+
+  <p style="text-indent: 20px">We will also add some descriptive comments to this stageframe so that we know what each of these stages is, and then look at the first 6 entries and the dimenstions of the stageframe.</p>
+```{r Ch2can3.2}
+lathframeipm$comments <- c("Dormant seed", "Seedling", "Dormant", rep("ipm stage", 100))
+head(lathframeipm)[,1:6]
+head(lathframeipm)[,7:12]
+head(lathframeipm)[,13:16]
+```
+
+  <p style="text-indent: 20px">This stageframe shows has 103 stages (we can see this by typing `dim(lathframeipm)`). The IPM portion technically starts with the fourth stage and keeps going until the 103rd stage. Stage names within this range are concatenations of the central size (designated with `sz`), reproductive status (designated with `rp`), maturity status (designated with `mt`), and observation status (designated with `ob`). The first three stages, which fall outside of the IPM classification, are left unaltered.</p>
+
+#### Step 2a. Dataset organization
+
+  <p style="text-indent: 20px">To work with this dataset, we first need to format the data into 'vertical' format, in which each row corresponds to the state of a single individual in two (if ahistorical) or three (if historical) consecutive time intervals. Because this is an IPM, we will need to estimate linear models of vital rates, and that will require that NAs in size and fecundity are avoided in key terms used in estimation. For this purpose, we will set `NAas0 = TRUE`. We will also set `NRasRep = TRUE` because all adult stages are assumed to be reproductive, and there are mature individuals in the dataset that do not reproduce but need to be included in reproductive stages (setting this option to TRUE makes sure that the reproductive status of non-reproductive individuals is set to 1, although the actual fecundity is not altered). Finally, we will ignore patches this time and estimate matrices only for the full population, in order to preserve statistical power for vital rate modeling in historical IPM analysis.</p>
+```{r Ch2can3.3}
+lathvertipm <- verticalize3(lathyrus, noyears = 4, firstyear = 1988, 
+                            individcol = "GENET", blocksize = 9, juvcol = "Seedling1988", 
+                            sizeacol = "Volume88", repstracol = "FCODE88",
+                            fecacol = "Intactseed88", deadacol = "Dead1988", 
+                            nonobsacol = "Dormant1988", stageassign = lathframeipm, 
+                            stagesize = "sizea", censorcol = "Missing1988",censorkeep = NA, 
+                            censor = TRUE, NAas0 = TRUE, NRasRep = TRUE)
+```
+
+  <p style="text-indent: 20px">Before we move on to the next key steps in analysis, let's take a closer look at fecundity. We can either treat fecundity as a continuous variable, or round the values and treat it as a count variable. In this dataset, fecundity is mostly a count of intact seeds, and only differs in six cases where the seed output was estimated based on other models. So, we will round fecundity so that we can assume count variables in the analysis, as below.</p>
+```{r Ch2can3.4}
+lathvertipm$feca2 <- round(lathvertipm$feca2)
+lathvertipm$feca1 <- round(lathvertipm$feca1)
+lathvertipm$feca3 <- round(lathvertipm$feca3)
+```
+
+  <p style="text-indent: 20px">Although we wish to treat fecundity as a count, it is still not clear what underlying distribution we should use. This package currently allows 5 choices: Gaussian, Poisson, negative binomial, zero-inflated Poisson, and zero-inflated negative binomial. To assess which to use, we should first assess whether the mean and variance of the count are equal using a dispersion test. This test allows us to test whether the variance is greater than that expected under our mean value for fecundity using a chi-squared test. If it is not significantly different, then we may use some variant of the Poisson distribution. If the data are overdispersed, then we should use the negative binomial distribution. We should also test whether the number of zeroes is more than expected under these distributions, and make the distribution zero-inflated if so.</p>
+  
+  <p style="text-indent: 20px">Let's start off by looking at a plot of the distribution of fecundity.</p>
+```{r Ch2ban3.5, fig.cap = "Figure 15. Histogram of fecundity in time t"}
+hist(subset(lathvertipm, repstatus2 == 1)$feca2, main = "Fecundity", xlab = "Intact seeds produced in time t")
+```
+
+We see that the distribution conforms to a classic count variable with a very low mean value. The first bar suggests that there may be too many zeroes, as well, and we can see this in the following plot.
+```{r Ch2ban3.6, fig.cap = "Figure 16. Histogram of fecundity in time t, only cases with <10 seeds produced"}
+hist(subset(lathvertipm, repstatus2 == 1)$feca2[which(subset(lathvertipm, repstatus2 == 1)$feca2 < 11)], 
+     main = "Fecundity", xlab = "Intact seeds produced in time t")
+```
+
+This is fairly ample evidence that we should use a zero-inflated distribution of some sort. Let's now go to a formal test of the two assumptions of mean = variance and no excess 0s. Both use chi-squared distribution-based approaches, with the zero-inflation test in particular based on van der Broek [-@van_den_broek_score_1995].
+```{r Ch2ban3.7}
+sf_distrib(lathvertipm, fec = "feca2", repst = "repstatus2")
+```
+
+Such significant results for both tests show us that we really need to use a zero-inflated negative binomial distribution here.
+
+  <p style="text-indent: 20px">We encourage users to explore the reorganized dataset, which now includes 2,527 historical transitions (rows) and 42 variables (columns). Now we move on to create the extra bits of information needed for matrix estimation.</p>
+  
+#### Step 2b: Develop supplemental information for matrix estimation
+
+  <p style="text-indent: 20px">Now we will provide some given transitions. These are the same overwrite objects as used before.</p>
+```{r Ch2can3.8}
+lathover2 <- overwrite(stage3 = c("Sd", "Sdl"), stage2 = c("Sd", "Sd"), 
+                      givenrate = c(0.345, 0.054))
+
+lathover3 <- overwrite(stage3 = c("Sd", "Sd", "Sdl"), stage2 = c("Sd", "Sd", "Sd"), 
+                      stage1 = c("Sd", "rep", "rep"), givenrate = c(0.345, 0.345, 0.054))
+```
+
+  <p style="text-indent: 20px">We will also create a reproductive matrix, which describes not only which stages are reproductive, but which stages they lead to the reproduction of, and at what level. This matrix is composed mostly of 0s, with fecundity noted as non-zero entries equal to a scalar multiplier to the full fecundity estimated by R. This matrix has rows and columns equal to the number of stages described in the stageframe for this dataset, and the rows and columns refer to these stages in the same order as in the stageframe. In many ways, it looks like a nearly empty population matrix, but notes the per-individual mean modifiers on fecundity for each stage that actually reproduces. Here, we first create a 0 matrix with dimensions equal to the number of rows in `lathframeipm`. Then we modify elements corresponding to fecundity by the expected mean seed dormancy probability (row 1), and by the germination rate (row 2).</p>
+```{r Ch2can3.9}
+lathrepmipm <- matrix(0, 103, 103)
+lathrepmipm[1, 4:103] <- 0.345
+lathrepmipm[2, 4:103] <- 0.054
+```
+
+
+#### Step 3. Tests of history, and vital rate modeling
+
+  <p style="text-indent: 20px">Integral projection models (IPMs) require functions of vital rates to populate them. Here, we will develop these functions as linear models using `modelsearch()`. This looks similar to the `modelsearch` call in the last example, although we will not include models of reproductive status because we assume that all adults are reproductive (though perhaps not successfully so). First we will create the historical models in order to assess whether history is a significant influence on vital rates.</p>
+```{r Ch2can3.10}
+lathmodels3ipm <- modelsearch(lathvertipm, historical = TRUE, approach = "mixed", 
+                              suite = "size", vitalrates = c("surv", "obs", "size", "fec"), 
+                              juvestimate = "Sdl", bestfit = "AICc&k", 
+                              sizedist = "gaussian", fecdist = "negbin", 
+                              fec.zero = TRUE, indiv = "individ", year = "year2", 
+                              year.as.random = TRUE, juvsize = TRUE, 
+                              show.model.tables = TRUE, quiet = TRUE)
+
+summary(lathmodels3ipm)
+```
+
+  <p style="text-indent: 20px">We see here, as before, that size in time *t*-1 exerts an influence on some vital rates, including survival to time *t*+1 and size in time *t*+1. So, the historical IPM is the correct choice here. However, we will also create an ahistorical IPM. For that purpose, we will create the ahistorical linear model set.</p>
+```{r Ch2can3.11}
+lathmodels2ipm <- modelsearch(lathvertipm, historical = FALSE, approach = "mixed", 
+                              suite = "size", vitalrates = c("surv", "obs", "size", "fec"), 
+                              juvestimate = "Sdl", bestfit = "AICc&k", 
+                              sizedist = "gaussian", fecdist = "negbin",
+                              fec.zero = TRUE, indiv = "individ", year = "year2", 
+                              year.as.random = TRUE, juvsize = TRUE, 
+                              show.model.tables = TRUE, quiet = TRUE)
+
+summary(lathmodels2ipm)
+```
+
+  <p style="text-indent: 20px">We note some strong similarities here, although obviously size in time *t*-1 is no longer present. Let's move on now to the matrices themselves.</p>
+
+#### Step 4. IPM estimation
+
+  <p style="text-indent: 20px">We will now create the historical suite of matrices covering the years of study. Be aware that the output matrices will be extremely large - large enough that some computers might have difficulty with them. If you encounter an error message telling you that you hae run out of memory, then please try this on a more powerful computer.</p>
+```{r Ch2can3.12}
+lathmat3ipm <- flefko3(stageframe = lathframeipm, repmatrix = lathrepmipm, 
+                       modelsuite = lathmodels3ipm, overwrite = lathover3,
+                       data = lathvertipm, year.as.random = FALSE, 
+                       patch.as.random = FALSE, reduce = FALSE)
+summary(lathmat3ipm)
+```
+
+  <p style="text-indent: 20px">These are giant matrices. With 10,609 rows and columns, there are a total of 112,550,881 elements per matrix. But they are also amazingly sparse - with 1,061,307 elements estimated, 0.9% of elements per matrix are non-zero.</p>
+  
+  <p style="text-indent: 20px">Let's now build the ahistorical IPMs.</p>
+```{r Ch2can3.13}
+lathmat2ipm <- flefko2(stageframe = lathframeipm, repmatrix = lathrepmipm, 
+                       modelsuite = lathmodels2ipm, overwrite = lathover2,
+                       data = lathvertipm, year.as.random = FALSE, 
+                       patch.as.random = FALSE, reduce = FALSE)
+summary(lathmat2ipm)
+```
+
+  <p style="text-indent: 20px">The ahistorical IPMs are certainly smaller than the historical IPMs, but are nonetheless huge in comparison to the matrices estimated in previous analyses. Although huge, these matrices are not sparse - 10,407 elements out of 10,609 per matrix are estimated (98.1%). Fortunately, we can assume that neither IPM is overparameterized, since ultimately the elements in an IPM and any other function-based matrix reflect the statistical power of the underlying vital rate models. In `lefko3`, the vital rate models used are the best-fit models from exhaustive model selection, and so are already the most parsimonious from within the suite of tested models.</p>
+
+  <p style="text-indent: 20px">Let's take a look at the top-left corner of the first ahistorical matrix (the matrix is too huge to inspect in full here).</p>
+```{r Ch2can3.14}
+print(lathmat2ipm$A[[1]][1:25,1:5], digits = 3)
+```
+
+This matrix is very large, of course, so is difficult to read properly. We can get another handle on quality control by checking the column sums of the first U matrix, to make sure that all column sums look like survival probabilities.
+```{r Ch2can3.15}
+summary(colSums(lathmat2ipm$U[[1]]))
+```
+
+Everything looks OK, with stage survival probabilities within the realm of possibility.
+
+  <p style="text-indent: 20px">Let's now repeat with the historical matrices. First the top corner of the first historical matrix.</p>
+```{r Ch2can3.16}
+print(lathmat3ipm$A[[1]][1:25,1:10], digits = 3)
+```
+
+The sparseness of the matrix means that the vast majority of it will be composed of 0s. Let's take a look at a summary of the column sums of the first survival-transition matrix.
+```{r Ch2can3.17}
+summary(colSums(lathmat3ipm$U[[1]]))
+```
+
+These numbers also all look fine.
+
+  <p style="text-indent: 20px">Now let's estimate the mean IPM matrices. This code will estimate 1 mean matrix each, because we did not separate patches in the data reorganization and vital rate modeling.</p>
+```{r Ch2can3.18}
+lath2ipmmean <- lmean(lathmat2ipm)
+summary(lath2ipmmean)
+
+lath3ipmmean <- lmean(lathmat3ipm)
+summary(lath3ipmmean)
+```
+
+  <p style="text-indent: 20px">As a final check, let's take a look at the column sums of the grand mean survival-transition matrix from each case.</p>
+```{r Ch2can3.19}
+writeLines("\nAhistorical matrix stage survival distribution: ")
+summary(colSums(lath2ipmmean$U[[1]]))
+
+writeLines("\nHistorical matrix stage-pair survival distribution: ")
+summary(colSums(lath3ipmmean$U[[1]]))
+```
+
+All looks fine!
+
+#### Step 5. MPM analysis
+
+  <p style="text-indent: 20px">Now let's estimate the deterministic population growth rates and plot them.</p>
+```{r Ch2can3.20, fig.cap = "Figure 17. Ahistorical vs. historical lambda"}
+ipm2lambda <- lambda3(lathmat2ipm)
+ipm3lambda <- lambda3(lathmat3ipm)
+
+meanlambda2 <- lambda3(lath2ipmmean)
+meanlambda3 <- lambda3(lath3ipmmean)
+
+plot(lambda ~ year2, data = ipm2lambda, xlab = "Year", ylab = "Lambda", ylim = c(0.65, 1.00),
+     type = "l", lwd = 2, bty = "n")
+lines(lambda ~ year2, data = ipm3lambda, lwd = 2, lty = 2, col = "red")
+legend("bottomleft", c("ahistorical", "historical"), lty = c(1, 2), col = c("black", "red"), lwd = 2, bty = "n")
+```
+
+Ahistorical estimates of $\lambda$ are lower than historical estimates, and the historical $\lambda$ values are more in line with estimates from the previous analyses.
+
+  <p style="text-indent: 20px">Now let's look at the stable stage distribution. We will only look at the summary and first 6 entries, given the size of the output.</p>
+```{r Ch2can3.21, fig.cap = "Figure 18. Ahistorical vs. historically-corrected stable stage distribution"}
+ipm2ss <- stablestage3(lath2ipmmean)
+ipm3ss <- stablestage3(lath3ipmmean)
+
+ss_put_together <- cbind.data.frame(ipm2ss$ss_prop, ipm3ss$ahist$ss_prop)
+names(ss_put_together) <- c("ahist", "hist")
+rownames(ss_put_together) <- ipm2ss$stage_id
+
+barplot(t(ss_put_together), beside=T, ylab = "Proportion", xlab = "Stage",
+        col = c("black", "red"), bty = "n")
+legend("topright", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+Both ahistorical and historical approaches show the stable stage distribution dominated by the first stage, which is the dormant seed stage. The importance of the seed bank to the population is quite clear in this analysis! However, the historical analysis suggests a stronger weighting of larger adults, with the distribution moving rightward slightly.
+
+  <p style="text-indent: 20px">Next, the reproductive values.</p>
+```{r Ch2can3.22, fig.cap = "Figure 19. Ahistorical vs. historically-corrected reproductive values"}
+ipm2rv <- repvalue3(lath2ipmmean)
+ipm3rv <- repvalue3(lath3ipmmean)
+
+rv_put_together <- cbind.data.frame(ipm2rv$rep_value, ipm3rv$ahist$rep_value)
+names(rv_put_together) <- c("ahist", "hist")
+rv_put_together$ahist <- rv_put_together$ahist / max(rv_put_together$ahist)
+rv_put_together$hist <- rv_put_together$hist / max(rv_put_together$hist)
+rownames(rv_put_together) <- ipm2rv$stage_id
+
+barplot(t(rv_put_together), beside=T, ylab = "Relative rep value", xlab = "Stage", 
+        col = c("black", "red"), bty = "n")
+legend("topleft", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+A quick scan through these values shows that the highest reproductive values in the ahistorical analysis are for the largest adults, all the way at the bottom of the data frame output. Since these values have been scaled to the contribution of dormant seed, the reproductive values suggest the important contribution of large adults to the maintenance of the population. However, historically-corrected reproductive values drop off once adults get mildly large, with the largest value associated with plants with a leaf volume of 5076 (the maximum is >7000).
+
+  <p style="text-indent: 20px">Given the size of these matrices and the difficulty of working with them, we will skip sensitivity analysis here and move on to elasticity analysis.</p>
+```{r Ch2can3.23}
+lath2ipmelas <- elasticity3(lath2ipmmean)
+lath3ipmelas <- elasticity3(lath3ipmmean)
+
+writeLines("\nThe highest ahistorical elasticity is associated with element: ")
+which(lath2ipmelas$elasmats[[1]] == max(lath2ipmelas$elasmats[[1]]))
+
+writeLines("\nThe highest historically-corrected elasticity is associated with element: ")
+which(lath3ipmelas$ah_elasmats[[1]] == max(lath3ipmelas$ah_elasmats[[1]]))
+```
+
+  <p style="text-indent: 20px">Both analyses agree that $\lambda$ is most elastic in response to stasis in vegetative dormancy, which is rather different from previous analyses, which suggested that transitions involving small adults or flowering adults had the strongest potential influence on $\lambda$. Let's plot the importance of stages from both perspectives.</p>
+```{r Ch2can3.24, fig.cap = "Figure 20. Ahistorical vs. historically-corrected elasticity of lambda to stage"}
+elas_put_together <- cbind.data.frame(colSums(lath2ipmelas$elasmats[[1]]), colSums(lath3ipmelas$ah_elasmats[[1]]))
+names(elas_put_together) <- c("ahist", "hist")
+rownames(elas_put_together) <- lath2ipmelas$stages$stage_id
+
+barplot(t(elas_put_together), beside=T, ylab = "Elasticity of lambda", xlab = "Stage", 
+        col = c("black", "red"), bty = "n")
+legend("topright", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+  <p style="text-indent: 20px">The plot of these distributions shows the strong importance of vegetative dormancy, which is the tallest bar in both plots. However, the distribution of elasticity values in adult stages is shifted to the right in the historically-corrected IPM. Thus, while the ahistorical IPM shows the second highest elasticity of $\lambda$ to be associated with plants with a leaf volume of 746, historically-corrected analysis suggests that the second highest elasticity is associated with plants with a leaf volume of 960.</p>
+
+
+## Acknowledgements
+
+  <p style="text-indent: 20px">We are grateful to two anonymous reviewers whose scrutiny improved the quality of this vignette. The project resulting in this package and this tutorial was funded by Grant-In-Aid 19H03298 from the Japan Society for the Promotion of Science.</p>
+  
+  
+## Literature cited
+
+<div id="refs"></div>

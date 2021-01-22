@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./C_local_clock_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/timechange/inst/testfiles/C_local_clock/C_local_clock_output/2f89dc5169989c501acb63126ae6340638f0441a.pass</line>
+</preamble>
+
+<pid>971112</pid>
+<ppid>971111</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/timechange/inst/testfiles/C_local_clock/C_local_clock_output/log_2f89dc5169989c501acb63126ae6340638f0441a/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./C_local_clock_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/timechange/inst/testfiles/C_local_clock/C_local_clock_output/2f89dc5169989c501acb63126ae6340638f0441a.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.024 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:07.673 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.157 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

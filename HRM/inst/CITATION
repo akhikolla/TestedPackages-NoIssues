@@ -1,0 +1,14 @@
+citHeader("To cite HRM in publications, please use:")
+citEntry(entry = "Article",
+title        = "High-dimensional Repeated Measures.",
+author       = personList(as.person("Martin Happ"),
+as.person("Solomon W. Harrar"),
+as.person("Arne C. Bathke")),
+journal      = "Journal of Statistical Theory and Practice",
+year         = "2017",
+volume       = "11",
+number       = "3",
+pages        = "468-477",
+url          = "http://www.tandfonline.com/doi/full/10.1080/15598608.2017.1307792",
+textVersion  = paste("Happ, M., Harrar S. W. and Bathke, A. C. (2017).","High-dimensional Repeated Measures.","Journal of Statistical Theory and Practice.", "11(3), 468-477.", "URL: http://www.tandfonline.com/doi/full/10.1080/15598608.2017.1307792.")
+)

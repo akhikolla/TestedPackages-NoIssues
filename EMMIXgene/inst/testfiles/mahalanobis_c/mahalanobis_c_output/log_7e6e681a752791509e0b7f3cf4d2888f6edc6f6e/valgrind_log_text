@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (EMMIXgene_deepstate_test_mahalanobis_c_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/EMMIXgene/inst/testfiles/mahalanobis_c/mahalanobis_c_output/7e6e681a752791509e0b7f3cf4d2888f6edc6f6e.pass`
+TRACE: Running: EMMIXgene_deepstate_test_mahalanobis_c_test from /home/akhila/fuzzer_packages/fuzzedpackages/EMMIXgene/inst/testfiles/mahalanobis_c/mahalanobis_c_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+y values: -1.5615e-299
+mu values: -1.20777e+13
+sigma values: 2.79236e-196
+input ends
+TRACE: Passed: EMMIXgene_deepstate_test_mahalanobis_c_test

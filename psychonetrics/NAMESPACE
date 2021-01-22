@@ -1,0 +1,175 @@
+### Dynlib ###
+useDynLib(psychonetrics, .registration = TRUE)
+
+export(emergencystart)
+export(partialprune)
+
+export(factorscores)
+
+importFrom(psych, fa)
+importFrom(GA, ga)
+importFrom(combinat, permn)
+
+# importFrom(metaSEM, asyCov)
+export(meta_ggm)
+export(simplestructure)
+
+export(setverbose)
+
+# Multi-level models:
+export(ml_tsdlvm1)
+export(ml_ts_lvgvar)
+export(ml_lvm)
+export(ml_lnm)
+export(ml_rnm)
+export(ml_lrnm)
+
+export(meta_varcov)
+
+# Ergodic:
+export(esa)
+export(esa_manual)
+import(ggplot2)
+# import(tidyr)
+importFrom(tidyr, gather, pivot_wider)
+
+S3method(plot, esa)
+S3method(plot, esa_manual)
+
+S3method(print, esa)
+S3method(print, esa_manual)
+S3method(print, psychonetrics_compare)
+
+import(IsingSampler)
+
+# Crayon:
+# import(crayon)
+
+### Exports ###
+# exportPattern("^[[:alpha:]]+")
+#  varcov models:
+export(covML)
+export(covMLtoUB)
+export(covUBtoML)
+export(varcov)
+export(ggm)
+export(precision)
+export(cholesky)
+export(prec)
+export(corr)
+# export(meta_varcov)
+export(modelsearch)
+
+# Ising models:
+export(Ising)
+
+# lvm models:
+export(lvm)
+export(lnm)
+export(rnm)
+export(lrnm)
+export(bifactor)
+export(latentgrowth)
+
+export(getVCOV)
+
+# VAR models:
+export(var1)
+export(gvar)
+
+# Panel var models:
+export(dlvm1)
+export(panelvar)
+export(panelgvar)
+export(panel_lvgvar)
+
+# Time-series lvvar models:
+export(ts_lvgvar)
+export(tsdlvm1)
+
+# extra:
+# export(joingroups)
+# export(frombootnet)
+
+# Model expansions:
+export(addMIs)
+export(addSEs)
+export(addfit)
+export(identify)
+
+# Run:
+export(runmodel)
+
+# Search:
+export(stepup)
+export(prune)
+
+# Model modification:
+export(fixpar)
+export(freepar)
+export(groupequal)
+export(groupfree)
+export(intersectionmodel)
+export(unionmodel)
+export(parequal)
+
+# Convenience functions:
+export(changedata)
+export(generate)
+export(setestimator)
+export(setoptimizer)
+export(usecpp)
+export(MIs)
+export(bootstrap)
+# export(bootstrap_SEs)
+export(fit)
+export(getmatrix)
+export(compare)
+export(parameters)
+# export(replicator)
+
+# Special matrices:
+export(duplicationMatrix, eliminationMatrix, diagonalizationMatrix)
+
+# export Classes
+exportClasses("psychonetrics" )
+#exportClasses("psychonetrics_samplestats","psychonetrics_log","psychonetrics" )
+
+# export Methods
+exportMethods("show", "resid", "residuals")
+
+
+### Imports ###
+# importFrom(lavaan, lavCor, lavInspect)
+import(dplyr)
+importFrom(abind, abind)
+importFrom(matrixcalc,duplication.matrix,elimination.matrix,commutation.matrix)
+import(Matrix)
+importFrom(numDeriv, grad, jacobian, hessian)
+importFrom(lavaan, lav_matrix_commutation)
+importFrom(corpcor, pseudoinverse)
+#importFrom(optimx, optimx)
+import(ucminf)
+import(glasso)
+importFrom(qgraph,qgraph,wi2net)
+importFrom("graphics", "abline", "par")
+  importFrom("methods", "as", "is", "new")
+  importFrom("stats", "nlminb", "pchisq", "pnorm", "qchisq", "runif",
+             "uniroot","cov")
+  importFrom("utils", "sessionInfo")
+
+importFrom("mgcv","uniquecombs")
+importFrom("optimx","optimr")
+importFrom("mvtnorm","rmvnorm")
+importFrom("VCA","MPinv")
+importFrom("pbapply","pblapply")
+import(parallel)
+import(magrittr)
+
+
+  importFrom("stats", "na.omit", "p.adjust", "rnorm", "sd")
+     importFrom("utils", "setTxtProgressBar", "txtProgressBar")
+     
+     importFrom("stats", "qnorm")
+     
+     importFrom("stats", "cor", "weighted.mean")

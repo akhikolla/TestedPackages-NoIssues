@@ -1,0 +1,26 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (fasteraster_deepstate_test_rasterZoneAnalyzer_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+raster values: 1.05415e-68 1.86447e-211 4.49059e+17 2.72551e-214 6.53679e-70 2.42643e+241 1.65687e+24
+
+from values: -2.10159e+110
+to values: -6.65583e-306
+step values: -3.48837e-09
+input ends
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+raster values: 1.02532e+261 1.12756e-57     nan
+1.46340e+288     inf 4.12846e-51
+5.67165e-306 4.85713e-272     inf
+    nan     inf 61.3403
+5.43908e-105 3.30698e+94 6.30847e-13
+
+from values: -1.016e-235
+to values: -8.95918e-135
+step values: -6.0625e-109
+input ends
+INFO: Done fuzzing! Ran 2 tests (1 tests/second) with 0 failed/2 passed/0 abandoned tests

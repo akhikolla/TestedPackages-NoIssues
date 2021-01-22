@@ -1,0 +1,27 @@
+useDynLib(frailtySurv)
+
+import(ggplot2)
+importFrom(nleqslv, nleqslv)
+importFrom(reshape2, melt)
+importFrom(numDeriv, grad)
+importFrom(survival, coxph, Surv, untangle.specials, coxph.control, basehaz, strata)
+importFrom(stats, optim, vcov, .getXlevels, aggregate, complete.cases,
+             cor, cov, dgamma, dlnorm, dnorm, dpois, dunif,
+             ecdf, integrate, model.extract, model.matrix,
+             qlnorm, qnorm, qpois, qunif, rbinom, rchisq,
+             rexp, rgamma, rlnorm, rnorm, runif, sd,
+             setNames, terms, uniroot, as.formula, drop.terms, update)
+
+export(genfrail, genfrail.control, fitfrail, fitfrail.control, simfrail, simcoxph)
+
+S3method(plot, fitfrail)
+S3method(plot, simfrail)
+S3method(print, fitfrail)
+S3method(print, genfrail)
+S3method(print, simfrail)
+S3method(print, summary.genfrail)
+S3method(print, summary.simfrail)
+S3method(summary, fitfrail)
+S3method(summary, genfrail)
+S3method(summary, simfrail)
+S3method(vcov, fitfrail)

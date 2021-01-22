@@ -1,0 +1,20 @@
+citHeader("To cite ImpactEffectsize in publications use:")
+
+citEntry(entry = "Article",
+         title        = "A non-parametric effect-size measure capturing changes in central tendency and data distribution shape",
+         author       = personList(as.person("Jorn Lotsch"),
+                                   as.person("Alfred Ultsch")),
+         journal      = "PLoS One",
+         year         = "2020",
+         volume       = "15",
+         number       = "9",
+         pages        = "e0239623",
+         url          = "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0239623",
+         doi          = "10.1371/journal.pone.0239623",
+
+         textVersion  = paste("Jorn Lotsch and Alfred Ultsch (2020).",
+                              "A non-parametric effect-size measure capturing changes in central tendency and data distribution shape.",
+                              "PLoS One. 2020 Sep 24;15(9):e0239623.",
+                              "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0239623.")
+)
+

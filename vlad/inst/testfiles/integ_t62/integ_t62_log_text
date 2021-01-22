@@ -1,0 +1,87 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (vlad_deepstate_test_integ_t62_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+xl values: -2.43318e-187
+xu values: -1.64581e+174
+j values: 484058222
+loc values: 2.1759e+276
+RA values: 8.23909e+275
+RQ values: -6.77057e-186
+g0 values: 0.0289362
+g1 values: -1.92492e+220
+shape1 values: -7.76052e-203
+shape2 values: -1.44818e-217
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+xl values: -1.5615e-299
+xu values: -1.20777e+13
+j values: -2065975987
+loc values: 7.98472e+52
+RA values: -4.39208e-147
+RQ values: 2.45153e+303
+g0 values: -1.96437e+262
+g1 values: -2.50808e+199
+shape1 values: 1.20498e-80
+shape2 values: -2.24616e-139
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+xl values: 1.27048e-62
+xu values: -2.88162e-134
+j values: -1331494887
+loc values: -3.73785e+59
+RA values: -5.02809e-216
+RQ values: 2.16225e+38
+g0 values: 4.61109e-106
+g1 values: 7.54668e+136
+shape1 values: 3.57162e-109
+shape2 values: -1.14124e+67
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+xl values: 3.16522e+06
+xu values: 3.72126e-82
+j values: 1618366851
+loc values: 1.79371e+195
+RA values: -9.39364e-248
+RQ values: -3.98953e+09
+g0 values: -3.57884e+73
+g1 values: -6.38154e+212
+shape1 values: -5.13827e+191
+shape2 values: -7.21869e-208
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+xl values: -1.92672e-302
+xu values: -4.2952e-278
+j values: 1767585227
+loc values: -1.01057e-119
+RA values: -2.84761e+166
+RQ values: 1.38598e+99
+g0 values: 4.16998e+129
+g1 values: -1.21036e+208
+shape1 values: 5.02796e-233
+shape2 values: 2.87389e-308
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+xl values: -8.5119e-07
+xu values: -5.48117e-145
+j values: 1216778795
+loc values: 2.8069e+21
+RA values: 1.29739e+249
+RQ values: -9.21299e+154
+g0 values: 4.67404e+136
+g1 values: -7.54772e-97
+shape1 values: -5.86841e+80
+shape2 values: 2.48832e-18
+input ends
+INFO: Done fuzzing! Ran 6 tests (3 tests/second) with 0 failed/6 passed/0 abandoned tests

@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Installing Rsymphony solver package on Mac</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Installing Rsymphony solver package on Mac</h1>
+
+
+
+<p><br /></p>
+<div id="introduction" class="section level3">
+<h3>Introduction</h3>
+<p>Rsymphony is one of solver packages supported by TestDesign. As of Rsymphony version 0.1.28, Mac users may encounter error messages like below when trying to install the solver package from R.</p>
+<pre><code>* installing *source* package ‘Rsymphony’ ...
+** package ‘Rsymphony’ successfully unpacked and MD5 sums checked
+** using staged installation
+Cannot find SYMPHONY libraries and headers.
+See &lt;https://projects.coin-or.org/SYMPHONY&gt;.
+ERROR: configuration failed for package ‘Rsymphony’</code></pre>
+<p>This document describes a potential fix to this problem. An admin account is required.</p>
+<p>Or alternatively, <a href="https://www.bioconductor.org/packages/release/bioc/html/lpsymphony.html">lpsymphony</a> from Bioconductor repository is supported from TestDesign 1.0.0.</p>
+<p><br /> <br /></p>
+</div>
+<div id="install-symphony-libraries" class="section level3">
+<h3>Install SYMPHONY libraries</h3>
+<p>The cause of the error is that Rsymphony requires SYMPHONY libraries, but the libraries are not installed. The goal of this section is to install the libraries.</p>
+<p><strong>Step 1.</strong> Open the terminal from Launchpad. Switch to the admin account on your system by running the following line in the terminal prompt. Make sure to replace <code>username</code> with the actual username of the admin account. Type in the account password once prompted.</p>
+<pre><code>su username</code></pre>
+<p><strong>Step 2.</strong> Install the <code>homebrew</code> package manager by following the instructions on <a href="https://brew.sh/" class="uri">https://brew.sh/</a>. The purpose of this step is to allow installing SYMPHONY with it.</p>
+<p><strong>Step 3.</strong> Install SYMPHONY and its dependencies by running the following in terminal. Each line must be run separately.</p>
+<pre><code>brew tap coin-or-tools/coinor</code></pre>
+<pre><code>brew install symphony</code></pre>
+<pre><code>brew install pkg-config</code></pre>
+<pre><code>brew cask install gfortran</code></pre>
+<p>Rsymphony solver package should now be able to locate the SYMPHONY libraries. Retry installing the Rsymphony solver package in R.</p>
+<p>If the install fails, proceed to the next step.</p>
+<p><br /> <br /></p>
+</div>
+<div id="modify-the-rsymphony-solver-package-to-manually-point-to-symphony-libraries" class="section level3">
+<h3>Modify the Rsymphony solver package to manually point to SYMPHONY libraries</h3>
+<p><strong>Step 1.</strong> Install <code>wget</code> by running the following line in terminal. The purpose of this step is to allow downloading the package file directly from CRAN servers.</p>
+<pre><code>brew install wget</code></pre>
+<p><strong>Step 2.</strong> Run the following line in terminal to download the Rsymphony solver package.</p>
+<pre><code>sudo wget https://cran.revolutionanalytics.com/src/contrib/Rsymphony_0.1-28.tar.gz</code></pre>
+<p><strong>Step 3.</strong> Unpack the downloaded file by running the following line.</p>
+<pre><code>sudo tar -xzvf Rsymphony_0.1-28.tar.gz</code></pre>
+<p><strong>Step 4.</strong> Open the file <code>Rsymphony/configure</code> by running the following line. This opens <code>nano</code> text editor, with <code>-c</code> option to make it display the line numbers.</p>
+<pre><code>sudo nano -c ./Rsymphony/configure</code></pre>
+<p>Comment out lines 51-55 by inserting <code>#</code>s at the beginning of each line, as shown below. Save it as the same file with Control + O, and when prompted for file name to write press Enter. Exit <code>nano</code> with Control + X.</p>
+<pre><code>#if test ${status} -ne 0; then
+# echo &quot;Cannot find SYMPHONY libraries and headers.&quot;
+# echo &quot;See https://projects.coin-or.org/SYMPHONY.&quot;
+# exit 1
+#fi</code></pre>
+<p><strong>Step 5.</strong> Open the file <code>Rsymphony/src/R_symphony.cc</code> by running the following line.</p>
+<pre><code>sudo nano -c ./Rsymphony/src/R_symphony.cc</code></pre>
+<p>Change line 12 <code>#include &lt;coin/symphony.h&gt;</code> as shown below. Save it as the same file with Control + O, and when prompted for file name to write press Enter. Exit with Control + X.</p>
+<pre><code>#include &lt;symphony.h&gt;</code></pre>
+<p><strong>Step 6.</strong> Run the following line in terminal to install the modified Rsymphony package.</p>
+<pre><code>sudo R CMD install Rsymphony</code></pre>
+<p>This will make the Rsymphony solver package available in R.</p>
+<p>Do NOT run <code>install.packages(&#39;Rsymphony&#39;)</code> within R after Step 6. Doing so will trigger a re-install of the unmodified package.</p>
+<p>If Step 6 fails with <code>--lgfortran</code> error, proceed to the next step.</p>
+<p><br /> <br /></p>
+</div>
+<div id="tell-r-where-fortran-libraries-are-located" class="section level3">
+<h3>Tell R where Fortran libraries are located</h3>
+<p>The cause of the error is that R needs Fortran libraries to build the package, but it does not know where they are. They are already available on your system: when you installed SYMPHONY libraries in the previous step, it installed gcc library as a requirement, which contains Fortran libraries as well.</p>
+<p><strong>Step 1.</strong> Open the file <code>~/.R/Makevars</code> by running the following line.</p>
+<pre><code>sudo nano -c ~/.R/Makevars</code></pre>
+<p>The file will be empty in most cases. Add the following line to point R to the Fortran libraries. Save it as the same file with Control + O, and when prompted for file name to write press Enter. Exit with Control + X.</p>
+<pre><code>FLIBS = -L/usr/local/gfortran/lib -lgfortran -lquadmath -lm</code></pre>
+<p><strong>Step 2.</strong> Run the following line in terminal to install the modified Rsymphony package.</p>
+<pre><code>sudo R CMD install Rsymphony</code></pre>
+<p>This will make the Rsymphony solver package available in R.</p>
+<p>Do NOT run <code>install.packages(&#39;Rsymphony&#39;)</code> within R after Step 2. Doing so will trigger a re-install of the unmodified package.</p>
+<p><br /> <br /></p>
+</div>
+<div id="resources" class="section level3">
+<h3>Resources</h3>
+<p>For further reference, please refer to these following external links.</p>
+<ul>
+<li><a href="https://stackoverflow.com/questions/32129191/osx-installing-rsymphony-linking-headers-and-libs/37599406" class="uri">https://stackoverflow.com/questions/32129191/osx-installing-rsymphony-linking-headers-and-libs/37599406</a></li>
+<li><a href="https://stackoverflow.com/questions/42215523/installing-rsymphony-using-rstudio-on-macos" class="uri">https://stackoverflow.com/questions/42215523/installing-rsymphony-using-rstudio-on-macos</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

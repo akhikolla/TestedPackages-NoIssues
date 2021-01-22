@@ -1,0 +1,344 @@
+---
+title: "Markov Chain Analysis on Phylogenetic Trees"
+author: "Utkarsh J. Dang and G. Brian Golding"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+vignette: >
+  %\VignetteIndexEntry{Markov Chain Analysis on Phylogenetic Trees}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+
+---
+The *markophylo* package allows for estimating substitution rates using a user-specified, i.e., hypothesis driven, substitution rate matrix in a continuous-time markov chain model on phylogenies. The package is quite efficient, with the workhorse functions written in C++ (using the Rcpp and RcppArmadillo packages), and can analyze data on discrete characters like the following (among others):
+
+- Gene family presence/absence for closely related taxa to infer lateral gene transfer rates.
+- Intron presence/absence data.
+- Gene family size data.
+- Data needing birth/death models. 
+- Gene paralogue data to infer, for example, pseudogenization rates.
+
+The package contains five simulated data sets. These data illustrate the kinds of models that the package is capable of fitting to discrete character data recorded for multiple taxa (for which a phylogeny is supplied by the user). The *markophylo::estimaterates* function is flexible, capable of capturing the following processes/behaviour:
+
+- Substitution rate matrices can be automatically built based on user choice. Alternatively, custom user-specified rate matrices can be supplied.
+- A custom alphabet can be specified that must be character only or numeric only (mixing numeric and character classes will lead to errors).
+- Sites can be split into different partitions, each partition of sites is a group of sites following their own rates different from the sites in the other partitions.
+- Gamma rate variation can be specified: a common gamma distribution (with \eqn{\alpha=\beta}) over all partitions or separate gamma rates within each partition separately.
+- Clades or a group of branches can be specified that are hypothesized to follow rates different from other branches.
+- The discrete character frequencies at the root can be user-specified, equal for each character state, follow markov chain stationary probabilities, or be estimated using the maximum likelihood framework.
+- Correcting for multiple unobservable phyletic patterns, i.e., sampling (or acquisition or ascertainment) bias.
+
+## Contact
+If you have any questions or requests for a feature, drop me a line at <udang@binghamton.edu>.
+
+## Installation
+### CRAN
+The following commands installs *markophylo* binaries from the Comprehensive R Archive Network (CRAN):
+
+```{r,eval=FALSE}
+install.packages("markophylo", dependencies = TRUE, repos = "https://cran.r-project.org")
+```
+
+### Source package from CRAN
+install.packages("markophylo", dependencies = TRUE, repos = "https://cran.r-project.org", type = "source")
+
+### Source package from file
+Installing *markophylo* from the source distribution after downloading the package source from https://cran.r-project.org/package=markophylo/ can be done using the following commands:
+
+#### OS X Yosemite
+
+```{r,eval=FALSE}
+install.packages(c("Rcpp","RcppArmadillo","ape","phangorn",
+"numDeriv","knitr"), repos = "https://cran.r-project.org")
+
+install.packages("markophylo_1.0.2.tar.gz", repos = NULL, type = "source")
+```
+Make sure the version number of *markophylo* reflects the latest version on CRAN.
+
+If "-lgfortran" and/or "-lquadmath" errors are encountered on a OS X system, try unpacking gfortran-4.8.2-darwin13.tar.bz2 from https://r.research.att.com/libs/ into /usr/local. This issue has been known to occur in the past with *RcppArmadillo*. This is also mentioned in the *Rcpp* FAQs vignette on https://cran.r-project.org/package=Rcpp/index.html.
+
+#### Windows
+Installing an *R* package from source that requires compilation on Windows requires prior installation of *Rtools* from https://cran.r-project.org/bin/windows/Rtools/. Rtools contains *MinGW* compilers needed for building packages requiring compilation of *Fortran*, *C* or *C++* code. The PATH variable should be allowed to be modified during installation of Rtools. If the above is not allowed, following the installation of *Rtools*, the PATH variable must be set to include "RTools/bin" and "Rtools/gcc-x.y.z/bin", where "x.y.z" refers to the version number of gcc. Then,
+
+```{r,eval=FALSE}
+install.packages(c("Rcpp","RcppArmadillo","ape","phangorn",
+"numDeriv","knitr"), repos = "https://cran.r-project.org")
+
+install.packages("markophylo_1.0.2.tar.gz", repos = NULL, type = "source")
+```
+Make sure the version number of *markophylo* reflects the latest version on CRAN.
+
+## Illustration 1
+### Fitting a simple model and evaluating the results.
+
+Load the package and data *simdata1*.
+
+```{r, fig.show='asis',fig.align = 'center'} 
+library(markophylo)
+data(simdata1)
+```
+Now, inspect the tree and the substitution rate matrix used to simulate data in *simdata1*.
+```{r, fig.show='asis',fig.align = 'center'} 
+ape::plot.phylo(simdata1$tree, edge.width = 2, show.tip.label = FALSE, no.margin = TRUE)
+ape::nodelabels(frame = "circle", cex = 0.7)
+ape::tiplabels(frame = "circle", cex = 0.7)
+print(simdata1$Q)
+```
+In this example, *Q* is a standard substitution rate matrix used to simulate two character states data for the tips of the phylogeny. Here, equal character frequencies were assumed at the root during simulation. Confirming the number of character states and inspecting the character frequencies at the tips of the phylogeny is straightforward.
+```{r}
+print(table(simdata1$data))
+```
+Now, using the function *estimaterates* from the *markophylo* package, we will estimate a substitution rate matrix from this data. The *modelmat* argument represents the number of unique rates to be fit using a 2-dimensional matrix, with the diagonals left as NA (see section on creating *modelmat* below). The model can be fitted in one of two ways:
+```{r}
+model1 <- estimaterates(usertree = simdata1$tree, userphyl = simdata1$data, 
+                        alphabet = c(1, 2), rootprob = "equal", 
+                        modelmat = matrix(c(NA, 1, 2, NA), 2, 2))
+print(model1)
+```
+OR
+```{r,eval=FALSE}
+model1 <- estimaterates(usertree = simdata1$tree, userphyl = simdata1$data, 
+                        alphabet = c(1, 2), rootprob = "equal", 
+                        modelmat = "ARD")
+print(model1)
+```
+The second code block is using the "ARD" option for *modelmat* which automatically uses a two state substitution rate matrix here with two rates to be estimated. The output from printing *model1* (which is an object of class 'markophylo') is self-explanatory. The estimated rates (given as an array in *$rates*) and the standard errors (both indexed according to the parameter index matrix) are output. The log-likelihood at the maximum likelihood estimates along with the values of the model selection criteria (Akaike information criterion and Bayesian information criterion) are also provided. Because we did not specify *a priori* any clades to be fit with their own unique rates, these estimates are homogenous over the tree. This is also reflected in the one component list output under "Groups of nodes with the same rates". Note that the *model1* object is of class *markophylo*.
+```{r}
+print(class(model1))
+```
+Among other things, *model1* contains the number of unique patterns observed that can be retreived using `model1$w`. As expected, for binary discrete characters for four taxa, there are `2^4` unique patterns. These patterns can also be calculated by providing the data set directly to the *patterns* function.
+```{r, echo=FALSE, results='asis'}
+knitr::kable(model1$w, row.names = NA, col.names = c("Number of Times Pattern Observed") )
+```
+
+### Correcting for unobservable patterns 
+
+It is often very important to correct for sampling bias (aka acquisition or ascertainment bias). This could be important in many diverse scenarios and has been corrected for in many previous methodologies. For example, this correction has been used in the following cases:
+
+ - Analysis of restriction site data (Felsenstein, 1992).
+ - Only characters that are non-constant were recorded in the data (Lewis, 2001). 
+ - Ancient genes that are lost from all taxa of interest cannot be observed at the tips (Hao and Golding, 2006).
+ - A gene family does not appear in the COG database unless it occurs in at least three genomes (Cohen and Pupko, 2010). 
+ 
+In such a case, certain character patterns for the taxa of interest are not available in the data. For example, let's see what happens if we estimate the rates of interest on the data used above in Illustration 1 that was filtered to remove all non-variable character patterns. 
+```{r}
+filterall1 <- which(apply(simdata1$data, MARGIN = 1, FUN = 
+                            function(x) isTRUE(all.equal(as.vector(x), c(1, 1, 1, 1)))))
+filterall2 <- which(apply(simdata1$data, MARGIN = 1, FUN = 
+                            function(x) isTRUE(all.equal(as.vector(x), c(2, 2, 2, 2)))))
+filteredsimdata1 <- simdata1$data[-c(filterall1, filterall2), ]
+model1_f <- estimaterates(usertree = simdata1$tree, userphyl = filteredsimdata1,
+                          alphabet = c(1, 2), rootprob = "equal", 
+                          modelmat = "ARD")
+print(model1_f)
+```
+Clearly, there is a big difference as compared to the output from earlier. However, it is easy to correct for such sampling bias using the *estimaterates* function by providing a matrix with each row representing a unique unobservable pattern in the data. Here, a matrix with 2 rows, the first row all ones, and the second row all twos is supplied to the *unobserved* argument.
+```{r}
+model1_f_corrected <- estimaterates(usertree = simdata1$tree, userphyl = filteredsimdata1, 
+                                    unobserved = matrix(c(1, 1, 1, 1, 2, 2, 2, 2), nrow = 2, 
+                                                        byrow = TRUE), alphabet = c(1, 2), 
+                        rootprob = "equal", modelmat = "ARD")
+print(model1_f_corrected)
+```
+
+##Illustration 2: branch rate heterogeneity
+
+Here, a more complicated model is fit with certain clades following rates separate from the rest of the tree. While simulating the data found in *simdata2*, the clade with node 7 as its most recent common ancestor (MRCA) was constrained to have twice the substitution rates as the rest of the branches in the tree.
+```{r}
+data(simdata2)
+print(simdata2$Q)
+print(table(simdata2$data))
+```
+While fitting the model, we hypothesize that the clade with node 7 as its most recent common ancestor (MRCA) follows substitution rates unique from the rest of the tree.
+```{r}
+model2 <- estimaterates(usertree = simdata2$tree, userphyl = simdata2$data, 
+                        alphabet = c(1, 2), bgtype = "ancestornodes", bg = c(7),
+                        rootprob = "equal", modelmat = "ARD")
+print(model2)
+```
+This could also have been accomplished by providing a list with each component representing the node labels, i.e., group of branches, that follow the same rate(s). The node labels can be seen with 
+```{r, fig.show='asis',fig.align = 'center'} 
+ape::plot.phylo(simdata2$tree, edge.width = 2, show.tip.label = FALSE, no.margin = TRUE)
+ape::nodelabels(frame = "circle", cex = 0.7)
+ape::tiplabels(frame = "circle", cex = 0.7)
+```
+Now,
+```{r}
+model2_2 <- estimaterates(usertree = simdata2$tree, userphyl = simdata2$data, 
+                        alphabet = c(1, 2), bgtype = "listofnodes", bg = list(c(3,4,7),c(1,2,5,6,7)),
+                        rootprob = "equal", modelmat = "ARD")
+print(model2_2)
+```
+In the output, groups of nodes that delimit the branches that follow the same rates (within groups) are displayed as two vector components of an array. The estimated rates then follow the ordering of these components. Generally, the output rates in the first column are the estimated rates (as indexed by the parameter index matrix) for the first group, the second column for the second group, and so on. To get a visual confirmation of the different branches following their own unique rates, the following command can be used:
+```{r, fig.show='asis',fig.align = 'center'}
+plottree(model2, colors=c("blue", "darkgreen"), edge.width = 2, show.tip.label = FALSE, 
+         no.margin = TRUE)
+ape::nodelabels(frame = "circle", cex = 0.7)
+ape::tiplabels(frame = "circle", cex = 0.7)
+```
+
+##Illustration 3: partition models.
+
+Here, a partition analysis is carried out. Nucleotide data was simulated such that the first half of sites followed substitution rates different from the other half of sites. Data was simulated in the two partitions with rates $0.33$ and $0.99$. While specifying the model, a list of two components then needs to be supplied to the function. To specify the partition with the two matrices, `list(c(1:2500), c(2501:5000))` can be used. Note also that our alphabet here consists of the four nucleotide bases.
+```{r}
+data(simdata3)
+print(dim(simdata3$data))
+print(table(simdata3$data))
+model3 <- estimaterates(usertree = simdata3$tree, userphyl = simdata3$data, 
+                        alphabet = c("a", "c", "g", "t"), rootprob = "equal", 
+                        partition = list(c(1:2500), c(2501:5000)), 
+                        modelmat = "ER")
+print(model3)
+```
+
+##Illustration 4: rate variation using the gamma distribution and estimating root probabilities.
+
+Here, an analysis with gamma rate variation is carried out. Data was simulated using a gamma rate distribution with the shape parameter set to $2$. The overall rate was $0.33$ while the prior root probabilities used for the simulation were `(0.15, 0.35, 0.25, 0.25)'`. While specifying the model, the "discgamma" option is used for the *ratevar* argument with 4 categories specified in *nocat*. This specifies a discrete gamma approximation that approximates the integral (that would be needed in the likelihood if the continuous gamma distribution was used) at each site by numerical integration. Moreover, instead of assuming equal or stationary root frequencies, or providing user-specified root probabilities, the root probabilities are estimated using maximum likelihood.
+
+```{r}
+data(simdata4)
+print(table(simdata4$data))
+model4 <- estimaterates(usertree = simdata4$tree, userphyl = simdata4$data, 
+                        alphabet = c("a", "c", "g", "t"), rootprob = "maxlik",
+                        ratevar = "discgamma", nocat = 4, 
+                        modelmat = "ER")
+print(model4)
+```
+### Correcting for unobservable patterns 
+
+Here, let's see what happens if we estimate the rates of interest on a filtered version of the data used above in Illustration 4. First, the data is filtered to remove all patterns where only "a" was recorded or "g" was recorded more than three times (i.e., three or four times). Note that this arbitrary filtering is done simply to illustrate the ease of adjusting for unobservable data patterns.
+```{r}
+filteralla <- which(apply(simdata4$data, MARGIN = 1, FUN = 
+                            function(x) isTRUE(all.equal(as.vector(x), 
+                                                         c("a", "a", "a", "a")))))
+filterg3 <- which(apply(simdata4$data, MARGIN = 1, FUN = 
+                          function(x) table(x)["g"] >= 3) )
+filteredsimdata4 <- simdata4$data[-c(filteralla, filterg3), ]
+dim(simdata4$data)
+dim(filteredsimdata4)
+```
+Now, construct a matrix with all possible combinations (```4^4```) of the states (alphabet) for four taxa. Using this matrix of all patterns, figure out the set of unique unobservable patterns.
+```{r, results = "hide"}
+alphabet <- c("a", "c", "g", "t")
+allpatt <- expand.grid(alphabet, alphabet, alphabet, alphabet) #all possible combinations
+unob_patt_index_1 <- which(apply(allpatt, MARGIN = 1, FUN = function(x) table(x)["g"] >= 3) )
+unob_patt_index_2 <- which(apply(allpatt, MARGIN = 1, FUN = function(x) 
+  isTRUE(all.equal(as.vector(x), c("a", "a", "a", "a"))) ) )
+unob_patt_indices <- sort(union(unob_patt_index_1, unob_patt_index_2)) #Ordered indices.
+unob_patt <- allpatt[unob_patt_indices, ] #matrix of unique patterns
+```
+Finally, this matrix of unique patterns can be passed to the *unobserved* argument.
+```{r}
+model4_f_corrected <- estimaterates(usertree = simdata4$tree, userphyl = filteredsimdata4, 
+                                    unobserved = unob_patt,
+                        alphabet = c("a", "c", "g", "t"), rootprob = "maxlik", 
+                        ratevar = "discgamma", nocat = 4, 
+                        modelmat = "ER")
+print(model4_f_corrected)
+```
+
+##Illustration 5: partition models with separate rate variation in each partition.
+
+Here, simulated data akin to codon data is analyzed. The data can be organized into triplets, with the first two positions following the same substitution rates different from the third position. The data was simulated under the assumption of gamma rate variation with the shape parameters set to $2$ and $0.75$ for the set of first two positions and last position, respectively. The overall rate was $0.33$. The ancestral sequence had the following character frequencies: `(0.15, 0.35, 0.25, 0.25)'`. If a common gamma distribution over partitions is assumed, "discgamma" should be supplied as the value for argument *ratevar*. Here, for the model to be fit, a different gamma rate distribution is assumed in each partition using "partitionspecificgamma" as the value for argument *ratevar*. Hence, a list of two components needs to be specified for argument *partition*. This can easily be done, for example, the following can be used to specify partitions for $15$ sites in total with the first (second) component being a vector of the first two (last) positions of triplets.
+```{r}
+list((1:15)[-seq(3, 15, by = 3)], seq(3, 15, by = 3) )
+```
+Moreover, the root probabilities are estimated using maximum likelihood:
+```{r}
+data(simdata5)
+print(dim(simdata5$data))
+print(table(simdata5$data))
+model5 <- estimaterates(usertree = simdata5$tree, userphyl = simdata5$data, 
+                        alphabet = c("a", "c", "g", "t"), rootprob = "maxlik", 
+                        partition = list((1:6000)[-seq(3, 6000, by = 3)], 
+                                         seq(3, 6000, by = 3) ),
+                        ratevar = "partitionspecificgamma", nocat = 4, 
+                        modelmat = "ER")
+print(model5)
+```
+
+##Illustration 6: importing data and fitting a birth death model.
+Import some simulated data and tree from the web. There are 5000 discrete character patterns (four states in total: 1, 2, 3, and 4) for ten taxa. The data was simulated using a birth death model with rates 1 and 2 and equal base frequencies.
+```{r}
+mp_data <- read.table("https://raw.githubusercontent.com/ujdang/miscellaneous/master/mp_example_data", header = TRUE)
+mp_tree <- ape::read.tree("https://raw.githubusercontent.com/ujdang/miscellaneous/master/mp_example_tree")
+mp_model <- estimaterates(usertree = mp_tree, userphyl = mp_data,
+                        alphabet = c(1, 2, 3, 4), rootprob = "equal",
+                        modelmat = "BD")
+print(mp_model)
+```
+Of course, we could also have estimated the root probabilities easily as seen before.
+```{r}
+mp_model_2 <- estimaterates(usertree = mp_tree, userphyl = mp_data,
+                        alphabet = c(1, 2, 3, 4), rootprob = "maxlik",
+                        modelmat = "BD")
+print(mp_model_2)
+```
+Notice the slightly better log-likelihood (at the MLEs) value for the latter model. However, in this case, both the BIC and the AIC (higher is better here) indicate that the former model is the better fitting (more parsimonious) model.
+
+## Specifying custom *modelmat*
+
+Can be one of two options: pre-built or user-specified. For the pre-built matrices, a four state matrix is used for the following examples. The dimensionality of the matrix is automatically inferred from the alphabet option.
+
+* "ER" for an equal rates matrix, e.g., 
+```{r}
+matrix(c(NA, 1, 1, 1, 1, NA, 1, 1, 1, 1, NA, 1, 1, 1, 1, NA
+), nrow = 4, ncol = 4)
+```
+* "SYM" for a symmetric matrix, e.g., 
+```{r}
+matrix(c(NA, 1, 2, 3, 1, NA, 4, 5, 2, 4, NA, 6, 3, 5, 6, NA
+), 4,4)
+```
+* "ARD" for an all rates different matrix, e.g., 
+```{r}
+matrix(c(NA, 1, 2, 3, 4, NA, 5, 6, 7, 8, NA, 9, 10, 11, 12, 
+NA), 4, 4)
+```
+* "GTR" for a general time reversible model. This sets reversible to be TRUE, rootprob to be "maxlik", and the rate matrix supplied to the function is symmetric. The estimated rate matrix can be written as the product of a symmetric matrix multiplied by a diagonal matrix (consisting of the likelihood estimated root probabilities).
+* "BD" for a standard birth death matrix, e.g., 
+```{r}
+matrix(c(NA, 1, 0, 0, 2, NA, 1, 0, 0, 2, NA, 1, 0, 0, 2, NA
+), 4, 4)
+```
+* "BDER" for a standard birth death matrix, e.g., 
+```{r}
+matrix(c(NA, 1, 0, 0, 1, NA, 1, 0, 0, 1, NA, 1, 0, 0, 1, NA
+), 4, 4)
+```
+* "BDSYM" for a standard birth death matrix, e.g., 
+```{r}
+matrix(c(NA, 1, 0, 0, 1, NA, 2, 0, 0, 2, NA, 3, 0, 0, 3, NA
+), 4, 4)
+```
+* "BDARD" for an all rates different birth death matrix, e.g., 
+```{r}
+matrix(c(NA, 1, 0, 0, 4, NA, 2, 0, 0, 5, NA, 3, 0, 0, 6, NA
+), 4, 4)
+```
+
+A square matrix can also be input that consists of integer values denoting the indices of the substitution rates to be estimated. Any arbitrary square matrix can be supplied where the zero entries denote substitutions that are not permitted, and the unique non-zero integer entries denote the rates that must be estimated. 
+
+In the following example inspired by gene copy loss, genes are lost (going from 1 copy to none, or 2 copies to 1) at the same instantaneous rate characterized by the index 1. On the other hand, losing both copies instantaneously is characterized by its own separate rate indexed by 2. Note that gene gain is not allowed here in this hypothetical example.
+```{r}
+m <- matrix(c(NA, 1, 2, 0, NA, 1, 0, 0, NA), 3, 3)
+rownames(m) <- colnames(m) <- c("Absent", "1 copy", "2 copies")
+print(m)
+```
+
+Birth-death matrices can also be easily supplied by using the modelmat options ("BD","BDER","BDSYM", and "BDARD") discussed above. However, they are also easily built. In the following, a transition from character state 2 (row) to character state 1 (column) happens at a unique instantaneous rate (the death rate) denoted by the matrix entry 1. Similarly, the transition from character states 3 to 2, 4 to 3, or 5 to 4 are all characterized by the same instantaneous rate. Similarly, a transition from character state 1 to character state 2 (or 2 to 3, or 3 to 4, or 4 to 5) happens at a unique instantaneous rate (the birth rate).
+```{r}
+m <- matrix(0, 5, 5)
+diag(m) <- NA
+diag(m[-1, ]) <- 1
+diag(m[, -1]) <- 2
+print(m)
+```
+
+References:
+
+ - Felsenstein, J. (1992). Phylogenies from restriction sites: A maximum-likelihood approach. *Evolution*, 159--173.
+ - Lewis, P. O. (2001). A likelihood approach to estimating phylogeny from discrete morphological character data. *Systematic Biology*, 50, 913--925.
+ - Hao, W., & Golding, G. B. (2006). The fate of laterally transferred genes: life in the fast lane to adaptation or death. *Genome Research*, 16, 636--643.
+ - Cohen, O., & Pupko, T. (2010). Inference and characterization of horizontally transferred gene families using stochastic mapping. *Molecular Biology and Evolution*, 27, 703--713.

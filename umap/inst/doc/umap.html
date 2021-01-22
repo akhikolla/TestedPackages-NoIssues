@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Uniform Manifold Approximation and Projection in R</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Uniform Manifold Approximation and Projection in R</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#overview">Overview</a><ul>
+<li><a href="#creating-a-projection">Creating a projection</a></li>
+<li><a href="#projecting-new-data">Projecting new data</a></li>
+</ul></li>
+<li><a href="#tuning">Tuning</a><ul>
+<li><a href="#configuration-objects">Configuration objects</a></li>
+<li><a href="#additional-arguments">Additional arguments</a></li>
+<li><a href="#input-types">Input types</a></li>
+</ul></li>
+<li><a href="#stability-and-reproducibility">Stability and reproducibility</a><ul>
+<li><a href="#initial-embedding">Initial embedding</a></li>
+<li><a href="#prediction">Prediction</a></li>
+</ul></li>
+<li><a href="#implementations">Implementations</a></li>
+<li><a href="#appendix">Appendix</a></li>
+</ul>
+</div>
+
+<style>
+h1.title {
+  margin-top: 1em;
+  margin-bottom: 1.5em;
+}
+h2 {
+  font-size: 26px;
+}
+h3 {
+  font-size: 22px;
+}
+h2, h3 {
+  margin-top: 2em;
+  margin-bottom: 0.7em;
+}
+p {
+  font-size: 17px;
+  margin-bottom: 0.7em;
+}
+pre {
+  font-size: 16px;
+  line-height: 1.35;
+}
+body {
+  max-width: 800px;
+}
+</style>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Uniform Manifold Approximation and Projection (UMAP) is an algorithm for dimensional reduction. Its details are described by <a href="https://arxiv.org/abs/1802.03426">McInnes, Healy, and Melville</a> and its official implementation is available through a python package <a href="https://github.com/lmcinnes/umap">umap-learn</a>. The R package <code>umap</code> described in this vignette is a separate work that provides two implementations for using UMAP within the R environment. One implementation is written from-scratch and another links to the official umap-learn. (Another R package, <a href="https://CRAN.R-project.org/package=uwot">uwot</a>, provides a separate implementation with a slightly different interface).</p>
+<p>The vignette covers basic usage, tuning, stability and reproducibility, and discusses toggling between different implementations. Throughout, the vignette uses a small dataset as an example, but the package is suited to processing larger data with many thousands of data points.</p>
+</div>
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>For a practical demonstration, let’s use the <a href="https://en.wikipedia.org/wiki/Iris_flower_data_set">Iris dataset</a>.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">head</span>(iris, <span class="dv">3</span>)</a></code></pre></div>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width Species
+## 1          5.1         3.5          1.4         0.2  setosa
+## 2          4.9         3.0          1.4         0.2  setosa
+## 3          4.7         3.2          1.3         0.2  setosa</code></pre>
+<p>The first four columns contain data and the last column contains a label. It will be useful to separate those components.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">iris.data =<span class="st"> </span>iris[, <span class="kw">grep</span>(<span class="st">&quot;Sepal|Petal&quot;</span>, <span class="kw">colnames</span>(iris))]</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2">iris.labels =<span class="st"> </span>iris[, <span class="st">&quot;Species&quot;</span>]</a></code></pre></div>
+<div id="creating-a-projection" class="section level3">
+<h3>Creating a projection</h3>
+<p>Let’s load the <code>umap</code> package and apply the UMAP transformation.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" data-line-number="1"><span class="kw">library</span>(umap)</a>
+<a class="sourceLine" id="cb4-2" data-line-number="2">iris.umap =<span class="st"> </span><span class="kw">umap</span>(iris.data)</a></code></pre></div>
+<p>The output is an object and we can get a summary of its contents by printing it.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">iris.umap</a></code></pre></div>
+<pre><code>## umap embedding of 150 items in 2 dimensions
+## object components: layout, data, knn, config</code></pre>
+<p>The main component of the object is ‘layout’, which holds a matrix with coordinates.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">head</span>(iris.umap<span class="op">$</span>layout, <span class="dv">3</span>)</a></code></pre></div>
+<pre><code>##          [,1]      [,2]
+## [1,] 15.95804 -1.418806
+## [2,] 17.80407 -1.531492
+## [3,] 17.59992 -2.239721</code></pre>
+<p>These coordinates can be used to visualize the dataset. (The custom plot function, <code>plot.iris</code>, is available at the end of this vignette.)</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="kw">plot.iris</span>(iris.umap, iris.labels)</a></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAeAAAAHgCAMAAABKCk6nAAAAElBMVEUAAAAXvs+qqqrjd8L/fwD///+43GPAAAAACXBIWXMAABcRAAAXEQHKJvM/AAAK60lEQVR4nO3d23aizAIAYdjI+7/yXhMV+gAGkD6k/qqLiVFA4pcGVOIMs6EbWq+AlU1geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMLwKwENwH0Pwdbk+uzD8lC/o893sTTH8Pm+2Ip9mGTYu7Uzw6/2Wf/gr3MNh4CEGzlZN4AvVuIdd4Od3q+s8RFOdW7fdqY8vZogu/A58YIL/BnD+O/8cbjnwEE61jOfXv6+vwzpWh/WKZQQvw/895fOb8K6GOd5AvK8OtyDRVNHkw7KqQ3bbzzKCtYq/ZBc290T3Vhx4+B14efS3gd+PY8AXAA/v2aJN9M+VwQ2rRfQ78J44+B2Z46mH8E6DdV9WYmNR6VoF36VLBIzgeNeYAL/HUzLlAh7MNAQTRMDhrMsc6Q3rTv/58EeLX2+LVnNB39Af8qVHi9q4OVr7+McoWR3g+JF7X7s8HkMyZTbC5hh4+Rovbh36MUZ0IfrtSBaVAG9PnvwiRg/g9lrl3yWLLlnpe4gHS/qzB1/CKZOD6Pege23bggWFoFvA8Sb6MvDGJnq9lD9JSNcqfCBeU3A20RsPzvvrypYO23SlwtG7eZAVA4eP4jJbOM814HxghiuULipez+Uniw4ChuIPfwfA0dHoAeB5Hc3L70i8iV58oyvncJ5sXT4DZ2uTLiFb1JCvUb72Gz/p/RW+h/DBDi+sP/9yKWGJl5JpxY/+JvCczPIlcHRjMk8OnN+8v/ZFawMceB0BnneAs+PVYEFbwEM4Tzz+to6i3xe3jqLjS9mifgOOpUtWGji9m2RDnO4+k5G0zhXM8H6i+b6QLCR4sJcd3vILke7A5/Dq6JoI8fNB1ubz4OjOg++S58FD9rPeXNnlZ5vm4NGMd0/RlB+Al2Oa5RhlCHbk62M3BDcEWiHkECw+J4+mCg0T4Pi2OVurIfxunXiF/vT43VD5bYQ1TWB4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwjgH/zzrsPuDWP4ltdifwoWVZzQSGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwysK/Di7NnZ75YAfz+5YsF2vGPDjcUhY4MKVAn48jgkLXLj6wMHHMAYf4TdkN9ktVQcOPnUz/LzVIbwp/NBK+65CwI994Oc/EWxwObjJ7qjJCJ7nbeDw41gPrZb9Wqt98PJhvvMKHP1XBYdWy36tyVF08N9MRMDBTQLfVPXnwe6D61b9lazkUHn7KNpN9G3Vf7MhfrK78zzY50l35btJ8ASGJzA8geEJDE9geALDExiewPAEhicwPIHh9QSc34nvOHxdUeDp3LoIXKBywNOzC+t08m7tU8WAp+kGYYG/rhTwNG0LD+splM8399//hf1ydkd0OsCcTGhnqw38PjdnOfF9vfA+P+tlvQBHznayNsDJudDr2Xb5KXlbJ03b8QoBT/vAidv7uuDbeRP40HpaWvURHOx1l/3uug8W+O6aAAcLXBY8DAKXqClw4Pf7PvjQelpa/efB6/nQwVOjA0fRh9bT0hq8khXudtN9cHpafDqhna2nNxusQALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIZXFHg8vsBh/yb7pnLA47ODCxS4UMWAx/GzsNWpFPA4KtxFtYHff9kwBKdXLmdfBedu+OH+N1V9BL9OyHqdORuemxV+yv/rJC1PeP+6QsDjZ+Dl5Lro/Mngpue16ymXdrX6I3hIFOeNE2TDuxP4q+ofZA3hebG/APvh/l/XBHg+COwm+vvqPw8+DOw++I7qv5I1DCFw8qcMwd8x+OH+t9TgzYYQMn4evF7vh/vfVRfvJklYrtbA7mYL1xzYF6vK1hrYl5sL1xzYyiYwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzC8zoDHr5dgcV0Bj//6chkW1xPwOCp8ex0CK3xnHQGPAheoH+BxVLhA3QCPo8IlEhheL8CjwGUSGF4fwOMocKG6AE59Bb6vLoEvLsY2agz8YylvwZoCPz0dvyVrCZztegW+v/6Azy3DfqkhsLo16gf41Lx2NIHhtQPWt0rNgN391klgeK2APYCulMDwBIbXCFjfWnUygo/PaOfqBFjhUvUCrHChunkefGJWO5EjGJ4jGJ7A8Hp5N+nMnHaiTt4PPjWjnaiPc7LOzWcn6gL43Gx2pvbnRQtctLZ/2SBw8Vr/6Yq+hevij8+sXALDExiewPDavRZ9Ylq7Xstzsg5PbddrA+zz32oJDK8JsC9R1ssRDE9geB5Fw/OFDngCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGF41YF95blMl4NebC9PP5UP3aPdUB/j19uA0jZPvI9WtKrB/L1q/KsCZr8LVajSCBa5VqxGscKVqAG/5ClwpgeFVAN70Ffhaj7MzVACeBL6px0/n5mm1iT68gvbu8e7UXDWA0yE8TYdXz5Ye/QInwpPAV+oaePpBFfiLHh0DT88cwV/0+APAs7vg6/UMPCXAx1fOXj0u+9YcwZN/U3ixx+O6cFXg2Y3zpR5fCNcEfinbyVLf7oBjYYlP1znwlHV89exffQPnvgqfTWB63QJPm74Kn+36Rroo8Dauwhe6fCRdEviDr8Any4CPCgv8R+oQ+JOvwBf6BXjb3BH8d8rG8CO7MZ+pEfChO7WofDcckO6O6yZH0a9bD92zvdsGfpnubrmbATuQT7bn+2O6v28u+0LHPrCb6tP1CJy9VRgP4NfFQ2tgfQLP2xvj1dyBfLhd4JQ7rNWn7HhUfaHYcX88hwn8x8qBP5+S1+xzsp6wo8Bn29zx7hO3+yC06XUq/Pvw68y8/+kWxd19clhL4PUvHRzGl+obeM6AFT5b38BjBqzw2boGnnNgiU/294AVPlfHR9HzS9hnxN+3y9v686KnvLOLsH/t+jb/QPBNYZXPtuvbHPjDO4p2oh3eDoD3iC8tyrI6AN4WvrYoS+sB2IOtgvUB7J+YFqsT4Fz4+qIsrBdgzwAoVDfAc2z83ZJsqSfgWeD76wr4XwLfW3fAnkd7b/0B260JDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMYnsDwBIYnMDyB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQzvXmDrMIHh3QdsfzeB4QkMT2B4AsMTGJ7A8ASGJzA8geEJDE9geALDExiewPAEhicwPIHhCQxPYHgCwxMY3v8Bur01I3y0e/cAAAAASUVORK5CYII=" /><!-- --></p>
+</div>
+<div id="projecting-new-data" class="section level3">
+<h3>Projecting new data</h3>
+<p>Once we have a ‘umap’ object describing an embedding of a dataset into a low-dimensional layout, we can project other data onto the same manifold.</p>
+<p>To demonstrate this, we need a second dataset with the same data features as the training data. Let’s create such data by adding some noise to the original.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1">iris.wnoise =<span class="st"> </span>iris.data <span class="op">+</span><span class="st"> </span><span class="kw">matrix</span>(<span class="kw">rnorm</span>(<span class="dv">150</span><span class="op">*</span><span class="dv">40</span>, <span class="dv">0</span>, <span class="fl">0.1</span>), <span class="dt">ncol=</span><span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"><span class="kw">colnames</span>(iris.wnoise) =<span class="st"> </span><span class="kw">colnames</span>(iris.data)</a>
+<a class="sourceLine" id="cb10-3" data-line-number="3"><span class="kw">head</span>(iris.wnoise, <span class="dv">3</span>)</a></code></pre></div>
+<pre><code>##   Sepal.Length Sepal.Width Petal.Length Petal.Width
+## 1     5.183373    3.525821     1.515123   0.3285499
+## 2     4.872395    3.096451     1.467537   0.2094982
+## 3     4.664500    3.150872     1.421417   0.2190057</code></pre>
+<p>We can now arrange these perturbed observations onto the same layout as before. Following R’s design pattern for fitted models, this is performed via <code>predict</code>.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1">iris.wnoise.umap =<span class="st"> </span><span class="kw">predict</span>(iris.umap, iris.wnoise)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">head</span>(iris.wnoise.umap, <span class="dv">3</span>)</a></code></pre></div>
+<pre><code>##       [,1]      [,2]
+## 1 15.30520 -1.921424
+## 2 18.09914 -1.361412
+## 3 17.47446 -2.782222</code></pre>
+<p>The output is a matrix with coordinates. We can visualize these points alongside the original.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" data-line-number="1"><span class="kw">plot.iris</span>(iris.umap, iris.labels)</a>
+<a class="sourceLine" id="cb14-2" data-line-number="2"><span class="kw">plot.iris</span>(iris.wnoise.umap, iris.labels, <span class="dt">add=</span>T, <span class="dt">pch=</span><span class="dv">4</span>, <span class="dt">legend.suffix=</span><span class="st">&quot; (with noise)&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The new observations lie close to their original counterparts.</p>
+</div>
+</div>
+<div id="tuning" class="section level2">
+<h2>Tuning</h2>
+<p>The example above uses function <code>umap</code> with a single argument - the input dataset - so the embedding is performed with default settings. However, the algorithm can be tuned via configuration objects or via additional arguments.</p>
+<div id="configuration-objects" class="section level3">
+<h3>Configuration objects</h3>
+<p>The default configuration object is called <code>umap.defaults</code>. This is a list encoding default values for all the parameters used by the algorithm.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1">umap.defaults</a></code></pre></div>
+<pre><code>## umap configuration parameters
+##            n_neighbors: 15
+##           n_components: 2
+##                 metric: euclidean
+##               n_epochs: 200
+##                  input: data
+##                   init: spectral
+##               min_dist: 0.1
+##       set_op_mix_ratio: 1
+##     local_connectivity: 1
+##              bandwidth: 1
+##                  alpha: 1
+##                  gamma: 1
+##   negative_sample_rate: 5
+##                      a: NA
+##                      b: NA
+##                 spread: 1
+##           random_state: NA
+##        transform_state: NA
+##                    knn: NA
+##            knn_repeats: 1
+##                verbose: FALSE
+##        umap_learn_args: NA</code></pre>
+<p>For a description of each field, see the documentation in <code>help(umap.defaults)</code> or the original publication.</p>
+<p>To create a custom configuration, we can make a copy of the default object and then update its fields. For example, let’s change the seed for random number generation.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">custom.config =<span class="st"> </span>umap.defaults</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">custom.config<span class="op">$</span>random_state =<span class="st"> </span><span class="dv">123</span></a></code></pre></div>
+<p>We can observe the changed settings by inspecting the object again (try it). To perform the UMAP projection with these settings, we can run the projection again and provide the configuration object as a second argument.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" data-line-number="1">iris.umap.config =<span class="st"> </span><span class="kw">umap</span>(iris.data, <span class="dt">config=</span>custom.config)</a>
+<a class="sourceLine" id="cb18-2" data-line-number="2"><span class="kw">plot.iris</span>(iris.umap.config, iris.labels,</a>
+<a class="sourceLine" id="cb18-3" data-line-number="3">          <span class="dt">main=</span><span class="st">&quot;Another UMAP visualization (different seed)&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+<p>The result is slightly different than before due to a new instantiation of the random number generator.</p>
+</div>
+<div id="additional-arguments" class="section level3">
+<h3>Additional arguments</h3>
+<p>Another way to customize the algorithm is to specify the parameter values one-by-one as arguments to the function call. The command below achieves equivalent results to the above.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1">iris.umap.args =<span class="st"> </span><span class="kw">umap</span>(iris.data, <span class="dt">random_state=</span><span class="dv">123</span>)</a></code></pre></div>
+<p>The coordinates in this output object should match the ones from <code>iris.umap.config</code> (check it!).</p>
+<p>Behind the scenes, the <code>umap</code> function call extracts most of the parameter values from the default configuration, and then replaces the value of <code>random_state</code> with the newly specified value. It is also possible to use a custom configuration and parameter values together.</p>
+</div>
+<div id="input-types" class="section level3">
+<h3>Input types</h3>
+<p>All the examples above apply the umap transformation on a raw dataset. The first stage in the algorithm is the calculation of nearest neighbors and distances between them. In cases when these distances or nearest neighbors are known a-priori, the <code>umap</code> function can start with those inputs instead.</p>
+<p>To use a distance matrix instead of raw data, we can set the <code>input</code> argument to ‘dist’.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" data-line-number="1">iris.dist =<span class="st"> </span><span class="kw">as.matrix</span>(<span class="kw">dist</span>(iris.data))</a>
+<a class="sourceLine" id="cb20-2" data-line-number="2">iris.umap.dist =<span class="st"> </span><span class="kw">umap</span>(iris.dist, <span class="dt">config=</span>custom.config, <span class="dt">input=</span><span class="st">&quot;dist&quot;</span>)</a>
+<a class="sourceLine" id="cb20-3" data-line-number="3">iris.umap.dist</a></code></pre></div>
+<pre><code>## umap embedding of 150 items in 2 dimensions
+## object components: layout, data, knn, config</code></pre>
+<p>Because <code>iris.umap.dist</code> is computed with the custom configuration, it holds the same embedding layout as <code>iris.umap.config</code> above (check it!). However, this object does not carry the original data. As such, it cannot be used to ‘predict’ new data into the embedding: attempting a command like <code>predict(iris.umap.dist, iris.wnoise)</code> will generate an error. This is because the algorithm will not have sufficient information to computing distances between new data points and previously embedded data.</p>
+<p>Another way to provide data to function <code>umap</code> is via precomputed nearest neighbors. As we saw above, each object of class ‘umap’ has a component called ‘knn’. We can preview this component by printing it.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" data-line-number="1">iris.umap<span class="op">$</span>knn</a></code></pre></div>
+<pre><code>## k-nearest neighbors for 150 items with k=15
+## object components: indexes, distances
+## Note: nearest neighbors may be approximate</code></pre>
+<p>This is actually a list with two matrices. One matrix associates each data point to a fixed number of nearest neighbors (the default is 15). The other matrix specifies the distances between them.</p>
+<p>To see how to use this data structure, let’s construct an object describing 10 nearest neighbors, and then perform an embedding.</p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb24-1" data-line-number="1"><span class="co"># extract information on 10 nearest neighbors from iris.umap</span></a>
+<a class="sourceLine" id="cb24-2" data-line-number="2">iris.neighbors =<span class="st"> </span>iris.umap<span class="op">$</span>knn<span class="op">$</span>indexes[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a>
+<a class="sourceLine" id="cb24-3" data-line-number="3">iris.neighbors.distances =<span class="st"> </span>iris.umap<span class="op">$</span>knn<span class="op">$</span>distances[, <span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a>
+<a class="sourceLine" id="cb24-4" data-line-number="4"><span class="co"># construct an object with indexes and distances</span></a>
+<a class="sourceLine" id="cb24-5" data-line-number="5">iris.knn<span class="fl">.10</span> =<span class="st"> </span><span class="kw">umap.knn</span>(<span class="dt">indexes=</span>iris.neighbors, <span class="dt">distances=</span>iris.neighbors.distances)</a>
+<a class="sourceLine" id="cb24-6" data-line-number="6">iris.knn<span class="fl">.10</span></a></code></pre></div>
+<pre><code>## k-nearest neighbors for 150 items with k=10
+## object components: indexes, distances
+## Note: nearest neighbors may be approximate</code></pre>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb26-1" data-line-number="1"><span class="co"># perform an embedding using the precomputed nearest neighbors</span></a>
+<a class="sourceLine" id="cb26-2" data-line-number="2">iris.umap.knn =<span class="st"> </span><span class="kw">umap</span>(iris.data, <span class="dt">config=</span>custom.config, <span class="dt">n_neighbors=</span><span class="dv">10</span>, <span class="dt">knn=</span>iris.knn<span class="fl">.10</span>)</a></code></pre></div>
+<p>In this function call, argument <code>config</code> specifies most of the parameter values. Because the custom configuration has <code>n_neighbors</code> at 15 and here we want to use 10 instead, the next argument sets this new value. The final argument provides our prepared object. Functions <code>umap</code> detect the availability of this object and can skip calculating nearest neighbors. This can substantially improve running times.</p>
+</div>
+</div>
+<div id="stability-and-reproducibility" class="section level2">
+<h2>Stability and reproducibility</h2>
+<p>The UMAP algorithm uses random numbers and thus results may vary from run to run. As we have seen, it is possible to obtain a minimal level of reproducibility by setting seeds. Nonetheless, there are some subtle points worth covering in more detail.</p>
+<div id="initial-embedding" class="section level3">
+<h3>Initial embedding</h3>
+<p>As shown in the section on tuning, embedding of a raw dataset can be stabilized by setting a seed for random number generation. However, the results are stable only when the raw data are re-processed in exactly the same way. Results are bound to change if data are presented in a different order.</p>
+<p>A separate consideration is about the effect of the randomness within the umap algorithms on the state of the random-number generator in the calling environment. By default, the <code>umap</code> function preserves the external random state. This has some pros and cons in various situations. One important consequence of the default setting is that when two calls are made <code>umap</code> one after the other, they both receive the same random state. If this is not a desired behavior, those calls should be made either with their own explicit seeds, or setting argument <code>preserve.seed=FALSE</code>.</p>
+</div>
+<div id="prediction" class="section level3">
+<h3>Prediction</h3>
+<p>Projection of new data onto an existing embedding uses a separate random number generator, which is controlled via parameter <code>transform_state</code>. This seed ensures that predictions executed in exactly the same way produce identical output each time. The default algorithm further implements a mechanism by which predictions are consistent when performed individually or in batch. Let’s look at an example based on the Iris data.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># predict in batch, display first item</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw">predict</span>(iris.umap, iris.wnoise)[<span class="dv">1</span>, , drop=<span class="ot">FALSE</span>]</a></code></pre></div>
+<pre><code>##      [,1]      [,2]
+## 1 15.3052 -1.921424</code></pre>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># predict only first item</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">predict</span>(iris.umap, iris.wnoise[<span class="dv">1</span>,,<span class="dt">drop=</span><span class="ot">FALSE</span>])</a></code></pre></div>
+<pre><code>##      [,1]      [,2]
+## 1 15.3052 -1.921424</code></pre>
+<p>The mechanism that enables stability between batch and individual predictions also ensures that predictions are stable when data are presented in a different order. However, this mechanism is not enforced (for performance reasons) when the new data contain more than a thousand rows. This is an implementation detail and may change in future versions.</p>
+</div>
+</div>
+<div id="implementations" class="section level2">
+<h2>Implementations</h2>
+<p>The package provides two implementations of the umap method, one written in R (with help from several packages from CRAN) and one accessed via an external python module.</p>
+<p>The implementation written in R is the default. It follows the design principles of the UMAP algorithm and its running time scales better-than-quadratically with the number of items (points) in a dataset. It is thus in principle suitable for use on datasets with thousands of points. This implementation is the default because it should be functional without extensive dependencies.</p>
+<p>The second available implementation is a wrapper for a python package <code>umap-learn</code>. To enable this implementation, specify the argument <code>method</code>.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1">iris.umap.learn =<span class="st"> </span><span class="kw">umap</span>(iris.data, <span class="dt">method=</span><span class="st">&quot;umap-learn&quot;</span>)</a></code></pre></div>
+<p>This command has several dependencies. The <code>reticulate</code> package must be installed and loaded (use <code>install.packages(&quot;reticulate&quot;)</code> and <code>library(reticulate)</code>). Furthermore, the <code>umap-learn</code> python package must be available (see the <a href="https://github.com/lmcinnes/umap">package repository</a> for instructions). If either of these components is not available, the above command will display an error message.</p>
+<p>A separate vignette explains additional aspects of interfacing with <code>umap-learn</code>, including handling of discrepancies between releases.</p>
+<p>Note that it will not be possible to produce exactly the same output from the two implementations due to inequivalent random number generators in R and python, and due to slight discrepancies in the implementations.</p>
+<p> </p>
+</div>
+<div id="appendix" class="section level2">
+<h2>Appendix</h2>
+<p>The custom plot function used to visualize the Iris dataset:</p>
+<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb32-1" data-line-number="1">plot.iris</a></code></pre></div>
+<pre><code>## function(x, labels,
+##          main=&quot;A UMAP visualization of the Iris dataset&quot;,
+##          colors=c(&quot;#ff7f00&quot;, &quot;#e377c2&quot;, &quot;#17becf&quot;),
+##          pad=0.1, cex=0.6, pch=19, add=FALSE, legend.suffix=&quot;&quot;,
+##          cex.main=1, cex.legend=0.85) {
+## 
+##   layout = x
+##   if (is(x, &quot;umap&quot;)) {
+##     layout = x$layout
+##   } 
+##   
+##   xylim = range(layout)
+##   xylim = xylim + ((xylim[2]-xylim[1])*pad)*c(-0.5, 0.5)
+##   if (!add) {
+##     par(mar=c(0.2,0.7,1.2,0.7), ps=10)
+##     plot(xylim, xylim, type=&quot;n&quot;, axes=F, frame=F)
+##     rect(xylim[1], xylim[1], xylim[2], xylim[2], border=&quot;#aaaaaa&quot;, lwd=0.25)  
+##   }
+##   points(layout[,1], layout[,2], col=colors[as.integer(labels)],
+##          cex=cex, pch=pch)
+##   mtext(side=3, main, cex=cex.main)
+## 
+##   labels.u = unique(labels)
+##   legend.pos = &quot;topleft&quot;
+##   legend.text = as.character(labels.u)
+##   if (add) {
+##     legend.pos = &quot;bottomleft&quot;
+##     legend.text = paste(as.character(labels.u), legend.suffix)
+##   }
+## 
+##   legend(legend.pos, legend=legend.text, inset=0.03,
+##          col=colors[as.integer(labels.u)],
+##          bty=&quot;n&quot;, pch=pch, cex=cex.legend)
+## }
+## &lt;bytecode: 0x55bca5af9d58&gt;</code></pre>
+<p>Summary of R session:</p>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb34-1" data-line-number="1"><span class="kw">sessionInfo</span>()</a></code></pre></div>
+<pre><code>## R version 3.6.1 (2019-07-05)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 18.04.5 LTS
+## 
+## Matrix products: default
+## BLAS:   /software/opt/R/R-3.6.1/lib/libRblas.so
+## LAPACK: /software/opt/R/R-3.6.1/lib/libRlapack.so
+## 
+## locale:
+##  [1] LC_CTYPE=en_GB.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=en_GB.UTF-8        LC_COLLATE=C              
+##  [5] LC_MONETARY=en_GB.UTF-8    LC_MESSAGES=en_GB.UTF-8   
+##  [7] LC_PAPER=en_GB.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=en_GB.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] umap_0.2.7.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] Rcpp_1.0.5      lattice_0.20-38 digest_0.6.23   RSpectra_0.16-0
+##  [5] grid_3.6.1      jsonlite_1.7.1  magrittr_1.5    evaluate_0.14  
+##  [9] rlang_0.4.4     stringi_1.4.3   Matrix_1.2-18   reticulate_1.18
+## [13] rmarkdown_2.0   tools_3.6.1     stringr_1.4.0   xfun_0.11      
+## [17] yaml_2.2.0      compiler_3.6.1  askpass_1.1     htmltools_0.5.0
+## [21] openssl_1.4.3   knitr_1.26</code></pre>
+<p> </p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+
+</body>
+</html>

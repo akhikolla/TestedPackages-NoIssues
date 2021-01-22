@@ -1,0 +1,65 @@
+markophylo v1.0-8 (Release date: 2020-07-05)
+==============
+Changes:
+
+* Moved external data file.
+
+markophylo v1.0-7 (Release date: 2019-03-22)
+==============
+Changes:
+
+* Maintainance update.
+
+markophylo v1.0-6 (Release date: 2018-01-29)
+==============
+Changes:
+
+* Experimental: New function (estimaterates_f) allows for fixing some parameters in the substitution rate matrix.
+* Maintainance update.
+
+markophylo v1.0-5 (Release date: 2016-01-19)
+==============
+Changes:
+
+* Allows for user-specification of starting values for the rates.
+
+markophylo v1.0-4 (Release date: 2015-12-31)
+==============
+Changes:
+
+* BIC typo corrected.
+* Total number of character patterns typo corrected.
+
+markophylo v1.0-3 (Release date: 2015-11-05)
+==============
+Changes:
+
+* Added citation to manuscript in Bioinformatics.
+* Removed stringr dependency.
+* Quashed a bug that would pop up when building unique phyletic patterns (used within the algorithm) observed when discrete characters in the phyletic patterns included numbers greater than 9.
+* Quashed a bug that popped up when fitting a model with a single branch having a unique rate separate from the surrounding branches.
+* Exported a function called "patterns" used to get list of unique phyletic patterns and their counts.
+* Updated vignette with some installation instructions and contact information.
+* Added a minimal check for bg "listofnodes" argument, which will stop and warn users if any branch is not being listed in the branch grouping.
+
+markophylo v1.0-2 (Release date: 2015-08-28)
+==============
+Changes:
+
+* Included automatically built rate matrices. Speeds up model specification as the rate matrix no longer needs to be typed in as long as it is one of the supported matrix types.
+* Forced reversibility.
+* Both matrices and dataframes are now accepted for the discrete character data argument.
+* Finer control of optimization problem boundaries. Expected to be useful when branch lengths are in units other than expected substitutions per site.
+* Argument matching for some arguments.
+* A minimum version of 1.0.0 is now required for the stringr dependency.
+
+* More tests for arguments in model specification.
+* More unit tests.
+
+* External data example in vignette.
+* Help file maintainance.
+* NAMESPACE and DESCRIPTION maintainance.
+
+markophylo v1.0-1 (Release date: 2014-07-07)
+==============
+First release.

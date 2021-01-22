@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Fourth order blind identification</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+<!-- MathJax scripts -->
+<script type="text/javascript" src="https://cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML">
+</script>
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<h2>Fourth order blind identification</h2>
+
+<p>In independent component analysis (ICA) it is usually assumed that the observable \(p\)-vector \(x\) is a linear mixture of \(p\) mutually independent components, where the vector of independent components is \(s\). Hence the model can be written as
+\[
+x = As + \mu,
+\]
+where the full rank \(A\) represents the linear mixing and \(\mu\) the location.
+It is then usually assumed that \(E(s)=0\) and \(Cov(s)=I_p\). The goal is then to find
+an unmixing matrix \(W\) such that \(Wx\) has independent components.</p>
+
+<p>In ICA gaussian components are considered the uninteresting ones whereas the non-gaussian ones are considered interesting. Actually, if there is more than one gaussian component only the non-gaussian components can be recovered but not the gaussian ones.</p>
+
+<p>Therefore it is naturally of interest to test how many interesting components there are. This is done by testing if a subvector of \(Wx\) is gaussian.</p>
+
+<p>FOBI is one of the first ICA methods - it jointly diagonalizes the regular covariance matrix \(Cov\) and the so-called matrix of fourth moments
+\[
+Cov_4(x) = E(r^2(x-\mu)(x-\mu)^T),
+\]
+where \(\mu = E(x)\) and \(r^2=(x-\mu)^T Cov(x)^{-1} (x-\mu)\).</p>
+
+<p>Note that under this definition \(Cov_4\) is not consistent under the normal model and the scale of a normal component would be \(\sqrt{p+2}\). (Therefore for example the function <code>cov4</code> from the <code>ICS</code> package divides \(Cov_4\) by \(p+2\).)</p>
+
+<p>Hence FOBI is the solution to the generalized eigenvector-eigenvalue problem which solves
+\[
+W Cov(x) W^T = I_p \ and \ W Cov_4(x) W^T = D,
+\]
+where D is a diagonal matrix.</p>
+
+<p>For the context under consideration it is natural to order the general eigenvectors in \(W\) such
+that the eigenvalues, which are the diagonal elements of \(D\), \(d_1,&hellip;,d_p\), fulfill
+\[
+(d_1 - (p+2))^2 \geq &hellip; \geq (d_p - (p+2))^2,
+\]
+which means gaussian components would be put at the end of \(s\) and values of \(d_i\)&#39;s which correspond to a gaussian component should be \(p+2\).</p>
+
+<p>Hence, assuming that there are \(k\) interesting components the hypothesis is that
+\[
+H_0: d_{k+1} = &hellip; = d_p = p+2.
+\]
+The package <code>ICtest</code> provides different asymptotic and bootstrapping based tests to test this hypothesis</p>
+
+<h3>Asymptotic tests for a specific value of \(k\)</h3>
+
+<p>The function for the asymptotic test is <code>FOBIasymp</code> and it provides three different tests,
+denoted by <code>S1</code>, <code>S2</code> and <code>S3</code>, and specified using the <code>type</code> argument:</p>
+
+<ol>
+<li><code>type=&quot;S1&quot;</code>: The test statistic \(T\) is the variance of the last \(p-k\) eigenvalues around p+2:
+\[
+T = n \sum_{i=k+1}^p (d_i-(p+2))^2
+\]</li>
+</ol>
+
+<p>the limiting distribution of \(T\) under the null is the sum of two weighted chisquare distributions with weights \(w_1 = 2 \sigma_1 / (p-k)\) and \(w_2 = 2 \sigma_1 / (p-k)  +  \sigma_2\) and degrees of freedom \(df_1 = (p-k-1)(p-k+2)/2\) and \(df_2 = 1\).</p>
+
+<ol>
+<li><code>type=&quot;S2&quot;</code>: Another possible version for the test statistic is a scaled sum of the variance of the eigenvalues around the mean plus the variance around
+the expected value under normality (\(p+2\)). Denote \(VAR_{dpk}\) as the variance of the last \(p-k\) eigenvalues  and  \(VAR2_{dpk}\) as the variance of these eigenvalues around \(p+2\).</li>
+</ol>
+
+<p>Then the test statistic is:
+\[
+T = (n (p-k) VAR_{dpk}) / (2 \sigma_1) + (n VAR2_{dpk}) / (2 \sigma_1 / (p-k) + \sigma_2)
+\]
+This test statistic has a limiting chisquare distribution with \((p-k-1)(p-q+2)/2 + 1\) degrees of freedom.</p>
+
+<ol>
+<li><code>type=&quot;S3&quot;</code>: The third possible test statistic just checks the equality of the last \(p-k\) eigenvalues using only the first part of the test statistic of <code>type=&quot;S2&quot;</code>.</li>
+</ol>
+
+<p>The test statistic is then:
+\[
+T = (n (p-k) VAR_{dpk}) / (2 \sigma_1)
+\]
+and has a limiting chisquare distribution with \((p-k-1)(p-q+2)/2\) degrees of freedom.</p>
+
+<p>The constants \(\sigma_1\) and \(\sigma_2\) depend on the kurtosis values of the independent components and on the dimension \(p\) and are estimated from the data.</p>
+
+<p>To demonstrate the function <code>FOBIasymp</code> consider the following artificial data</p>
+
+<pre><code class="r">library(ICtest)
+set.seed(1)
+n &lt;- 1500
+S &lt;- cbind(runif(n), rchisq(n, 2), rexp(n), rnorm(n), rnorm(n), rnorm(n))
+A &lt;- matrix(rnorm(36), ncol = 6)
+X &lt;- S  %*% t(A)
+</code></pre>
+
+<p>Therefore there are three interesting components and three noise components.</p>
+
+<pre><code class="r">FOBI1 &lt;- FOBIasymp(X, k = 3, model=&quot;ICA&quot;)
+screeplot(FOBI1)
+abline(h = 8) # p=6, i.e. p + 2 = 8
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-2"/></p>
+
+<p>The screeplot shows that the components are in the right order and 3 components have an eigenvalue close to the value of interest.</p>
+
+<p>The test decision is</p>
+
+<pre><code class="r">FOBI1 
+</code></pre>
+
+<pre><code>## 
+##  FOBI subgaussianty test using a chisquare test (Variant II)
+##  in an ICA model
+## 
+## data:  X
+## T = 4.5359, df = 5, p-value = 0.4751
+## alternative hypothesis: there are fewer than 3 gaussian components
+</code></pre>
+
+<p>Which we can compare to the other test version:</p>
+
+<pre><code class="r">FOBIasymp(X, k = 3, type = &quot;S1&quot;, model = &quot;ICA&quot;)
+</code></pre>
+
+<pre><code>## 
+##  FOBI subgaussianty test using a weighted sum of chisquare test
+##  in an ICA model
+## 
+## data:  X
+## T = 175.81, w1 = 21.324, df1 = 5.000, w2 = 25.324, df2 = 1.000,
+## p-value = 0.2387
+## alternative hypothesis: there are fewer than 3 gaussian components
+</code></pre>
+
+<pre><code class="r">FOBIasymp(X, k = 3, type = &quot;S2&quot;, model = &quot;ICA&quot;)
+</code></pre>
+
+<pre><code>## 
+##  FOBI subgaussianty test using a chisquare test (Variant I)
+##  in an ICA model
+## 
+## data:  X
+## T = 7.6589, df = 6, p-value = 0.2642
+## alternative hypothesis: there are fewer than 3 gaussian components
+</code></pre>
+
+<p>which means all three tests do not reject that the last three components are gaussian.
+Using the default, <code>model = &quot;NGCA&quot;</code> should be also consistent but does not explicitely assume an ICA model but the more general non-gaussian component analysis (NGCA) model with possible dependent interesting signals.</p>
+
+<p>To see if there are 4 gaussian components using the default <code>model</code> argument one could use for example:</p>
+
+<pre><code class="r">FOBIasymp(X, k = 2)
+</code></pre>
+
+<pre><code>## 
+##  FOBI subgaussianty test using a chisquare test (Variant II)
+##  in an NGCA model
+## 
+## data:  X
+## T = 20.455, df = 9, p-value = 0.01531
+## alternative hypothesis: there are fewer than 4 gaussian components
+</code></pre>
+
+<p>which would be rejected at the \(0.05\) level.</p>
+
+<h3>Bootstrapping tests for a specific value of \(k\)</h3>
+
+<p>The test statistic used here is again the variance of the last \(p-k\) components around the value of interest \(p+2\): 
+\[
+T = n \sum_{i=k+1}^p (d_i-(p+2))^2
+\]
+Two possible bootstrap testing strategies, denoted <code>B1</code> and <code>B2</code>, are provided for testing the null hypothesis of interest.</p>
+
+<p>Let \(X\) be the centered data matrix of the \(n\) \(p\)-variate observations and \(S\) the corresponding estimated independent components which can be decomposed into \(S_1\), the non-gaussian components and \(S_2\) the gaussian components. Let \(W\) be the estimated unmixing matrix.</p>
+
+<ol>
+<li><code>s.boot=&quot;B1&quot;</code>: 
+The first strategy has the following steps:
+a. Take a bootstrap sample \(S_1^*\) of size \(n\) from \(S_1\).
+b. Take a bootstrap sample \(S_2^*\) consisting of a matrix of standard normally      distributed elements.
+c. Combine \(S^*=(S_1^*, S_2^*)\) and create \(X^*= S^* W^{-1}\).
+d. Compute the test statistic \(T^*\) based on \(X^*\). 
+e. Repeat the previous steps <code>n.boot</code> times to get the test statistics \(T^*_1,&hellip;, T^*_{n.boot}\).</li>
+</ol>
+
+<p>Note that in this bootstrapping test the assumption of &#39;&#39;independent components&#39;&#39; is not used, it is only used that the last \(p-k\) components are gaussian and independent from the first \(k\) components. Therefore this strategy can be applied in an independent component analysis (ICA) framework and in a non-gaussian components analysis (NGCA) framework.</p>
+
+<ol>
+<li><code>s.boot=&quot;B2&quot;</code>: 
+The second strategy has the following steps:
+a. Take a bootstrap sample \(S_1^*\) of size \(n\) from \(S_1\) where the subsampling is done separately for each independent component.
+b. Take a bootstrap sample \(S_2^*\) consisting of a matrix of standard normally distributed elements.
+c. Combine \(S^*=(S_1^*, S_2^*)\) and create \(X^*= S^* W^{-1}\).
+d. Compute the test statistic \(T^*\) based on \(X^*\).<br/>
+e. Repeat the previous steps <code>n.boot</code> times to get the test statistics \(T^*_1,&hellip;, T^*_{n.boot}\).</li>
+</ol>
+
+<p>The p-value is then in both cases
+\[
+\frac{\#(T_i^* \geq T)+1}{n.boot+1}.
+\]</p>
+
+<p>This bootstrapping strategy assumes a full ICA model and cannot be used in an NGCA framework.</p>
+
+<p>To test for the previous data whether there are three gaussian components, the bootstrap <code>FOBIboot</code> can be used as follows:</p>
+
+<pre><code class="r">FOBIboot(X, k = 3, s.boot = &quot;B1&quot;)
+</code></pre>
+
+<pre><code>## 
+##  ICA subgaussianity bootstrapping test using FOBI and strategy B1
+## 
+## data:  X
+## T = 527.43, replications = 200, p-value = 0.194
+## alternative hypothesis: the last 3 components are not gaussian
+</code></pre>
+
+<pre><code class="r">FOBIboot(X, k = 3, s.boot = &quot;B2&quot;)
+</code></pre>
+
+<pre><code>## 
+##  ICA subgaussianity bootstrapping test using FOBI and strategy B2
+## 
+## data:  X
+## T = 527.43, replications = 200, p-value = 0.1493
+## alternative hypothesis: the last 3 components are not gaussian
+</code></pre>
+
+<h2>Non-Gaussian projection pursuit</h2>
+
+<p>Non-Gaussian projection pursuit (NGPP) assumes that the observed multivariate data is generated by a linear mixture of \(k\) signals and \(p - k\) channels of Gaussian noise. The package provides both methods for estimating the signals when \(k\) is known <em>a priori</em> and a technique for testing and estimating the value of \(k\) itself. The estimation is based on the maximization of convex combinations of squared objective functions, of which four popular ones are included in the package:</p>
+
+<ul>
+<li>Third cumulant, <code>skew</code></li>
+<li>Fourth cumulant, <code>pow3</code></li>
+<li>Logarithmic hyperbolic cosine, <code>tanh</code></li>
+<li>Gaussian function, <code>gauss</code></li>
+</ul>
+
+<p>The names (<code>skew</code> etc.) of the functions in the package are based on the corresponding derivatives, or <em>non-linearities</em>.</p>
+
+<h3>Estimating the signal components</h3>
+
+<p>The simplest way to use NGPP is to just call the function using default settings and indicating the number of signal components <code>k</code> you want to extract. The default objective function is a certain linear combination of squared third and fourth cumulants, the <em>Jarque-Bera</em> test statistic for normality. To use some other objective function you can specify a vector of objective function names in <code>nl</code> and the corresponding weights in <code>alpha</code>.</p>
+
+<pre><code class="r">library(ICtest)
+X &lt;- as.matrix(iris[, 1:4])
+
+res1 &lt;- NGPP(X, k = 2)
+plot(res1$S, col = as.factor(iris[, 5]), xlab = &quot;signal_1&quot;, ylab = &quot;signal_2&quot;)
+
+res2 &lt;- NGPP(X, k = 2, nl=c(&quot;tanh&quot;, &quot;pow3&quot;), alpha = c(0.5, 0.5))
+plot(res2$S, col = as.factor(iris[, 5]), xlab = &quot;signal_1&quot;, ylab = &quot;signal_2&quot;)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-7"/><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-7"/></p>
+
+<h3>Testing for a specific value of \(k\)</h3>
+
+<p>The above example used the default <code>method=&quot;symm&quot;</code> to specify that all <code>k</code> signals should be estimated simultaneously and the alternative <code>method=&quot;defl&quot;</code> could have been used to estimate the signals one-by-one, leading into different solutions. But perhaps more interestingly, the one-by-one estimation can also be used to test the null hypothesis \(H_0: true\_k \leq k\) with the function <code>NGPPsim</code>. Let&#39;s create next some mixed toy data and try to infer its true signal dimension.</p>
+
+<pre><code class="r">set.seed(2016)
+S &lt;- cbind(rexp(100), rnorm(100), rnorm(100))
+A &lt;- matrix(rnorm(9), 3, 3)
+X &lt;- S%*%A
+res0 &lt;- NGPPsim(X, k = 0, N = 200)
+res0$p.value
+</code></pre>
+
+<pre><code>## [1] 0
+</code></pre>
+
+<pre><code class="r">res1 &lt;- NGPPsim(X, k = 1, N = 200)
+res1$p.value
+</code></pre>
+
+<pre><code>## [1] 0.935
+</code></pre>
+
+<p>The obtained \(p\)-values provide sufficient evidence to conclude that \(k\_true > 0\) and \(k\_true \leq 1\), correctly implying that the signal dimension is equal to one. The parameter <code>N</code> controls the number of repetitions used to simulate the distribution of the test statistic under the null hypothesis and increasing it gives more accurate results but increases the computation time.</p>
+
+<h3>Estimation of the true dimension</h3>
+
+<p>In the above example we had to separately call <code>NGPPsim</code> for each value of <code>k</code>. This process is automated by the function <code>NGPPest</code> which performs the hypothesis test for all \(k = 0, \ldots , p-1\). Let&#39;s create another toy data and try to estimate its dimension, using this time only the non-linearity <code>pow3</code>. </p>
+
+<pre><code class="r">set.seed(2016)
+S &lt;- cbind(rexp(100), runif(100), rnorm(100))
+A &lt;- matrix(rnorm(9), 3, 3)
+X &lt;- S%*%A
+res &lt;- NGPPest(X, nl = &quot;pow3&quot;, N = 200)
+res$p.value
+</code></pre>
+
+<pre><code>## [1] 0.000 0.080 0.855
+</code></pre>
+
+<p>The resulting vector of \(p\)-values can now be directly interpreted as testing the null hypotheses whether each particular component is just noise. The correct conclusion of two signal components is again reached.</p>
+
+</body>
+
+</html>

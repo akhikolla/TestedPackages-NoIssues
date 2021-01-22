@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (vcfR_deepstate_test_window_init_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/vcfR/inst/testfiles/window_init/window_init_output/6461835e030a9d6e80470eea92701f473a9ceeae.pass`
+TRACE: Running: vcfR_deepstate_test_window_init_test from /home/akhila/fuzzer_packages/fuzzedpackages/vcfR/inst/testfiles/window_init/window_init_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+window_size values: -498905818
+max_bp values: 569042049
+input ends
+TRACE: Passed: vcfR_deepstate_test_window_init_test

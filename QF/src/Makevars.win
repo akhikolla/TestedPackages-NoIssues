@@ -1,0 +1,9 @@
+ARCH=x64
+ifeq "$(WIN)" "64"
+ARCH= i386
+else
+ARCH= x64
+endif
+PKG_CPPFLAGS = -I$(LIB_GSL)/include -I. -I../inst/include
+PKG_LIBS=-L"$(LIB_GSL)/lib"${R_ARCH_BIN} -lgsl -lgslcblas
+

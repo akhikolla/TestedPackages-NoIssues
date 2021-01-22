@@ -1,0 +1,174 @@
+---
+title: "Short introduction to TLMoments"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Short introduction to TLMoments}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+`TLMoments` is a set of functions whose main functionality is the calculation of trimmed L-moments (TL-moments) and resulting estimates of distribution parameters and quantiles.  
+One of the goals is to reduce computation time compared to existing implementations (in packages like `lmomco`, `Lmoments`, `Lmom`), therefore the core functions are written in C++ using `Rcpp` (see vignette "comparison of computation time" for speed comparisons). 
+The package expands the combinations of trimmings that can be used to estimate distribution parameters in comparison to existing packages (which currently mainly support parameter estimation with L-moments). 
+To ensure an easy usage, the package only contains a small set of functions. 
+This vignette gives a short introduction to the most important ones and how to use them. 
+
+```{r}
+library(TLMoments)
+sessionInfo()
+```
+
+## Calculation of empirical TL-moments, parameter and quantile estimates
+
+First we have a look at the basic functionality of calculating TL-moments and parameter and quantile estimates. 
+Let assume we have a simple random data vector generated from a GEV distribution:
+```{r}
+xvec <- rgev(100, loc = 10, scale = 5, shape = .2)
+```
+
+TL-moments are calculated by the function `TLMoments` with arguments `leftrim`, `rightrim`, and `max.order` (generating an object of class `TLMoments`): 
+```{r}
+TLMoments(xvec)
+TLMoments(xvec, leftrim = 0, rightrim = 1, max.order = 2)
+```
+
+We can calculate parameter estimates by putting a `TLMoments`-object to the function `parameters` and specifying argument `distr`: 
+```{r}
+tlm <- TLMoments(xvec)
+parameters(tlm, distr = "gev")
+
+tlm <- TLMoments(xvec, rightrim = 1)
+parameters(tlm, distr = "gev")
+```
+
+This generates an object of class `parameters`, which can be transmitted to `quantiles` to calculate quantile estimations: 
+```{r}
+tlm <- TLMoments(xvec)
+quantiles(parameters(tlm, distr = "gev"), c(.9, .99, .999))
+
+tlm <- TLMoments(xvec, rightrim = 1)
+quantiles(parameters(tlm, distr = "gev"), c(.9, .99, .999))
+```
+
+
+## Summary functions
+
+Objects of type `TLMoments`, `parameters`, or `quantiles` (i.e. results from the functions of the same name) feature `summary`-functions, which give confidence intervals and an overview of the data. 
+
+```{r}
+tlm <- TLMoments(rgev(100), leftrim = 0, rightrim = 1)
+
+summary(tlm)
+summary(parameters(tlm, "gev"))
+summary(quantiles(parameters(tlm, "gev"), .99))
+```
+
+The default confidence interval level is 90%, but it can be set using the argument `ci.level`. 
+The argument `select` can be used to subset the results, which can be handy when analysing large data matrices. 
+```{r}
+summary(tlm, ci.level = .95, select = 3:4)
+summary(parameters(tlm, "gev"), select = "shape")
+```
+
+At the moment, the summary functions do not work for data in lists or data.frames. 
+
+
+## Magrittr syntax
+
+`TLMoments` is built to support the use in `magrittr` syntax. 
+The nesting of functions can be written more readable as: 
+```{r}
+library(magrittr)
+
+TLMoments(xvec, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev") %>% 
+  quantiles(c(.99, .999)) %>% 
+  summary()
+```
+
+In the following this syntax is used for a clearer presentation. 
+
+
+## Support for different data types
+
+The functions `TLMoments`, `parameters`, and `quantiles` provide the main functionality of the package. 
+In the code above we used single data vectors only, but the same functions can be used for data matrices, lists, and data.frames as well. 
+To demonstrate this, let's generate sample data of these four types: 
+```{r}
+xmat <- matrix(rgev(100), nc = 4)
+xvec <- xmat[, 3]
+xlist <- lapply(1L:ncol(xmat), function(i) xmat[, i])
+xdat <- data.frame(station = rep(1:4, each = 25), hq = as.vector(xmat))
+```
+
+Note that the type of the dimensions `lambdas` and `ratios` returned by `TLMoments` matches the input type: 
+```{r}
+TLMoments(xvec, leftrim = 0, rightrim = 1)
+TLMoments(xmat, leftrim = 0, rightrim = 1)
+TLMoments(xlist, leftrim = 0, rightrim = 1)
+TLMoments(xdat, hq ~ station, leftrim = 0, rightrim = 1)
+```
+
+This holds when parameter and quantile estimations are calculated: 
+```{r}
+TLMoments(xvec, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev")
+TLMoments(xmat, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev")
+TLMoments(xlist, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev")
+TLMoments(xdat, hq ~ station, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev")
+
+TLMoments(xvec, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev") %>% 
+  quantiles(c(.99, .999))
+TLMoments(xmat, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev") %>%
+  quantiles(c(.99, .999))
+TLMoments(xlist, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev") %>% 
+  quantiles(c(.99, .999))
+TLMoments(xdat, hq ~ station, leftrim = 0, rightrim = 1) %>% 
+  parameters("gev") %>% 
+  quantiles(c(.99, .999))
+```
+
+
+## Distributions 
+
+`TLMoments` offers distribution functions (cdf, pdf, quantile, random number generation) for the generalized extreme value distribution (`gev`), Gumbel distribution (`gum`), generalized Pareto distribution (`gpd`), and three-parameter lognormal distribution (`ln3`) in the common `p|d|q|r`-syntax. 
+The parameter (and quantile) estimation functionality works for all of them, but more complex functionality like estimation of the covariance matrix of parameter or quantile estimators only works for GEV by now. 
+
+
+## TL-moment ratio diagram
+
+Version 0.7.4 added functionality to plot TL-moment ratio diagrams of arbitrary trimming orders. 
+Simply plot an object of `TLMoments`. Argument `distr` can be used to specify displayed theoretical distributions. 
+Note that `ggplot2` is used. Therefore changes or additions have to be made by adding `ggplot2`-specific functions. 
+
+```{r}
+data <- matrix(rgev(25 * 10, shape = .2), ncol = 10)
+plot(TLMoments(data))
+plot(TLMoments(data)) + ggplot2::theme_minimal()
+plot(TLMoments(data, rightrim = 1), distr = c("gev", "gpd", "exp", "gum"))
+```
+
+
+## Calculations using theoretical/given TL-moments and parameters
+
+The functions `as.TLMoments` and `as.parameters` can be used to construct `TLMoments`- or `parameters`-objects of given values (not calculated from data). 
+These objects can be used in the same way like before (to convert between TL-moments and their parameters or to calculate the corresponding quantiles): 
+```{r}
+(tlm <- as.TLMoments(c(14.1, 4.3, 1.32)))
+parameters(tlm, distr = "gev")
+quantiles(parameters(tlm, distr = "gev"), c(.9, .99, .999))
+
+(param <- as.parameters(loc = 10, scale = 5, shape = .2, distr = "gev"))
+quantiles(param, c(.9, .99, .999))
+TLMoments(param)
+TLMoments(param, rightrim = 1)
+```
+
+Note, that we can simply use the `TLMoments`-function to calculate TL-moments corresponding to a `parameters`-object. 

@@ -1,0 +1,20 @@
+import(vegan,sp)
+importFrom("grDevices", "colorRampPalette", "rainbow")
+importFrom("graphics", "abline", "axis", "legend", "lines", "matlines",
+             "persp", "arrows")
+importFrom("vegan", "decostand")
+importFrom("MASS", "ginv")
+importFrom("stats", "as.dist", "cutree", "dist", "quantile", "model.matrix", "var", "cmdscale", "sd")
+importFrom("utils", "setTxtProgressBar", "txtProgressBar", "combn")
+importFrom("Kendall", "MannKendall")
+importFrom("circular", "circular", "mean.circular", "sd.circular", "rho.circular")
+importFrom(Rcpp, evalCpp)
+useDynLib(vegclust)
+
+# Export all names
+exportPattern(".")
+S3method(plot,CAP)
+S3method(plot,stratifiedvegdata)
+S3method(plot,CAS)
+S3method(summary,clustconst)
+S3method(plot,mvegclust)

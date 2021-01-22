@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (SeqNet_deepstate_test_components_in_adjacency_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/SeqNet/inst/testfiles/components_in_adjacency/components_in_adjacency_output/08bcb2d91544adba0b922c419e542ef36af2ccbd.pass`
+TRACE: Running: SeqNet_deepstate_test_components_in_adjacency_test from /home/akhila/fuzzer_packages/fuzzedpackages/SeqNet/inst/testfiles/components_in_adjacency/components_in_adjacency_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+adj values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: SeqNet_deepstate_test_components_in_adjacency_test

@@ -1,0 +1,14 @@
+WARNING: No test specified, defaulting to first test defined (fastLink_deepstate_test_calcPWDcpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/fastLink/inst/testfiles/calcPWDcpp/calcPWDcpp_output/782d3f4f95b5a74e63632181cc2dee7669398791.pass`
+TRACE: Running: fastLink_deepstate_test_calcPWDcpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/fastLink/inst/testfiles/calcPWDcpp/calcPWDcpp_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+Missing value
+y values: 4.19790e+140    -inf     inf 2.00396e-158 2.91601e+272     inf     nan     nan
+
+input ends
+TRACE: Passed: fastLink_deepstate_test_calcPWDcpp_test

@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (hmlasso_deepstate_test_updateLassoC_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/hmlasso/inst/testfiles/updateLassoC/updateLassoC_output/388fffc3507b1658760744e41c726b693e83e463.pass`
+TRACE: Running: hmlasso_deepstate_test_updateLassoC_test from /home/akhila/fuzzer_packages/fuzzedpackages/hmlasso/inst/testfiles/updateLassoC/updateLassoC_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+u values: 3.16522e+06
+l1 values: 3.72126e-82
+l2 values: 5.29799e-243
+v values: 7.52749e+12
+input ends
+TRACE: Passed: hmlasso_deepstate_test_updateLassoC_test

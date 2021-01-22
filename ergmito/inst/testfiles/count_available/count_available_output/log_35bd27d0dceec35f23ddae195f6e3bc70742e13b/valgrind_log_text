@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (ergmito_deepstate_test_count_available_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ergmito/inst/testfiles/count_available/count_available_output/35bd27d0dceec35f23ddae195f6e3bc70742e13b.pass`
+TRACE: Running: ergmito_deepstate_test_count_available_test from /home/akhila/fuzzer_packages/fuzzedpackages/ergmito/inst/testfiles/count_available/count_available_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+i values: -498905818
+input ends
+TRACE: Passed: ergmito_deepstate_test_count_available_test

@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (wellknown_deepstate_test_wkt_centroid_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/wellknown/inst/testfiles/wkt_centroid/wkt_centroid_output/7390215ea28f8f73d4226881f8acd1a443565a4f.pass`
+TRACE: Running: wellknown_deepstate_test_wkt_centroid_test from /home/akhila/fuzzer_packages/fuzzedpackages/wellknown/inst/testfiles/wkt_centroid/wkt_centroid_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+wkt values: "mplwicdtmoyhdmcruigf" "rlsfnjgpcjekqbfgpwwi" "gauzcvleuptzdtwslize" "vhwfzloprswzmmdoneuf" "jtwltvrhjupirapcwqoq" "foofbyybnnszpucecdbk" "hjcevpp" "NA" "fpzwwfsmjqlxxwgnjb" "tffdfpeslwvxzakvfxwn" "NA" "NA" "NA" "cerkdyxornbxfjjwcviz" "zocgkeexnzcudnliauzs" "uzmeiukzuitonyyarcsn" "NA" "fthcdbjvfajbfkgqwzor" "zurtddhtyvrsqsefnzsj" "aspimbxthfulpyaqymky" "NA" "hdkgfvesuyrmtvewbnwi" "bjcyizxhdp" "NA" "gnnrveuygou" "NA" "NA" "NA" "NA" "ytyvjxxlglbwhphmrern" "NA" "hmhngoppjhreqpvkilup" "qntlzlaowudjhxdnjvkp" "uuflsddvhadtavoglh" "eq" "cachb" "ciciyrrgpsrdtgsuipgt" "muyflbbadmmmkdlbjqef" "qbgdaiphvvgkcrgsmmus" "NA" "mpnjxhadsimvksjiskaq" "NA" "" "NA" "NA" "NA" "" "fnewcdlwv" "dgykuahruhisqwwavubb" "NA" "NA" "vdangggqjtoxhsekcyom" "gjmogvnwvvglffndlzhs" "NA" "NA" "wj" "wmamsqyrbuxygzcchnf" "NA" "hytgtxdiyhusiiquazzg" "NA" "NA" "NA" "NA" "NA" "qv" "dsayktn" "kqfmq" "wvmnya" "bhfxqzlwolcdv" "cmnztedc" "wvpqubfltulqtsirqove" "NA" "uzxkplxlfzsthkwzsacl" "lnmyhoqmmkdrxgogwdcw" "NA" "o" "ggbf" "yqzckklshtfywbkqdpfb" "snoeryywvqaynclbadwo" "fzbyobmqewfbpvnzzxhv" "anasgomfavjbrelvlmev" "exjvgbfcm" "ydcyajjmywgyzyieiikn" "eovfzeidudners"
+input ends
+TRACE: Passed: wellknown_deepstate_test_wkt_centroid_test

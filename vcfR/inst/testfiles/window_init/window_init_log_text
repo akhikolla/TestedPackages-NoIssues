@@ -1,0 +1,27 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (vcfR_deepstate_test_window_init_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+window_size values: 467495432
+max_bp values: 1827680409
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+window_size values: -498905818
+max_bp values: 569042049
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+window_size values: -293123844
+max_bp values: -555281357
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+window_size values: -1105761949
+max_bp values: 304498753
+input ends
+INFO: Done fuzzing! Ran 4 tests (2 tests/second) with 0 failed/4 passed/0 abandoned tests

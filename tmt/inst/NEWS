@@ -1,0 +1,37 @@
+********************************************************
+****               NEWS tmt Package                 ****
+********************************************************
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+The Multistage Testing (tmt)
+J. Steinfeld & A. Robitzsch
+
+  _____ __  __ _____ 
+ |_   _|  \/  |_   _|
+   | | | |\/| | | |  
+   |_| |_|  |_| |_|  
+
+
+mailto:
+-------
+Jan Steinfeld
+jan.d.steinfeld@gmail.com
+
+For reporting a bug, please always provide a reproducible R script 
+and (if necessary) a corresponding dataset.
+
+URL:
+----
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+-------------------------------------------------------------
+VERSIONS tmt 0.2  |  2019-xx-xx  |  Last: tmt 0.1.9-3
+-------------------------------------------------------------
+* cumulative designs are now supported (see vignette)
+* increased the speed of the package
+* updated the vignette
+* changed tmt_sim to include cumulative designs
+* Fixed some typos

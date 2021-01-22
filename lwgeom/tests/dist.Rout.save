@@ -1,0 +1,52 @@
+
+R version 3.6.2 (2019-12-12) -- "Dark and Stormy Night"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> suppressPackageStartupMessages(library(sf))
+> library(sp)
+> suppressPackageStartupMessages(library(units))
+> library(geosphere)
+> 
+> x = st_sfc(
++ st_point(c(0,0)),
++ st_point(c(1,0)),
++ st_point(c(2,0)),
++ st_point(c(3,0)),
++ crs = 4326
++ )
+> 
+> y = st_sfc(
++ st_point(c(0,10)),
++ st_point(c(1,0)),
++ st_point(c(2,0)),
++ st_point(c(3,0)),
++ st_point(c(4,0)),
++ crs = 4326
++ )
+> 
+> st_crs(y) = 4326
+> st_crs(x) = 4326
+> (d.sf = st_distance(x, y))
+Units: [m]
+        [,1]     [,2]     [,3]     [,4]     [,5]
+[1,] 1105855 111319.5 222639.0 333958.5 445278.0
+[2,] 1111387      0.0 111319.5 222639.0 333958.5
+[3,] 1127822 111319.5      0.0 111319.5 222639.0
+[4,] 1154693 222639.0 111319.5      0.0 111319.5
+> 
+> proc.time()
+   user  system elapsed 
+  0.560   0.055   0.605 

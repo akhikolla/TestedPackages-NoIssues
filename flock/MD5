@@ -1,0 +1,10 @@
+79a2668572ef0bfacc3ffb0e78d31e17 *DESCRIPTION
+e6ca62b85441a08a5eb56bf10276afe5 *NAMESPACE
+344a9ff73f852f54c3d730aca3a7213e *R/RcppExports.R
+b0fffc5db504af2b53374262eeda30b4 *R/flock.r
+9d2d96cba143cd25a782744ac6923558 *man/flock-package.Rd
+471ec8858344c23ba396a47aef539718 *man/is.locked.Rd
+853a68cd8e657cf80b161e9c331c0e25 *man/lock.Rd
+99ddfa2e4c36f70887c3dcffd62ad218 *man/unlock.Rd
+46f817f45e67a27cf9270c38b79939ba *src/RcppExports.cpp
+ba8769ddec45863e40ee44154f805da2 *src/flock.cpp

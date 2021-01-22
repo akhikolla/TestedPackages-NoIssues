@@ -1,0 +1,17 @@
+45b551d268ead916b3615563d63bbafa *DESCRIPTION
+df7a2da9d89f48b2de8d945762276bd0 *NAMESPACE
+0382dd8ee4e36cc17f29dcca7a944793 *NEWS.md
+6756aff72ac97a824cdfecece96418d9 *R/RcppExports.R
+6f15fe1adc0d4056db28f41ea7e938e1 *R/SuperpixelImageSegmentation.R
+1fbf20562061a167dc5d34545800c263 *R/px_utils.R
+073424414e4c95e23266cdfdc502b11a *README.md
+7b5d892b53b92beda224f3cd2dcb1120 *inst/images/BSR_bsds500_image.jpg
+f3eaffe9947bef4de9c5212f6362d48a *inst/images/airplane.jpg
+9f1d3206730838c8f84e8ab9e0f17c6e *man/Image_Segmentation.Rd
+c0b0887d0e21dba427791387a69357a4 *src/Makevars
+3924f33984346427452b9a43de77a4c8 *src/Makevars.win
+716ab2d354e17f151cb2510a10987618 *src/RcppExports.cpp
+ab272c93d1bcd756f252e525a98d13f8 *src/init.c
+4201db564ba8b923aed71da2b8e56b3a *src/superPx_AP_Kmeans_Segment.cpp
+c88ba8c4f2be04490ea68004321b5eae *tests/testthat.R
+c9e0f15b217f46b675b27689ab574bd2 *tests/testthat/test-spx_im_segmentation.R

@@ -1,0 +1,7 @@
+useDynLib(wbsts, .registration=TRUE)
+exportPattern("^[[:alpha:]]+")
+importFrom(Rcpp, evalCpp)
+import(mvtnorm,wavelets)
+importFrom("graphics", "plot")
+importFrom("stats","aggregate", "ar", "arima.sim", "quantile", "rnorm")
+importFrom("utils", "tail")

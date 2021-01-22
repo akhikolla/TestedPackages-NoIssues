@@ -1,0 +1,54 @@
+---
+title: "Datasets in the iptools package"
+author: "Oliver Keyes"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Datasets in the iptools package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+The `iptools` package contains various datasets to aid users in handling IP addresses. While the plan is to keep these datasets as up-to-date as possible, there's no doubt that there will be some gap between data changing and a package update being available - so the package *also* contains functions for refreshing the locally-stored versions of each dataset. This vignette describes both.
+
+### Available datasets
+
+Three primary datasets are available, all sourced from the [IANA](http://www.iana.org/). These, cover, respectively, the IPv4 address
+space assignments, the IPv4 special-purpose address assignments, and the assignments for port numbers and services.
+
+The IPv4 address space assignments (`iana_assignments`) is the registry of what chunks of the IPv4 space have been reserved,
+who by, and for what purpose. The IPv4 special-purpose assignments (`iana\_special\_assignments`) are those sub-units of the IPv4
+space that have been reserved for specific, special purposes - an example is `192.0.2.0/24`, a range for documentation purposes. The port registry (`iana_ports`) contains the ports that are reserved, and what services they are reserved for - a canonical example is port 80,
+which is registered for something called "World Wide Web HTTP" by a "Tim Berners Lee".
+
+Each dataset can be accessed with `data(dataset_name)`, which makes it available to the user, and consists of a data.frame. See
+the documentation on individual datasets (e.g. `?iana_assignments`) for more details.
+
+### Refreshing datasets
+
+To avoid users having datasets that get out of date, and no obvious way to fix it (short of waiting for a package update), `iptools`
+pairs with each of its datasets an equivalent function to refresh it. If the `iana_assignments` dataset is out of date, for example, you'd run `iana\_assignments\_refresh()`:
+
+```{r, eval=FALSE}
+library(iptools)
+data(iana_assignments)
+str(iana_assignments)
+'data.frame':	151 obs. of  5 variables:
+ $ prefix     : chr  "49.0.0.0/8" "50.0.0.0/8" "51.0.0.0/8" "52.0.0.0/8" ...
+ $ designation: chr  "APNIC" "ARIN" "UK Government Department for Work and Pensions" ...
+ $ date       : chr  "2010-08" "2010-02" "1994-08" "1991-12" ...
+ $ whois      : chr  "whois.apnic.net" "whois.arin.net" "whois.ripe.net" "whois.arin.net" ...
+ $ status     : chr  "ALLOCATED" "ALLOCATED" "LEGACY" "LEGACY" ...
+
+iana_assignments_refresh()
+[1] TRUE
+
+data("iana_assignments")
+str(iana_assignments)
+'data.frame':	256 obs. of  5 variables:
+ $ prefix     : chr  "0.0.0.0/8" "1.0.0.0/8" "2.0.0.0/8" "3.0.0.0/8" ...
+ $ designation: chr  "IANA - Local Identification" "APNIC" "RIPE NCC" ...
+ $ date       : chr  "1981-09" "2010-01" "2009-09" "1994-05" ...
+ $ whois      : chr  "" "whois.apnic.net" "whois.ripe.net" "whois.arin.net" ...
+ $ status     : chr  "RESERVED" "ALLOCATED" "ALLOCATED" "LEGACY" ...
+```

@@ -1,0 +1,23 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (testforDEP_deepstate_test_MC_count_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+Ts values: -2.43318e-187
+n values: -1053990400
+sn values: 77470436
+input ends
+EXTERNAL: Error: negative length vectors are not allowed
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+Ts values: -1.5615e-299
+n values: 1273656994
+sn values: 603497922
+input ends
+ERROR: Crashed: testforDEP_deepstate_test_MC_count_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_output/e78ce7438df9a1440309ef3e26dc1d3f4bb32f6a.crash`
+INFO: Done fuzzing! Ran 2 tests (0 tests/second) with 2 failed/0 passed/0 abandoned tests

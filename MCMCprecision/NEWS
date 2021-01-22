@@ -1,0 +1,63 @@
+MCMCprecision 0.4.0
+===========
+
+* Bug fixes for issues concerning class(matrix(...)) in R 4.0.0
+
+
+MCMCprecision 0.3.9
+===========
+
+* Updated citation and vignette: Paper in Statistics & Computing (doi:10.1007/s11222-018-9828-0)
+
+
+MCMCprecision 0.3.8
+===========
+
+* Code refactoring
+* Renamed functions: table.mc -> transitions; sim.mc -> rmarkov; dirichlet.mle -> fit_dirichlet ; stationary.mle -> stationary_mle ; best.k -> best_models
+* Added unit tests
+* Fixed bugs for transitions() of multiple-chain sequences and multiple CPUs in stationary()
+
+
+MCMCprecision 0.3.6
+===========
+
+* Fixed WARNING: Found ‘__assert_fail’, possibly from ‘assert’ (C)
+
+
+MCMCprecision 0.3.5
+===========
+
+* Registered C++ routines
+* Improved Description file
+
+
+MCMCprecision 0.3.3
+===========
+
+* Alternative method to compute eigenvectors: RcppEigen package
+* Improved starting values for Dirichlet estimation algorithm
+* Maximum likelihood estimation of stationary distribution: stationary.mle()
+* Changed default prior to epsilon=1/M (M= number of sampled models)
+* Changed default method to compute eigenvalue decomposition to RcppArmadillo (method="arma")
+
+
+MCMCprecision 0.3.0
+===========
+
+* Improved estimation of Dirichlet parameters to get effective sample size (C++ version of fixed-point algorithm by Mink, 2000)
+* New function best.k() to get summary for the k models with highest posterior model probability
+* Exports function rdirichlet()
+* Updated licence: GPL-3 (instead of GPL-2)
+
+
+MCMCprecision 0.2.1
+===========
+
+* New function best.k() to assess estimation uncertainty for the k models with the highest posterior model probabilities
+
+
+MCMCprecision 0.2.0
+===========
+
+* Implementations with RcppArmadillo::eig_gen and base::eigen

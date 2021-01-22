@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./CPP_set_openmp_threads_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/wordspace/inst/testfiles/CPP_set_openmp_threads/CPP_set_openmp_threads_output/d450ae71fbd8bc4961bc806a2689af873e7dcfeb.pass</line>
+</preamble>
+
+<pid>392371</pid>
+<ppid>392370</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/wordspace/inst/testfiles/CPP_set_openmp_threads/CPP_set_openmp_threads_output/log_d450ae71fbd8bc4961bc806a2689af873e7dcfeb/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./CPP_set_openmp_threads_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/wordspace/inst/testfiles/CPP_set_openmp_threads/CPP_set_openmp_threads_output/d450ae71fbd8bc4961bc806a2689af873e7dcfeb.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.049 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:23.847 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:24.820 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

@@ -1,0 +1,43 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (updog_deepstate_test_dlbeta_dxi_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: 467495432
+n values: 1827680409
+xi values: -1.64581e+174
+tau values: -1.66668e-49
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -498905818
+n values: 569042049
+xi values: -1.20777e+13
+tau values: 2.79236e-196
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -293123844
+n values: -555281357
+xi values: -2.88162e-134
+tau values: 8.18711e+299
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -1105761949
+n values: 304498753
+xi values: 3.72126e-82
+tau values: 5.29799e-243
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: 954479852
+n values: -194229631
+xi values: -4.2952e-278
+tau values: 4.24195e+22
+input ends
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 0 failed/5 passed/0 abandoned tests

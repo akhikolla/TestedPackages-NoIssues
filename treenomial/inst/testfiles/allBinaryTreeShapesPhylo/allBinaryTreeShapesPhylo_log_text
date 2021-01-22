@@ -1,0 +1,10 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (treenomial_deepstate_test_allBinaryTreeShapesPhylo_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+numTips values: 467495432
+input ends
+ERROR: Crashed: treenomial_deepstate_test_allBinaryTreeShapesPhylo_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/treenomial/inst/testfiles/allBinaryTreeShapesPhylo/allBinaryTreeShapesPhylo_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+INFO: Done fuzzing! Ran 1 tests (0 tests/second) with 1 failed/0 passed/0 abandoned tests

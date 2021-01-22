@@ -1,0 +1,11 @@
+09ecd883823061e2ba510a5f7e8cc5ad *DESCRIPTION
+7a70104c0cfa2014e7d611b57f8a875d *NAMESPACE
+97f3144ebffc7643c9384d8216f70cde *R/RcppExports.R
+d83a5f9c0f3682ae179242ea51e64811 *R/StMoSim.R
+d945683c1f13e5fd730bddf4079f43b5 *R/qqnormSim.R
+96f20d1758e19dff3be2187d3a53dad4 *man/StMoSim.Rd
+7f43584c01aab93d1bc191988407047a *man/qqnormSim.Rd
+8465ee3c046dc4b929d81033152f5339 *src/Makevars
+1344f2b0991ab305a1a99893493c907d *src/Makevars.win
+6d4169e7b7d91911bf3fd5490a9b8c75 *src/RcppExports.cpp
+7ff7cfc4020c9fb71ef7c0d0705363af *src/qqnormSim.cpp

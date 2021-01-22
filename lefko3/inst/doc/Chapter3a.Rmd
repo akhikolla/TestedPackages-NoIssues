@@ -1,0 +1,847 @@
+---
+title: "Cypripedium candidum raw MPMs"
+author: Richard P. Shefferson, Shun Kurokawa, and Johan Ehrlén
+output: rmarkdown::html_vignette
+bibliography: Lefko3Tutorial.bib
+vignette: >
+  %\VignetteIndexEntry{Cypripedium candidum raw MPMs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+This document was built in Markdown in R 4.0.3, and covers package `lefko3` version 3.1.0.
+
+## CASE STUDIES OF AMERICAN *Cypripedium candidum* POPULATION
+
+### ORGANISM AND POPULATION
+
+  <p style="text-indent: 20px">In this vignette, we will focus on a demographic dataset for a North American population of the white lady's slipper, *Cypripedium candidum*. This species is an herbaceous perennial in the orchid family, and is very long-lived. It is also of conservation concern, and the population is located within a state nature preserve located in northeastern Illinois, USA. The population was monitored annually from 2004 to 2009, with two monitoring sessions per year. More information about this population and its characteristics is given in Shefferson et al. [-@shefferson_estimating_2001] and Shefferson et al. [-@shefferson_predicting_2017].</p>
+  
+  <p style="text-indent: 20px">Population matrix projection modeling requires an appropriate life history model showing how all stages and transitions are related. The figure below shows a very general life history model detailing these relationships in *Cypripedium candidum*. The first stage of life is a dormant seed stage, although an individual may germinate in the year following seed production. The first germinated stage is a protocorm, which is an underground, mycoheterotrophic stage unique to the families Orchidaceae and Pyrolaceae. There are three years of protocorm stages, followed by a seedling stage, and finally a set of stages that comprise the size-classified adult portion of life. The figure shows 49 such stages, each for a different number of stems (including 0 for vegetative dormancy) and one of two reproductive statuses. These stages may be compressed for different circumstances (more on this later).</p>
+  
+<img src = "lifhist1.png" width = "700"></img>
+**Figure 1.** Life history model of *Cypripedium candidum*.
+
+  <p style="text-indent: 20px">We can see a variety of transitions within this figure. The juvenile stages have fairly simple transitions. New recruits may enter the population directly from germination of a seed produced the previous year, in which case they start in the protocorm 1 stage, or they may begin as dormant seed. Dormant seed may remain dormant, die, or germinate into the protocorm 1 stage. Protocorms exist for up to 3 years, yielding the protocorm 1, 2, and 3 stages, without any possibility of staying within each of these stages for more than a single year. Protocorm 3 leads to a seedling stage, in which the plant may persist for many years before becoming mature. Here, maturity does not really refer to reproduction *per se*, but rather to a morphology indistinguishable from a reproductive plant except for the lack of a flower. The first mature stage is usually either vegetative dormancy (dorm), during which time the plant does not sprout, or a small, non-flowering adult (1V). Once in this portion of the life history, the plant may transition among 49 mature stages, including vegetative dormancy, 1-24 shoots without flowers, or 1-24 shoots with at least one flower.</p>
+  
+  <p style="text-indent: 20px">The horizontal dataset `cypdata`, and the ahistorical vertical dataset `cypvert` which is the same as `cypdata` but is structured differently, both include only data for the adult stages, and so later we will need to set juvenile transitions to constants.</p>
+  
+### ANALYSES WITH *CYPRIPEDIUM* DATA
+
+  <p style="text-indent: 20px">We will analyze these data in two different ways to illustrate the utility of package `lefko3`:</p> 
+  
+  1) through the estimation of **raw MPMs** using a simplified life history; and
+  
+  2) through the estimation of **function-based MPMs** using a count-based size metric and the general life history model shown above.
+  
+  <p style="text-indent: 20px">We will not estimate an IPM because size is measured as a count variable in this case.</p>
+  
+  <p style="text-indent: 20px">In this vignette, we will focus on analysis (1).</p>
+  
+  
+### Analysis 1. Raw matrix estimation
+
+  <p style="text-indent: 20px">In this example, we will create raw matrices with these data. Here, we use the term 'raw' to refer to the fact that we will estimate matrix elements as exact proportions of individuals surviving and transitioning to different stages. This requires us to develop a life history model that is both biologically realistic, statistically meaningful, and parsimonious. The first requirement means that stages need to be defined in biologically meaningful ways. The second requirement means that stages should correlate strongly with the underlying demography. The final requirement means that we need to design our life stages in such a way that most years include some individuals in each stage. We also need to consider the fact that very low numbers of stages appear to result in biased matrix analyses, so we want to make sure that we have at least 7 stages in the final model [@salguero-gomez_matrix_2010].</p>
+
+#### Steps 1 and 2a. Life history model development, and horizontal dataset organization
+
+  <p style="text-indent: 20px">First let's wipe the memory, load `lefko3`, and then load the data.</p>
+
+```r
+rm(list=ls(all=TRUE))
+
+library(lefko3)
+data(cypdata)
+```
+
+  <p style="text-indent: 20px">The dataset that we have provided is organized in horizontal format, meaning that rows correspond to unique individuals and columns correspond to stage in particular years. Looking at the original Excel spreadsheet (below), you will note a repeating pattern in the names of the columns. Package `lefko3` includes functions to handle data in horizontal format, as well as functions to handle vertically formatted data (i.e. data for individuals is broken up across rows, where each row is a unique combination of individual and year in time *t*).</p>
+
+<img src = "cypscreen1.png" width = "700"></img>
+**Figure 2.** Organization of the *Cypripedium* dataset, as viewed in Microsoft Excel.
+
+
+  <p style="text-indent: 20px">In this dataset, there are 77 individuals, so there are 77 rows with data (not counting the header). There are 27 columns. Note that the first 3 columns are variables giving identifying information about each individual, with each individual's data entirely restricted to one row. This is followed by a number of sets of 4 columns, each named `Inf2.XX`, `Inf.XX`, `Veg.XX`, and `Pod.XX`. The XX in each case corresponds to a specific year, which are organized consecutively. Thus, columns 4-7 refer to year 04 (short for 2004), columns 8-11 refer to year 05, columns 12-15 refer to year 06, columns 16-19 refer to year 07, columns 20-23 refer to year 08, and columns 24-27 refer to year 09. To properly conduct this exercise, we need to know the exact number of years used, which is six years here (includes all years from 2004 to 2009). Note that each year MUST utilize exactly the same number and pattern of columns.</p>
+
+  <p style="text-indent: 20px">Now we will move on to the assessment of size. The full sizes of individuals are actually the sums of columns (representing sprouts) within years. We will take these sums, and then assess the distribution of individual sizes across years. We will look at all years and look for general patterns and abnormalities.</p>
+
+```r
+size.04 <- cypdata$Inf2.04 + cypdata$Inf.04 + cypdata$Veg.04
+size.05 <- cypdata$Inf2.05 + cypdata$Inf.05 + cypdata$Veg.05
+size.06 <- cypdata$Inf2.06 + cypdata$Inf.06 + cypdata$Veg.06
+size.07 <- cypdata$Inf2.07 + cypdata$Inf.07 + cypdata$Veg.07
+size.08 <- cypdata$Inf2.08 + cypdata$Inf.08 + cypdata$Veg.08
+size.09 <- cypdata$Inf2.09 + cypdata$Inf.09 + cypdata$Veg.09
+
+summary(c(size.04, size.05, size.06, size.07, size.08, size.09))
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+#>   1.000   1.000   2.000   3.581   5.000  24.000      97
+```
+
+The minimum size noted is 1, while the maximum is 24. There are 97 NAs, which includes cases in which plants were not alive as well as cases in which plants were vegetatively dormant. In the latter case, the individual is alive but not observable, which can be interpreted as an aboveground size of 0. Let's quickly plot the size distribution of sprouting individuals.
+
+```r
+plot(density(c(size.04, size.05, size.06, size.07, size.08, size.09), na.rm = TRUE), 
+     main = "", xlab = "Size (# of sprouts)", bty = "n")
+```
+
+![Figure 21. Density plot of plant size](Ch3aan1.2-1.png)
+
+  <p style="text-indent: 20px">This exercise gives us a reasonable idea of size classes to use for adult stages. We will have a dormant class (size = 0 shoots), extra small class (1 shoot), small class (2-3 shoots), medium class (4-5 shoots), large class (6-10 shoots), and extra large class (>10 shoots). Let's define a stageframe summarizing this.</p>
+
+```r
+sizevector <- c(0, 0, 0, 0, 0, 0, 1, 2.5, 4.5, 8, 17.5)
+stagevector <- c("SD", "P1", "P2", "P3", "SL", "D", "XSm", "Sm", "Md", "Lg", "XLg")
+repvector <- c(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1)
+obsvector <- c(0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1)
+matvector <- c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1)
+immvector <- c(0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0)
+propvector <- c(1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+indataset <- c(0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1)
+binvec <- c(0, 0, 0, 0, 0, 0.5, 0.5, 1, 1, 2.5, 7)
+
+cypframe_raw <- sf_create(sizes = sizevector, stagenames = stagevector, 
+                      repstatus = repvector, obsstatus = obsvector, 
+                      matstatus = matvector, propstatus = propvector, 
+                      immstatus = immvector, indataset = indataset, 
+                      binhalfwidth = binvec)
+```
+
+  <p style="text-indent: 20px">Now we will add some comments to the stageframe for our later use in interpretation.</p>
+
+```r
+cypframe_raw$comments[(cypframe_raw$stagenames == "SD")] <- "Dormant seed"
+cypframe_raw$comments[(cypframe_raw$stagenames == "P1")] <- "1st yr protocorm"
+cypframe_raw$comments[(cypframe_raw$stagenames == "P2")] <- "2nd yr protocorm"
+cypframe_raw$comments[(cypframe_raw$stagenames == "P3")] <- "3rd yr protocorm"
+cypframe_raw$comments[(cypframe_raw$stagenames == "SL")] <- "Seedling"
+cypframe_raw$comments[(cypframe_raw$stagenames == "D")] <- "Dormant adult"
+cypframe_raw$comments[(cypframe_raw$stagenames == "XSm")] <- "Extra small adult (1 shoot)"
+cypframe_raw$comments[(cypframe_raw$stagenames == "Sm")] <- "Small adult (2-3 shoots)"
+cypframe_raw$comments[(cypframe_raw$stagenames == "Md")] <- "Medium adult (4-5 shoots)"
+cypframe_raw$comments[(cypframe_raw$stagenames == "Lg")] <- "Large adult (6-10 shoots)"
+cypframe_raw$comments[(cypframe_raw$stagenames == "XLg")] <- "Extra large adult (>10 shoots)"
+```
+
+  <p style="text-indent: 20px">Type `cypframe_raw` at the R prompt to see what this structure looks like.</p>
+  
+  <p style="text-indent: 20px">Next we will create the vertical dataset. Because we are lumping reproductive and non-reproductive individuals into the non-dormant adult classes, we need to set `NRasRep = TRUE`. Otherwise, `verticalize3()` will attempt to use the reproductive status of individuals in classification, and will fail due to the presence of non-reproductive adults. We also need to set `NAas0 = TRUE` to make sure that NA values in size are turned into 0 entries where necessary, and so aid in the assignment of the vegetative dormancy stage. After this runs, type `summary(cypraw_v1)` to get a summary of the new dataset.</p>
+
+```r
+cypraw_v1 <- verticalize3(data = cypdata, noyears = 6, firstyear = 2004, 
+                         patchidcol = "patch", individcol = "plantid", 
+                         blocksize = 4, sizeacol = "Inf2.04", sizebcol = "Inf.04", 
+                         sizeccol = "Veg.04", repstracol = "Inf.04", 
+                         repstrbcol = "Inf2.04", fecacol = "Pod.04", 
+                         stageassign = cypframe_raw, stagesize = "sizeadded", 
+                         NAas0 = TRUE, NRasRep = TRUE)
+```
+
+#### Step 2b. Vertical dataset organization
+
+  <p style="text-indent: 20px">We may also wish to see how to proceed if our original dataset is already in vertical, but ahistorical, format. This package also includes dataset `cypvert`, which is the same dataset as `cypdata` but set in ahistorical vertical format. The structure of the dataset can be seen below. Note that individual histories are split across multiple rows.</p>
+
+<img src = "cypscreen2.png" width = "700"></img>
+**Figure 4.** Organization of the ahistorical vertical version of the *Cypripedium* dataset, as viewed in Microsoft Excel.
+
+  <p style="text-indent: 20px">Here, we use the `historicalize3()` function to deal with this dataset. First, let's load the ahistorical vertical raw data file.</p>
+
+```r
+data(cypvert)
+```
+
+And let's also look at its dimensions, relative to the original horizontal dataset.
+
+```r
+dim(cypdata)
+#> [1] 77 27
+dim(cypvert)
+#> [1] 331  12
+```
+  
+  <p style="text-indent: 20px">This dataset is longer and narrower, with more rows and fewer columns. This is because we now split data for each individual across multiple columns. After three columns of identifying information (`plantid`, `patch`, and `censor`), a single column designates time in year *t*, given as `year2`. This dataset then includes columns showing individual state in pairs of consecutive years corresponding to times *t* and *t*+1. State in time *t*-1 is not presented because this is an ahistorical dataset. Fortunately, this dataset includes the `plantid` variable, which is an individual identity term and must be supplied for conversion. The `historicalize3()` function uses individual identity to reorganize datasets into historical vertical format. After this runs, type `summary(cypraw_v2)` to get a summary of this dataset.</p>
+
+```r
+cypraw_v2 <- historicalize3(data = cypvert, patchidcol = "patch", individcol = "plantid",
+                           year2col = "year2", sizea2col = "Inf2.2", sizea3col = "Inf2.3",
+                           sizeb2col = "Inf.2", sizeb3col = "Inf.3", sizec2col = "Veg.2",
+                           sizec3col = "Veg.3", repstra2col = "Inf2.2", 
+                           repstra3col = "Inf2.3", repstrb2col = "Inf.2", 
+                           repstrb3col = "Inf.3", feca2col = "Pod.2",
+                           feca3col = "Pod.3", repstrrel = 2, stageassign = cypframe_raw,
+                           stagesize = "sizeadded", censorcol = "censor", censor = FALSE,
+                           NAas0 = TRUE, NRasRep = TRUE, reduce = TRUE)
+```
+
+  <p style="text-indent: 20px">We can compare the dimensions of these datasets.</p>
+
+```r
+dim(cypraw_v1)
+#> [1] 320  54
+dim(cypraw_v2)
+#> [1] 320  54
+```
+
+The lengths of the datasets are the same in terms of rows and columns, and the variables and data are the same although the order of the columns and rows might not match (see the summaries for comparison).
+
+#### Step 2c. Provide supplemental information for matrix estimation
+
+  <p style="text-indent: 20px">For our next step, we need to create a **reproductive matrix**, which tells R not only which stages are reproductive, but which stages they lead to the reproduction of, and at what level. This matrix is mostly composed of 0s, but fecundity is noted as non-zero entries equal to a scalar multiplier to the full fecundity estimated by R. This square matrix has as many rows and columns as the number of stages described in the stageframe for this dataset, and the rows and columns refer to these stages in the same order as in the stageframe. It looks like a nearly empty population matrix, but notes the per-individual mean modifiers on fecundity for each stage that actually reproduces. Here, we first create a 0 matrix with dimensions equal to the number of rows in `cypframe_raw`. Then we modify elements corresponding to fecundity by dividing fecundity evenly between dormant seeds (row 1) and germinating seeds (row 2).</p>
+
+```r
+rep_cyp_raw <- matrix(0, 11, 11)
+rep_cyp_raw[1:2,7:11] <- 0.5
+```
+
+  <p style="text-indent: 20px">Next we will provide some given transitions. In this case, we provide the seed dormancy probability and germination rate, which in this case are provided as transitions from the dormant seed stage to another year of seed dormancy or to a first-year protocorm, respectively. We also provide the survival-transition probabilities between different year protocorm stages (P1, P2, and P3), to the seedling stage (SL), and from the seedling stage to some of the adult stages (XSm, Sm, and D). Let's start with the ahistorical case.</p>
+
+```r
+cypover2r <- overwrite(stage3 = c("SD", "P1", "P2", "P3", "SL", "SL", "D", "XSm", "Sm"),
+                       stage2 = c("SD", "SD", "P1", "P2", "P3", "SL", "SL", "SL", "SL"),
+                       eststage3 = c(NA, NA, NA, NA, NA, NA, "D", "XSm", "Sm"),
+                       eststage2 = c(NA, NA, NA, NA, NA, NA, "XSm", "XSm", "XSm"),
+                       givenrate = c(0.1, 0.2, 0.2, 0.2, 0.25, 0.1, NA, NA, NA),
+                       type = c("S", "S", "S", "S", "S", "S", "S", "S", "S"))
+```
+
+  <p style="text-indent: 20px">This overwrite table shows us that we have survival-transition probabilities (`type = "S"`), that the given transitions are ahistorical, and outlines probabilities for transitions that we cannot estimate with our dataset, which in this case involve the immature stages of life. While six of these survival-transitions are given in the `givenrate` column, we also mark 3 of them as survival-transitions that we wish to use other estimates as proxies for. This is indicated via the `eststageX` columns, which have entries corresponding the stages to use as proxies (note that the `givenrate` entries are NA for these cases).</p>
+
+  <p style="text-indent: 20px">And now the historical case. Here we need to show the stages in time *t*-1 for this to work properly. Because of the extra complexity, we will use the short-hand term `"rep"` to code for reproductive stages leading to the seeds and first-year protocorms that must survive to the next year.</p>
+
+```r
+cypover3r <- overwrite(stage3 = c("SD", "SD", "P1", "P1", "P2", "P3", "SL", "SL", "SL", 
+                        "D", "XSm", "Sm", "D", "XSm", "Sm"), stage2 = c("SD", "SD", "SD", 
+                        "SD", "P1", "P2", "P3", "SL", "SL", "SL", "SL", "SL", "SL", "SL", 
+                        "SL"), stage1 = c("SD", "rep", "SD", "rep", "SD", "P1", "P2", 
+                        "P3", "SL", "P3", "P3", "P3", "SL", "SL", "SL"), 
+                       eststage3 = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, "D", "XSm", 
+                        "Sm", "D", "XSm", "Sm"), 
+                       eststage2 = c(NA, NA, NA, NA, NA, NA, NA, NA, NA, "XSm", "XSm",
+                        "XSm", "XSm", "XSm", "XSm"), eststage1 = c(NA, NA, NA, NA, NA, 
+                        NA, NA, NA, NA, "XSm", "XSm", "XSm", "XSm", "XSm", "XSm"), 
+                       givenrate = c(0.1, 0.1, 0.2, 0.2, 0.2, 0.2, 0.25, 0.1, 0.1, NA, 
+                        NA, NA, NA, NA, NA), type = c("S", "S", "S", "S", "S", "S", "S", 
+                        "S", "S", "S", "S", "S", "S", "S", "S"))
+```
+
+  <p style="text-indent: 20px">Type `cypover3r` at the prompt to note the increased dimensions here - there are 15 total transitions incorporated into this overwrite table, compared to 9 for the ahistorical version.</p>
+  
+  <p style="text-indent: 20px">Now we are read to create some matrices!</p>
+
+#### Step 3. Tests of history
+
+  <p style="text-indent: 20px">Let's now test whether individual history is important here. Let's build a historical set of vital rates models with modelsearch(), and see if any of the best-fit models include state in time *t*-1. The first 5 elements of the class `lefkoMod` object  that is output are the linear models. However, since the last 4 are focused on juveniles, and we did not include any juvenile data, we will look only at the first 5 elements.</p>
+
+```r
+histtest <- modelsearch(cypraw_v1, historical = TRUE, approach = "mixed", 
+                        vitalrates = c("surv", "obs", "size", "repst", "fec"), 
+                        sizedist = "poisson", fecdist = "poisson", suite = "size", 
+                        size = c("size3added", "size2added", "size1added"),
+                        show.model.tables = FALSE, quiet = TRUE)
+#> boundary (singular) fit: see ?isSingular
+#> Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model failed to converge with max|grad| = 0.0104299 (tol =
+#> 0.002, component 1)
+#> Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model is nearly unidentifiable: very large eigenvalue
+#>  - Rescale variables?
+#> Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model failed to converge with max|grad| = 0.00233173 (tol =
+#> 0.002, component 1)
+#> Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model is nearly unidentifiable: very large eigenvalue
+#>  - Rescale variables?
+histtest[1:5]
+#> $survival_model
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: alive3 ~ size2added + (1 | year2) + (1 | individ)
+#>    Data: surv.data
+#>      AIC      BIC   logLik deviance df.resid 
+#> 128.1324 143.2057 -60.0662 120.1324      316 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 1.198371
+#>  year2   (Intercept) 0.008826
+#> Number of obs: 320, groups:  individ, 74; year2, 5
+#> Fixed Effects:
+#> (Intercept)   size2added  
+#>      2.0352       0.6344  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> $observation_model
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: obsstatus3 ~ size2added + (1 | year2) + (1 | individ)
+#>    Data: obs.data
+#>      AIC      BIC   logLik deviance df.resid 
+#> 118.2567 133.1117 -55.1284 110.2567      299 
+#> Random effects:
+#>  Groups  Name        Std.Dev. 
+#>  individ (Intercept) 1.078e-05
+#>  year2   (Intercept) 8.776e-01
+#> Number of obs: 303, groups:  individ, 70; year2, 5
+#> Fixed Effects:
+#> (Intercept)   size2added  
+#>      2.4904       0.3134  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> $size_model
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: poisson  ( log )
+#> Formula: size3added ~ size1added + size2added + (1 | year2) + (1 | individ) +      size1added:size2added
+#>    Data: size.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#> 1086.8306 1108.8084 -537.4153 1074.8306       282 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0.1211  
+#>  year2   (Intercept) 0.1931  
+#> Number of obs: 288, groups:  individ, 70; year2, 5
+#> Fixed Effects:
+#>           (Intercept)             size1added             size2added  size1added:size2added  
+#>              0.303992               0.139204               0.156235              -0.009423  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 2 lme4 warnings 
+#> 
+#> $repstatus_model
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: repstatus3 ~ size2added + (1 | year2) + (1 | individ)
+#>    Data: repst.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#>  346.9352  361.5870 -169.4676  338.9352       284 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 1.2838  
+#>  year2   (Intercept) 0.7164  
+#> Number of obs: 288, groups:  individ, 70; year2, 5
+#> Fixed Effects:
+#> (Intercept)   size2added  
+#>     -1.2489       0.2698  
+#> 
+#> $fecundity_model
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: poisson  ( log )
+#> Formula: feca2 ~ size1added + size2added + (1 | year2) + (1 | individ) +      size1added:size2added
+#>    Data: fec.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#>  254.2001  270.8242 -121.1000  242.2001       112 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0.3505  
+#>  year2   (Intercept) 0.5914  
+#> Number of obs: 118, groups:  individ, 51; year2, 5
+#> Fixed Effects:
+#>           (Intercept)             size1added             size2added  size1added:size2added  
+#>              -1.88629                0.15055                0.18950               -0.01237  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 2 lme4 warnings
+```
+
+We can see that historical size is included as a factor in the model of size. This suggests that the raw historical MPM is the most parsimonious choice. Please see the section on historical vital rate modeling in the next analysis, or in Analysis 2 of the Lathyrus vignette for more information on the modeling conducted here.
+
+#### Step 4. MPM estimation
+
+  <p style="text-indent: 20px">We will begin with the creation of a set of ahistorical matrices for the *Cypripedium candidum* dataset. The `rlefko2` function was created to deal with the construction of ahistorical MPMs using raw data. Matrices may strongly differ, particularly if the demographic dataset is somewhat sparse. This happens because there may not be enough individuals per year to encounter all possible transitions, leading to seemingly random shifts in the location of non-zero elements within matrices across time. We strongly advise readers to build life history models that reflect the sample size that they are working with to prevent this issue from causing odd results in MPM analysis.</p>
+
+```r
+cypmatrix2r <- rlefko2(data = cypraw_v1, stageframe = cypframe_raw, year = "all", 
+                       patch = "all", stages = c("stage3", "stage2"),
+                       size = c("size3added", "size2added"), 
+                       repmatrix = rep_cyp_raw, overwrite = cypover2r, 
+                       yearcol = "year2", patchcol = "patchid", indivcol = "individ")
+```
+
+  <p style="text-indent: 20px">The input for the `rlefko2()` function includes `year = "all"`, but can be set to focus on any set of years included within the data. Package `lefko3` includes a great deal of flexibility here, and can estimate many matrices covering all of the populations, patches, and years occurring in a specific dataset. The function-based matrix approach in the next section will showcase some more of this flexibility.</p>
+
+  <p style="text-indent: 20px">The output from this analysis is a `lefkoMat` object, which is a list object with the following elements:</p>
+  
+  **A**: a list of full population projection matrices, in order of population, patch, and year
+  
+  **U**: a list of matrices showing only survival-transition elements, in the same order as A
+  
+  **F**: a list of matrices showing only fecundity elements, in the same order as A
+  
+  **hstages**: a data frame showing the order of paired stages (given if matrices are historical, otherwise NA)
+  
+  **ahstages**: this is the stageframe used in analysis, with stages reordered and edited as they occur in the matrix
+  
+  **labels**: a table showing the order of matrices, according to population, patch, and year
+  
+  **matrixqc**: a short vector used in `summary` statements to describe the overall quality of each matrix
+  
+  **dataqc**: a short vector used in `summary` statements to describe key sampling aspects of the dataset
+  
+  
+  <p style="text-indent: 20px">Objects of class `lefkoMat` have their own `summary` statements, which we can use to understand more about them.</p>
+
+```r
+summary(cypmatrix2r)
+#> 
+#> This ahistorical lefkoMat object contains 15 matrices.
+#> 
+#> Each matrix is a square matrix with 11 rows and columns, and a total of 121 elements.
+#> A total of 280 survival transitions were estimated, with 18.667 per matrix.
+#> A total of 66 fecundity transitions were estimated, with 4.4 per matrix.
+#> 
+#> The dataset contains a total of 74 unique individuals and 320 unique transitions.
+#> NULL
+```
+
+  <p style="text-indent: 20px">We start off learning that 15 matrices were estimated, and we learn the dimensionality of those matrices. Of note here is the output telling us how many elements were actually estimated, both overall and per matrix, and the number of individuals and transitions the matrices are based on. It is typical for population ecologists to consider the total number of transitions in a dataset as a measure of the statistical power of a matrix, but the number of individuals used is just as important because each transition that an individual experiences is dependent on the other transitions that it also experiences. Indeed, this is the fundamental point that led to the development of historical matrices and of this package - the assumption that the status of an individual in the next time is dependent only on its current state is too simplistic, and may lead to both overparameterization and pseudoreplication (if vital rate models are used).</p>
+  
+  <p style="text-indent: 20px">Let's look at a sample matrix here.</p>
+
+```r
+print(cypmatrix2r$A[[1]], digits = 3)
+#>       [,1] [,2] [,3] [,4]  [,5] [,6]  [,7] [,8] [,9] [,10] [,11]
+#>  [1,]  0.1  0.0  0.0 0.00 0.000    0 0.000  0.1  0.5   0.0     0
+#>  [2,]  0.2  0.0  0.0 0.00 0.000    0 0.000  0.1  0.5   0.0     0
+#>  [3,]  0.0  0.2  0.0 0.00 0.000    0 0.000  0.0  0.0   0.0     0
+#>  [4,]  0.0  0.0  0.2 0.00 0.000    0 0.000  0.0  0.0   0.0     0
+#>  [5,]  0.0  0.0  0.0 0.25 0.100    0 0.000  0.0  0.0   0.0     0
+#>  [6,]  0.0  0.0  0.0 0.00 0.000    0 0.000  0.0  0.0   0.0     0
+#>  [7,]  0.0  0.0  0.0 0.00 0.636    0 0.636  0.2  0.0   0.0     0
+#>  [8,]  0.0  0.0  0.0 0.00 0.273    0 0.273  0.6  0.5   0.0     0
+#>  [9,]  0.0  0.0  0.0 0.00 0.000    0 0.000  0.0  0.5   0.5     0
+#> [10,]  0.0  0.0  0.0 0.00 0.000    0 0.000  0.2  0.0   0.5     0
+#> [11,]  0.0  0.0  0.0 0.00 0.000    0 0.000  0.0  0.0   0.0     0
+```
+
+The reader will note that although this is an ahistorical matrix, it is predominantly composed of 0 elements. This is a result of the sparseness of the data, and will likely lead to different elements shifting between 0 and positive elements across time.
+
+  <p style="text-indent: 20px">Now we will create some historical matrices. Historical matrix construction parses the data much more finely across many more stages than ahistorical matrix construction, so historical matrices are even more likely to differ strongly across time, particularly as the number of individuals in a dataset decreases. Let's see what these matrices look like.</p>
+
+```r
+cypmatrix3r <- rlefko3(data = cypraw_v1, stageframe = cypframe_raw, year = "all", 
+                       patch = "all", stages = c("stage3", "stage2", "stage1"), 
+                       size = c("size3added", "size2added", "size1added"), 
+                       repmatrix = rep_cyp_raw, overwrite = cypover3r, 
+                       yearcol = "year2", patchcol = "patchid", indivcol = "individ")
+
+summary(cypmatrix3r)
+#> 
+#> This historical lefkoMat object contains 12 matrices.
+#> 
+#> Each matrix is a square matrix with 121 rows and columns, and a total of 14641 elements.
+#> A total of 433 survival transitions were estimated, with 36.083 per matrix.
+#> A total of 70 fecundity transitions were estimated, with 5.833 per matrix.
+#> 
+#> The dataset contains a total of 74 unique individuals and 320 unique transitions.
+#> NULL
+```
+
+  <p style="text-indent: 20px">There are at least two things to note here. First, there are 3 fewer matrices here than in the ahistorical case. There are 3 patches that we are estimating matrices for, and 6 years of data for each patch, leading to 5 possible ahistorical time transitions and 15 possible ahistorical matrices. Since historical matrices require 3 years of transitions, only 4 historical transitions are possible per patch, leading to 12 total historical matrices. Second, the dimensionality of the matrices is the square of the dimensions of the ahistorical matrices. This leads to vastly more matrix elements within each matrix, although it turns out that most of these matrix elements are structural 0s because they reflect impossible transitions. Indeed, in this case, although there are 14,641 elements in each matrix, on average only 41.917 are actually estimated at being greater than 0.</p>
+  
+  <p style="text-indent: 20px">Let's look at the first matrix, corresponding to the transition from 2004 and 2005 to 2006 in the first patch. Because this is a huge matrix, we will only look at the top corner, followed by a middle section.</p>
+
+```r
+cypmatrix3r$A[[1]][1:20,1:10]
+#>       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#>  [1,]  0.1  0.0    0    0    0    0    0    0    0     0
+#>  [2,]  0.2  0.0    0    0    0    0    0    0    0     0
+#>  [3,]  0.0  0.0    0    0    0    0    0    0    0     0
+#>  [4,]  0.0  0.0    0    0    0    0    0    0    0     0
+#>  [5,]  0.0  0.0    0    0    0    0    0    0    0     0
+#>  [6,]  0.0  0.0    0    0    0    0    0    0    0     0
+#>  [7,]  0.0  0.0    0    0    0    0    0    0    0     0
+#>  [8,]  0.0  0.0    0    0    0    0    0    0    0     0
+#>  [9,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [10,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [11,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [12,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [13,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [14,]  0.0  0.2    0    0    0    0    0    0    0     0
+#> [15,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [16,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [17,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [18,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [19,]  0.0  0.0    0    0    0    0    0    0    0     0
+#> [20,]  0.0  0.0    0    0    0    0    0    0    0     0
+print(cypmatrix3r$A[[1]][66:85,73:81], digits = 3)
+#>         [,1]  [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9]
+#>  [1,] 0.0000 0.000    0    0    0    0    0    0    0
+#>  [2,] 0.0714 0.000    0    0    0    0    0    0    0
+#>  [3,] 0.0714 0.000    0    0    0    0    0    0    0
+#>  [4,] 0.0000 0.000    0    0    0    0    0    0    0
+#>  [5,] 0.0000 0.000    0    0    0    0    0    0    0
+#>  [6,] 0.0000 0.000    0    0    0    0    0    0    0
+#>  [7,] 0.1429 0.000    0    0    0    0    0    0    0
+#>  [8,] 0.7143 0.000    0    0    0    0    0    0    0
+#>  [9,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [10,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [11,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [12,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [13,] 0.0000 0.333    0    0    0    0    0    0    0
+#> [14,] 0.0000 0.333    0    0    0    0    0    0    0
+#> [15,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [16,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [17,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [18,] 0.0000 0.000    0    0    0    0    0    0    0
+#> [19,] 0.0000 0.667    0    0    0    0    0    0    0
+#> [20,] 0.0000 0.333    0    0    0    0    0    0    0
+```
+The full matrix is not shown here, but we can focus on portions of it if we wish. These matrices may also be exported to Excel or another spreadsheet program to look over in detail.
+
+  <p style="text-indent: 20px">Next we will create a mean ahistorical matrix using the `lmean()` function.</p>
+
+```r
+cypr2mean <- lmean(cypmatrix2r)
+print(cypr2mean$A[[4]], digits = 3)
+#>       [,1] [,2] [,3] [,4]   [,5]   [,6]    [,7]   [,8]   [,9]  [,10]  [,11]
+#>  [1,]  0.1  0.0  0.0 0.00 0.0000 0.0000 0.00787 0.0717 0.1890 0.2924 0.4667
+#>  [2,]  0.2  0.0  0.0 0.00 0.0000 0.0000 0.00787 0.0717 0.1890 0.2924 0.4667
+#>  [3,]  0.0  0.2  0.0 0.00 0.0000 0.0000 0.00000 0.0000 0.0000 0.0000 0.0000
+#>  [4,]  0.0  0.0  0.2 0.00 0.0000 0.0000 0.00000 0.0000 0.0000 0.0000 0.0000
+#>  [5,]  0.0  0.0  0.0 0.25 0.1000 0.0000 0.00000 0.0000 0.0000 0.0000 0.0000
+#>  [6,]  0.0  0.0  0.0 0.00 0.0673 0.0222 0.06726 0.0281 0.0194 0.0000 0.0000
+#>  [7,]  0.0  0.0  0.0 0.00 0.5197 0.2111 0.51975 0.2291 0.0694 0.0667 0.0000
+#>  [8,]  0.0  0.0  0.0 0.00 0.2547 0.1556 0.25474 0.4031 0.1961 0.1822 0.0222
+#>  [9,]  0.0  0.0  0.0 0.00 0.0000 0.0556 0.00741 0.2135 0.4881 0.1679 0.0000
+#> [10,]  0.0  0.0  0.0 0.00 0.0000 0.0000 0.03704 0.0650 0.2269 0.5435 0.0889
+#> [11,]  0.0  0.0  0.0 0.00 0.0000 0.0222 0.00000 0.0000 0.0000 0.0397 0.4889
+
+writeLines("\nColumn sums (stage survival probabilities) for grand arithmetic mean matrix")
+#> 
+#> Column sums (stage survival probabilities) for grand arithmetic mean matrix
+summary(colSums(cypr2mean$U[[4]]))
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>  0.2000  0.2750  0.6000  0.6167  0.9403  1.0000
+```
+  
+The column sums represent the survival probabilities of stages, and so can be used for error-checking purposes. Here, all values look to be within the realm of possibility.
+
+  <p style="text-indent: 20px">And now the historical grand mean matrix, with a peek at a middle portion with some non-zero values.</p>
+
+```r
+cypr3mean <- lmean(cypmatrix3r)
+print(cypr3mean$A[[4]][66:85,73:80], digits = 3)
+#>          [,1]   [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+#>  [1,] 0.00000 0.0000    0    0    0    0    0    0
+#>  [2,] 0.00595 0.0000    0    0    0    0    0    0
+#>  [3,] 0.00595 0.0000    0    0    0    0    0    0
+#>  [4,] 0.00000 0.0000    0    0    0    0    0    0
+#>  [5,] 0.00000 0.0000    0    0    0    0    0    0
+#>  [6,] 0.00000 0.0000    0    0    0    0    0    0
+#>  [7,] 0.13690 0.0000    0    0    0    0    0    0
+#>  [8,] 0.53730 0.0000    0    0    0    0    0    0
+#>  [9,] 0.22500 0.0000    0    0    0    0    0    0
+#> [10,] 0.00000 0.0000    0    0    0    0    0    0
+#> [11,] 0.00000 0.0000    0    0    0    0    0    0
+#> [12,] 0.00000 0.0000    0    0    0    0    0    0
+#> [13,] 0.00000 0.0278    0    0    0    0    0    0
+#> [14,] 0.00000 0.0278    0    0    0    0    0    0
+#> [15,] 0.00000 0.0000    0    0    0    0    0    0
+#> [16,] 0.00000 0.0000    0    0    0    0    0    0
+#> [17,] 0.00000 0.0000    0    0    0    0    0    0
+#> [18,] 0.00000 0.0000    0    0    0    0    0    0
+#> [19,] 0.00000 0.3014    0    0    0    0    0    0
+#> [20,] 0.00000 0.0986    0    0    0    0    0    0
+```
+
+Do not fear the prevalence of 0s in this matrix - this is normal, both because many elements are structural 0s and so cannot equal anything else, and because this is a raw matrix, meaning that transitions that do not actually occur in the dataset cannot equal anything other than 0.
+
+  <p style="text-indent: 20px">To understand the dominance of structural 0s in the historical case, let's take a look at the `hstages` object associated with this mean matrix.</p>
+
+```r
+cypr3mean$hstages
+#>     stage_id_2 stage_id_1 stage_2 stage_1
+#> 1            1          1      SD      SD
+#> 2            2          1      P1      SD
+#> 3            3          1      P2      SD
+#> 4            4          1      P3      SD
+#> 5            5          1      SL      SD
+#> 6            6          1       D      SD
+#> 7            7          1     XSm      SD
+#> 8            8          1      Sm      SD
+#> 9            9          1      Md      SD
+#> 10          10          1      Lg      SD
+#> 11          11          1     XLg      SD
+#> 12           1          2      SD      P1
+#> 13           2          2      P1      P1
+#> 14           3          2      P2      P1
+#> 15           4          2      P3      P1
+#> 16           5          2      SL      P1
+#> 17           6          2       D      P1
+#> 18           7          2     XSm      P1
+#> 19           8          2      Sm      P1
+#> 20           9          2      Md      P1
+#> 21          10          2      Lg      P1
+#> 22          11          2     XLg      P1
+#> 23           1          3      SD      P2
+#> 24           2          3      P1      P2
+#> 25           3          3      P2      P2
+#> 26           4          3      P3      P2
+#> 27           5          3      SL      P2
+#> 28           6          3       D      P2
+#> 29           7          3     XSm      P2
+#> 30           8          3      Sm      P2
+#> 31           9          3      Md      P2
+#> 32          10          3      Lg      P2
+#> 33          11          3     XLg      P2
+#> 34           1          4      SD      P3
+#> 35           2          4      P1      P3
+#> 36           3          4      P2      P3
+#> 37           4          4      P3      P3
+#> 38           5          4      SL      P3
+#> 39           6          4       D      P3
+#> 40           7          4     XSm      P3
+#> 41           8          4      Sm      P3
+#> 42           9          4      Md      P3
+#> 43          10          4      Lg      P3
+#> 44          11          4     XLg      P3
+#> 45           1          5      SD      SL
+#> 46           2          5      P1      SL
+#> 47           3          5      P2      SL
+#> 48           4          5      P3      SL
+#> 49           5          5      SL      SL
+#> 50           6          5       D      SL
+#> 51           7          5     XSm      SL
+#> 52           8          5      Sm      SL
+#> 53           9          5      Md      SL
+#> 54          10          5      Lg      SL
+#> 55          11          5     XLg      SL
+#> 56           1          6      SD       D
+#> 57           2          6      P1       D
+#> 58           3          6      P2       D
+#> 59           4          6      P3       D
+#> 60           5          6      SL       D
+#> 61           6          6       D       D
+#> 62           7          6     XSm       D
+#> 63           8          6      Sm       D
+#> 64           9          6      Md       D
+#> 65          10          6      Lg       D
+#> 66          11          6     XLg       D
+#> 67           1          7      SD     XSm
+#> 68           2          7      P1     XSm
+#> 69           3          7      P2     XSm
+#> 70           4          7      P3     XSm
+#> 71           5          7      SL     XSm
+#> 72           6          7       D     XSm
+#> 73           7          7     XSm     XSm
+#> 74           8          7      Sm     XSm
+#> 75           9          7      Md     XSm
+#> 76          10          7      Lg     XSm
+#> 77          11          7     XLg     XSm
+#> 78           1          8      SD      Sm
+#> 79           2          8      P1      Sm
+#> 80           3          8      P2      Sm
+#> 81           4          8      P3      Sm
+#> 82           5          8      SL      Sm
+#> 83           6          8       D      Sm
+#> 84           7          8     XSm      Sm
+#> 85           8          8      Sm      Sm
+#> 86           9          8      Md      Sm
+#> 87          10          8      Lg      Sm
+#> 88          11          8     XLg      Sm
+#> 89           1          9      SD      Md
+#> 90           2          9      P1      Md
+#> 91           3          9      P2      Md
+#> 92           4          9      P3      Md
+#> 93           5          9      SL      Md
+#> 94           6          9       D      Md
+#> 95           7          9     XSm      Md
+#> 96           8          9      Sm      Md
+#> 97           9          9      Md      Md
+#> 98          10          9      Lg      Md
+#> 99          11          9     XLg      Md
+#> 100          1         10      SD      Lg
+#> 101          2         10      P1      Lg
+#> 102          3         10      P2      Lg
+#> 103          4         10      P3      Lg
+#> 104          5         10      SL      Lg
+#> 105          6         10       D      Lg
+#> 106          7         10     XSm      Lg
+#> 107          8         10      Sm      Lg
+#> 108          9         10      Md      Lg
+#> 109         10         10      Lg      Lg
+#> 110         11         10     XLg      Lg
+#> 111          1         11      SD     XLg
+#> 112          2         11      P1     XLg
+#> 113          3         11      P2     XLg
+#> 114          4         11      P3     XLg
+#> 115          5         11      SL     XLg
+#> 116          6         11       D     XLg
+#> 117          7         11     XSm     XLg
+#> 118          8         11      Sm     XLg
+#> 119          9         11      Md     XLg
+#> 120         10         11      Lg     XLg
+#> 121         11         11     XLg     XLg
+```
+There are 121 pairs of ahistorical stages, and these pairs correspond to the rows and columns of the historical matrices output by `rlefko3()`. These stage-pairs are interpreted so that matrix columns represent the stages of the individual in times *t*-1 and *t*, and matrix rows represent stages in times *t* and *t*+1. For an element in the matrix to contain a number other than 0, it must represent the same stage at time *t* in both the column stage pairs and the row stage pairs. The element [1, 1], for example, represents the transition probability from dormant seed at times *t*-1 and *t* (column pair) to times *t* and *t*+1 (row pair) - the time *t* stages match, and so this element is possible. However, element [1, 2] represents the transition probability from seed in time *t*-1 and protocorm 1 in time *t* (column pair), to dormant seed in time *t* and in time *t*+1 (row pair). Clearly [1, 2] is a structural 0 because it is impossible for an individual to be both a protocorm 1 and a dormant seed in time *t*.
+
+  <p style="text-indent: 20px">Error-checking is more difficult with historical matrices because they are typically one or two orders of magnitude bigger than their ahistorical counterparts. There are 121 column sums to assess, and while not too bad here, other historical matrices often have many more than 100 columns (some historical matrices used in Shefferson et al. [-@shefferson_life_2014] had dimensions of over 2500 x 2500!). So, it makes more sense to look at a summary than to look at all values.</p>
+
+```r
+summary(colSums(cypr3mean$U[[4]]))
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>  0.0000  0.0000  0.0000  0.1229  0.1667  0.9992
+```
+
+
+As long as all of the numbers above are between 0 and 1, then all is probably well. Fine-scale error-checking would require outputting the matrix into a spreadsheet and assessing it using the `hstages` output as a guide to what the elements refer to.
+
+#### Step 5. MPM analysis
+
+  <p style="text-indent: 20px">Now let's estimate the deterministic population growth rate in each case. We will start by looking at the annual population growth rate estimated from the ahistorical analyses, followed by the population growth rate associated with the mean matrix from that analysis. We will assess these with a plot.</p>
+
+```r
+cyplam2 <- lambda3(cypmatrix2r)
+cyplam3 <- lambda3(cypmatrix3r)
+
+plot(lambda ~ year2, data = subset(cyplam2, patch == "A"), ylim = c(0.65, 1.05), 
+     type = "l", lwd = 2, bty = "n")
+lines(lambda ~ year2, data = subset(cyplam2, patch == "B"), type = "l", lwd = 2, lty = 2)
+lines(lambda ~ year2, data = subset(cyplam2, patch == "C"), type = "l", lwd = 2, lty = 3)
+lines(lambda ~ year2, data = subset(cyplam3, patch == "A"), type = "l", lwd = 2, lty = 1, 
+      col = "red")
+lines(lambda ~ year2, data = subset(cyplam3, patch == "B"), type = "l", lwd = 2, lty = 2, 
+      col = "red")
+lines(lambda ~ year2, data = subset(cyplam3, patch == "C"), type = "l", lwd = 2, lty = 3, 
+      col = "red")
+legend("bottomright", c("A ahistorical", "B ahistorical", "C ahistorical", "A historical", 
+        "B historical", "C historical"), lty = c(1, 2, 3, 1, 2, 3), col = c("black", 
+        "black", "black", "red", "red", "red"), lwd = 2, bty = "n")
+```
+
+![Figure 22. Ahistorical vs. historical lambda](Ch3aan1.24-1.png)
+
+In this case, readers will likely observe both that there are fewer $\lambda$ estimates in the historical case, and that the mean $\lambda$ is substantially lower. Because there are 6 years of data, there are three ahistorical transitions possible for estimation: year 1 to 2, year 2 to 3, and year 3 to 4. However, in the historical case, only two are possible: from years 1 and 2 to years 2 and 3, and from years 2 and 3 to years 3 and 4. Let's also compare the patch-level and overall population means.
+
+```r
+lambda3(cypr2mean)
+#>   pop patch    lambda
+#> 1   1     1 0.8987428
+#> 2   1     2 0.9271072
+#> 3   1     3 0.9584473
+#> 4   1     0 0.9322154
+lambda3(cypr3mean)
+#>   pop patch    lambda
+#> 1   1     1 0.7802134
+#> 2   1     2 0.7601081
+#> 3   1     3 1.0000000
+#> 4   1     0 0.6905696
+```
+
+  <p style="text-indent: 20px">Historical matrices can be impacted by trade-offs operating across years [@shefferson_longitudinal_2010]. One particularly common such trade-off is the cost of growth: an individual that grows a great deal in one time due to great environmental conditions in that year might pay a large cost of survival, growth, or reproduction in the next if those environmental conditions deteriorate [@shefferson_life_2014]. While we do not argue that the drop in $\lambda$ is due to this specific trade-off, we do argue that this lambda is likely to be more realistic than the higher lambda estimated in the ahistorical case. In this case, of course, there is a third issue, which is that some of the prevalence of 0s in both ahistorical and historical matrices will be due to the sparseness of the data. This may be one additional reason accounting for the rather dramatic drop in population-level lambda associated with the historical case, which is substantially lower than the ahistorical lambda. In this circumstance, the function-based matrix approach is more likely to yield a realistic understanding of population dynamics.</p>
+
+  <p style="text-indent: 20px">We can also take a peek at the stable stage distributions. Let's compare the stable stage distributions of the grand mean matrix, which is the 4th matrix in each case (the first 3 are patch-level means).</p>
+
+```r
+cypr2ss <- stablestage3(cypr2mean)
+cypr3ss <- stablestage3(cypr3mean)
+
+ss_put_together <- cbind.data.frame(subset(cypr2ss, matrix == 4)$ss_prop, subset(cypr3ss$ahist, matrix == 4)$ss_prop)
+names(ss_put_together) <- c("ahist", "hist")
+rownames(ss_put_together) <- subset(cypr2ss, matrix == 4)$stage_id
+
+barplot(t(ss_put_together), beside=T, ylab = "Proportion", xlab = "Stage",
+        col = c("black", "red"), bty = "n")
+legend("topright", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+![Figure 23. Ahistorical vs. historically-corrected stable stage distribution](Ch3aan1.26-1.png)
+
+These two analyses suggest different stable stage distributions. The ahistorical analysis suggests that the population should be dominated by small adults, followed by very small adults, followed by medium and then large adults. The historically-corrected analysis suggests that the population should be dominated by very small adults, followed by small adults, medium adults, and protocorms. Individual history seems to have important impacts on inference here.
+
+  <p style="text-indent: 20px">Let's look at the reproductive values next.</p>
+
+```r
+cypr2rv <- repvalue3(cypr2mean)
+cypr3rv <- repvalue3(cypr3mean)
+
+rv_put_together <- cbind.data.frame(subset(cypr2rv, matrix == 4)$rep_value, 
+                                    subset(cypr3rv$ahist, matrix == 4)$rep_value)
+names(rv_put_together) <- c("ahist", "hist")
+rv_put_together$ahist <- rv_put_together$ahist / max(rv_put_together$ahist)
+rv_put_together$hist <- rv_put_together$hist / max(rv_put_together$hist)
+rownames(rv_put_together) <- subset(cypr2rv, matrix == 4)$stage_id
+
+barplot(t(rv_put_together), beside=T, ylab = "Relative rep value", xlab = "Stage", 
+        col = c("black", "red"), bty = "n")
+legend("topleft", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+![Figure 24. Ahistorical vs. historically-corrected reproductive values](Ch3aan1.27-1.png)
+
+Ahistorical analysis suggests that adults have the highest reproductive value, particularly medium and large adults. Historically-corrected analysis agrees that adults have the highest reproductive value, but shows the highest reproductive value to be associated with extra small adults. It also shows the contribution of extra large adults to drop to almost 0, while ahistorical analysis still suggested a modest contribution.
+
+  <p style="text-indent: 20px">Next we will move on to sensitivity analysis. We will only work with the population-level mean matrices from here out.</p>
+
+```r
+cypr2sens <- sensitivity3(cypr2mean)
+cypr3sens <- sensitivity3(cypr3mean)
+
+writeLines("\nGreatest sensitivity value in ahistorical matrix associated with element: ")
+#> 
+#> Greatest sensitivity value in ahistorical matrix associated with element:
+which(cypr2sens$sensmats[[4]] == max(cypr2sens$sensmats[[4]]))
+#> [1] 86
+
+writeLines("\nGreatest sensitivity value in historical matrix associated with element: ")
+#> 
+#> Greatest sensitivity value in historical matrix associated with element:
+which(cypr3sens$h_sensmats[[4]] == max(cypr3sens$h_sensmats[[4]][which(cypr3mean$A[[4]] > 0)]))
+#> [1] 8785
+
+writeLines("\nGreatest sensitivity value in historically-corrected matrix associated with element: ")
+#> 
+#> Greatest sensitivity value in historically-corrected matrix associated with element:
+which(cypr3sens$ah_sensmats[[4]] == max(cypr3sens$ah_sensmats[[4]]))
+#> [1] 76
+```
+
+The highest sensitivity value in the ahistorical mean is associated with the transition from stage 8 (small adult) to stage 9 (medium adult). The historically-corrected case, however, shows the highest elasticity value associated with the transition from stage 7 (extra small adult) to stage 10 (large adult). However, the highest sensitivity among historical transitions is associated with stasis in stage 7 (extra small adult).
+
+  <p style="text-indent: 20px">Now let's take a look at the elasticity matrices.</p>
+
+```r
+cypr2elas <- elasticity3(cypr2mean)
+cypr3elas <- elasticity3(cypr3mean)
+
+writeLines("\nGreatest elasticity value in ahistorical matrix associated with element: ")
+#> 
+#> Greatest elasticity value in ahistorical matrix associated with element:
+which(cypr2elas$elasmats[[4]] == max(cypr2elas$elasmats[[4]]))
+#> [1] 109
+
+writeLines("\nGreatest elasticity value in historical matrix associated with element: ")
+#> 
+#> Greatest elasticity value in historical matrix associated with element:
+which(cypr3elas$h_elasmats[[4]] == max(cypr3elas$h_elasmats[[4]]))
+#> [1] 8785
+
+writeLines("\nGreatest elasticity value in historically-corrected matrix associated with element: ")
+#> 
+#> Greatest elasticity value in historically-corrected matrix associated with element:
+which(cypr3elas$ah_elasmats[[4]] == max(cypr3elas$ah_elasmats[[4]]))
+#> [1] 73
+```
+
+Interestingly, the greatest elasticity values in the historical and historically-corrected mean matrices are associated with the same elements as the highest sensitivity values are associated with. This gives greater support to the inference that shifts in the survival of extra small adults, and of transitions from this stage to the large adult, have great impacts on $\lambda$. Ahistorical analysis, in contrast, supports the stasis of extra large adults as the element that $\lambda$ is most elastic to.
+
+  <p style="text-indent: 20px">Let's compare the overall elasticity of $\lambda$ to life history stages from both analysis.</p>
+
+```r
+elas_put_together <- cbind.data.frame(colSums(cypr2elas$elasmats[[4]]), 
+                                      colSums(cypr3elas$ah_elasmats[[4]]))
+names(elas_put_together) <- c("ahist", "hist")
+rownames(elas_put_together) <- cypr2elas$stages$stage_id
+
+barplot(t(elas_put_together), beside=T, ylab = "Elasticity of lambda", xlab = "Stage", 
+        col = c("black", "red"), bty = "n")
+legend("topright", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, 
+       bty = "n")
+```
+
+![Figure 25. Ahistorical vs. historically-corrected elasticity of lambda to stage](Ch3aan1.30-1.png)
+
+Overall, we see that both analyses support the inference that $\lambda$ is most elastic to changes in adult stages, but historically-corrected analyses suggest that it is critically affected by changes in extra small adult survival, while ahistorical analysis suggests simply that all adult stages other than vegetative dormancy and extra large adult have large impacts.
+
+  <p style="text-indent: 20px">Now on to function-based matrices!</p>
+
+
+## Acknowledgements
+
+  <p style="text-indent: 20px">We are grateful to two anonymous reviewers whose scrutiny improved the quality of this vignette. The project resulting in this package and this tutorial was funded by Grant-In-Aid 19H03298 from the Japan Society for the Promotion of Science.</p>
+  
+  
+## Literature cited
+
+<div id="refs"></div>

@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (mwaved_deepstate_test_boxcarDetect_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/boxcarDetect/boxcarDetect_output/4c4626ac5bab6a85045960b9ccaf57a94ef6492a.pass`
+TRACE: Running: mwaved_deepstate_test_boxcarDetect_test from /home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/boxcarDetect/boxcarDetect_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: mwaved_deepstate_test_boxcarDetect_test

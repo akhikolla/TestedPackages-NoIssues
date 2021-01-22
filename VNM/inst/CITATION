@@ -1,0 +1,21 @@
+bibentry(bibtype = "Article",
+  title        = "{VNM}: An {R} Package for Finding Multiple-Objective Optimal Designs for the 4-Parameter Logistic Model",
+  author       = c(person(given = c("Seung", "Won"),
+                          family = "Hyun",
+                          email = "SHyun1@ITS.JNJ.com"),
+                   person(given = c("Weng", "Kee"),
+                          family = "Wong",
+                          email = "wkwong@ucla.edu"),
+                   person(given = "Yarong",
+                          family = "Yang",
+                          email = "yarongyang78@gmail.com")),
+  journal      = "Journal of Statistical Software",
+  year         = "2018",
+  volume       = "83",
+  number       = "5",
+  pages        = "1--19",
+  doi          = "10.18637/jss.v083.i05",
+
+  header       = "To cite VNM in publications use:"
+)
+

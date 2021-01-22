@@ -1,0 +1,13 @@
+WARNING: No test specified, defaulting to first test defined (EMMIXgene_deepstate_test_t_dist_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/EMMIXgene/inst/testfiles/t_dist/t_dist_output/ea7d8cf59f8bec028e6f4df0b21d129fc0c4cb96.pass`
+TRACE: Running: EMMIXgene_deepstate_test_t_dist_test from /home/akhila/fuzzer_packages/fuzzedpackages/EMMIXgene/inst/testfiles/t_dist/t_dist_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+y values: 1.27048e-62
+mu values: -2.88162e-134
+sigma values: 8.18711e+299
+nu values: 0.00468189
+p values: -1262797933
+input ends
+TRACE: Passed: EMMIXgene_deepstate_test_t_dist_test

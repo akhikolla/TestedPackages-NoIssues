@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Lampros Mouselimis" />
+
+<meta name="date" content="2020-06-13" />
+
+<title>Extreme Learning Machine</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Extreme Learning Machine</h1>
+<h4 class="author">Lampros Mouselimis</h4>
+<h4 class="date">2020-06-13</h4>
+
+
+
+<p>As of 2018-06-17 the <a href="https://CRAN.R-project.org/package=elmNN">elmNN</a> package was archived and due to the fact that it was one of the machine learning functions that I used when I started learning R (it returns the output results pretty fast too) plus that I had to utilize the package last week for a personal task I decided to reimplement the R code in Rcpp. It didn’t take long because the R package was written, initially by the author, in a clear way. In the next lines I’ll explain the differences and the functionality just for reference.</p>
+<p><br></p>
+<div id="differences-between-the-elmnn-r-package-and-the-elmnnrcpp-rcpp-package" class="section level3">
+<h3>Differences between the elmNN (R package) and the elmNNRcpp (Rcpp Package)</h3>
+<ul>
+<li>The reimplementation assumes that both the predictors ( <em>x</em> ) and the response variable ( <em>y</em> ) are in the form of a matrix. This means that <em>character</em>, <em>factor</em> or <em>boolean</em> columns have to be transformed (onehot encoded would be an option) before using either the <em>elm_train</em> or the <em>elm_predict</em> function.</li>
+<li>The output predictions are in the form of a matrix. In case of regression the matrix has one column whereas in case of classification the number of columns equals the number of unique labels</li>
+<li>In case of classification the unique labels should begin from 0 and the difference between the unique labels should not be greater than 1. For instance, <em>unique_labels = c(0, 1, 2, 3)</em> are acceptable whereas the following case will raise an error : <em>unique_labels = c(0, 2, 3, 4)</em></li>
+<li>I renamed the <em>poslin</em> activation to <em>relu</em> as it’s easier to remember ( both share the same properties ). Moreover I added the <em>leaky_relu_alpha</em> parameter so that if the value is greater than 0.0 a leaky-relu-activation for the single-hidden-layer can be used.</li>
+<li>The initilization weights in the <em>elmNN</em> were set by default to uniform in the range [-1,1] <em>( ‘uniform_negative’ )</em> . I added two more options : <em>‘normal_gaussian’ ( in the range [0,1] )</em> and <em>‘uniform_positive’ ( in the range [0,1] )</em> too</li>
+<li>The user has the option to include or exclude <em>bias</em> of the one-layer feed-forward neural network</li>
+</ul>
+<p><br></p>
+</div>
+<div id="the-elmnnrcpp-functions" class="section level3">
+<h3>The elmNNRcpp functions</h3>
+<p>The functions included in the <em>elmNNRcpp</em> package are the following and details for each parameter can be found in the package documentation,</p>
+<p><br></p>
+<table>
+<colgroup>
+<col width="100%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th align="center">elmNNRcpp</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="center"><strong>elm_train</strong>(x, y, nhid, actfun, init_weights = “normal_gaussian”, bias = FALSE, …)</td>
+</tr>
+<tr class="even">
+<td align="center"><strong>elm_predict</strong>(elm_train_object, newdata, normalize = FALSE)</td>
+</tr>
+<tr class="odd">
+<td align="center"><strong>onehot_encode</strong>(y)</td>
+</tr>
+</tbody>
+</table>
+<p><br></p>
+</div>
+<div id="elmnnrcpp-in-case-of-regression" class="section level3">
+<h3>elmNNRcpp in case of Regression</h3>
+<p>The following code chunk gives some details on how to use the <em>elm_train</em> in case of regression and compares the results with the <em>lm ( linear model )</em> base function,</p>
+<p><br></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># load the data and split it in two parts</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#----------------------------------------</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">data</span>(Boston, <span class="dt">package =</span> <span class="st">&#39;KernelKnn&#39;</span>)</span>
+<span id="cb1-5"><a href="#cb1-5"></a></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="kw">library</span>(elmNNRcpp)</span></code></pre></div>
+<pre><code>## Loading required package: KernelKnn</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>Boston =<span class="st"> </span><span class="kw">as.matrix</span>(Boston)</span>
+<span id="cb3-2"><a href="#cb3-2"></a><span class="kw">dimnames</span>(Boston) =<span class="st"> </span><span class="ot">NULL</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>X =<span class="st"> </span>Boston[, <span class="op">-</span><span class="kw">dim</span>(Boston)[<span class="dv">2</span>]]</span>
+<span id="cb3-5"><a href="#cb3-5"></a>xtr =<span class="st"> </span>X[<span class="dv">1</span><span class="op">:</span><span class="dv">350</span>, ]</span>
+<span id="cb3-6"><a href="#cb3-6"></a>xte =<span class="st"> </span>X[<span class="dv">351</span><span class="op">:</span><span class="kw">nrow</span>(X), ]</span>
+<span id="cb3-7"><a href="#cb3-7"></a></span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co"># prepare / convert the train-data-response to a one-column matrix</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a><span class="co">#-----------------------------------------------------------------</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a></span>
+<span id="cb3-12"><a href="#cb3-12"></a>ytr =<span class="st"> </span><span class="kw">matrix</span>(Boston[<span class="dv">1</span><span class="op">:</span><span class="dv">350</span>, <span class="kw">dim</span>(Boston)[<span class="dv">2</span>]], <span class="dt">nrow =</span> <span class="kw">length</span>(Boston[<span class="dv">1</span><span class="op">:</span><span class="dv">350</span>, <span class="kw">dim</span>(Boston)[<span class="dv">2</span>]]),</span>
+<span id="cb3-13"><a href="#cb3-13"></a>             </span>
+<span id="cb3-14"><a href="#cb3-14"></a>             <span class="dt">ncol =</span> <span class="dv">1</span>)</span>
+<span id="cb3-15"><a href="#cb3-15"></a></span>
+<span id="cb3-16"><a href="#cb3-16"></a></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="co"># perform a fit and predict [ elmNNRcpp ]</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="co">#----------------------------------------</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a></span>
+<span id="cb3-20"><a href="#cb3-20"></a>fit_elm =<span class="st"> </span><span class="kw">elm_train</span>(xtr, ytr, <span class="dt">nhid =</span> <span class="dv">1000</span>, <span class="dt">actfun =</span> <span class="st">&#39;purelin&#39;</span>,</span>
+<span id="cb3-21"><a href="#cb3-21"></a>                    </span>
+<span id="cb3-22"><a href="#cb3-22"></a>                    <span class="dt">init_weights =</span> <span class="st">&quot;uniform_negative&quot;</span>, <span class="dt">bias =</span> <span class="ot">TRUE</span>, <span class="dt">verbose =</span> T)</span></code></pre></div>
+<pre><code>## Input weights will be initialized ...
+## Dot product of input weights and data starts ...
+## Bias will be added to the dot product ...
+## &#39;purelin&#39; activation function will be utilized ...
+## The computation of the Moore-Pseudo-inverse starts ...
+## The computation is finished!
+## 
+## Time to complete : 0.07642627 secs</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>pr_te_elm =<span class="st"> </span><span class="kw">elm_predict</span>(fit_elm, xte)</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a></span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># perform a fit and predict [ lm ]</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#----------------------------------------</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a><span class="kw">data</span>(Boston, <span class="dt">package =</span> <span class="st">&#39;KernelKnn&#39;</span>)</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a>fit_lm =<span class="st"> </span><span class="kw">lm</span>(medv<span class="op">~</span>., <span class="dt">data =</span> Boston[<span class="dv">1</span><span class="op">:</span><span class="dv">350</span>, ])</span>
+<span id="cb5-11"><a href="#cb5-11"></a></span>
+<span id="cb5-12"><a href="#cb5-12"></a>pr_te_lm =<span class="st"> </span><span class="kw">predict</span>(fit_lm, <span class="dt">newdata =</span> Boston[<span class="dv">351</span><span class="op">:</span><span class="kw">nrow</span>(X), ])</span>
+<span id="cb5-13"><a href="#cb5-13"></a></span>
+<span id="cb5-14"><a href="#cb5-14"></a></span>
+<span id="cb5-15"><a href="#cb5-15"></a></span>
+<span id="cb5-16"><a href="#cb5-16"></a><span class="co"># evaluation metric</span></span>
+<span id="cb5-17"><a href="#cb5-17"></a><span class="co">#------------------</span></span>
+<span id="cb5-18"><a href="#cb5-18"></a></span>
+<span id="cb5-19"><a href="#cb5-19"></a>rmse =<span class="st"> </span><span class="cf">function</span> (y_true, y_pred) {</span>
+<span id="cb5-20"><a href="#cb5-20"></a>  </span>
+<span id="cb5-21"><a href="#cb5-21"></a>  out =<span class="st"> </span><span class="kw">sqrt</span>(<span class="kw">mean</span>((y_true <span class="op">-</span><span class="st"> </span>y_pred)<span class="op">^</span><span class="dv">2</span>))</span>
+<span id="cb5-22"><a href="#cb5-22"></a>  </span>
+<span id="cb5-23"><a href="#cb5-23"></a>  out</span>
+<span id="cb5-24"><a href="#cb5-24"></a>}</span>
+<span id="cb5-25"><a href="#cb5-25"></a></span>
+<span id="cb5-26"><a href="#cb5-26"></a></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="co"># test data response variable</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="co">#----------------------------</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a></span>
+<span id="cb5-30"><a href="#cb5-30"></a>yte =<span class="st"> </span>Boston[<span class="dv">351</span><span class="op">:</span><span class="kw">nrow</span>(X), <span class="kw">dim</span>(Boston)[<span class="dv">2</span>]]</span>
+<span id="cb5-31"><a href="#cb5-31"></a></span>
+<span id="cb5-32"><a href="#cb5-32"></a></span>
+<span id="cb5-33"><a href="#cb5-33"></a><span class="co"># mean-squared-error for &#39;elm&#39; and &#39;lm&#39;</span></span>
+<span id="cb5-34"><a href="#cb5-34"></a><span class="co">#--------------------------------------</span></span>
+<span id="cb5-35"><a href="#cb5-35"></a></span>
+<span id="cb5-36"><a href="#cb5-36"></a><span class="kw">cat</span>(<span class="st">&#39;the rmse error for extreme-learning-machine is :&#39;</span>, <span class="kw">rmse</span>(yte, pr_te_elm[, <span class="dv">1</span>]), <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>## the rmse error for extreme-learning-machine is : 23.36543</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">cat</span>(<span class="st">&#39;the rmse error for liner-model is :&#39;</span>, <span class="kw">rmse</span>(yte, pr_te_lm), <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>## the rmse error for liner-model is : 23.36543</code></pre>
+<p><br></p>
+</div>
+<div id="elmnnrcpp-in-case-of-classification" class="section level3">
+<h3>elmNNRcpp in case of Classification</h3>
+<p>The following code script illustrates how <em>elm_train</em> can be used in classification and compares the results with the <em>glm ( Generalized Linear Models )</em> base function,</p>
+<p><br></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a><span class="co"># load the data</span></span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#--------------</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="kw">data</span>(ionosphere, <span class="dt">package =</span> <span class="st">&#39;KernelKnn&#39;</span>)</span>
+<span id="cb9-5"><a href="#cb9-5"></a></span>
+<span id="cb9-6"><a href="#cb9-6"></a>y_class =<span class="st"> </span>ionosphere[, <span class="kw">ncol</span>(ionosphere)]</span>
+<span id="cb9-7"><a href="#cb9-7"></a></span>
+<span id="cb9-8"><a href="#cb9-8"></a>x_class =<span class="st"> </span>ionosphere[, <span class="op">-</span><span class="kw">c</span>(<span class="dv">2</span>, <span class="kw">ncol</span>(ionosphere))]     <span class="co"># second column has 1 unique value</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a></span>
+<span id="cb9-10"><a href="#cb9-10"></a>x_class =<span class="st"> </span><span class="kw">scale</span>(x_class[, <span class="op">-</span><span class="kw">ncol</span>(x_class)])</span>
+<span id="cb9-11"><a href="#cb9-11"></a></span>
+<span id="cb9-12"><a href="#cb9-12"></a>x_class =<span class="st"> </span><span class="kw">as.matrix</span>(x_class)                        <span class="co"># convert to matrix</span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="kw">dimnames</span>(x_class) =<span class="st"> </span><span class="ot">NULL</span> </span>
+<span id="cb9-14"><a href="#cb9-14"></a></span>
+<span id="cb9-15"><a href="#cb9-15"></a></span>
+<span id="cb9-16"><a href="#cb9-16"></a></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co"># split data in train-test</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#-------------------------</span></span>
+<span id="cb9-19"><a href="#cb9-19"></a></span>
+<span id="cb9-20"><a href="#cb9-20"></a>xtr_class =<span class="st"> </span>x_class[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>, ]                    </span>
+<span id="cb9-21"><a href="#cb9-21"></a>xte_class =<span class="st"> </span>x_class[<span class="dv">201</span><span class="op">:</span><span class="kw">nrow</span>(ionosphere), ]</span>
+<span id="cb9-22"><a href="#cb9-22"></a></span>
+<span id="cb9-23"><a href="#cb9-23"></a>ytr_class =<span class="st"> </span><span class="kw">as.numeric</span>(y_class[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>])</span>
+<span id="cb9-24"><a href="#cb9-24"></a>yte_class =<span class="st"> </span><span class="kw">as.numeric</span>(y_class[<span class="dv">201</span><span class="op">:</span><span class="kw">nrow</span>(ionosphere)])</span>
+<span id="cb9-25"><a href="#cb9-25"></a></span>
+<span id="cb9-26"><a href="#cb9-26"></a>ytr_class =<span class="st"> </span><span class="kw">onehot_encode</span>(ytr_class <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)                                     <span class="co"># class labels should begin from 0 (subtract 1)</span></span>
+<span id="cb9-27"><a href="#cb9-27"></a></span>
+<span id="cb9-28"><a href="#cb9-28"></a></span>
+<span id="cb9-29"><a href="#cb9-29"></a><span class="co"># perform a fit and predict [ elmNNRcpp ]</span></span>
+<span id="cb9-30"><a href="#cb9-30"></a><span class="co">#----------------------------------------</span></span>
+<span id="cb9-31"><a href="#cb9-31"></a></span>
+<span id="cb9-32"><a href="#cb9-32"></a>fit_elm_class =<span class="st"> </span><span class="kw">elm_train</span>(xtr_class, ytr_class, <span class="dt">nhid =</span> <span class="dv">1000</span>, <span class="dt">actfun =</span> <span class="st">&#39;relu&#39;</span>,</span>
+<span id="cb9-33"><a href="#cb9-33"></a>                          </span>
+<span id="cb9-34"><a href="#cb9-34"></a>                          <span class="dt">init_weights =</span> <span class="st">&quot;uniform_negative&quot;</span>, <span class="dt">bias =</span> <span class="ot">TRUE</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</span></code></pre></div>
+<pre><code>## Input weights will be initialized ...
+## Dot product of input weights and data starts ...
+## Bias will be added to the dot product ...
+## &#39;relu&#39; activation function will be utilized ...
+## The computation of the Moore-Pseudo-inverse starts ...
+## The computation is finished!
+## 
+## Time to complete : 0.03475618 secs</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>pr_elm_class =<span class="st"> </span><span class="kw">elm_predict</span>(fit_elm_class, xte_class, <span class="dt">normalize =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a>pr_elm_class =<span class="st"> </span><span class="kw">max.col</span>(pr_elm_class, <span class="dt">ties.method =</span> <span class="st">&quot;random&quot;</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a></span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a><span class="co"># perform a fit and predict [ glm ]</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#----------------------------------------</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="kw">data</span>(ionosphere, <span class="dt">package =</span> <span class="st">&#39;KernelKnn&#39;</span>)</span>
+<span id="cb11-11"><a href="#cb11-11"></a></span>
+<span id="cb11-12"><a href="#cb11-12"></a>fit_glm =<span class="st"> </span><span class="kw">glm</span>(class<span class="op">~</span>., <span class="dt">data =</span> ionosphere[<span class="dv">1</span><span class="op">:</span><span class="dv">200</span>, <span class="dv">-2</span>], <span class="dt">family =</span> <span class="kw">binomial</span>(<span class="dt">link =</span> <span class="st">&#39;logit&#39;</span>))</span></code></pre></div>
+<pre><code>## Warning: glm.fit: fitted probabilities numerically 0 or 1 occurred</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>pr_glm =<span class="st"> </span><span class="kw">predict</span>(fit_glm, <span class="dt">newdata =</span> ionosphere[<span class="dv">201</span><span class="op">:</span><span class="kw">nrow</span>(ionosphere), <span class="dv">-2</span>], <span class="dt">type =</span> <span class="st">&#39;response&#39;</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a></span>
+<span id="cb13-3"><a href="#cb13-3"></a>pr_glm =<span class="st"> </span><span class="kw">as.vector</span>(<span class="kw">ifelse</span>(pr_glm <span class="op">&lt;</span><span class="st"> </span><span class="fl">0.5</span>, <span class="dv">1</span>, <span class="dv">2</span>))</span>
+<span id="cb13-4"><a href="#cb13-4"></a></span>
+<span id="cb13-5"><a href="#cb13-5"></a></span>
+<span id="cb13-6"><a href="#cb13-6"></a><span class="co"># accuracy for &#39;elm&#39; and &#39;glm&#39;</span></span>
+<span id="cb13-7"><a href="#cb13-7"></a><span class="co">#-----------------------------</span></span>
+<span id="cb13-8"><a href="#cb13-8"></a></span>
+<span id="cb13-9"><a href="#cb13-9"></a><span class="kw">cat</span>(<span class="st">&#39;the accuracy for extreme-learning-machine is :&#39;</span>, <span class="kw">mean</span>(yte_class <span class="op">==</span><span class="st"> </span>pr_elm_class), <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>## the accuracy for extreme-learning-machine is : 0.9006623</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">cat</span>(<span class="st">&#39;the accuracy for glm is :&#39;</span>, <span class="kw">mean</span>(yte_class <span class="op">==</span><span class="st"> </span>pr_glm), <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span></code></pre></div>
+<pre><code>## the accuracy for glm is : 0.8940397</code></pre>
+<p><br></p>
+</div>
+<div id="classify-mnist-digits-using-elmnnrcpp" class="section level3">
+<h3>Classify MNIST digits using elmNNRcpp</h3>
+<p>I found an interesting <a href="https://www.kaggle.com/robertbm/extreme-learning-machine-example">Python implementation / Code on the web</a> and I thought I give it a try to reproduce the results. I downloaded the MNIST data from my <a href="https://github.com/mlampros/DataSets">Github repository</a> and I used the following parameter setting,</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1"></a><span class="co"># using system(&#39;wget..&#39;) on a linux OS </span></span>
+<span id="cb17-2"><a href="#cb17-2"></a><span class="co">#-------------------------------------</span></span>
+<span id="cb17-3"><a href="#cb17-3"></a></span>
+<span id="cb17-4"><a href="#cb17-4"></a><span class="kw">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/mnist.zip&quot;</span>)             </span>
+<span id="cb17-5"><a href="#cb17-5"></a></span>
+<span id="cb17-6"><a href="#cb17-6"></a>mnist &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">unz</span>(<span class="st">&quot;mnist.zip&quot;</span>, <span class="st">&quot;mnist.csv&quot;</span>), <span class="dt">nrows =</span> <span class="dv">70000</span>, <span class="dt">header =</span> T, </span>
+<span id="cb17-7"><a href="#cb17-7"></a>                    </span>
+<span id="cb17-8"><a href="#cb17-8"></a>                    <span class="dt">quote =</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb17-9"><a href="#cb17-9"></a></span>
+<span id="cb17-10"><a href="#cb17-10"></a>x =<span class="st"> </span>mnist[, <span class="op">-</span><span class="kw">ncol</span>(mnist)]</span>
+<span id="cb17-11"><a href="#cb17-11"></a></span>
+<span id="cb17-12"><a href="#cb17-12"></a>y =<span class="st"> </span>mnist[, <span class="kw">ncol</span>(mnist)]</span>
+<span id="cb17-13"><a href="#cb17-13"></a></span>
+<span id="cb17-14"><a href="#cb17-14"></a><span class="co"># using system(&#39;wget..&#39;) on a linux OS </span></span>
+<span id="cb17-15"><a href="#cb17-15"></a><span class="co">#-------------------------------------</span></span>
+<span id="cb17-16"><a href="#cb17-16"></a></span>
+<span id="cb17-17"><a href="#cb17-17"></a><span class="kw">system</span>(<span class="st">&quot;wget https://raw.githubusercontent.com/mlampros/DataSets/master/mnist.zip&quot;</span>)             </span>
+<span id="cb17-18"><a href="#cb17-18"></a></span>
+<span id="cb17-19"><a href="#cb17-19"></a>mnist &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="kw">unz</span>(<span class="st">&quot;mnist.zip&quot;</span>, <span class="st">&quot;mnist.csv&quot;</span>), <span class="dt">nrows =</span> <span class="dv">70000</span>, <span class="dt">header =</span> T, </span>
+<span id="cb17-20"><a href="#cb17-20"></a>                    </span>
+<span id="cb17-21"><a href="#cb17-21"></a>                    <span class="dt">quote =</span> <span class="st">&quot;</span><span class="ch">\&quot;</span><span class="st">&quot;</span>, <span class="dt">sep =</span> <span class="st">&quot;,&quot;</span>)</span>
+<span id="cb17-22"><a href="#cb17-22"></a></span>
+<span id="cb17-23"><a href="#cb17-23"></a>x =<span class="st"> </span>mnist[, <span class="op">-</span><span class="kw">ncol</span>(mnist)]</span>
+<span id="cb17-24"><a href="#cb17-24"></a></span>
+<span id="cb17-25"><a href="#cb17-25"></a>y =<span class="st"> </span>mnist[, <span class="kw">ncol</span>(mnist)] <span class="op">+</span><span class="st"> </span><span class="dv">1</span></span>
+<span id="cb17-26"><a href="#cb17-26"></a></span>
+<span id="cb17-27"><a href="#cb17-27"></a></span>
+<span id="cb17-28"><a href="#cb17-28"></a><span class="co"># use the hog-features as input data</span></span>
+<span id="cb17-29"><a href="#cb17-29"></a><span class="co">#-----------------------------------</span></span>
+<span id="cb17-30"><a href="#cb17-30"></a></span>
+<span id="cb17-31"><a href="#cb17-31"></a>hog =<span class="st"> </span>OpenImageR<span class="op">::</span><span class="kw">HOG_apply</span>(x, <span class="dt">cells =</span> <span class="dv">6</span>, <span class="dt">orientations =</span> <span class="dv">9</span>, <span class="dt">rows =</span> <span class="dv">28</span>, <span class="dt">columns =</span> <span class="dv">28</span>, <span class="dt">threads =</span> <span class="dv">6</span>)</span>
+<span id="cb17-32"><a href="#cb17-32"></a></span>
+<span id="cb17-33"><a href="#cb17-33"></a>y_expand =<span class="st"> </span>elmNNRcpp<span class="op">::</span><span class="kw">onehot_encode</span>(y <span class="op">-</span><span class="st"> </span><span class="dv">1</span>)</span>
+<span id="cb17-34"><a href="#cb17-34"></a></span>
+<span id="cb17-35"><a href="#cb17-35"></a></span>
+<span id="cb17-36"><a href="#cb17-36"></a><span class="co"># 4-fold cross-validation</span></span>
+<span id="cb17-37"><a href="#cb17-37"></a><span class="co">#------------------------</span></span>
+<span id="cb17-38"><a href="#cb17-38"></a></span>
+<span id="cb17-39"><a href="#cb17-39"></a>folds =<span class="st"> </span>KernelKnn<span class="op">:::</span><span class="kw">class_folds</span>(<span class="dt">folds =</span> <span class="dv">4</span>, <span class="kw">as.factor</span>(y))</span>
+<span id="cb17-40"><a href="#cb17-40"></a><span class="kw">str</span>(folds)</span>
+<span id="cb17-41"><a href="#cb17-41"></a></span>
+<span id="cb17-42"><a href="#cb17-42"></a>START =<span class="st"> </span><span class="kw">Sys.time</span>()</span>
+<span id="cb17-43"><a href="#cb17-43"></a></span>
+<span id="cb17-44"><a href="#cb17-44"></a></span>
+<span id="cb17-45"><a href="#cb17-45"></a>fit =<span class="st"> </span><span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(folds), <span class="cf">function</span>(x) {</span>
+<span id="cb17-46"><a href="#cb17-46"></a>  </span>
+<span id="cb17-47"><a href="#cb17-47"></a>  <span class="kw">cat</span>(<span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>); <span class="kw">cat</span>(<span class="st">&#39;fold&#39;</span>, x, <span class="st">&#39;starts ....&#39;</span>, <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb17-48"><a href="#cb17-48"></a>  </span>
+<span id="cb17-49"><a href="#cb17-49"></a>  tmp_fit =<span class="st"> </span>elmNNRcpp<span class="op">::</span><span class="kw">elm_train</span>(<span class="kw">as.matrix</span>(hog[<span class="kw">unlist</span>(folds[<span class="op">-</span>x]), ]), y_expand[<span class="kw">unlist</span>(folds[<span class="op">-</span>x]), ], </span>
+<span id="cb17-50"><a href="#cb17-50"></a>  </span>
+<span id="cb17-51"><a href="#cb17-51"></a>                                 <span class="dt">nhid =</span> <span class="dv">2500</span>, <span class="dt">actfun =</span> <span class="st">&#39;relu&#39;</span>, <span class="dt">init_weights =</span> <span class="st">&#39;uniform_negative&#39;</span>,</span>
+<span id="cb17-52"><a href="#cb17-52"></a>                                 </span>
+<span id="cb17-53"><a href="#cb17-53"></a>                                 <span class="dt">bias =</span> <span class="ot">TRUE</span>, <span class="dt">verbose =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb17-54"><a href="#cb17-54"></a>  </span>
+<span id="cb17-55"><a href="#cb17-55"></a>  <span class="kw">cat</span>(<span class="st">&#39;******************************************&#39;</span>, <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb17-56"><a href="#cb17-56"></a>  </span>
+<span id="cb17-57"><a href="#cb17-57"></a>  tmp_fit</span>
+<span id="cb17-58"><a href="#cb17-58"></a>})</span>
+<span id="cb17-59"><a href="#cb17-59"></a></span>
+<span id="cb17-60"><a href="#cb17-60"></a>END =<span class="st"> </span><span class="kw">Sys.time</span>()</span>
+<span id="cb17-61"><a href="#cb17-61"></a></span>
+<span id="cb17-62"><a href="#cb17-62"></a>END <span class="op">-</span><span class="st"> </span>START</span>
+<span id="cb17-63"><a href="#cb17-63"></a></span>
+<span id="cb17-64"><a href="#cb17-64"></a><span class="co"># Time difference of 5.698552 mins</span></span>
+<span id="cb17-65"><a href="#cb17-65"></a></span>
+<span id="cb17-66"><a href="#cb17-66"></a></span>
+<span id="cb17-67"><a href="#cb17-67"></a><span class="kw">str</span>(fit)</span>
+<span id="cb17-68"><a href="#cb17-68"></a></span>
+<span id="cb17-69"><a href="#cb17-69"></a></span>
+<span id="cb17-70"><a href="#cb17-70"></a><span class="co"># predictions for 4-fold cross validation</span></span>
+<span id="cb17-71"><a href="#cb17-71"></a><span class="co">#----------------------------------------</span></span>
+<span id="cb17-72"><a href="#cb17-72"></a></span>
+<span id="cb17-73"><a href="#cb17-73"></a>test_acc =<span class="st"> </span><span class="kw">unlist</span>(<span class="kw">lapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(fit), <span class="cf">function</span>(x) {</span>
+<span id="cb17-74"><a href="#cb17-74"></a>  </span>
+<span id="cb17-75"><a href="#cb17-75"></a>  pr_te =<span class="st"> </span>elmNNRcpp<span class="op">::</span><span class="kw">elm_predict</span>(fit[[x]], <span class="dt">newdata =</span> <span class="kw">as.matrix</span>(hog[folds[[x]], ]))</span>
+<span id="cb17-76"><a href="#cb17-76"></a>  </span>
+<span id="cb17-77"><a href="#cb17-77"></a>  pr_max_col =<span class="st"> </span><span class="kw">max.col</span>(pr_te, <span class="dt">ties.method =</span> <span class="st">&quot;random&quot;</span>)</span>
+<span id="cb17-78"><a href="#cb17-78"></a>  </span>
+<span id="cb17-79"><a href="#cb17-79"></a>  y_true =<span class="st"> </span><span class="kw">max.col</span>(y_expand[folds[[x]], ])</span>
+<span id="cb17-80"><a href="#cb17-80"></a>  </span>
+<span id="cb17-81"><a href="#cb17-81"></a>  <span class="kw">mean</span>(pr_max_col <span class="op">==</span><span class="st"> </span>y_true)</span>
+<span id="cb17-82"><a href="#cb17-82"></a>}))</span>
+<span id="cb17-83"><a href="#cb17-83"></a>  </span>
+<span id="cb17-84"><a href="#cb17-84"></a>  </span>
+<span id="cb17-85"><a href="#cb17-85"></a></span>
+<span id="cb17-86"><a href="#cb17-86"></a>test_acc</span>
+<span id="cb17-87"><a href="#cb17-87"></a></span>
+<span id="cb17-88"><a href="#cb17-88"></a><span class="co"># [1] 0.9825143 0.9848571 0.9824571 0.9822857</span></span>
+<span id="cb17-89"><a href="#cb17-89"></a></span>
+<span id="cb17-90"><a href="#cb17-90"></a></span>
+<span id="cb17-91"><a href="#cb17-91"></a><span class="kw">cat</span>(<span class="st">&#39;Accuracy ( Mnist data ) :&#39;</span>, <span class="kw">round</span>(<span class="kw">mean</span>(test_acc) <span class="op">*</span><span class="st"> </span><span class="dv">100</span>, <span class="dv">2</span>), <span class="st">&#39;</span><span class="ch">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb17-92"><a href="#cb17-92"></a></span>
+<span id="cb17-93"><a href="#cb17-93"></a><span class="co"># Accuracy ( Mnist data ) : 98.3</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

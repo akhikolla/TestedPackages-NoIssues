@@ -1,0 +1,73 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (SeqNet_deepstate_test_ring_lattice_cpp_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 467495432
+neig_size values: 1827680409
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -498905818
+neig_size values: 569042049
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -293123844
+neig_size values: -555281357
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -1105761949
+neig_size values: 304498753
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 954479852
+neig_size values: -194229631
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 1344097580
+neig_size values: -1433424706
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -823343871
+neig_size values: -1944840741
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+INFO: Done fuzzing! Ran 7 tests (3 tests/second) with 7 failed/0 passed/0 abandoned tests

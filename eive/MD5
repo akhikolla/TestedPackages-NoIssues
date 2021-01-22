@@ -1,0 +1,13 @@
+972a0dddd426a6dac5e0280fdf1fa040 *DESCRIPTION
+3d787999a44434d8c2bd48ca21cd8e07 *NAMESPACE
+9884c51e8e5929798b6f5cfc3fbb216d *R/RcppExports.R
+23e7a69be4b6927655ed597a67e8138d *R/eive.R
+12ca55d2cc3b244af11deccf056ab98a *inst/CITATION
+8373adfdc1d921a3a6bd88fdb87a9919 *man/cga.Rd
+69dcdfb0ac0c45a4b62b14fcd29028bf *man/cga_generate_chromosome.Rd
+3e34d9f35da2ea342a4fe76244d46c39 *man/eive-package.Rd
+d0353d85570ce1a1b444591eee50f53a *man/eive.cga.Rd
+e1893f7441db07a7929ff798ccee3123 *man/generate.eive.data.Rd
+bbd204dd5f3bcbba7cfef2287a044700 *src/RcppExports.cpp
+5de9335b549a8c0c51c648819b1ae02e *src/ccga.cpp
+1db8aceb66ddac905a2a5f7947b4b083 *src/registerDynamicSymbol.c

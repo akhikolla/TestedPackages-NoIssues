@@ -1,0 +1,24 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (EMMIXgene_deepstate_test_mahalanobis_c_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+y values: -2.43318e-187
+mu values: -1.64581e+174
+sigma values: -1.66668e-49
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+y values: -1.5615e-299
+mu values: -1.20777e+13
+sigma values: 2.79236e-196
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+y values: 1.27048e-62
+mu values: -2.88162e-134
+sigma values: 8.18711e+299
+input ends
+INFO: Done fuzzing! Ran 3 tests (1 tests/second) with 0 failed/3 passed/0 abandoned tests

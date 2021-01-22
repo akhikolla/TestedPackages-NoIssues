@@ -1,0 +1,6 @@
+useDynLib(perccal)
+importFrom(Rcpp, evalCpp)
+importFrom("stats", "coefficients")
+importFrom("stats", "quantile")
+importFrom("stats", "lm")
+exportPattern("^[[:alpha:]]+")

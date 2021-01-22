@@ -1,0 +1,13 @@
+WARNING: No test specified, defaulting to first test defined (hdbinseg_deepstate_test_func_dc_by_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/hdbinseg/inst/testfiles/func_dc_by/func_dc_by_output/897c1ad2dee49bf070609ed22f19aad334f4ec6b.pass`
+TRACE: Running: hdbinseg_deepstate_test_func_dc_by_test from /home/akhila/fuzzer_packages/fuzzedpackages/hdbinseg/inst/testfiles/func_dc_by/func_dc_by_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+z values: 1.05415e-68 1.86447e-211 4.49059e+17 2.72551e-214 6.53679e-70 2.42643e+241 1.65687e+24
+
+gamma values: -2.10159e+110
+dmby values: -6.65583e-306
+dtby values: -3.48837e-09
+input ends
+TRACE: Passed: hdbinseg_deepstate_test_func_dc_by_test

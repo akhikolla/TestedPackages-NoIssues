@@ -1,0 +1,13 @@
+WARNING: No test specified, defaulting to first test defined (mwaved_deepstate_test_multiProj_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiProj/multiProj_output/ee4d4cd04c7e17be1a21f688e4eea20914650364.pass`
+TRACE: Running: mwaved_deepstate_test_multiProj_test from /home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiProj/multiProj_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+beta values: 4.38983e+276 -2.83919e+230 nan -1.5601e+246 inf
+j0 values: 1315945823
+j1 values: -1330425665
+deg values: 242193156
+input ends
+TRACE: Passed: mwaved_deepstate_test_multiProj_test

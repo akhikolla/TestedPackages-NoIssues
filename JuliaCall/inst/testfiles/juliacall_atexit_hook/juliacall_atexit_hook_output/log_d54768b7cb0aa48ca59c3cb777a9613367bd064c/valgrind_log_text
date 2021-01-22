@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (JuliaCall_deepstate_test_juliacall_atexit_hook_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/JuliaCall/inst/testfiles/juliacall_atexit_hook/juliacall_atexit_hook_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash`
+TRACE: Running: JuliaCall_deepstate_test_juliacall_atexit_hook_test from /home/akhila/fuzzer_packages/fuzzedpackages/JuliaCall/inst/testfiles/juliacall_atexit_hook/juliacall_atexit_hook_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+status values: 1520036990
+input ends
+ERROR: Crashed: JuliaCall_deepstate_test_juliacall_atexit_hook_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/JuliaCall/inst/testfiles/juliacall_atexit_hook/juliacall_atexit_hook_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash crashed

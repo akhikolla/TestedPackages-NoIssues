@@ -1,0 +1,147 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./MC_count_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_output/e78ce7438df9a1440309ef3e26dc1d3f4bb32f6a.crash</line>
+</preamble>
+
+<pid>927986</pid>
+<ppid>927985</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_output/log_e78ce7438df9a1440309ef3e26dc1d3f4bb32f6a/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./MC_count_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_output/e78ce7438df9a1440309ef3e26dc1d3f4bb32f6a.crash</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.026 </time>
+</status>
+
+<clientmsg>
+  <tid>1</tid>
+  <text>new/new[] failed and should throw an exception, but Valgrind
+  </text>
+</clientmsg>
+<clientmsg>
+  <tid>1</tid>
+  <text>   cannot throw exceptions and so is aborting instead.  Sorry.
+  </text>
+  <stack>
+    <frame>
+      <ip>0x483B3CC</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so</obj>
+    </frame>
+    <frame>
+      <ip>0x483C5F5</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/valgrind/vgpreload_memcheck-amd64-linux.so</obj>
+      <fn>operator new[](unsigned long)</fn>
+    </frame>
+    <frame>
+      <ip>0x4D28A74</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/src/testforDEP.so</obj>
+      <fn>Emcdf::Emcdf(Rcpp::Vector&lt;14, Rcpp::PreserveStorage&gt;&amp;, Rcpp::Vector&lt;14, Rcpp::PreserveStorage&gt;&amp;, bool)</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/src</dir>
+      <file>Emcdf.cpp</file>
+      <line>21</line>
+    </frame>
+    <frame>
+      <ip>0x4D2F568</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/src/testforDEP.so</obj>
+      <fn>vex(Rcpp::Vector&lt;14, Rcpp::PreserveStorage&gt;&amp;, Rcpp::Vector&lt;14, Rcpp::PreserveStorage&gt;&amp;)</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/src</dir>
+      <file>vexler.cpp</file>
+      <line>45</line>
+    </frame>
+    <frame>
+      <ip>0x4D2FB49</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/src/testforDEP.so</obj>
+      <fn>MC_count(double, int, int)</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/src</dir>
+      <file>vexler.cpp</file>
+      <line>95</line>
+    </frame>
+    <frame>
+      <ip>0x40A204</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_DeepState_TestHarness</obj>
+      <fn>DeepState_Test_testforDEP_deepstate_test_MC_count_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count</dir>
+      <file>MC_count_DeepState_TestHarness.cpp</file>
+      <line>33</line>
+    </frame>
+    <frame>
+      <ip>0x409B58</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_DeepState_TestHarness</obj>
+      <fn>DeepState_Run_testforDEP_deepstate_test_MC_count_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count</dir>
+      <file>MC_count_DeepState_TestHarness.cpp</file>
+      <line>13</line>
+    </frame>
+    <frame>
+      <ip>0x41D0C8</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_DeepState_TestHarness</obj>
+      <fn>DeepState_RunTest.isra.0</fn>
+    </frame>
+    <frame>
+      <ip>0x41D369</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_DeepState_TestHarness</obj>
+      <fn>DeepState_ForkAndRunTest</fn>
+    </frame>
+    <frame>
+      <ip>0x41D444</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_DeepState_TestHarness</obj>
+      <fn>DeepState_RunSavedTestCase</fn>
+    </frame>
+    <frame>
+      <ip>0x407665</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/testforDEP/inst/testfiles/MC_count/MC_count_DeepState_TestHarness</obj>
+      <fn>main</fn>
+    </frame>
+  </stack>
+</clientmsg>
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:52:51.996 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:56:10.937 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

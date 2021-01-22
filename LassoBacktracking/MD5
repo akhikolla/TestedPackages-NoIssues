@@ -1,0 +1,13 @@
+8e9ef0938b84ee835c6cd04afcb38948 *DESCRIPTION
+9aecd41d9dcbbc34926687b44f0f2c37 *NAMESPACE
+f51fd576d8b26216c3b8feb5519df6b7 *R/LassoBT.R
+f23f9ec9545f5b6bda8f95fd401aa0a3 *R/RcppExports.R
+a80f571bcccb5d1dbf50f49e324c0ed9 *R/aux_functions.R
+45d3a2c06d75b2f18794de43e275adeb *R/cvBT.R
+0bacc17fd2abc9835ee66ae9dac1494a *R/predict_BT.R
+2af5b559f0e7191c8678bbeb4ebf75ca *man/LassoBT.Rd
+8777d074acf420ac78457d94c0f0ba98 *man/cvLassoBT.Rd
+81d9ef1962a69e1f5b14ed61dd6b49f5 *man/predict.BT.Rd
+fd77b1871ce8c5a8fd970ee8922bc9d4 *src/ExportedFunctions.cpp
+505b4edefd4444af00cc4da40f9bb233 *src/LassoBacktracking_init.c
+574f06f948975130c0c5caff63605491 *src/RcppExports.cpp

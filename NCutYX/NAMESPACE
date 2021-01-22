@@ -1,0 +1,12 @@
+importFrom(Rcpp, evalCpp)
+importFrom("stats", "cor", "dist", "kmeans", "predict", "quantile",
+           "rbinom", "runif")
+export(ancut)
+export(mlbncut)
+export(muncut)
+export(ncut)
+export(pwncut)
+export(awncut)
+export(awncut.selection)
+export(ErrorRate)
+useDynLib(NCutYX)

@@ -1,0 +1,33 @@
+useDynLib(eBsc,.registration=TRUE)
+importFrom(Rcpp, evalCpp)
+importFrom("graphics", "abline", "lines", "par")
+importFrom("stats", "acf", "coef", "quantile", "sd", "uniroot")
+importFrom("graphics", "legend")
+
+export(drbasis)
+export(rcpparma_innerproduct)
+export(rcpparma_outerproduct)
+export(EBCparallel)
+export(EBCq)
+export(eBsc)
+export(plot.eBsc)
+export(print.eBsc)
+export(summary.eBsc)
+
+
+S3method(plot, eBsc)
+S3method(print, eBsc)
+S3method(summary, eBsc)
+S3method(eBsc,default)
+
+# Import all packages listed as Imports or Depends
+import(
+    Brobdingnag,
+    parallel,
+    nlme,
+    Matrix,
+    MASS,
+    splines,
+    Rcpp
+)
+

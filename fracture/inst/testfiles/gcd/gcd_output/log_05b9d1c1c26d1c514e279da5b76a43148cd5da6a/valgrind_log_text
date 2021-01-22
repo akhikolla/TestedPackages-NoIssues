@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (fracture_deepstate_test_gcd_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/fracture/inst/testfiles/gcd/gcd_output/05b9d1c1c26d1c514e279da5b76a43148cd5da6a.pass`
+TRACE: Running: fracture_deepstate_test_gcd_test from /home/akhila/fuzzer_packages/fuzzedpackages/fracture/inst/testfiles/gcd/gcd_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: 1452738095 1618366851 1679204877 1586657384 -2073912510 2030347660 720227797 1790569921 1375006897 1782658255 1473698998
+input ends
+TRACE: Passed: fracture_deepstate_test_gcd_test

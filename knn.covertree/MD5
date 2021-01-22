@@ -1,0 +1,16 @@
+157d1419552b7527dc7f5f0e9ee6d5b3 *DESCRIPTION
+1817f54bc5554ec9cd61537718953e07 *NAMESPACE
+4a9445f52d1e6dff4e39fb9297904907 *R/RcppExports.R
+e53411f9f096a70c76fac623433a1f66 *R/knn.covertree-package.r
+e9012345890c1dcfdf1f2ba89dbfa86e *R/knn.r
+b511ad36b3e4b47445f74356794733ad *README.md
+8d92b03127a2da97be6290ae46612a45 *man/knn.Rd
+5bfe505b2b3085150e550cdebbcfdafa *man/knn.covertree-package.Rd
+a7eec3243d1807eb7d460df2a5a72a1a *src/RcppExports.cpp
+00f487b535a77c75975b196edfe98bca *src/cover_tree.h
+470cc9553f96844767cb1639c6ed5f86 *src/exports.h
+2939f726d9bf09902c5d98f73d028e9b *src/knn.cpp
+67fa96308c5b47620210af77631cd9f0 *src/utils.cpp
+e990a0f4c7c6e6f84e53bfea0c89b0e6 *src/utils.h
+37f56ff95cb7fd99ee7190732a52e6b5 *tests/testthat.R
+ba73351107ff17fa2febd842854db730 *tests/testthat/test-knn.r

@@ -1,0 +1,150 @@
+Version 0.2-6:
+
+  - bugfix release to keep package available on CRAN
+  - incorrect use of abs() instead of fabs() in C++ code (chi-squared formula)
+  - test of word2vec export format used to depend on rounding conventions, which were changed to accurate "round half to even" in R 4.0.0
+  - all tests rewritten in 'testthat' framework for better diagnostics
+
+Version 0.2-5:
+
+  - second public release with miscellaneous extensions and improvements (see items below for details)
+
+Version 0.2-4:
+
+  - provide dimnames() getter and setter methods for DSM objects
+  - provide as.matrix() method for DSM objects (which extracts either M or S)
+  - write.dsm.matrix() to save dense DSM matrix or word embeddings in word2vec text format (so far)
+  - read.dsm.matrix() to load word embeddings in word2vec text format (not optimized for speed yet)
+  - rbind(), cbind() and merge() for DSM objects are deprecated for the time being
+  - efficiently check nonzero counts and non-negativity using the signcount() function
+
+Version 0.2-3:
+
+  - context.vectors() now also accepts weighted bag-of-words representations as context specification; direct indexing into M has been deprecated
+  - normalize.rows() also supports Minkowski norms with p < 1 (which are known as k-norms, for k=p), but rejects p < .05 due to numerical instability
+  - normalize.rows() preserves all-zero row vectors; rows with very small norm are explicitly set to zero instead of attempting to normalize them 
+
+Version 0.2-2:
+
+  - dsm.score() can now also be abused for collocation analysis with negative.ok="nonzero" (using a sparse DSM to represent a co-occurrence data set)
+  - new association measures log-likelihood and chi-squared (with Yates correction); more thorough unit tests of dsm.score()
+  - dist.matrix() offers two new similarity measures: the generalized Jaccard coefficient (which can be converted into a metric) and an asymmetric measure of overlap
+ 
+Version 0.2-1:
+
+  - dsm.score() now supports user-defined association measures, which are automatically evaluated in batches to reduce memory overhead compared to a naive vectorized implementation
+  - as.distmat() marks an arbitrary matrix as a pre-computed dist.matrix object, so it can be used for lookup with nearest.neighbours() and pair.distances()
+  - nearest.neighbours() improved to support lookup in sparse pre-computed distance matrix
+  - pair.distances() improved to support lookup (and calculation of neighbour ranks) in a pre-computed distance matrix
+  - more efficient implementation of nonzero counts using "Hamming length" (Minkowski p=0)
+    - naive implementation rowSums(M != 0) involves temporary logical matrix, stored as 32-bit integers
+    - rowSums/colSums in Matrix package additionally converts lgcMatrix into a matrix of doubles (dgCMatrix), resulting in huge memory overhead
+    - even nnzero(M) has considerable memory overhead for sparse matrices
+  - subset(..., recursive=TRUE) can now optionally run garbage collection after every iteration to avoid multiple copies of DSM object
+    - garbage collection is extremely expensive if the workspace contains many distinct strings (which is quite common for natural language data), so the aggressive gc() calls have to be enable explicitly by the user (if memory is so tight that the CPU overhead has to be tolerated)
+    - several intermediate gc() calls in dsm.score() also have to be enabled explicitly by the user
+
+Version 0.2-0:
+
+  - the first public release of the wordspace package \o/
+
+Version 0.1-24:
+
+  - read.dsm.triplet can now load marginal frequencies from separate files, so it is a full-fledged replacement for read.dsm.ucs (though less memory-efficient than the native UCS format for very large models)
+  - RC 2 for public release
+
+Version 0.1-23:
+
+  - completed vignette with tutorial introduction
+  - RC 1 for public release
+
+Version 0.1-22:
+
+  - clean up & complete documentation in preparation for first public release
+  - reduce size of example data (verb-noun triples, pre-compiled DSM vectors)
+
+Version 0.1-21:
+
+  - replace readr::read_delim() with iotools::read.delim.raw(), which is slightly faster and leaner; also avoids expensive dependencies of readr such as BH (Boost libraries)
+  - implemented work-arounds to support compressed files and different character encodings with iotools
+  - package test for file input (triplet and UCS format, different encodings) with suitable sample files in extdata/
+
+Version 0.1-20:
+
+  - new sample data: DSM objects for small illustrative term-term and term-context matrix
+
+Version 0.1-19:
+
+  - complete basic documentation for all functions and data sets
+  - data set DSM_VerbNounTriples_DESC removed to reduce package size
+  - dsm.projection() now supports power-scaling for SVD-based projection methods
+
+Version 0.1-18:
+
+  - efficient truncated SVD of sparse matrix using SVDLIBC code from 'sparsesvd' package
+  - faster reading of triplet files with 'readr' package (though not very memory-efficient)
+
+Version 0.1-17:
+
+  - Minkowski distance and length measures generalized to 0 <= p < 1 (but not homogeneous for p < 1, hence not a proper mathematical norm)
+
+Version 0.1-16:
+
+  - plot() method for dist.matrix for easy visualization of neighbourhood graphs
+  - head() methods to extract top left corner of DSM object (dsm) or distance matrix (dist.matrix)
+  - print() method for DSM objects, so users don't accidentally print a large co-occurrence matrix
+  - new sample data set: DSM_Vectors with 100-dimensional pre-compiled representations for selected words
+  - new sample data: typical singular values from term-context matrix
+  - new sample data: "goods" example illustrating dimensionality reduction based on correlations
+
+Version 0.1-14:
+
+  - new evaluation task: SemCorWSD (preliminary version)
+  - CITATION entry with official reference (Evert 2014)
+  - enhanced functionality in nearest.neighbours(): support for cross-distance setting, targets can be given as vectors or by name, neighbour search in pre-computed distance or similarity matrix,  optionally return distance matrix for target and its neighbours
+
+Version 0.1-13:
+
+  - Rcpp implementation of scaleMargins() further reduces memory overhead (with in-place operation for internal use)
+  - as.dsm() method converts term-document and document-term matrices from tm package into DSM objects
+  - added support functions for evaluation of DSMs in standard tasks (multiple choice, similarity correlation and clustering)
+  - new sample data sets: tables of verb-noun cooccurrences from BNC and DESC corpora
+  - new evaluation tasks: RG65, WordSim353, ESSLLI08_Nouns
+
+Version 0.1-10:
+
+  - use Rcpp instead of deprecated .C() native code interface
+  - for performance reasons, .C() was used with DUP=FALSE, which is no longer allowed as of R 3.1.0
+  - in addition, some package tests for dsm.score(), dist.matrix() and dsm.projection() were added
+  - the package now depends on Rcpp (>= 0.11.0) and R (>= 3.0.0)
+
+Version 0.1:
+
+  - partial re-design of DSM objects and basic functions
+  - handling of sparse and non-negative co-occurrence matrices has been re-thought
+  - not fully compatible with v0.0 series (but basic usage should not be affected)
+    
+Version 0.0-25:
+
+  - randomized SVD available as separate function rsvd()
+
+Version 0.0-24
+
+  - OpenMP no longer activated by default
+  - wordspace.openmp() to check for OpenMP support and select the number of parallel threads
+
+Version 0.0-23
+
+  - further performance improvements
+  - dist.matrix() uses less memory and is considerably faster for cosine/angle distance measure
+  - new function pair.distances() computes distances or neighbour ranks for a list of word pairs efficiently
+  - nearest.neighbours() automatically processes a long list of lookup terms in moderately sized batches
+
+Version 0.0-21:
+
+ - experimental support for OpenMP on appropriate platforms
+ - n/a on Mac OS X in the default R installation (but achieves speed-up if expressly activated)
+ - parallelization only used if more than 100 M operations have to be carried out (purely heuristic limit)
+ - first experiments suggests that using more than 4 or 8 threads brings little benefit with enormous overhead
+ - setting OMP_NUM_THREADS is strongly recommended but may also affect BLAS matrix operations (e.g. with OpenBLAS)
+

@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (weibulltools_deepstate_test_weibullDensity_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/weibulltools/inst/testfiles/weibullDensity/weibullDensity_output/725f552771217565500161e22e6377bf90ef506c.pass`
+TRACE: Running: weibulltools_deepstate_test_weibullDensity_test from /home/akhila/fuzzer_packages/fuzzedpackages/weibulltools/inst/testfiles/weibullDensity/weibullDensity_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -1.92672e-302
+beta values: -4.2952e-278
+lambda values: 4.24195e+22
+censored values: -1.34847e-218
+input ends
+TRACE: Passed: weibulltools_deepstate_test_weibullDensity_test

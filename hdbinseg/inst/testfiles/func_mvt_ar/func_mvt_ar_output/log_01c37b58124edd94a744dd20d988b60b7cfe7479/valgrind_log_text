@@ -1,0 +1,14 @@
+WARNING: No test specified, defaulting to first test defined (hdbinseg_deepstate_test_func_mvt_ar_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/hdbinseg/inst/testfiles/func_mvt_ar/func_mvt_ar_output/01c37b58124edd94a744dd20d988b60b7cfe7479.pass`
+TRACE: Running: hdbinseg_deepstate_test_func_mvt_ar_test from /home/akhila/fuzzer_packages/fuzzedpackages/hdbinseg/inst/testfiles/func_mvt_ar/func_mvt_ar_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+ar values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+Missing value
+res values: 4.19790e+140    -inf     inf 2.00396e-158 2.91601e+272     inf     nan     nan
+
+input ends
+TRACE: Passed: hdbinseg_deepstate_test_func_mvt_ar_test

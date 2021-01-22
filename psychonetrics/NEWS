@@ -1,0 +1,94 @@
+Changes in Version 0.8:
+  - The log determinant is now computer better to be able to include fit measures at higher model complexities
+  - The 'return_improper' argument in runmodel( ) now returns improper estimates without trying different starting values
+  - Fixed a bug in meta_varcov when using individual estimates of the sampling variation
+
+Changes in version 0.7.6:
+  - Model estimations that used improper estimation (pseudoinverse of variance-covariance matrix) now return with an error unless return_improper = TRUE in runmodel()
+  - Equality-free MIs are now also computed when all edges are included
+
+Changes in version 0.7.5:
+  - Fixed a bug with nu_zeta being constrained in multigroup LGC models.
+  - factorscores now supports multi group models
+
+Changes in version 0.7.3:
+  - Added the 'covariates_as' argument to latentgrowth() to model covariates with regressions (now default) or covariances
+
+Changes in version 0.7.2:
+  o Fixed a bug with removing diagonal elements of sigma_epsilon with single indicators
+  o Fixed another bug with models with only one free indicator
+  o Added the partialprune function for partially pruning multi-group models
+
+
+Changes in version 0.7.1:
+  o Fixed a bug for Solaris
+
+Changes in version 0.7:
+  o Major changes
+    o Major restructuring of underlying core code. Most vital functions have been translated to C++, leading to a large speedup!
+    o Added C++ based optimizers cpp_L-BFGS-B, cpp_CG, cpp_SANN, and cpp_Nelder. These are faster but slightly less stable than nlminb (now the default optimizer).
+    o Verbose now defaults to FALSE everywhere. This can be set with the setverbose function for a model
+    o Added meta-analysis model for varcov family (meta_varcov)
+    o The ml_tsdlvm1 function now allows for multi-kevek tsdlvm1 models (dlvm1 models) to be specified using syntax familiar to those using mlVAR and graphicalVAR
+  o Minor changes
+    o Numerous small bugfixes and improvements (e.g., better starting values)
+    o Added function 'fullFIML' to use true FIML computing the likelihood per row
+    o Changed 'WLS.V' to 'WLS.W'
+    o Several warning messages have been updated
+  
+
+Changes in version 0.6:
+  o The 'dlvm1' model family now also returns the implied latent variance-covarriance matrix as 'sigma_eta_within'
+      o The latent lag-1 matrix is also returned as 'sigma_eta_within_lag1'
+  o The dlvm1 model family now no longer requires a 'lambda' matrix to be specified (will default to a panelvar model)
+  o Most model families now support the 'standardized' argument, which can be set to 'z' for z-scores (helps convergence) or 'quantile' for a semiparametric transformation
+  o Added the ml_lvm family for two-level random intercept latent variable models
+  o Added the simplestructure function to easily make a lambda matrix
+  o addalpha in modelsearch now works as expected
+  o addalpha and prunealpha now default to 0.01 in 'modelsearch'
+  o recursive now defaults to FALSE in 'prune'
+
+Changes in version 0.5.1:
+  o Fixed a bug with responses being missing when summary statistics are used in Ising()
+  o Fixed a bug with covtype sometimes being set to UB when corinput = TRUE
+  o Added DOI to description field
+
+Changes in version 0.5.0:
+  o The Ising model is now supported (only ML estimation) through the Ising() model function
+  o Added the covtype option to several models, controlling if maximum likelihood or unbiased estimates are used for the input covariances
+  o Added the function 'covML' for maximum likelihood covariance estimates
+
+Changes in version 0.4.1:
+  o Small fix for CRAN checks
+
+Changes in version 0.4:
+  o type = "cor" is now supported in varcov, with rho representing the correlations and SD the diagonal standard deviations matrix.
+      o The 'corr' function is now implemented as shorthand for varcov(..., type = "cor")
+  o The scale of the Fisher information matrix has been adjusted to portray unit information to be similar to Lavaan
+  o The getVCOV function has been added to obtain the estimated asymptotic var-cov matrix of the parameters.
+  o The meanstructure can now be ignored using meanstructure = TRUE in the following model families:
+    - varcov
+  o A correlation matrix can now be used as input (detected or set with corinput = TRUE) for the following families:
+    - varcov (type = "ggm" and type = "cor")
+  o The WLS estimator will now not investigate means when meanstructure is ignored, and variances when a correlaton matrix is used as input.
+    - The WLS weights matrix must be of the appropriate dimensions!
+    - The WLS.V matrix will no longer be adjusted for missing means.
+    - Added 'startEPC' argument to stepup and freepar
+  o Added the 'modelsearch' function for extensive stepwise model search
+  o Fixed several bugs and improved starting values in several models
+
+Changes in version 0.3.3:
+  o prune() now removes diagonal values of temporal effects
+  o psychonetrics now requires R 3.6
+  o Some C++ fixes for Solaris
+  
+Changes in version 0.3.2:
+	o The parameters function now invisibly returns the parameter estimate data frame
+	o The MIs function now invisibly returns a data frame with MI estimates
+	o fit now invisibly returns a data frame with fit measure estimates
+
+
+Changes in version 0.3.1:
+	o Several help-files are now updated with executable examples
+
+Version 0.3.0: First version to be submitted to CRAN

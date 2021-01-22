@@ -1,0 +1,49 @@
+useDynLib(hpa, .registration=TRUE)
+
+importFrom(Rcpp, evalCpp)
+importFrom(RcppParallel, RcppParallelLibs)
+
+export("dhpa", "phpa", "ihpa", "ehpa",
+       "dtrhpa", "itrhpa", "etrhpa",
+       "dhpaDiff", "ihpaDiff")
+
+export("dnorm_parallel", "pnorm_parallel")
+
+export("normalMoment", "truncatedNormalMoment")
+
+export("polynomialIndex", "printPolynomial")
+
+export("mecdf")
+
+export("hpaML")
+export("summary.hpaML", "predict.hpaML",
+       "plot.hpaML", "logLik.hpaML",
+       "print.hpaML", "print.summary.hpaML")
+S3method("predict", "hpaML")
+S3method("summary", "hpaML")
+S3method("plot", "hpaML")
+S3method("logLik", "hpaML")
+S3method("print", "hpaML")
+S3method("print", "summary.hpaML")
+
+export("hpaBinary")
+export("predict.hpaBinary", "summary.hpaBinary", 
+       "plot.hpaBinary", "logLik.hpaBinary", 
+       "print.hpaBinary", "print.summary.hpaBinary")
+S3method("predict", "hpaBinary")
+S3method("summary", "hpaBinary")
+S3method("plot", "hpaBinary")
+S3method("logLik", "hpaBinary")
+S3method("print", "hpaBinary")
+S3method("print", "summary.hpaBinary")
+
+export("hpaSelection")
+export("predict.hpaSelection", "summary.hpaSelection",
+       "plot.hpaSelection", "logLik.hpaSelection", 
+       "print.hpaSelection", "print.summary.hpaSelection")
+S3method("predict", "hpaSelection")
+S3method("summary", "hpaSelection")
+S3method("plot", "hpaSelection")
+S3method("logLik", "hpaSelection")
+S3method("print", "hpaSelection")
+S3method("print", "summary.hpaSelection")

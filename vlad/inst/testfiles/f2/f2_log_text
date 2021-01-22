@@ -1,0 +1,58 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (vlad_deepstate_test_f2_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+w values: -2.43318e-187
+RA values: -1.64581e+174
+RQ values: -1.66668e-49
+g0 values: 1.91698e-80
+g1 values: 2.93871e+294
+shape1 values: 6.2389e-80
+shape2 values: 4.73594e-68
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+w values: -1.5615e-299
+RA values: -1.20777e+13
+RQ values: 2.79236e-196
+g0 values: 1.26379e+187
+g1 values: 1.42068e+49
+shape1 values: 2.58036e-206
+shape2 values: 3.02006e-260
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+w values: 1.27048e-62
+RA values: -2.88162e-134
+RQ values: 8.18711e+299
+g0 values: 0.00468189
+g1 values: 9.28697e-257
+shape1 values: -4.47314e+269
+shape2 values: -1.08462e-247
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+w values: 3.16522e+06
+RA values: 3.72126e-82
+RQ values: 5.29799e-243
+g0 values: 7.52749e+12
+g1 values: -2.14488e+105
+shape1 values: -3.93045e-68
+shape2 values: -2.02048e-44
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+w values: -1.92672e-302
+RA values: -4.2952e-278
+RQ values: 4.24195e+22
+g0 values: -1.34847e-218
+g1 values: 8.07634e-201
+shape1 values: 9.96356e-247
+shape2 values: 2.90007e+287
+input ends
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 0 failed/5 passed/0 abandoned tests

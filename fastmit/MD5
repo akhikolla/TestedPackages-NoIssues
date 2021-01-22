@@ -1,0 +1,17 @@
+91814447c9e60f0d1ea264a496e67ee3 *DESCRIPTION
+0b6dd7da8814f9232656cdf2b6f2e458 *NAMESPACE
+61f94a63974dd055edb10ea2460f3d33 *NEWS.md
+16567849f29ad040f3be9de5bf42d2ee *R/RcppExports.R
+74285fc665cedee008501ced9ad82c9b *R/mi.R
+0e3a80539c170402c4eb8e731ed3d517 *R/mi_test.R
+d6dd1ee1d9be5b4bab5f1c7dc93a50cc *README.md
+40b1e9b5be5728065c75ae642684f050 *man/mi.Rd
+ae463b25de7d7aec72b26515386affc6 *man/mi.test.Rd
+e6badd380d6ac96af30076b3fcafbec6 *src/Makevars
+c3f86a30e696df23aa9d1bc195155010 *src/Makevars.win
+21e8be41ca6ca3c7dac4980fe7a7d344 *src/RcppExports.cpp
+96c276f920d04b7ba942af12987336dd *src/knn_mi.cpp
+fc7fcfe2b5529092e80f4d48e8075542 *src/sort_knn.cpp
+bcd3d061195a4dbcd4ef31eac1dd7528 *src/sort_knn.h
+578d94f5b7af3100d5a3b120adc45002 *tests/testthat.R
+6c5e9f79e9a7250766ca84017f5e7fed *tests/testthat/test_mi.R

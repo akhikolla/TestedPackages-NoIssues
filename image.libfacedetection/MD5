@@ -1,0 +1,17 @@
+dd167076cfdffcd4c49affab85363147 *DESCRIPTION
+db5e593ad0aa541d5d004568419579d9 *LICENSE
+d64c5d772e2a1ac3308d9146b2570fab *NAMESPACE
+1e61e37cd62717fdda8a8be37ccf30f3 *R/RcppExports.R
+a9aef7e6ddec4e6c8cd406892bda83e3 *R/pkg.R
+cb8b6102be7524bf79c66188f6bf489a *README.md
+c2b81a62a4a308930e427d9836473011 *inst/images/handshake.jpg
+45031cb92ab0e47fd9a155e74218ec17 *man/image_detect_faces.Rd
+5a91c817721ac03ecfe094b9f55bfc72 *man/plot.libfacedetection.Rd
+a366cbad94d2747d1af666d994fa11b7 *src/Makevars
+9158ba9bd606cc1c6b4bab04e5527d00 *src/RcppExports.cpp
+3aef05e0f28bc316507ccb82ab8c9eab *src/facedetectcnn-int8data.cpp
+4d3062cc1087fe1cbf307b65c56492df *src/facedetectcnn-model.cpp
+f164b4acb357ec92337e19365ec88c2c *src/facedetectcnn.cpp
+5135751ea1d9ed071fa781afc5669464 *src/facedetectcnn.h
+f07db2f3adb122d140cde1adcf80e585 *src/facedetection_export.h
+85f74f08b1b3a31d2fc93812cca0998c *src/rcpp_libfacedetection.cpp

@@ -1,0 +1,21 @@
+useDynLib(VARtests, .registration = TRUE)
+
+S3method(coef, VARfit)
+S3method(print, VARfit)
+S3method(residuals, VARfit)
+S3method(print, ACtest)
+S3method(print, archBootTest)
+S3method(print, cointBootTest)
+S3method(print, wildBoot)
+
+importFrom("methods", hasArg)
+importFrom(Rcpp, evalCpp)
+importFrom("stats", "embed", "pchisq", "printCoefmat", "rnorm")
+importFrom("sn", "rmst")
+
+export(ACtest,
+	   archBootTest,
+	   cointBootTest,
+	   VARsim,
+	   VARfit,
+	   wildBoot)

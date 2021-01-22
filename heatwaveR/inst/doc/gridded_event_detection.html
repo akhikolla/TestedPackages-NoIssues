@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Robert W Schlegel and AJ Smit" />
+
+<meta name="date" content="2020-06-27" />
+
+<title>Detecting Events in Gridded Data</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Detecting Events in Gridded Data</h1>
+<h4 class="author">Robert W Schlegel and AJ Smit</h4>
+<h4 class="date">2020-06-27</h4>
+
+
+
+<div id="overview" class="section level2">
+<h2>Overview</h2>
+<p>In the previous vignette we saw how to <a href="https://robwschlegel.github.io/heatwaveR/articles/OISST_preparation.html">download and prepare OISST data</a>. In this vignette we will use the subsetted data we downloaded (not global) for our example on how to detect MHWs in gridded data.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(dplyr) <span class="co"># For basic data manipulation</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">library</span>(ggplot2) <span class="co"># For visualising data</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">library</span>(heatwaveR) <span class="co"># For detecting MHWs</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="kw">library</span>(tidync) <span class="co"># For easily dealing with NetCDF data</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">library</span>(doParallel) <span class="co"># For parallel processing</span></span></code></pre></div>
+</div>
+<div id="loading-data" class="section level2">
+<h2>Loading data</h2>
+<p>Because we saved our data as an <code>.Rds</code> file, loading it into R is easy.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>OISST &lt;-<span class="st"> </span><span class="kw">readRDS</span>(<span class="st">&quot;~/Desktop/OISST_vignette.Rds&quot;</span>)</span></code></pre></div>
+</div>
+<div id="event-detection" class="section level2">
+<h2>Event detection</h2>
+<div id="two-good-choices-dplyr-vs.-plyr" class="section level3">
+<h3>Two good choices: <strong><code>dplyr</code></strong> vs. <strong><code>plyr</code></strong></h3>
+<p>When we want to make the same calculation across multiple groups of data within one dataframe we have two good options available to us. The first is to make use of the <code>map()</code> suite of functions found in the <strong><code>purrr</code></strong> package, and now implemented in <strong><code>dplyr</code></strong>. This is a very fast <strong><code>tidyverse</code></strong> friendly approach to splitting up tasks. The other good option is to go back in time a bit and use the <code>ddply()</code> function from the <strong><code>plyr</code></strong> package. This is arguably a better approach as it allows us to very easily use multiple cores to detect the MHWs. The problem with this approach is that one must <em>never</em> load the <strong><code>plyr</code></strong> library directly as it has some fundamental inconsistencies with the <strong><code>tidyverse</code></strong>. We will see below how to perform these two different techniques without causing ourselves any headaches.</p>
+<p>It is a little clumsy to use multiple functions at once with the two methods so we will combine the calculations we want to make into one wrapper function.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>event_only &lt;-<span class="st"> </span><span class="cf">function</span>(df){</span>
+<span id="cb3-2"><a href="#cb3-2"></a>  <span class="co"># First calculate the climatologies</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a>  clim &lt;-<span class="st"> </span><span class="kw">ts2clm</span>(<span class="dt">data =</span> df, <span class="dt">climatologyPeriod =</span> <span class="kw">c</span>(<span class="st">&quot;1982-01-01&quot;</span>, <span class="st">&quot;2011-01-01&quot;</span>))</span>
+<span id="cb3-4"><a href="#cb3-4"></a>  <span class="co"># Then the events</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>  event &lt;-<span class="st"> </span><span class="kw">detect_event</span>(<span class="dt">data =</span> clim)</span>
+<span id="cb3-6"><a href="#cb3-6"></a>  <span class="co"># Return only the event metric dataframe of results</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>  <span class="kw">return</span>(event<span class="op">$</span>event)</span>
+<span id="cb3-8"><a href="#cb3-8"></a>}</span></code></pre></div>
+<div id="the-dplyr-method" class="section level4">
+<h4>The <strong><code>dplyr</code></strong> method</h4>
+<p>This method requires no special consideration and is performed just as any other friendly <strong><code>tidyverse</code></strong> code chunk would be.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">system.time</span>(</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co"># First we start by choosing the &#39;OISST&#39; dataframe</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a>MHW_dplyr &lt;-<span class="st"> </span>OISST <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-4"><a href="#cb4-4"></a><span class="st">  </span><span class="co"># Then we group the data by the &#39;lon&#39; and &#39;lat&#39; columns</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a><span class="st">  </span><span class="kw">group_by</span>(lon, lat) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb4-6"><a href="#cb4-6"></a><span class="st">  </span><span class="co"># Then we run our MHW detecting function on each group</span></span>
+<span id="cb4-7"><a href="#cb4-7"></a><span class="st">  </span><span class="kw">group_modify</span>(<span class="op">~</span><span class="kw">event_only</span>(.x))</span>
+<span id="cb4-8"><a href="#cb4-8"></a>) <span class="co"># ~123 seconds</span></span></code></pre></div>
+<p>Running the above calculations with only one of the 2.8 GHz cores on a modern laptop took ~123 seconds. It must be noted however that a recent update to the <strong><code>dplyr</code></strong> package now allows it to interrogate one’s computer to determine how many cores it has at it’s disposal. It then uses one core at full capacity and the other cores usually at half capacity.</p>
+</div>
+<div id="the-plyr-technique" class="section level4">
+<h4>The <strong><code>plyr</code></strong> technique</h4>
+<p>This method requires that we first tell our machine how many of its processor cores to give us for our calculation.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="co"># NB: One should never use ALL available cores, save at least 1 for other essential tasks</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co"># The computer I&#39;m writing this vignette on has 8 cores, so I use 7 here</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="kw">registerDoParallel</span>(<span class="dt">cores =</span> <span class="dv">7</span>)</span>
+<span id="cb5-4"><a href="#cb5-4"></a></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co"># Detect events</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="kw">system.time</span>(</span>
+<span id="cb5-7"><a href="#cb5-7"></a>MHW_plyr &lt;-<span class="st"> </span>plyr<span class="op">::</span><span class="kw">ddply</span>(<span class="dt">.data =</span> OISST, <span class="dt">.variables =</span> <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>), <span class="dt">.fun =</span> event_only, <span class="dt">.parallel =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb5-8"><a href="#cb5-8"></a>) <span class="co"># 33 seconds</span></span></code></pre></div>
+<p>The <strong><code>plyr</code></strong> technique took 33 seconds using seven cores. This technique is not seven times faster because when using multiple cores there is a certain amount of loss in efficiency due to the computer needing to remember which results are meant to go where so that it can stitch everything back together again for you. This takes very little memory, but over large jobs it can start to become problematic. Occasionally ‘slippage’ can occur as well where an entire task can be forgotten. This is very rare but does happen. This is partly what makes <strong><code>dplyr</code></strong> a viable option as it does not have this problem. The other reason is that <strong><code>dplyr</code></strong> performs more efficient calculations than <strong><code>plyr</code></strong>. But what if we could have the best of both worlds?</p>
+</div>
+</div>
+<div id="a-harmonious-third-option" class="section level3">
+<h3>A harmonious third option</h3>
+<p>As one may see above, running these calculations on a very large (or even global) gridded dataset can quickly become very heavy. While running these calculations myself on the global OISST dataset I have found that the fastest option is to combine the two options above. In my workflow I have saved each longitude segment of the global OISST dataset as separate files and use the <strong><code>dplyr</code></strong> method on each individual file, while using the <strong><code>plyr</code></strong> method to be running the multiple calculations on as many files as my core limit will allow. One may not do this the other way around and use <strong><code>dplyr</code></strong> to run multiple <strong><code>plyr</code></strong> calculations at once. This will confuse your computer and likely cause a stack overflow. Which sounds more fun than it actually is… as I have had to learn.</p>
+<p>In order to happily combine these two options into one we will need to convert the <strong><code>dplyr</code></strong> code we wrote above into it’s own wrapper function, which we will then call on a stack of files using the <strong><code>plyr</code></strong> technique. Before we do that we must first create the aforementioned stack of files.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="cf">for</span>(i <span class="cf">in</span> <span class="dv">1</span><span class="op">:</span><span class="kw">length</span>(<span class="kw">unique</span>(OISST<span class="op">$</span>lon))){</span>
+<span id="cb6-2"><a href="#cb6-2"></a>  OISST_sub &lt;-<span class="st"> </span>OISST <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="st">    </span><span class="kw">filter</span>(lon <span class="op">==</span><span class="st"> </span><span class="kw">unique</span>(lon)[i])</span>
+<span id="cb6-4"><a href="#cb6-4"></a>  <span class="kw">saveRDS</span>(<span class="dt">object =</span> OISST_sub, <span class="dt">file =</span> <span class="kw">paste0</span>(<span class="st">&quot;~/Desktop/OISST_lon_&quot;</span>,i,<span class="st">&quot;.Rds&quot;</span>))</span>
+<span id="cb6-5"><a href="#cb6-5"></a>}</span></code></pre></div>
+<p>This may initially seem like an unnecessary extra step, but when one is working with time series data it is necessary to have all of the dates at a given pixel loaded at once. Unless one is working from a server/virtual machine/supercomputer this means that one will often not be able to comfortably hold an entire grid for a study area in memory at once. Having the data accessible as thin strips like this makes life easier. And as we see in the code chunk below it also (arguably) allows us to perform the most efficient calculations on our data.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="co"># The &#39;dplyr&#39; wrapper function to pass to &#39;plyr&#39;</span></span>
+<span id="cb7-2"><a href="#cb7-2"></a>dplyr_wraper &lt;-<span class="st"> </span><span class="cf">function</span>(file_name){</span>
+<span id="cb7-3"><a href="#cb7-3"></a>  MHW_dplyr &lt;-<span class="st"> </span><span class="kw">readRDS</span>(file_name) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-4"><a href="#cb7-4"></a><span class="st">    </span><span class="kw">group_by</span>(lon, lat) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb7-5"><a href="#cb7-5"></a><span class="st">    </span><span class="kw">group_modify</span>(<span class="op">~</span><span class="kw">event_only</span>(.x))</span>
+<span id="cb7-6"><a href="#cb7-6"></a>}</span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="co"># Create a vector of the files we want to use</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a>OISST_files &lt;-<span class="st"> </span><span class="kw">dir</span>(<span class="st">&quot;~/Desktop&quot;</span>, <span class="dt">pattern =</span> <span class="st">&quot;OISST_lon_*&quot;</span>, <span class="dt">full.names =</span> T)</span>
+<span id="cb7-9"><a href="#cb7-9"></a></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="co"># Use &#39;plyr&#39; technique to run &#39;dplyr&#39; technique with multiple cores</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="kw">system.time</span>(</span>
+<span id="cb7-12"><a href="#cb7-12"></a>MHW_result &lt;-<span class="st"> </span>plyr<span class="op">::</span><span class="kw">ldply</span>(OISST_files, <span class="dt">.fun =</span> dplyr_wraper, <span class="dt">.parallel =</span> T)</span>
+<span id="cb7-13"><a href="#cb7-13"></a>) <span class="co"># 31 seconds</span></span></code></pre></div>
+<p>Even though this technique is not much faster computationally, it is much lighter on our memory (RAM) as it only loads one longitude slice of our data at a time. To maximise efficiency even further I would recommend writing out this full workflow in a stand-alone script and then running it using <code>source()</code> directly from an R terminal. The gain in speed here appears nominal, but as one scales this up the speed boost becomes apparent.</p>
+<p>As mentioned above, recent changes to how <strong><code>dplyr</code></strong> interacts with one’s computer has perhaps slowed down the <strong><code>plyr</code></strong> + <strong><code>dplyr</code></strong> workflow shown here. It may be now that simply using <strong><code>plyr</code></strong> by itself is the better option. It depends on the number of cores and the amount of RAM that one has available.</p>
+</div>
+</div>
+<div id="case-study" class="section level2">
+<h2>Case study</h2>
+<p>Because of human-induced climate change, we anticipate that extreme events will occur more frequently and that they will become greater in intensity. Here we investigate this hypothesis by using gridded SST data, which is the only way that we can assess if this trend is unfolding across large ocean regions. Using the gridded <a href="http://dx.doi.org/10.1175/2007JCLI1824.1">0.25 degree Reynolds OISST</a>, we will detect marine heatwaves (MHWs) around South Africa by applying the <code>detect_event()</code> function pixel-by-pixel to the data we downloaded in <a href="https://robwschlegel.github.io/heatwaveR/articles/OISST_preparation.html">the previous vignette</a>. After detecting the events, we will fit a generalised linear model (GLM) to each pixel to calculate rates of change in some MHW metrics, and then plot the estimated trends.</p>
+<div id="trend-detection" class="section level3">
+<h3>Trend detection</h3>
+<p>With our MHW detected we will now look at how to fit some GLMs to the results in order to determine long-term trends in MHW occurrence.</p>
+<p>Up first we see how to calculate the number of events that occurred per pixel.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="co"># summarise the number of unique longitude, latitude and year combination:</span></span>
+<span id="cb8-2"><a href="#cb8-2"></a>event_freq &lt;-<span class="st"> </span>MHW_result <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-3"><a href="#cb8-3"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">year =</span> lubridate<span class="op">::</span><span class="kw">year</span>(date_start)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-4"><a href="#cb8-4"></a><span class="st">  </span><span class="kw">group_by</span>(lon, lat, year) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-5"><a href="#cb8-5"></a><span class="st">  </span><span class="kw">summarise</span>(<span class="dt">n =</span> <span class="kw">n</span>(), <span class="dt">.groups =</span> <span class="st">&quot;drop&quot;</span>)</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="kw">head</span>(event_freq)</span>
+<span id="cb8-7"><a href="#cb8-7"></a></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="co"># create complete grid for merging with:</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a>sst_grid &lt;-<span class="st"> </span>OISST <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="st">  </span><span class="kw">select</span>(lon, lat, t) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">t =</span> lubridate<span class="op">::</span><span class="kw">year</span>(t)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">year =</span> t) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="st">  </span><span class="kw">distinct</span>()</span>
+<span id="cb8-14"><a href="#cb8-14"></a></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="co"># and merge:</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a>OISST_n &lt;-<span class="st"> </span><span class="kw">left_join</span>(sst_grid, event_freq, <span class="dt">by =</span> <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>, <span class="st">&quot;year&quot;</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb8-17"><a href="#cb8-17"></a><span class="st">  </span><span class="kw">mutate</span>(<span class="dt">n =</span> <span class="kw">ifelse</span>(<span class="kw">is.na</span>(n), <span class="dv">0</span>, n))</span></code></pre></div>
+<p>Then we specify the particulars of the GLM we are going to use.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>lin_fun &lt;-<span class="st"> </span><span class="cf">function</span>(ev) {</span>
+<span id="cb9-2"><a href="#cb9-2"></a>  mod1 &lt;-<span class="st"> </span><span class="kw">glm</span>(n <span class="op">~</span><span class="st"> </span>year, <span class="dt">family =</span> <span class="kw">poisson</span>(<span class="dt">link =</span> <span class="st">&quot;log&quot;</span>), <span class="dt">data =</span> ev)</span>
+<span id="cb9-3"><a href="#cb9-3"></a>  <span class="co"># extract slope coefficient and its p-value</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a>  tr &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">slope =</span> <span class="kw">summary</span>(mod1)<span class="op">$</span>coefficients[<span class="dv">2</span>,<span class="dv">1</span>],</span>
+<span id="cb9-5"><a href="#cb9-5"></a>                   <span class="dt">p =</span> <span class="kw">summary</span>(mod1)<span class="op">$</span>coefficients[<span class="dv">2</span>,<span class="dv">4</span>])</span>
+<span id="cb9-6"><a href="#cb9-6"></a>  <span class="kw">return</span>(tr)</span>
+<span id="cb9-7"><a href="#cb9-7"></a>}</span></code></pre></div>
+<p>Lastly we make the calculations.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>OISST_nTrend &lt;-<span class="st"> </span>plyr<span class="op">::</span><span class="kw">ddply</span>(OISST_n, <span class="kw">c</span>(<span class="st">&quot;lon&quot;</span>, <span class="st">&quot;lat&quot;</span>), lin_fun, <span class="dt">.parallel =</span> T)</span>
+<span id="cb10-2"><a href="#cb10-2"></a>OISST_nTrend<span class="op">$</span>pval &lt;-<span class="st"> </span><span class="kw">cut</span>(OISST_nTrend<span class="op">$</span>p, <span class="dt">breaks =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.001</span>, <span class="fl">0.01</span>, <span class="fl">0.05</span>, <span class="dv">1</span>))</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="kw">head</span>(OISST_nTrend)</span></code></pre></div>
+</div>
+<div id="visualising-the-results" class="section level3">
+<h3>Visualising the results</h3>
+<p>Let’s finish this vignette by visualising the long-term trends in the annual occurrence of MHWs per pixel in the chosen study area. First we will grab the base global map from the <strong><code>maps</code></strong> package.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="co"># The base map</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a>map_base &lt;-<span class="st"> </span>ggplot2<span class="op">::</span><span class="kw">fortify</span>(maps<span class="op">::</span><span class="kw">map</span>(<span class="dt">fill =</span> <span class="ot">TRUE</span>, <span class="dt">plot =</span> <span class="ot">FALSE</span>)) <span class="op">%&gt;%</span><span class="st"> </span></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="st">  </span>dplyr<span class="op">::</span><span class="kw">rename</span>(<span class="dt">lon =</span> long)</span></code></pre></div>
+<p>Then we will create two maps that we will stick together using <strong><code>ggpubr</code></strong>. The first map will show the slope of the count of events detected per year over time as shades of red, and the second map will show the significance (<em>p</em>-value) of these trends in shades of grey.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>map_slope &lt;-<span class="st"> </span><span class="kw">ggplot</span>(OISST_nTrend, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat)) <span class="op">+</span></span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="st">  </span><span class="kw">geom_rect</span>(<span class="dt">size =</span> <span class="fl">0.2</span>, <span class="dt">fill =</span> <span class="ot">NA</span>,</span>
+<span id="cb12-3"><a href="#cb12-3"></a>       <span class="kw">aes</span>(<span class="dt">xmin =</span> lon <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>, <span class="dt">xmax =</span> lon <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>, <span class="dt">ymin =</span> lat <span class="op">-</span><span class="st"> </span><span class="fl">0.1</span>, <span class="dt">ymax =</span> lat <span class="op">+</span><span class="st"> </span><span class="fl">0.1</span>,</span>
+<span id="cb12-4"><a href="#cb12-4"></a>           <span class="dt">colour =</span> pval)) <span class="op">+</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="st">  </span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> slope), <span class="dt">interpolate =</span> <span class="ot">FALSE</span>, <span class="dt">alpha =</span> <span class="fl">0.9</span>) <span class="op">+</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="st">  </span><span class="kw">scale_fill_gradient2</span>(<span class="dt">name =</span> <span class="st">&quot;count/year (slope)&quot;</span>, <span class="dt">high =</span> <span class="st">&quot;red&quot;</span>, <span class="dt">mid =</span> <span class="st">&quot;white&quot;</span>,</span>
+<span id="cb12-7"><a href="#cb12-7"></a>                       <span class="dt">low =</span> <span class="st">&quot;darkblue&quot;</span>, <span class="dt">midpoint =</span> <span class="dv">0</span>,</span>
+<span id="cb12-8"><a href="#cb12-8"></a>                       <span class="dt">guide =</span> <span class="kw">guide_colourbar</span>(<span class="dt">direction =</span> <span class="st">&quot;horizontal&quot;</span>,</span>
+<span id="cb12-9"><a href="#cb12-9"></a>                                               <span class="dt">title.position =</span> <span class="st">&quot;top&quot;</span>)) <span class="op">+</span></span>
+<span id="cb12-10"><a href="#cb12-10"></a><span class="st">  </span><span class="kw">scale_colour_manual</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;(0,0.001]&quot;</span>, <span class="st">&quot;(0.001,0.01]&quot;</span>, <span class="st">&quot;(0.01,0.05]&quot;</span>, <span class="st">&quot;(0.05,1]&quot;</span>),</span>
+<span id="cb12-11"><a href="#cb12-11"></a>                      <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;firebrick1&quot;</span>, <span class="st">&quot;firebrick2&quot;</span>, <span class="st">&quot;firebrick3&quot;</span>, <span class="st">&quot;white&quot;</span>),</span>
+<span id="cb12-12"><a href="#cb12-12"></a>                      <span class="dt">name =</span> <span class="st">&quot;p-value&quot;</span>, <span class="dt">guide =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map_base, <span class="kw">aes</span>(<span class="dt">group =</span> group), </span>
+<span id="cb12-14"><a href="#cb12-14"></a>               <span class="dt">colour =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="st">&quot;grey80&quot;</span>) <span class="op">+</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="dv">1</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="fl">13.0</span>, <span class="fl">23.0</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">33</span>, <span class="dv">-42</span>), <span class="dt">expand =</span> <span class="ot">TRUE</span>) <span class="op">+</span></span>
+<span id="cb12-16"><a href="#cb12-16"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
+<span id="cb12-17"><a href="#cb12-17"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
+<span id="cb12-19"><a href="#cb12-19"></a></span>
+<span id="cb12-20"><a href="#cb12-20"></a>map_p &lt;-<span class="st"> </span><span class="kw">ggplot</span>(OISST_nTrend, <span class="kw">aes</span>(<span class="dt">x =</span> lon, <span class="dt">y =</span> lat)) <span class="op">+</span></span>
+<span id="cb12-21"><a href="#cb12-21"></a><span class="st">  </span><span class="kw">geom_raster</span>(<span class="kw">aes</span>(<span class="dt">fill =</span> pval), <span class="dt">interpolate =</span> <span class="ot">FALSE</span>) <span class="op">+</span></span>
+<span id="cb12-22"><a href="#cb12-22"></a><span class="st">  </span><span class="kw">scale_fill_manual</span>(<span class="dt">breaks =</span> <span class="kw">c</span>(<span class="st">&quot;(0,0.001]&quot;</span>, <span class="st">&quot;(0.001,0.01]&quot;</span>, <span class="st">&quot;(0.01,0.05]&quot;</span>,</span>
+<span id="cb12-23"><a href="#cb12-23"></a>                               <span class="st">&quot;(0.05,0.1]&quot;</span>, <span class="st">&quot;(0.1,0.5]&quot;</span>, <span class="st">&quot;(0.5,1]&quot;</span>),</span>
+<span id="cb12-24"><a href="#cb12-24"></a>                    <span class="dt">values =</span> <span class="kw">c</span>(<span class="st">&quot;black&quot;</span>, <span class="st">&quot;grey20&quot;</span>, <span class="st">&quot;grey40&quot;</span>,</span>
+<span id="cb12-25"><a href="#cb12-25"></a>                               <span class="st">&quot;grey80&quot;</span>, <span class="st">&quot;grey90&quot;</span>, <span class="st">&quot;white&quot;</span>),</span>
+<span id="cb12-26"><a href="#cb12-26"></a>                    <span class="dt">name =</span> <span class="st">&quot;p-value&quot;</span>,</span>
+<span id="cb12-27"><a href="#cb12-27"></a>                    <span class="dt">guide =</span> <span class="kw">guide_legend</span>(<span class="dt">direction =</span> <span class="st">&quot;horizontal&quot;</span>,</span>
+<span id="cb12-28"><a href="#cb12-28"></a>                                               <span class="dt">title.position =</span> <span class="st">&quot;top&quot;</span>)) <span class="op">+</span></span>
+<span id="cb12-29"><a href="#cb12-29"></a><span class="st">  </span><span class="kw">geom_polygon</span>(<span class="dt">data =</span> map_base, <span class="kw">aes</span>(<span class="dt">group =</span> group), </span>
+<span id="cb12-30"><a href="#cb12-30"></a>               <span class="dt">colour =</span> <span class="ot">NA</span>, <span class="dt">fill =</span> <span class="st">&quot;grey80&quot;</span>) <span class="op">+</span></span>
+<span id="cb12-31"><a href="#cb12-31"></a><span class="st">  </span><span class="kw">coord_fixed</span>(<span class="dt">ratio =</span> <span class="dv">1</span>, <span class="dt">xlim =</span> <span class="kw">c</span>(<span class="fl">13.0</span>, <span class="fl">23.0</span>), <span class="dt">ylim =</span> <span class="kw">c</span>(<span class="op">-</span><span class="dv">33</span>, <span class="dv">-42</span>), <span class="dt">expand =</span> <span class="ot">TRUE</span>) <span class="op">+</span></span>
+<span id="cb12-32"><a href="#cb12-32"></a><span class="st">  </span><span class="kw">labs</span>(<span class="dt">x =</span> <span class="st">&quot;&quot;</span>, <span class="dt">y =</span> <span class="st">&quot;&quot;</span>) <span class="op">+</span></span>
+<span id="cb12-33"><a href="#cb12-33"></a><span class="st">  </span><span class="kw">theme_bw</span>() <span class="op">+</span></span>
+<span id="cb12-34"><a href="#cb12-34"></a><span class="st">  </span><span class="kw">theme</span>(<span class="dt">legend.position =</span> <span class="st">&quot;bottom&quot;</span>)</span>
+<span id="cb12-35"><a href="#cb12-35"></a></span>
+<span id="cb12-36"><a href="#cb12-36"></a>map_both &lt;-<span class="st"> </span>ggpubr<span class="op">::</span><span class="kw">ggarrange</span>(map_slope, map_p, <span class="dt">align =</span> <span class="st">&quot;hv&quot;</span>)</span>
+<span id="cb12-37"><a href="#cb12-37"></a>map_both</span></code></pre></div>
+<p>From the figure above we may see that the entire study area shows significant (<em>p</em>&lt;= 0.05) increases in the count of MHWs per year. This is generally the case for the entire globe. Not shown here is the significant increase in the intensity of MHWs as well.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,419 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Lotfi Slim" />
+
+<meta name="date" content="2019-12-07" />
+
+<title>kernelPSI: a Post-Selection Inference Framework for Nonlinear Variable Selection</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">kernelPSI: a Post-Selection Inference Framework for Nonlinear Variable Selection</h1>
+<h4 class="author">Lotfi Slim</h4>
+<h4 class="date">2019-12-07</h4>
+
+
+
+<style>
+body {
+text-align: justify}
+</style>
+<p>In this vignette, we illustrate on a synthetic dataset how to perform post-selection inference (PSI) for a set of kernels using our R package <strong>kernelPSI</strong> <span class="citation">(Slim et al. 2019)</span>. The kernels are selected in a forward fashion according to quadratic kernel association scores, leading to the modeling of the selection event as a set of quadratic constraints. For valid inference, we need to correct for the bias introduced by the prior selection of the kernels. Determining the exact post-selection distribution of our test statistics under the selection event was impossible. To overcome that, we use sampling in order to derive empirical <span class="math inline">\(p\)</span>-values.</p>
+<div id="simulation" class="section level2">
+<h2>Simulation</h2>
+<p>We first start by giving the setup for our simulation. We associate <span class="math inline">\(10\)</span> gaussian kernels to <span class="math inline">\(10\)</span> independent groups of variables of size <span class="math inline">\(5\)</span> each. Within each group, the variables are drawn from a multivariate normal distribution with mean <span class="math inline">\(0\)</span> and a correlation matrix <span class="math inline">\(V_{ij} = \rho^{\lvert i-j\rvert}\)</span>, where <span class="math inline">\(\rho = 0.6\)</span> and <span class="math inline">\(i,j\in[1\mathrel{{.}\,{.}} 5]\)</span>. The dataset we consider here consists of <span class="math inline">\(100\)</span> independent samples.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">require</span>(<span class="st">&quot;MASS&quot;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; Loading required package: MASS</span></span>
+<span id="cb1-3"><a href="#cb1-3"></a></span>
+<span id="cb1-4"><a href="#cb1-4"></a>n_kernels &lt;-<span class="st"> </span><span class="dv">10</span> <span class="co"># total number of kernels</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a>size_kernels &lt;-<span class="st"> </span><span class="dv">5</span> <span class="co"># dimensionality of the data associated to each kernel</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>n &lt;-<span class="st"> </span><span class="dv">100</span> <span class="co"># sample size</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a>rho &lt;-<span class="st"> </span><span class="fl">0.6</span> <span class="co"># correlation parameter</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co"># intra-group correlation matrix</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a>corr &lt;-<span class="st"> </span><span class="kw">outer</span>(<span class="kw">seq_len</span>(size_kernels), <span class="kw">seq_len</span>(size_kernels),</span>
+<span id="cb1-12"><a href="#cb1-12"></a>              <span class="cf">function</span>(i, j) <span class="kw">return</span>(rho<span class="op">^</span>(<span class="kw">abs</span>(i<span class="op">-</span>j))))</span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="co"># design matrix</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a>X &lt;-<span class="st"> </span><span class="kw">replicate</span>(n_kernels,</span>
+<span id="cb1-16"><a href="#cb1-16"></a>               <span class="kw">mvrnorm</span>(n, <span class="dt">mu =</span> <span class="kw">rep</span>(<span class="dv">0</span>, size_kernels), <span class="dt">Sigma =</span> corr),</span>
+<span id="cb1-17"><a href="#cb1-17"></a>               <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<p>To each group, we associate a local gaussian kernel <span class="math inline">\(K\)</span> of variance <span class="math inline">\(\sigma^2 = 5\)</span>, <em>i.e.</em> <span class="math inline">\(K(x_i, x_j) = \exp(\lvert\lvert x_i-x_j\rvert\rvert^2/\sigma^2)\)</span>.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">require</span>(<span class="st">&quot;kernlab&quot;</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; Loading required package: kernlab</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>K &lt;-<span class="st"> </span><span class="kw">replicate</span>(n_kernels, <span class="kw">rbfdot</span>(<span class="dt">sigma =</span> <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>size_kernels))  <span class="co"># full list of Gaussian kernels</span></span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a><span class="co"># List of Gram matrices</span></span>
+<span id="cb2-6"><a href="#cb2-6"></a>Kmat &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="kw">seq_len</span>(n_kernels),</span>
+<span id="cb2-7"><a href="#cb2-7"></a>               <span class="cf">function</span>(i) {kMatrix &lt;-<span class="st"> </span><span class="kw">kernelMatrix</span>(K[[i]], X[[i]]);</span>
+<span id="cb2-8"><a href="#cb2-8"></a>               <span class="kw">return</span>(<span class="kw">as.kernelMatrix</span>(kMatrix, <span class="dt">center =</span> <span class="ot">TRUE</span>))},</span>
+<span id="cb2-9"><a href="#cb2-9"></a>               <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</span></code></pre></div>
+<p>We select the first three kernels as causal kernels, and simulate the outcome <span class="math inline">\(Y\)</span> in the following way: <span class="math inline">\(Y\sim 0.1 * U + \epsilon\)</span>. <span class="math inline">\(U\)</span> is the first eigenvector of the similarity matrix of the sum kernel of the first three kernel and <span class="math inline">\(\epsilon\)</span> is a reduced gaussian random error. For the outcome, we consider the linear kernel.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>m_kernels &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co"># number of causal kernels</span></span>
+<span id="cb3-2"><a href="#cb3-2"></a>theta &lt;-<span class="st"> </span><span class="fl">0.1</span> <span class="co"># amplitude of size effect</span></span>
+<span id="cb3-3"><a href="#cb3-3"></a></span>
+<span id="cb3-4"><a href="#cb3-4"></a>Ksum &lt;-<span class="st"> </span><span class="kw">Reduce</span>(<span class="st">`</span><span class="dt">+</span><span class="st">`</span>, Kmat[<span class="kw">seq_len</span>(m_kernels)]) <span class="co"># sum kernel of the causal kernels</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>decompK &lt;-<span class="st"> </span><span class="kw">eigen</span>(Ksum) <span class="co"># eigenvalue decomposition of the sum kernel Ksum</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a></span>
+<span id="cb3-7"><a href="#cb3-7"></a>Y &lt;-<span class="st"> </span><span class="kw">as.matrix</span>(theta <span class="op">*</span><span class="st"> </span>decompK<span class="op">$</span>values[<span class="dv">1</span>] <span class="op">*</span><span class="st"> </span>decompK<span class="op">$</span>vectors[, <span class="dv">1</span>] <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(n), <span class="dt">ncol =</span> <span class="dv">1</span>) <span class="co"># response vector</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a>Lmat &lt;-<span class="st"> </span><span class="kw">kernelMatrix</span>(<span class="kw">new</span>(<span class="st">&quot;vanillakernel&quot;</span>), Y) <span class="co"># linear response vector</span></span></code></pre></div>
+</div>
+<div id="kernel-selection" class="section level2">
+<h2>Kernel selection</h2>
+<p>The first step in PSI is to select the kernels. For that purpose, we use the function <code>FOHSIC</code> for the fixed variant and <code>adaFOHSIC</code> for the adaptive variant. Afterwards, to generate the list of matrices associated to the quadratic constraint of each selection event, we respectively apply <code>forwardQ</code> and <code>adaQ</code>.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">require</span>(<span class="st">&quot;kernelPSI&quot;</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a><span class="co">#&gt; Loading required package: kernelPSI</span></span>
+<span id="cb4-3"><a href="#cb4-3"></a></span>
+<span id="cb4-4"><a href="#cb4-4"></a>candidate_kernels &lt;-<span class="st"> </span><span class="dv">3</span> <span class="co"># number of kernels for the fixed variant</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>selectFOHSIC &lt;-<span class="st"> </span><span class="kw">FOHSIC</span>(Kmat, Lmat, <span class="dt">mKernels =</span> candidate_kernels) <span class="co"># fixed variant</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a>constraintFO &lt;-<span class="st"> </span><span class="kw">forwardQ</span>(Kmat, selectFOHSIC) <span class="co"># list of quadratic constraints modeling the selection event</span></span></code></pre></div>
+<p>If the number of causal kernels is not available beforehand, we resort to the adaptive version:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>selectAHSIC &lt;-<span class="st"> </span><span class="kw">adaFOHSIC</span>(Kmat, Lmat) <span class="co"># adaptive variant</span></span>
+<span id="cb5-2"><a href="#cb5-2"></a>adaFO &lt;-<span class="st"> </span><span class="kw">adaQ</span>(Kmat, selectAHSIC[[<span class="st">&quot;selection&quot;</span>]], selectAHSIC[[<span class="st">&quot;n&quot;</span>]]) <span class="co"># list of quadratic constraints for the adaptive selection method</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a>adaS &lt;-<span class="st"> </span>selectAHSIC<span class="op">$</span>selection[<span class="kw">seq_len</span>(selectAHSIC<span class="op">$</span>n)] <span class="co"># indices of selected kernels</span></span></code></pre></div>
+</div>
+<div id="inference" class="section level2">
+<h2>Inference</h2>
+<p>Finally, using the obtained constraints, we can derive PSI significance values for three statistics: the log-likelihood ratio for the ridge prototype, the log-likelihood ratio for the kernel PCA prototype and the HSIC score. The <span class="math inline">\(p\)</span>-values are computed by comparing the statistics of the original response to those of replicates sampled within the acceptance region of the selection event. Most often, because of the difference in their statistical power, the methods yield different <span class="math inline">\(p\)</span>-values.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>n_replicates &lt;-<span class="st"> </span><span class="dv">5000</span> <span class="co"># number of replicates (statistical power and validity require a higher number of samples)</span></span>
+<span id="cb6-2"><a href="#cb6-2"></a>burn_in &lt;-<span class="st"> </span><span class="dv">1000</span> <span class="co"># number of burn-in iterations</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co"># Fixed variant ------------------</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co"># selected methods: &#39;ridge&#39; for the kernel ridge regression prototype </span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co"># and &#39;pca&#39; for the kernel principal component regression prototype</span></span>
+<span id="cb6-7"><a href="#cb6-7"></a><span class="kw">kernelPSI</span>(Y, <span class="dt">K_select =</span> Kmat[selectFOHSIC], constraintFO, <span class="dt">method =</span> <span class="kw">c</span>(<span class="st">&quot;ridge&quot;</span>, <span class="st">&quot;pca&quot;</span>), </span>
+<span id="cb6-8"><a href="#cb6-8"></a>          <span class="dt">n_replicates =</span> n_replicates, <span class="dt">burn_in =</span> burn_in)</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="co">#&gt; $ridge</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="co">#&gt; [1] 0.0382</span></span>
+<span id="cb6-11"><a href="#cb6-11"></a><span class="co">#&gt; </span></span>
+<span id="cb6-12"><a href="#cb6-12"></a><span class="co">#&gt; $pca</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a><span class="co">#&gt; [1] 0.2502</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="co"># Adaptive variant ------------------</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="co"># selected methods: &#39;hsic&#39; for the unbiased HSIC estimator</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="kw">kernelPSI</span>(Y, <span class="dt">K_select =</span> Kmat[adaS], constraintFO, <span class="dt">method =</span> <span class="st">&quot;hsic&quot;</span>, </span>
+<span id="cb6-18"><a href="#cb6-18"></a>          <span class="dt">n_replicates =</span> n_replicates, <span class="dt">burn_in =</span> burn_in)</span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="co">#&gt; $hsic</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="co">#&gt; [1] 0.0912</span></span></code></pre></div>
+</div>
+<div id="references" class="section level2">
+<h2 class="unnumbered">References</h2>
+<div id="refs" class="references hanging-indent">
+<div id="ref-slim2019">
+<p>Slim, Lotfi, Clément Chatelain, Chloe-Agathe Azencott, and Jean-Philippe Vert. 2019. “KernelPSI: A Post-Selection Inference Framework for Nonlinear Variable Selection.” In <em>Proceedings of the 36th International Conference on Machine Learning</em>, edited by Kamalika Chaudhuri and Ruslan Salakhutdinov, 97:5857–65. Proceedings of Machine Learning Research. Long Beach, California, USA: PMLR. <a href="http://proceedings.mlr.press/v97/slim19a.html">http://proceedings.mlr.press/v97/slim19a.html</a>.</p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

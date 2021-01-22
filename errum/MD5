@@ -1,0 +1,16 @@
+571e9850014454e4a94b8154fde999fd *DESCRIPTION
+bf2aa64c3f61c727fabff5fbfa07c10b *NAMESPACE
+e74274438f3d7583137a5556d935a9b1 *NEWS.md
+8463a26cd559d9737f4dd4770fe86567 *R/RcppExports.R
+e14a6c315344e3a350caba162220edff *R/errum-package.R
+60b9bafed28cdc74445b4fdfbcf85f0c *R/errum.R
+5a215fb3eb1ddb5bbc19ae65b67ed5e2 *README.md
+0d50da081b576c1fa191780053a0ebe3 *inst/CITATION
+44124cd7a017426c422e5a080429cb52 *inst/WORDLIST
+f8df80e3cfd13170e0cea2abe28e9cc7 *inst/demo_script.R
+60a727feef9341bb75e47371d35b0af5 *man/errum-package.Rd
+9d55e971239c89570c503d73f553d47c *man/errum.Rd
+e4a9a47c4a3aca98677ab8b16336e5de *src/Makevars
+e4a9a47c4a3aca98677ab8b16336e5de *src/Makevars.win
+5ea5d7bc33b42179ac0efc07f38bc65e *src/RcppExports.cpp
+8f2b6ce9203582a9f47067dd909dcd4f *src/errum_cpp_routine.cpp

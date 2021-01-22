@@ -1,0 +1,24 @@
+
+2019-01-29 Steven E. Pav <shabbychef@gmail.com>
+* 0.2.1 on CRAN
+* fix memory leak for case where the mean only
+  need be computed via a Welford object.
+
+
+2019-01-12 Steven E. Pav <shabbychef@gmail.com>
+* 0.2.0 on CRAN
+* add std_cumulants.
+* add running_sum and running_mean.
+* Kahan compensated summation for these.
+* Welford object under the hood.
+* add weighted moments computation.
+* add time-based running window computations.
+* some speedups for obviously fast cases: no checking of NA, etc.
+* move github figures to location CRAN understands
+
+2016-04-04 Steven E. Pav <shabbychef@gmail.com>
+* 0.1.3 on CRAN
+
+2016-03-25 Steven E. Pav <shabbychef@gmail.com>
+* start work
+

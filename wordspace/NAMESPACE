@@ -1,0 +1,61 @@
+importFrom(methods, as, is, new)
+importFrom(stats, cor.test, lowess, na.omit, quantile, rbinom, rnorm)
+importFrom(utils, combn, read.delim, read.table, write.table, type.convert, txtProgressBar, setTxtProgressBar)
+importFrom(graphics, legend, lines, par, plot, points, segments, text)
+importFrom(grDevices, extendrange)
+importFrom(MASS, sammon, isoMDS)
+importFrom(cluster, pam)
+
+import(Matrix)
+importFrom(sparsesvd, sparsesvd)
+importFrom(iotools, readAsRaw, dstrsplit, mstrsplit)
+importFrom(Rcpp, evalCpp)
+
+useDynLib(wordspace, .registration=TRUE)
+
+export(wordspace.openmp)
+
+export(dsm, check.dsm)
+export(dsm.is.canonical, dsm.canonical.matrix)
+export(read.dsm.ucs, read.dsm.triplet)
+export(write.dsm.matrix, read.dsm.matrix)
+export(dsm.score)
+export(rowNorms, colNorms, normalize.rows, normalize.cols, scaleMargins)
+export(rsvd)
+export(dsm.projection)
+export(dist.matrix, nearest.neighbours, pair.distances)
+export(match.split)
+export(context.vectors)
+export(convert.lemma, eval.multiple.choice, eval.clustering, eval.similarity.correlation)
+export(signcount)
+
+S3method(print, dsm)
+S3method(head, dsm)
+S3method(dim, dsm)
+S3method(t, dsm)
+S3method(dimnames, dsm)
+S3method(`dimnames<-`, dsm)
+S3method(as.matrix, dsm)
+
+S3method(subset, dsm)
+
+S3method(rbind, dsm)
+S3method(cbind, dsm)
+
+S3method(merge, dsm)
+
+S3method(head, dist.matrix)
+S3method(plot, dist.matrix)
+
+S3method(print, eval.similarity.correlation)
+S3method(plot, eval.similarity.correlation)
+
+export(as.dsm)
+S3method(as.dsm, TermDocumentMatrix)
+S3method(as.dsm, DocumentTermMatrix)
+
+export(as.distmat)
+S3method(as.distmat, matrix)
+S3method(as.distmat, sparseMatrix)
+S3method(as.distmat, dsm)
+

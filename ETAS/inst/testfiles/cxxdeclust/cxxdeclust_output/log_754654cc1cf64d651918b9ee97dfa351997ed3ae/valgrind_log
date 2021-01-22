@@ -1,0 +1,153 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./cxxdeclust_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_output/754654cc1cf64d651918b9ee97dfa351997ed3ae.pass</line>
+</preamble>
+
+<pid>385666</pid>
+<ppid>385665</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_output/log_754654cc1cf64d651918b9ee97dfa351997ed3ae/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./cxxdeclust_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_output/754654cc1cf64d651918b9ee97dfa351997ed3ae.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.024 </time>
+</status>
+
+<fatal_signal>
+  <tid>1</tid>
+  <signo>2</signo>
+  <signame>SIGINT</signame>
+  <sicode>128</sicode>
+  <siaddr>0x0</siaddr>
+  <stack>
+    <frame>
+      <ip>0x517EDBA</ip>
+      <obj>/usr/lib/x86_64-linux-gnu/libc-2.31.so</obj>
+      <fn>wait4</fn>
+      <dir>/build/glibc-ZN95T4/glibc-2.31/posix/../sysdeps/unix/sysv/linux</dir>
+      <file>wait4.c</file>
+      <line>27</line>
+    </frame>
+    <frame>
+      <ip>0x41E825</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>DeepState_ForkAndRunTest</fn>
+    </frame>
+    <frame>
+      <ip>0x41E914</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>DeepState_RunSavedTestCase</fn>
+    </frame>
+    <frame>
+      <ip>0x4076B5</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>main</fn>
+    </frame>
+  </stack>
+</fatal_signal>
+
+<fatal_signal>
+  <tid>1</tid>
+  <signo>2</signo>
+  <signame>SIGINT</signame>
+  <sicode>128</sicode>
+  <siaddr>0x0</siaddr>
+  <stack>
+    <frame>
+      <ip>0x4D3BD00</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/src/ETAS.so</obj>
+      <fn>cxxdeclust(Rcpp::Vector&lt;14, Rcpp::PreserveStorage&gt;, Rcpp::Matrix&lt;14, Rcpp::PreserveStorage&gt;, Rcpp::Matrix&lt;14, Rcpp::PreserveStorage&gt;, Rcpp::Vector&lt;14, Rcpp::PreserveStorage&gt;, Rcpp::Vector&lt;14, Rcpp::PreserveStorage&gt;, int)</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/src</dir>
+      <file>fitMP.cpp</file>
+      <line>1734</line>
+    </frame>
+    <frame>
+      <ip>0x40A6CF</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>DeepState_Test_ETAS_deepstate_test_cxxdeclust_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust</dir>
+      <file>cxxdeclust_DeepState_TestHarness.cpp</file>
+      <line>43</line>
+    </frame>
+    <frame>
+      <ip>0x409BA8</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>DeepState_Run_ETAS_deepstate_test_cxxdeclust_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust</dir>
+      <file>cxxdeclust_DeepState_TestHarness.cpp</file>
+      <line>13</line>
+    </frame>
+    <frame>
+      <ip>0x41E598</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>DeepState_RunTest.isra.0</fn>
+    </frame>
+    <frame>
+      <ip>0x41E839</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>DeepState_ForkAndRunTest</fn>
+    </frame>
+    <frame>
+      <ip>0x41E914</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>DeepState_RunSavedTestCase</fn>
+    </frame>
+    <frame>
+      <ip>0x4076B5</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/ETAS/inst/testfiles/cxxdeclust/cxxdeclust_DeepState_TestHarness</obj>
+      <fn>main</fn>
+    </frame>
+  </stack>
+</fatal_signal>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:01:07:49.643 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:01:07:49.663 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

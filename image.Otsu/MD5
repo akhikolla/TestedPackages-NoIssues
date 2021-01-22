@@ -1,0 +1,10 @@
+08e8fac1444a0d3637c23c120a106729 *DESCRIPTION
+0494c397ea9da165ee5babc60aa41c53 *LICENSE
+a32e66f4ca57ef0f331e825e82aadbd8 *NAMESPACE
+083ff58707b1cb228765f2e5cd064bff *R/RcppExports.R
+104b4a1e44c0e38714aaaecf4e4d67d6 *R/pkg.R
+deee3941315f9ca5646dda76181e5484 *inst/extdata/coins.jpeg
+0552d8d869d25db1c34efffe5ab1ad00 *man/image_otsu.Rd
+e3d3cb360fbfdb3c6974e14eb5f09870 *src/Makevars
+a6867e3f23f98cccd87c573ec4905dbc *src/RcppExports.cpp
+cde2f442440858601ebe7b6528780a9f *src/rcpp_otsu.cpp

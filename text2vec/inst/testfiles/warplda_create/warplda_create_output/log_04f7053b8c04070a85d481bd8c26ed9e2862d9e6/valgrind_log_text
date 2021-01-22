@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (text2vec_deepstate_test_warplda_create_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/text2vec/inst/testfiles/warplda_create/warplda_create_output/04f7053b8c04070a85d481bd8c26ed9e2862d9e6.pass`
+TRACE: Running: text2vec_deepstate_test_warplda_create_test from /home/akhila/fuzzer_packages/fuzzedpackages/text2vec/inst/testfiles/warplda_create/warplda_create_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+n_topics values: 954479852
+doc_topic_prior values: 1.42154e+226
+topic_word_prior values: -2.0456e+54
+input ends
+TRACE: Passed: text2vec_deepstate_test_warplda_create_test

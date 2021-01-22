@@ -1,0 +1,28 @@
+useDynLib("fclust", .registration=TRUE)
+#exportPattern("^[[:alpha:]]+")
+importFrom("Rcpp", sourceCpp)
+#importFrom(Rcpp, "evalCpp")
+
+importFrom("grDevices", "devAskNewPage", "grey", "palette", "rainbow")
+importFrom("graphics", "hist", "image", "par", "plot", "points")
+importFrom("stats", "dist", "runif", "sd","var")
+importFrom("utils", "packageVersion")
+importFrom("MASS", "isoMDS")
+S3method("plot","fclust")
+S3method("print","fclust")
+S3method("summary","fclust")
+
+
+
+export("print.fclust","summary.fclust","plot.fclust")
+
+export("FKM","FKM.ent",
+       "FKM.ent.noise","FKM.gk","FKM.gk.ent",
+       "FKM.gk.ent.noise","FKM.gk.noise","FKM.gkb",
+       "FKM.gkb.noise","FKM.med","FKM.med.noise",
+       "FKM.noise","FKM.pf","FKM.pf.noise","FKM.gkb.ent.noise","FKM.gkb.ent")
+export("cl.memb", "cl.memb.H", "cl.memb.t", "cl.size", "cl.size.H", "Hraw", "VAT", "VCV", "VCV2", "VIFCR")
+export("MPC","PC","PE","SIL","SIL.F","XB","Fclust.index")
+export("Fclust.compare","JACCARD.F","RI.F","ARI.F")
+export("NEFRC","NEFRC.noise")
+export("Fclust")

@@ -1,0 +1,621 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="Daniel W. Heck" />
+
+<meta name="date" content="2019-05-16" />
+
+<title>multinomineq: Multinomial Models with Inequality Constraints</title>
+
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">multinomineq: Multinomial Models with Inequality Constraints</h1>
+<h4 class="author">Daniel W. Heck</h4>
+<h4 class="date">2019-05-16</h4>
+
+
+
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAgYAAAJYCAMAAAAuZd4VAAAC8VBMVEX9/v0AAAAAAAMAAAYAAAkAAAsAAIUAAIcAAIgAAIkAAIoAAIsBAQECAgIDAwMEBAQFBQUGBgYHBwcICAgJCQkKCgoLCwsMDAwNDQ0ODg4PDw8QEBARERESEhITExMUFBQVFRUWFhYXFxcYGBgZGRkaGhobGxscHBwdHR0eHh4fHx8gICAhISEiIiIjIyMkJCQlJSUmJiYnJycoKCgpKSkrKyssLCwtLS0uLi4vLy8wMDAxMTEyMjIzMzM0NDQ1NTU2NjY3Nzc4ODg5OTk6Ojo7Ozs8PDw9PT0+Pj4/Pz9AQEBBQUFCQkJDQ0NERERFRUVGRkZHR0dISEhJSUlKSkpLS0tMTExNTU1OTk5PT09QUFBRUVFSUlJTU1NUVFRVVVVWVlZXV1dYWFhZWVlaWlpbW1tcXFxdXV1eXl5fX19gYGBhYWFiYmJjY2NkZGRlZWVmZmZnZ2doaGhpaWlqampra2tsbGxtbW1ubm5vb29wcHBxcXFzc3N0dHR1dXV2dnZ3d3d4eHh5eXl6enp8fHx9fX1+fn5/f3+AgICBgYGCgoKDg4OFhYWGhoaHh4eIiIiJiYmKioqLi4uMjIyNjY2Ojo6Pj4+QkJCRkZGSkpKTk5OUlJSVlZWWlpaXl5eYmJiZmZmampqbm5ucnJydnZ2enp6fn5+goKChoaGioqKjo6OkpKSlpaWmpqaoqKipqamqqqqrq6usrKytra2urq6wsLCxsbGysrKzs7O0tLS1tbW2tra3t7e4uLi5ubm6urq7u7u8vLy9vb2+vr6/v7/AwMDBwcHCwsLDw8PExMTGxsbIyMjIyNTIyNjIyNnIyN3JycnKysrLy8vMzMzNzc3Ozs7Q0NDR0dHS0tLT09PU1NTV1dXW1tbX19fY2NjZ2dna2trb29vc3NzdMzPd3d3e3t7f39/g4ODh4eHi4uLj4+Pk5OTl5eXm5ubn5+fo6Ojp6enq6urr6+vs7Ozt7e3u7u7v7+/w8PDx8fHy8vL9/v3tb/kFAAAA+3RSTlP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AOOfA8gAAAAJcEhZcwAALiMAAC4jAXilP3YAACAASURBVHic7d154B1FfQDwvN8vJtAfSYAkYKyQoIigQQVRQMSjKihSFKxVW0RULlEOtVIsoAWVclVFvANi1YBWPKtWrIK13iTG4llFlKMcWjUYSLL5q2939pqZ7+zO7M7Md67vH5C3b957szuf31w7uztvW4oU2+ZhZyCFC5EYpNiWGKQoIjFIsS0xSFFE9AzuyAM7E+gROYM7qsDOCHJEzeCOdmBnBjViZnDHHclBGfEyuIMP7CzhRawMAAQxQ4iTgQBBvBCiZNChIFIHETLoRBAphOgY9CKIEkJsDIAyz5KDyBhACPKIHkJMDEQIEoSIGHQhiB5CNAz6FMTtIBIG/QjihhAFAzkEMUOIgAFQtCIFoIMYIITPQAVBtBVC6AxUEUQKIWwGQxBECSFoBkMVxOcgYAbDEcQHIVgG4xDEBiFQBuMRxAUhTAZ6FETkIEQGuhBEBCE8BjoRRAMhNAZAoY1TEMf8cmAM9COIo0IIioEZBDFACIiBOQThQwiGAdSCa1QQeBchFAamEQggYO+2rgiDgQ0EQUMIgYEtBAFDCICBTQWhOvCegV0EoULwnIF9BGFC8JoBDoIQIfjMAE9BcA78ZYCJIDgIvjLARhAYBD8ZAAVgX0FI88teMnADgQAC9sEZFB4ycAdBOBC8Y+AWglAg+MbAPQVBOPCLgYsI8vAegk8MXEWQh+cQ/GHgMoI8vIbgDQPXFfjtwBMG7iPIw18IXjDwA0EevkLwgAFwaF1V4O38svsMfEKQh5cOXGfgG4I8PITgNgMfEeThHQSXGUDtLHYBSwaUdezD2RUOM/AXQR5+OXCWgd8I8vAJgqMM/EeQhz8Q3GQQhgKPHLjIIBQEeXgCwT0GISHIwwsIrjEIDUEeHkBwjEGICnxw4BSDMBHk4ToEhxiEiyAPtyE4wwA4TCEpcHx+2RUGoSPIw2EHbjCIAUEezkJw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" width="150" align="right" hspace="20" style="border:0px"></p>
+<p>The R package <code>multinomineq</code> facilitates the Bayesian analysis of discrete/categorical data using multinomial models with inequality constraints. Essentially, these types of models allow to analyze discrete choice frequencies while assuming that the corresponding choice probabilities <span class="math inline">\(\theta\)</span> are constrained by linear inequality constraints (e.g., by the simple order <span class="math inline">\(\theta_{1} \leq \theta_{2}\leq \theta_{3}\leq \theta_{4}\)</span>). In the following, this vignette shows how to define and test such models in R. The second section below provides a concise formal definition of the model class.</p>
+<div id="example-testing-the-description-experience-gap" class="section level2">
+<h2>Example: Testing the Description-Experience Gap</h2>
+<p>The following example shows how inequality constraints can be used to test the description-experience (DE) gap in risky decision making (Hertwig et al., 2004). In the experiment, participants had to choose one of two risky gambles in each of 6 different paired comparisons (e.g., a lottery in which you win 10€ with <span class="math inline">\(p=.20\)</span> versus a lottery in which you can win 20€ with <span class="math inline">\(p=.45\)</span>). The description-experience gap states that people underweigh small probabilities <span class="math inline">\(p\)</span> when making decisions based on experience. We will conduct a reanalysis of Hertwig’s data set using the inequality-constrained multinomial model in Regenwetter &amp; Robinson (2017).</p>
+<p>First, it is necessary to install the R package <code>multinomineq</code> from Github. Note that it is necessary to install the developer R tools first (see <a href="https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites" class="uri">https://support.rstudio.com/hc/en-us/articles/200486498-Package-Development-Prerequisites</a>). Afterwards, <code>multinomineq</code> can be installed and loaded via:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="co">### uncomment to install packages:</span></a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="co"># install.packages(&quot;devtools&quot;, &quot;coda&quot;, &quot;RcppArmadillo&quot;, &quot;RcppProgress&quot;, &quot;Rglpk&quot;, &quot;quadprog&quot;)</span></a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="co"># devtools::install_github(&quot;danheck/multinomineq&quot;)</span></a>
+<a class="sourceLine" id="cb1-4" title="4"></a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(<span class="st">&quot;multinomineq&quot;</span>)</a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">library</span>(<span class="st">&quot;coda&quot;</span>)</a>
+<a class="sourceLine" id="cb1-7" title="7"><span class="kw">set.seed</span>(<span class="dv">1234</span>)</a></code></pre></div>
+<div id="data-structure" class="section level3">
+<h3>Data structure</h3>
+<p>We reanalyze the data by Hertwig et al. (2004) who collected choice frequencies of <span class="math inline">\(n=25\)</span> participants for 6 paired comparisons of risky gambles. The observed choice frequencies can simply be summarized by the frequencies of choosing “Option H” (a specific lottery, cf. original article) in each of the 6 paired comparisons:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># total number of observations for each paired comparison:</span></a>
+<a class="sourceLine" id="cb2-2" title="2">n &lt;-<span class="st"> </span><span class="dv">25</span>  </a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="co"># Frequencies of choosing &quot;Option H&quot; in Description condition:</span></a>
+<a class="sourceLine" id="cb2-4" title="4">HER_desc &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">16</span>, <span class="dv">16</span>, <span class="dv">7</span>, <span class="dv">12</span>, <span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb2-5" title="5"><span class="co"># Frequencies of choosing &quot;Option H&quot; in Experience condition:</span></a>
+<a class="sourceLine" id="cb2-6" title="6">HER_exp  &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">22</span>, <span class="dv">11</span>, <span class="dv">7</span>, <span class="dv">14</span>, <span class="dv">5</span>, <span class="dv">3</span>)</a></code></pre></div>
+</div>
+<div id="vertex-v-representation" class="section level3">
+<h3>Vertex (<span class="math inline">\(V\)</span>-)representation</h3>
+<p>First, it is shown how to use the vertex (<span class="math inline">\(V\)</span>-)representation for inequality-constrained models. Essentially, the rows of the matrix <span class="math inline">\(V\)</span> list all patterns that are predicted by a substantive theory of interest. Each prediction either states that “Option H” is chosen (value <code>1</code>) or not (value <code>0</code>). For example, if the theory makes the prediction that “Option H” is chosen only in the 4th paired comparison but otherwise not, the matrix <span class="math inline">\(V\)</span> needs to include the following pattern in one row: <code>c(0,0,0,1,0,0)</code>. Similarly, all possible predictions need to be combined to form the matrix <span class="math inline">\(V\)</span>. Inequality-constrained models assume a mixture distribution over all these possible predicted patterns (e.g., due to heterogeneity across participants or trials). Geometrically, the corresponding parameter space thus represents the convex hull of the predicted patterns/vertices (i.e., all possible linear combinations of the rows of <span class="math inline">\(V\)</span> when using nonnegative weights).</p>
+<p>For the description-experience gap, Regenwetter &amp; Robinson (2017) used a specific decision making model (Cumulative Prospect Theory) to generate all possible predictions. The matrix <span class="math inline">\(V\)</span> lists all of these predictions when assuming that participants underweigh small probabilities <span class="math inline">\(p\)</span> of winning money. The following matrix contains all predicted patterns for the 6 risky gambles:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Underweighting of small probabilities CPT:</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="co"># (1 = choose &quot;Option H&quot;; 0 = do not choose &quot;Option H&quot;)</span></a>
+<a class="sourceLine" id="cb3-3" title="3">V &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,  <span class="co"># first predicted pattern</span></a>
+<a class="sourceLine" id="cb3-4" title="4">              <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,  <span class="co"># second predicted pattern</span></a>
+<a class="sourceLine" id="cb3-5" title="5">              <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,  <span class="co"># ...</span></a>
+<a class="sourceLine" id="cb3-6" title="6">              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-7" title="7">              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-8" title="8">              <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-9" title="9">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-10" title="10">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-11" title="11">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-12" title="12">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb3-13" title="13">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-14" title="14">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb3-15" title="15">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-16" title="16">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb3-17" title="17">              <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), </a>
+<a class="sourceLine" id="cb3-18" title="18">            <span class="dt">ncol =</span> <span class="dv">6</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<p>Given this representation of the theoretical predictions, it is not easy to check whether a given vector of choice probabilities for the 6 gambles is inside the convex hull of the predicted patterns. As a remedy, one can use the function <code>inside()</code> to test this, or the function <code>find_inside()</code> to find a probability vector that is inside the convex hull of the predictions:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="co"># define a specific vector of choice probabilities:</span></a>
+<a class="sourceLine" id="cb4-2" title="2">p_observed &lt;-<span class="st"> </span><span class="kw">c</span>(.<span class="dv">25</span>, <span class="fl">.48</span>, <span class="fl">.93</span>, <span class="fl">.10</span>, <span class="fl">.32</span>, <span class="fl">.50</span>)</a>
+<a class="sourceLine" id="cb4-3" title="3"></a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="co"># check whether p is inside the convex hull defined by V:</span></a>
+<a class="sourceLine" id="cb4-5" title="5"><span class="kw">inside</span>(p_observed, <span class="dt">V =</span> V)</a>
+<a class="sourceLine" id="cb4-6" title="6"><span class="co">#&gt; [1] FALSE</span></a>
+<a class="sourceLine" id="cb4-7" title="7"></a>
+<a class="sourceLine" id="cb4-8" title="8"><span class="co"># to find a (random) probability that is inside the convex hull:</span></a>
+<a class="sourceLine" id="cb4-9" title="9"><span class="kw">find_inside</span>(<span class="dt">V =</span> V, <span class="dt">random =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="co">#&gt; [1] 0.8396019 0.7133954 0.2367023 0.4547242 0.4952754 0.4340429</span></a></code></pre></div>
+</div>
+<div id="inequality-ab-representation" class="section level3">
+<h3>Inequality (<span class="math inline">\(Ab\)</span>-)representation</h3>
+<p>Instead of listing the vertices (or edges) of the inequality-constrained parameter space, we may instead define a set of linear inequality constraints on the parameters explicitly. For this purpose, we specify a matrix <span class="math inline">\(A\)</span> and a vector <span class="math inline">\(b\)</span>. The model only allows parameter vectors <span class="math inline">\(\theta\)</span> that satisfy the inequalities defined by the matrix equation: <span class="math inline">\(A \cdot \theta \leq b\)</span>.</p>
+<p>For the description-experience gap, one can show that instead of listing the predictions by the matrix <span class="math inline">\(V\)</span> as shown above, one can equivalently describe the linear inequalities as follows:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">A &lt;-<span class="st"> </span><span class="kw">matrix</span>(<span class="kw">c</span>( <span class="dv">0</span>,   <span class="dv">0</span>,   <span class="dv">-1</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,  <span class="co"># first inequality</span></a>
+<a class="sourceLine" id="cb5-2" title="2">               <span class="dv">0</span>,   <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,   <span class="dv">-1</span>,  <span class="co"># second inequality</span></a>
+<a class="sourceLine" id="cb5-3" title="3">              <span class="dv">-1</span>,   <span class="dv">1</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,  <span class="co"># ...</span></a>
+<a class="sourceLine" id="cb5-4" title="4">               <span class="dv">0</span>,  <span class="dv">-1</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">1</span>,    <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb5-5" title="5">               <span class="dv">0</span>,   <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,   <span class="dv">-1</span>,    <span class="dv">1</span>,</a>
+<a class="sourceLine" id="cb5-6" title="6">               <span class="dv">0</span>,   <span class="dv">0</span>,    <span class="dv">1</span>,   <span class="dv">-1</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb5-7" title="7">               <span class="dv">0</span>,   <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">1</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,</a>
+<a class="sourceLine" id="cb5-8" title="8">               <span class="dv">1</span>,   <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>,    <span class="dv">0</span>), </a>
+<a class="sourceLine" id="cb5-9" title="9">            <span class="dt">ncol =</span> <span class="dv">6</span>, <span class="dt">byrow =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb5-10" title="10"></a>
+<a class="sourceLine" id="cb5-11" title="11">b &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>)</a></code></pre></div>
+<p>For example, the third row of <span class="math inline">\(A\)</span> and the third value of <span class="math inline">\(b\)</span> specify that <span class="math inline">\(-1 \cdot \theta_1 + 1 \cdot \theta_2 + 0 \cdot \theta_3+ 0 \cdot \theta_4+ 0 \cdot \theta_5+ 0 \cdot \theta_6 \leq 0\)</span> (which is equivalent to <span class="math inline">\(\theta_2 \leq \theta_1\)</span>).</p>
+<p>Using the matrix <span class="math inline">\(A\)</span> and the vector <span class="math inline">\(b\)</span>, one can use standard matrix multiplication in R (<code>%*%</code>) to check whether a given vector of choice probabilities satisfies all of the inequality constraints:</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">p_observed &lt;-<span class="st"> </span><span class="kw">c</span>(.<span class="dv">25</span>, <span class="fl">.48</span>, <span class="fl">.93</span>, <span class="fl">.10</span>, <span class="fl">.32</span>, <span class="fl">.50</span>)</a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="kw">all</span>(A <span class="op">%*%</span><span class="st"> </span>p_observed <span class="op">&lt;=</span><span class="st"> </span>b)</a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="co">#&gt; [1] FALSE</span></a>
+<a class="sourceLine" id="cb6-4" title="4"></a>
+<a class="sourceLine" id="cb6-5" title="5"><span class="co"># corresponding function in multinomineq:</span></a>
+<a class="sourceLine" id="cb6-6" title="6"><span class="kw">inside</span>(p_observed, A, b)</a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; [1] FALSE</span></a>
+<a class="sourceLine" id="cb6-8" title="8"></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co"># find a point that satisfies the constraints:</span></a>
+<a class="sourceLine" id="cb6-10" title="10"><span class="kw">find_inside</span>(A, b, <span class="dt">random =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="co">#&gt; [1] 0.4849912 0.4236391 0.4196148 0.4196248 0.4236291 0.4236191</span></a></code></pre></div>
+<p>Note that it is sometimes possible to convert the vertex (<span class="math inline">\(V\)</span>-)representation (convex hull) to the inequality (<span class="math inline">\(Ab\)</span>-)representation using specific software. To do this in R, it is necessary to install the package <code>rPorta</code> from Github:</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co">### (not run):</span></a>
+<a class="sourceLine" id="cb7-2" title="2">devtools<span class="op">::</span><span class="kw">install_github</span>(<span class="st">&quot;TasCL/rPorta&quot;</span>)</a>
+<a class="sourceLine" id="cb7-3" title="3">Ab &lt;-<span class="st"> </span><span class="kw">V_to_Ab</span>(V)</a>
+<a class="sourceLine" id="cb7-4" title="4">Ab </a></code></pre></div>
+</div>
+<div id="posterior-sampling" class="section level3">
+<h3>Posterior sampling</h3>
+<p>In a Bayesian framework, inequality-constrained multinomial models can be fitted by drawing posterior samples for the parameter vector of choice probabilities <span class="math inline">\(\theta\)</span>. If the model is defined in terms of a matrix <span class="math inline">\(V\)</span> with predicted patterns, we obtain <span class="math inline">\(M=2,000\)</span> posterior samples as follows:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"><span class="co"># fit data from Description and Experience condition:</span></a>
+<a class="sourceLine" id="cb8-2" title="2">p_D &lt;-<span class="st"> </span><span class="kw">sampling_binom</span>(<span class="dt">k =</span> HER_desc, <span class="dt">n =</span> n, <span class="dt">V =</span> V, <span class="dt">M =</span> <span class="dv">2000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb8-3" title="3">p_E &lt;-<span class="st"> </span><span class="kw">sampling_binom</span>(<span class="dt">k =</span> HER_exp, <span class="dt">n =</span> n, <span class="dt">V =</span> V, <span class="dt">M =</span> <span class="dv">2000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>If the model is defined in terms of the inequality <span class="math inline">\(Ab\)</span>-representation, we obtain posterior samples in a similar way by replacing the argument <code>V=V</code> by the two arguments <code>A=A, b=b</code>:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># fit data from Description and Experience condition:</span></a>
+<a class="sourceLine" id="cb9-2" title="2">p_D &lt;-<span class="st"> </span><span class="kw">sampling_binom</span>(<span class="dt">k =</span> HER_desc, <span class="dt">n =</span> n, <span class="dt">A =</span> A, <span class="dt">b =</span> b, </a>
+<a class="sourceLine" id="cb9-3" title="3">                      <span class="dt">M =</span> <span class="dv">2000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb9-4" title="4">p_E &lt;-<span class="st"> </span><span class="kw">sampling_binom</span>(<span class="dt">k =</span> HER_exp, <span class="dt">n =</span> n, <span class="dt">A =</span> A, <span class="dt">b =</span> b, </a>
+<a class="sourceLine" id="cb9-5" title="5">                      <span class="dt">M =</span> <span class="dv">2000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>If possible, the <span class="math inline">\(Ab\)</span>-representation should be used because the sampling is much more efficient than for the <span class="math inline">\(V\)</span>-representation. Irrespective of how the posterior samples have been obtained, we can use standard methods in Bayesian analysis to check the convergence of the MCMC sampler and obtain summary statistics of the posterior distribution:</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1"><span class="co"># check convergence of MCMC sampler (should look like hairy caterpillars):</span></a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="kw">plot</span>(p_D)</a></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --><img src="data:image/png;base64,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" /><!-- --></p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># summarize posterior samples:</span></a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="kw">summary</span>(p_D)</a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co">#&gt; Iterations = 11:2000</span></a>
+<a class="sourceLine" id="cb11-5" title="5"><span class="co">#&gt; Thinning interval = 1 </span></a>
+<a class="sourceLine" id="cb11-6" title="6"><span class="co">#&gt; Number of chains = 1 </span></a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt; Sample size per chain = 1990 </span></a>
+<a class="sourceLine" id="cb11-8" title="8"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-9" title="9"><span class="co">#&gt; 1. Empirical mean and standard deviation for each variable,</span></a>
+<a class="sourceLine" id="cb11-10" title="10"><span class="co">#&gt;    plus standard error of the mean:</span></a>
+<a class="sourceLine" id="cb11-11" title="11"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-12" title="12"><span class="co">#&gt;        Mean      SD Naive SE Time-series SE</span></a>
+<a class="sourceLine" id="cb11-13" title="13"><span class="co">#&gt; [1,] 0.5981 0.05581 0.001251       0.003777</span></a>
+<a class="sourceLine" id="cb11-14" title="14"><span class="co">#&gt; [2,] 0.5607 0.05368 0.001203       0.004074</span></a>
+<a class="sourceLine" id="cb11-15" title="15"><span class="co">#&gt; [3,] 0.4417 0.06955 0.001559       0.004187</span></a>
+<a class="sourceLine" id="cb11-16" title="16"><span class="co">#&gt; [4,] 0.4865 0.07051 0.001581       0.004135</span></a>
+<a class="sourceLine" id="cb11-17" title="17"><span class="co">#&gt; [5,] 0.5098 0.05610 0.001258       0.003800</span></a>
+<a class="sourceLine" id="cb11-18" title="18"><span class="co">#&gt; [6,] 0.4633 0.06159 0.001381       0.003376</span></a>
+<a class="sourceLine" id="cb11-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-20" title="20"><span class="co">#&gt; 2. Quantiles for each variable:</span></a>
+<a class="sourceLine" id="cb11-21" title="21"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb11-22" title="22"><span class="co">#&gt;        2.5%    25%    50%    75%  97.5%</span></a>
+<a class="sourceLine" id="cb11-23" title="23"><span class="co">#&gt; var1 0.4862 0.5614 0.5977 0.6350 0.7078</span></a>
+<a class="sourceLine" id="cb11-24" title="24"><span class="co">#&gt; var2 0.4490 0.5267 0.5595 0.5956 0.6657</span></a>
+<a class="sourceLine" id="cb11-25" title="25"><span class="co">#&gt; var3 0.3060 0.3924 0.4422 0.4881 0.5771</span></a>
+<a class="sourceLine" id="cb11-26" title="26"><span class="co">#&gt; var4 0.3552 0.4399 0.4853 0.5329 0.6282</span></a>
+<a class="sourceLine" id="cb11-27" title="27"><span class="co">#&gt; var5 0.3913 0.4731 0.5114 0.5459 0.6188</span></a>
+<a class="sourceLine" id="cb11-28" title="28"><span class="co">#&gt; var6 0.3453 0.4214 0.4638 0.5069 0.5832</span></a></code></pre></div>
+<p>Similarly, we can use posterior-predictive checks to test whether an inequality-constrained model fits the data adequately (i.e., whether the constraints hold empirically). Essentially, this method computes Pearson’s <span class="math inline">\(X^2\)</span>-statistic to measure the discrepancy both for the observed and the posterior-predicted frequencies. If the model does <em>not</em> fit the data, the posterior-predicted <span class="math inline">\(p\)</span>-value <code>ppp</code> will become very small (and it will be close to 0.50 if the model fits). Hence, we usually apply a criterion such as <code>ppp &lt; .05</code> to reject models that do not fit the data, as in the following example:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># posterior-predictive p-value for Description condition:</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="kw">ppp_binom</span>(<span class="dt">prob =</span> p_D, <span class="dt">k =</span> HER_desc, <span class="dt">n =</span> n)</a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt;       X2_obs      X2_pred          ppp </span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; 10.287549703  3.010170044  0.004020101</span></a>
+<a class="sourceLine" id="cb12-5" title="5"><span class="kw">ppp_binom</span>(<span class="dt">prob =</span> p_D, <span class="dt">k =</span> HER_exp, <span class="dt">n =</span> n)</a>
+<a class="sourceLine" id="cb12-6" title="6"><span class="co">#&gt;    X2_obs   X2_pred       ppp </span></a>
+<a class="sourceLine" id="cb12-7" title="7"><span class="co">#&gt; 17.687770  2.937618  0.000000</span></a></code></pre></div>
+</div>
+<div id="bayes-factor" class="section level3">
+<h3>Bayes factor</h3>
+<p>Often, one is interested in quantifying the evidence in favor of the inequality constraints. We can use Bayesian model selection to compare the inequality-constrained model <span class="math inline">\(M_0\)</span> against the unconstrained model <span class="math inline">\(M_u\)</span> that does not restrict the choice probabilities <span class="math inline">\(\theta\)</span> (also called encompassing model). The Bayes factor <code>bf_0u</code> quantifies the evidence in favor of the inequality-constrained model <span class="math inline">\(M_0\)</span> versus the unconstrained model <span class="math inline">\(M_u\)</span>. Similarly, <code>bf_u0</code> is the inverse of <code>bf_0u</code> and provides the evidence for the unconstrained model. Moreover, the Bayes factor <code>bf_00&#39;</code> compares the inequality-constrained model <span class="math inline">\(M_0\)</span> against the model <span class="math inline">\(M_{0&#39;}\)</span> which has a parameter space defined as the <em>complement</em> of the parameter space of <span class="math inline">\(M_0\)</span>.</p>
+<p>Bayes factors are computed as follows:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># compute Bayes factor using the V-representation</span></a>
+<a class="sourceLine" id="cb13-2" title="2">bf_D &lt;-<span class="st"> </span><span class="kw">bf_binom</span>(<span class="dt">k =</span> HER_desc, <span class="dt">n =</span> n, <span class="dt">V =</span> V, <span class="dt">M =</span> <span class="dv">10000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb13-3" title="3">bf_E &lt;-<span class="st"> </span><span class="kw">bf_binom</span>(<span class="dt">k =</span> HER_exp,  <span class="dt">n =</span> n, <span class="dt">V =</span> V, <span class="dt">M =</span> <span class="dv">10000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="co"># compute Bayes factor using the Ab-representation</span></a>
+<a class="sourceLine" id="cb14-2" title="2">bf_D &lt;-<span class="st"> </span><span class="kw">bf_binom</span>(HER_desc, <span class="dt">n =</span> n, <span class="dt">A =</span> A, <span class="dt">b =</span> b, <span class="dt">M =</span> <span class="dv">10000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb14-3" title="3">bf_E &lt;-<span class="st"> </span><span class="kw">bf_binom</span>(HER_exp,  <span class="dt">n =</span> n, <span class="dt">A =</span> A, <span class="dt">b =</span> b, <span class="dt">M =</span> <span class="dv">10000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb14-4" title="4"></a>
+<a class="sourceLine" id="cb14-5" title="5">bf_D</a>
+<a class="sourceLine" id="cb14-6" title="6"><span class="co">#&gt;         bf           se        ci.5%       ci.95%</span></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="co">#&gt; bf_0u    0 3.608596e-03 1.200689e-05 9.795163e-03</span></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="co">#&gt; bf_u0  Inf 3.608004e+07 1.020912e+02 8.328551e+04</span></a>
+<a class="sourceLine" id="cb14-9" title="9"><span class="co">#&gt; bf_00&#39;   0 3.539881e-03 1.179143e-05 9.617549e-03</span></a>
+<a class="sourceLine" id="cb14-10" title="10">bf_E</a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="co">#&gt;                 bf          se        ci.5%       ci.95%</span></a>
+<a class="sourceLine" id="cb14-12" title="12"><span class="co">#&gt; bf_0u   36.1269036 2.598473041  32.18187465  40.67857138</span></a>
+<a class="sourceLine" id="cb14-13" title="13"><span class="co">#&gt; bf_u0    0.0276802 0.001987101   0.02458297   0.03107339</span></a>
+<a class="sourceLine" id="cb14-14" title="14"><span class="co">#&gt; bf_00&#39; 122.8414969 9.369839417 108.56683879 139.11544600</span></a></code></pre></div>
+<p>Note that <code>multinomineq</code> also provides an error of approximation for the Bayes factor to account for random sampling error. The matrix that is provided as output shows the standard error <code>se</code> for the Bayes factor and the 90% credibility interval <code>ci.5%</code> and <code>ci.95%</code>.</p>
+<div id="increased-efficiency-for-bayes-factor-computations" class="section level5">
+<h5>Increased efficiency for Bayes factor computations</h5>
+<p>Within the function <code>bf_binom</code>, the encompassing Bayes factor is computed in two steps based on the <em>unconstrained</em> multinomial model <span class="math inline">\(M_u\)</span>:</p>
+<ol style="list-style-type: decimal">
+<li>Draw <em>prior</em> parameter samples from <span class="math inline">\(M_u\)</span> and count the proportion of samples <span class="math inline">\(c\)</span> inside the inequality-constrained parameter space.</li>
+<li>Draw <em>posterior</em> parameter samples from <span class="math inline">\(M_u\)</span> and count the proportion of samples <span class="math inline">\(f\)</span> inside the inequality-constrained parameter space.</li>
+</ol>
+<p>Based on these two proportions, the Bayes factor in favor of the inequality constraints is approximated as <span class="math inline">\(B_{0u}=f/c\)</span>. It might be convenient to perform these computations in separate steps in R for some models and datasets. For example, the prior constant <span class="math inline">\(c\)</span> is sometimes known analytically. Moreover, when analyzing multiple datasets or participants, it is more efficient to estimate the prior constant <span class="math inline">\(c\)</span> only once because <span class="math inline">\(c\)</span> is identical for all analyses:</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co"># proportion of *prior* samples satisfying inequality constraints</span></a>
+<a class="sourceLine" id="cb15-2" title="2">cnt &lt;-<span class="st"> </span><span class="kw">count_binom</span>(<span class="dt">k =</span> <span class="dv">0</span>, <span class="dt">n =</span> <span class="dv">0</span>, <span class="dt">A =</span> A, <span class="dt">b =</span> b, <span class="dt">M =</span> <span class="dv">50000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb15-3" title="3">cnt</a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="co">#&gt; Number of samples satisfying the inequality constraints:</span></a>
+<a class="sourceLine" id="cb15-5" title="5"><span class="co">#&gt;      count     M steps</span></a>
+<a class="sourceLine" id="cb15-6" title="6"><span class="co">#&gt; [1,]  1037 50000     8</span></a>
+<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt; To extract the proporiton of samples, use:</span></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt;    attr(count, &quot;proportion&quot;) = 0.02074 (SE = 0.00064279).</span></a>
+<a class="sourceLine" id="cb15-10" title="10"></a>
+<a class="sourceLine" id="cb15-11" title="11"><span class="co"># proportion of *prior* samples satisfying inequality constraints </span></a>
+<a class="sourceLine" id="cb15-12" title="12"><span class="co"># (dataset: Experience)</span></a>
+<a class="sourceLine" id="cb15-13" title="13">cnt_E &lt;-<span class="st"> </span><span class="kw">count_binom</span>(<span class="dt">k =</span> HER_exp, <span class="dt">n =</span> n, <span class="dt">A =</span> A, <span class="dt">b =</span> b, <span class="dt">M =</span> <span class="dv">10000</span>, <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb15-14" title="14">cnt_E</a>
+<a class="sourceLine" id="cb15-15" title="15"><span class="co">#&gt; Number of samples satisfying the inequality constraints:</span></a>
+<a class="sourceLine" id="cb15-16" title="16"><span class="co">#&gt;      count     M steps</span></a>
+<a class="sourceLine" id="cb15-17" title="17"><span class="co">#&gt; [1,]  7191 10000     8</span></a>
+<a class="sourceLine" id="cb15-18" title="18"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb15-19" title="19"><span class="co">#&gt; To extract the proporiton of samples, use:</span></a>
+<a class="sourceLine" id="cb15-20" title="20"><span class="co">#&gt;    attr(count, &quot;proportion&quot;) = 0.7191 (SE = 0.004491353).</span></a>
+<a class="sourceLine" id="cb15-21" title="21"></a>
+<a class="sourceLine" id="cb15-22" title="22"><span class="co"># obtain Bayes factor (including error of approximation)</span></a>
+<a class="sourceLine" id="cb15-23" title="23"><span class="kw">count_to_bf</span>(<span class="dt">posterior =</span> cnt_E, <span class="dt">prior =</span> cnt)</a>
+<a class="sourceLine" id="cb15-24" title="24"><span class="co">#&gt;                  bf          se        ci.5%       ci.95%</span></a>
+<a class="sourceLine" id="cb15-25" title="25"><span class="co">#&gt; bf_0u   34.67213115 1.105057000  32.93231334  36.51122429</span></a>
+<a class="sourceLine" id="cb15-26" title="26"><span class="co">#&gt; bf_u0    0.02884161 0.000919178   0.02738884   0.03036531</span></a>
+<a class="sourceLine" id="cb15-27" title="27"><span class="co">#&gt; bf_00&#39; 120.87230740 4.688334259 113.52968049 128.88221949</span></a></code></pre></div>
+<p>Since Bayes factors can be hard to compute for some models and data sets, <code>multinomineq</code> provides a stepwise procedure that aims at increasing the efficiency. The user can specify a minimum number of samples <code>cmin</code> that must satisy a subset of the inequality constraints. The algorithm keeps sampling until this threshold is reached. The argument <code>steps</code> determines at which rows of the matrix <span class="math inline">\(A\)</span> the inequalities are split into subsets of increasing size. For example, <code>steps = c(3, 5, 7)</code> means that the first subset contains only the first 3 inequalities, the second subset the first 5 inequalities etc.:</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="co"># use a stepwise counting approach for the &quot;Description&quot; condition:</span></a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="co"># (&quot;cmin&quot; = minimum of samples that satisfy constraints before sampling stops)</span></a>
+<a class="sourceLine" id="cb16-3" title="3">cnt_D &lt;-<span class="st"> </span><span class="kw">count_binom</span>(<span class="dt">k =</span> HER_desc, <span class="dt">n =</span> n, <span class="dt">A =</span> A, <span class="dt">b =</span> b, </a>
+<a class="sourceLine" id="cb16-4" title="4">                     <span class="dt">M =</span> <span class="dv">5000</span>, <span class="dt">cmin =</span> <span class="dv">1</span>, <span class="dt">steps =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">5</span>, <span class="dv">7</span>), <span class="dt">progress =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb16-5" title="5">cnt_D</a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="co">#&gt; Number of samples satisfying the inequality constraints:</span></a>
+<a class="sourceLine" id="cb16-7" title="7"><span class="co">#&gt;      count    M steps</span></a>
+<a class="sourceLine" id="cb16-8" title="8"><span class="co">#&gt; [1,]   125 5000     3</span></a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="co">#&gt; [2,]    84 5000     5</span></a>
+<a class="sourceLine" id="cb16-10" title="10"><span class="co">#&gt; [3,]    25 5000     7</span></a>
+<a class="sourceLine" id="cb16-11" title="11"><span class="co">#&gt; [4,]  5000 5000     8</span></a>
+<a class="sourceLine" id="cb16-12" title="12"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb16-13" title="13"><span class="co">#&gt; To extract the proporiton of samples, use:</span></a>
+<a class="sourceLine" id="cb16-14" title="14"><span class="co">#&gt;    attr(count, &quot;proportion&quot;) = 2.1e-06 (SE = 5.337439e-07).</span></a>
+<a class="sourceLine" id="cb16-15" title="15"></a>
+<a class="sourceLine" id="cb16-16" title="16"><span class="co"># obtain Bayes factor (including error of approximation)</span></a>
+<a class="sourceLine" id="cb16-17" title="17"><span class="kw">count_to_bf</span>(<span class="dt">posterior =</span> cnt_D, <span class="dt">prior =</span> cnt)</a>
+<a class="sourceLine" id="cb16-18" title="18"><span class="co">#&gt;                  bf           se        ci.5%       ci.95%</span></a>
+<a class="sourceLine" id="cb16-19" title="19"><span class="co">#&gt; bf_0u  1.012536e-04 2.530872e-05 6.689430e-05 1.489683e-04</span></a>
+<a class="sourceLine" id="cb16-20" title="20"><span class="co">#&gt; bf_u0  9.876190e+03 2.589882e+03 6.712837e+03 1.494896e+04</span></a>
+<a class="sourceLine" id="cb16-21" title="21"><span class="co">#&gt; bf_00&#39; 9.915382e-05 2.479517e-05 6.549815e-05 1.458469e-04</span></a></code></pre></div>
+</div>
+</div>
+<div id="data-format-for-multinomial-frequencies" class="section level3">
+<h3>Data format for multinomial frequencies</h3>
+<p>In the present example, we only observed <em>binomial</em> data, which can easily be described by the frequency of choosing one of two options. If more than two choice options are provided for a comparison, a different data format has to be used for <em>multinomial</em> data. In the binomial case, we ommitted the frequencies of <em>not</em> choosing a specific option because we knew the total number <span class="math inline">\(n\)</span>. For multinomial data, one needs to specify <em>all</em> choice frequencies <span class="math inline">\(k_{ij}\)</span>. Moreover, one needs to specify a vector <code>options</code> that defines how many choice options are available for each item type (e.g., <code>options = c(3,3,)</code> means that there are two scenarios, each with three possible options).</p>
+<p>Using this notation, the 6 binomial choice frequencies above can equivalently be specified by the multinomial data format as follows:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="co"># binomial data format</span></a>
+<a class="sourceLine" id="cb17-2" title="2">n &lt;-<span class="st"> </span><span class="dv">25</span>  </a>
+<a class="sourceLine" id="cb17-3" title="3">HER_desc &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">16</span>, <span class="dv">16</span>, <span class="dv">7</span>, <span class="dv">12</span>, <span class="dv">16</span>)</a>
+<a class="sourceLine" id="cb17-4" title="4"></a>
+<a class="sourceLine" id="cb17-5" title="5"><span class="co"># multinomial data format  (&quot;k&quot; must be a vector!)</span></a>
+<a class="sourceLine" id="cb17-6" title="6">k_multinom &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">9</span>, <span class="dv">16</span>,   <span class="co"># first binary gamble</span></a>
+<a class="sourceLine" id="cb17-7" title="7">                <span class="dv">16</span>, <span class="dv">9</span>,   <span class="co"># second binary gamble</span></a>
+<a class="sourceLine" id="cb17-8" title="8">                <span class="dv">16</span>, <span class="dv">9</span>,   <span class="co"># ...</span></a>
+<a class="sourceLine" id="cb17-9" title="9">                <span class="dv">7</span>, <span class="dv">17</span>,   </a>
+<a class="sourceLine" id="cb17-10" title="10">                <span class="dv">12</span>, <span class="dv">13</span>,   </a>
+<a class="sourceLine" id="cb17-11" title="11">                <span class="dv">16</span>, <span class="dv">9</span>)</a>
+<a class="sourceLine" id="cb17-12" title="12">options &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>, <span class="dv">2</span>)  <span class="co"># 2 options for each type</span></a></code></pre></div>
+<p>The binomial format can also be translated to the multinomial format automatically:</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">mn &lt;-<span class="st"> </span><span class="kw">binom_to_multinom</span>(HER_desc, n)</a>
+<a class="sourceLine" id="cb18-2" title="2">mn</a>
+<a class="sourceLine" id="cb18-3" title="3"><span class="co">#&gt; $k</span></a>
+<a class="sourceLine" id="cb18-4" title="4"><span class="co">#&gt; p1_1 p1_2 p2_1 p2_2 p3_1 p3_2 p4_1 p4_2 p5_1 p5_2 p6_1 p6_2 </span></a>
+<a class="sourceLine" id="cb18-5" title="5"><span class="co">#&gt;    9   16   16    9   16    9    7   18   12   13   16    9 </span></a>
+<a class="sourceLine" id="cb18-6" title="6"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb18-7" title="7"><span class="co">#&gt; $options</span></a>
+<a class="sourceLine" id="cb18-8" title="8"><span class="co">#&gt; [1] 2 2 2 2 2 2</span></a></code></pre></div>
+<p>The multinomial data format is used as input for the analysis as follows:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">posterior &lt;-<span class="st"> </span><span class="kw">sampling_multinom</span>(<span class="dt">k =</span> mn<span class="op">$</span>k, <span class="dt">options =</span> mn<span class="op">$</span>options, <span class="dt">A =</span> A, <span class="dt">b =</span> b)</a>
+<a class="sourceLine" id="cb19-2" title="2">bayesfactor &lt;-<span class="st"> </span><span class="kw">bf_multinom</span>(<span class="dt">k =</span> k_multinom, <span class="dt">options =</span> options, <span class="dt">A =</span> A, <span class="dt">b =</span> b)</a>
+<a class="sourceLine" id="cb19-3" title="3">bayesfactor</a>
+<a class="sourceLine" id="cb19-4" title="4"><span class="co">#&gt;         bf           se        ci.5%       ci.95%</span></a>
+<a class="sourceLine" id="cb19-5" title="5"><span class="co">#&gt; bf_0u    0 5.662915e-03 1.542493e-05 1.555550e-02</span></a>
+<a class="sourceLine" id="cb19-6" title="6"><span class="co">#&gt; bf_u0  Inf 2.935595e+08 6.428594e+01 6.483043e+04</span></a>
+<a class="sourceLine" id="cb19-7" title="7"><span class="co">#&gt; bf_00&#39;   0 5.527939e-03 1.503289e-05 1.515908e-02</span></a></code></pre></div>
+</div>
+</div>
+<div id="formal-definition-of-multinomial-models-with-inequality-constraints" class="section level2">
+<h2>Formal definition of multinomial models with inequality constraints</h2>
+<p>In the following, we define inequality-constrained multinomial models for discrete data. We use the term “item type” to refer to a category system <span class="math inline">\(i\)</span> that is modeled by a multinomial distribution with a fixed total number of observations <span class="math inline">\(n_i\)</span>. For an item type <span class="math inline">\(i\)</span>, we label the observed frequencies as <span class="math inline">\(k_{ij}\)</span>.</p>
+<div id="parameters-and-likelihood" class="section level4">
+<h4>Parameters and Likelihood</h4>
+<p>The parameter vector of interest refers to the choice probabilities: <span class="math display">\[\theta = (\theta_{11},\dots,\theta_{1 (J_1-1)},\theta_{21},\dots, \theta_{I (J_I-1)})\]</span> Note that the last probability within each item type is ommited because probabilities have to sum to one. Hence, for <span class="math inline">\(n_i=3\)</span> choice options there are only 2 free parameters.</p>
+<p>Using this notation, we can define a product-multinomial likelihood function: <span class="math display">\[p(k \mid \theta) = \prod_{i=1}^I  
+{n_i \choose k_{i1} ,\dots ,k_{i J_i} }
+\prod_{j=1}^{J_i - 1}  \theta_{ij}^{k_{ij}} 
+\left(1- \sum_{r=1}^{J_i-1} \theta_{ir}\right)^{k_{J_i}}\]</span></p>
+</div>
+<div id="linear-inequality-constraints" class="section level4">
+<h4>Linear Inequality Constraints</h4>
+<p>Inequality constraints can be defined in two different, equivalent ways. First, one may define a list of inequality constraints that have to hold for the choice probabilities, for instance: <span class="math display">\[\begin{align*}
+\theta_{11} \leq \theta_{21} \, \text{ and } \, \theta_{21} \leq \theta_{31}
+\end{align*}\]</span> These inequalities can be expressed in vector notation as <span class="math inline">\(A \,\theta \leq b\)</span> by defining a matrix $ A$ and a vector $ b$ as follows: <span class="math display">\[ A = \pmatrix{1 &amp; -1 &amp; 0 \\ 0 &amp; 1 &amp; -1} \,\, \text{ and }\,\,  b = \pmatrix{0 \\ 0}\]</span> To formalize this notation, we define the constrained parameter space <span class="math inline">\(\Omega_0\)</span> via a matrix <span class="math inline">\(A\)</span> and a vector <span class="math inline">\(b\)</span> that specify a list of inequalities that have to hold: <span class="math display">\[\Omega_0 = \left\{\theta \in \Omega \, \middle | \, A \, \theta \leq  b \right\}\]</span></p>
+<p>Alternatively, one may list all the vertices <span class="math inline">\(v^{(s)}\)</span> defining the constrained parameter space in the rows of a matrix <span class="math inline">\(V\)</span>. In the example above, we have <span class="math display">\[ v^{(1)} = \pmatrix{0\\0\\0} \,,\,
+   v^{(2)} = \pmatrix{0\\0\\1} \,,\,
+   v^{(3)} = \pmatrix{0\\1\\1} \,,\,
+   v^{(1)} = \pmatrix{1\\1\\1}\]</span> These vectors can be convenietly summarizes in a matrix $ V$ with one vertex per row: <span class="math display">\[ V = \pmatrix{0 &amp; 0 &amp; 0\\ 0 &amp; 0 &amp; 1 \\ 0 &amp; 1 &amp; 1 \\ 1 &amp; 1 &amp; 1}\]</span> In general, the restricted parameter space <span class="math inline">\(\Omega_0\)</span> is defined as the convex hull of the set of vertices <span class="math inline">\(v^{(s)}\)</span>: <span class="math display">\[\Omega_0 = \left\{ \theta = \sum_{s=1}^S \alpha_s  v^{(s)} \,\middle |\, \alpha_s \geq 0 \text{ for all } s=1,\dots, S \text{ and }\sum_{s=1}^S \alpha_s=1 \right\}\]</span></p>
+</div>
+<div id="prior-posterior" class="section level4">
+<h4>Prior &amp; Posterior</h4>
+<p>As a prior distribution for the parameters <span class="math inline">\(\theta\)</span>, we assume independent Dirichlet distributions for the different item types <span class="math inline">\(i\)</span> with shape parameters <span class="math inline">\(\alpha_{ij}\)</span>. Note that we only allow parameters that are inside the constrained parameter space <span class="math inline">\(\Omega_0\)</span>: <span class="math display">\[p(\theta) = \frac {1}{c} \, \mathbb I_{\Omega_0}(\theta) \, 
+\prod_{i=1}^I \prod_{j=1}^{J_i} \theta_{ij}^{\alpha_{ij}-1}\]</span> Here, <span class="math inline">\(\mathbb I_{\Omega_0}(\theta)\)</span> is the indicator function which is one if <span class="math inline">\(\theta\in\Omega_0\)</span> and zero otherwise. Moreover, the normalizing constant <span class="math inline">\(c\)</span> ensures that the prior density function integrates to one.</p>
+<p>Finally, the analytical solution of the posterior distribution is also a product-Dirichlet distribution, truncated to the constrained parameter space: <span class="math display">\[p(\theta \mid  k) = \frac {1}{f} \, \mathbb I_{\Omega_0}(\theta) \, 
+\prod_{i=1}^I \prod_{j=1}^{J_i} \theta_{ij}^{k_{ij} + \alpha_{ij}-1}\]</span> Similarly as before, <span class="math inline">\(f\)</span> is the normalizing constant of the posterior density function.</p>
+</div>
+<div id="reference" class="section level4">
+<h4>Reference</h4>
+<p>For a more detailed introduction with technical details, see:</p>
+<ul>
+<li>Heck, D. W., &amp; Davis-Stober, C. P. (2019). Multinomial models with linear inequality constraints: Overview and improvements of computational methods for Bayesian inference. Manuscript under revision. <a href="https://arxiv.org/abs/1808.07140" class="uri">https://arxiv.org/abs/1808.07140</a></li>
+</ul>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

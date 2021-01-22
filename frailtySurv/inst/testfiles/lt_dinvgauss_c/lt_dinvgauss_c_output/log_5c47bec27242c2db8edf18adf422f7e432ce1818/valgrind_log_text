@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (frailtySurv_deepstate_test_lt_dinvgauss_c_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dinvgauss_c/lt_dinvgauss_c_output/5c47bec27242c2db8edf18adf422f7e432ce1818.pass`
+TRACE: Running: frailtySurv_deepstate_test_lt_dinvgauss_c_test from /home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/lt_dinvgauss_c/lt_dinvgauss_c_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: 1344097580
+s values: 6.64201e-211
+theta values: 8.46933e-99
+input ends
+TRACE: Passed: frailtySurv_deepstate_test_lt_dinvgauss_c_test

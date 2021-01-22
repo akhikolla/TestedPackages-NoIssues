@@ -1,0 +1,31 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (updog_deepstate_test_dpen_dh_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: -2.43318e-187
+mu_h values: -1.64581e+174
+sigma2_h values: -1.66668e-49
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: -1.5615e-299
+mu_h values: -1.20777e+13
+sigma2_h values: 2.79236e-196
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: 1.27048e-62
+mu_h values: -2.88162e-134
+sigma2_h values: 8.18711e+299
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+h values: 3.16522e+06
+mu_h values: 3.72126e-82
+sigma2_h values: 5.29799e-243
+input ends
+INFO: Done fuzzing! Ran 4 tests (2 tests/second) with 0 failed/4 passed/0 abandoned tests

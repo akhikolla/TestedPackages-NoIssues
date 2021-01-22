@@ -1,0 +1,202 @@
+---
+title: "Comparison of computation time"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Comparison of computation time}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r echo=FALSE, message=FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE)
+```
+
+```{r}
+library(TLMoments)
+library(lmomco)
+library(Lmoments)
+library(lmom)
+sessionInfo()
+```
+
+This document shows a comparison of computation time of TL-moments between different packages available, as well as between the different approaches built-in in this package. 
+
+This package offers the following computation methods (available via `computation.method`-attribute in `TLMoments` or `TLMoment`): 
+
+* *direct*: Calculation as a weighted mean of the ordered data vector
+
+* *pwm*: Calculation of probabilty-weighted moments and using the conversion to TL-moments
+
+* *recursive*: An alternative recursive estimation of the weights of the direct approach
+
+* *recurrence*: Estimating the L-moments first and using the recurrence property to derive TL-moments
+
+For a complete and thorough analysis of all these approaches and another speed comparison see Hosking & Balakrishnan (2015, *A uniqueness result for L-estimators, with applications to L-moments*, Statistical Methodology, 24, 69-80). 
+
+Besides our implementation, L-moments and/or TL-moments can be calculated using the packages
+
+* `lmomco`: L-moments and TL-moments
+
+* `Lmoments`: L-moments and TL(1,1)-moments
+
+* `lmom`: only L-moments
+
+(all availabe at CRAN). 
+The functions `lmomco::lmoms`, `lmomco::TLmoms`, and `Lmoments::Lmoments` return list objects with (T)L-moments and (T)L-moment-ratios and are therefore compared to our `TLMoments`. 
+The function `lmom::samlmu` returns a vector of lambdas and is compared to the function `TLMoment` (which is a faster bare-bone function to compute TL-moments but is not suited to be transmitted to `parameters` or other functions of this package). 
+
+
+## Calculation of L-moments
+
+First we check if all calculation approaches in `TLMoments` give the same results (lmomco::lmoms is added as comparison): 
+```{r}
+n <- c(25, 50, 100, 200, 500, 1000, 10000, 50000)
+sapply(n, function(nn) {
+  x <- rgev(nn)
+  check <- lmomco::lmoms(x, 4)$lambdas
+  sapply(c("direct", "pwm", "recursive"), function(comp) {
+    isTRUE(all.equal(TLMoment(x, order = 1:4, computation.method = comp), check, check.attributes = FALSE))
+  })
+})
+```
+
+Now we compare the functions giving L-moments and L-moment-ratios simultaneously regarding computation speed: 
+```{r}
+possib <- list(
+  TLMoments_direct = function(x) TLMoments(x, max.order = 4, computation.method = "direct"), 
+  TLMoments_pwm = function(x) TLMoments(x, max.order = 4, computation.method = "pwm"), 
+  TLMoments_recursive = function(x) TLMoments(x, max.order = 4, computation.method = "recursive"), 
+  lmomco = function(x) lmomco::lmoms(x, 4), 
+  Lmoments = function(x) Lmoments::Lmoments(x, returnobject = TRUE)
+)
+
+# n = 50
+datalist <- replicate(200, rgev(50), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+
+# n = 1000
+datalist <- replicate(200, evd::rgev(1000), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+```
+`Lmoments` (since version 1.3-1) is the fastest implementation. 
+Within `TLMoments` the *recursive approach* is the fastest. After this, the *pwm approach* is to be prefered over the *direct approach*. 
+The implementation in `lmomco` is slow, compared to the others, especially for longer data vectors. 
+
+Comparison of functions that only return a vector of L-moments:
+```{r}
+possib <- list(
+  TLMoments_direct = function(x) TLMoment(x, order = 1:4, computation.method = "direct"), 
+  TLMoments_pwm = function(x) TLMoment(x, order = 1:4, computation.method = "pwm"), 
+  TLMoments_recursive = function(x) TLMoment(x, order = 1:4, computation.method = "recursive"), 
+  lmom = function(x) lmom::samlmu(x, 4), 
+  Lmoments = function(x) Lmoments::Lmoments(x, returnobject = FALSE)
+)
+
+# n = 50
+datalist <- replicate(200, rgev(50), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+
+# n = 1000
+datalist <- replicate(200, rgev(1000), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+```
+For smaller data vectors our *recursive*-implementation is as fast as `lmom::samlmu`, but for longer data vectors `lmom::samlmu` and `Lmoments::Lmoments` are faster.  
+
+
+## Calculation of TL-moments
+
+Again, first we check if all approaches give the same results (lmomco::Tlmoms is added as comparison):
+```{r}
+n <- c(25, 50, 100, 150, 200, 500, 1000, 10000)
+names(n) <- paste("n", n, sep = "=")
+sapply(n, function(nn) {
+  x <- rgev(nn)
+  check <- lmomco::TLmoms(x, 4, leftrim = 0, rightrim = 1)$lambdas
+  sapply(c("direct", "pwm", "recursive", "recurrence"), function(comp) {
+    tlm <- suppressWarnings(TLMoments(x, rightrim = 1, computation.method = comp)$lambdas)
+    isTRUE(all.equal(tlm, check, check.attributes = FALSE))
+  })
+})
+sapply(n, function(nn) {
+  x <- rgev(nn)
+  check <- lmomco::TLmoms(x, 4, leftrim = 2, rightrim = 4)$lambdas
+  sapply(c("direct", "pwm", "recursive", "recurrence"), function(comp) {
+    tlm <- suppressWarnings(TLMoments(x, leftrim = 2, rightrim = 4, computation.method = comp)$lambdas)
+    isTRUE(all.equal(tlm, check, check.attributes = FALSE))
+  })
+})
+```
+The *recursive approach* fails when n exceeds 150. All other implementations give the same results. 
+
+Speed comparison for TL(0,1)-moments:
+```{r}
+possib <- list(
+  TLMoments_direct = function(x) TLMoments(x, leftrim = 0, rightrim = 1, max.order = 4, computation.method = "direct"), 
+  TLMoments_pwm = function(x) TLMoments(x, leftrim = 0, rightrim = 1, max.order = 4, computation.method = "pwm"), 
+  TLMoments_recurrence = function(x) TLMoments(x, leftrim = 0, rightrim = 1, max.order = 4, computation.method = "recurrence"), 
+  lmomco = function(x) lmomco::TLmoms(x, 4, leftrim = 0, rightrim = 1)
+)
+
+# n = 50
+datalist <- replicate(200, rgev(50), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+
+# n = 1000
+datalist <- replicate(200, rgev(1000), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+```
+
+Speed comparison for TL(2,4)-moments:
+```{r}
+possib <- list(
+  TLMoments_direct = function(x) TLMoments(x, leftrim = 2, rightrim = 4, max.order = 4, computation.method = "direct"), 
+  TLMoments_pwm = function(x) TLMoments(x, leftrim = 2, rightrim = 4, max.order = 4, computation.method = "pwm"), 
+  TLMoments_recurrence = function(x) TLMoments(x, leftrim = 2, rightrim = 4, max.order = 4, computation.method = "recurrence"), 
+  lmomco = function(x) lmomco::TLmoms(x, 4, leftrim = 2, rightrim = 4)
+)
+
+# n = 50
+datalist <- replicate(200, evd::rgev(50), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+
+# n = 1000
+datalist <- replicate(200, evd::rgev(1000), simplify = FALSE)
+
+do.call("rbind", lapply(possib, function(f) {
+  system.time(lapply(datalist, f))[3]
+}))
+```
+
+In this calculations the *recurrence approach* clearly outperforms the other implementations. 
+Calculation using *probabilty-weighted moments* is relatively fast, but using the *direct calculation* should be avoided, regarding calculation speed. 
+This package's implementation is clearly faster than those in `lmomco`. 
+
+
+## Conclusion
+
+This results encourage to use the *recursive approach* for L-moments and the *recurrence approach* when calculating TL-moments. 
+Therefore these are the defaults in this package, but the other computation methods (*direct* and *pwm*) are still available (by using the argument `computation.method`). 
+
+In comparison to other packages `Lmoments` is faster but only supports L-moments and TL(1,1)-moments. 

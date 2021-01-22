@@ -1,0 +1,16 @@
+02ad10bebe91f91f7df88d663025ba86 *DESCRIPTION
+250c9b28bf72367c04f6ae3949b2558e *NAMESPACE
+8d47014a7e04e5029d7b4a13982ac742 *R/RcppExports.R
+60094bfaa5a33b68983ec667d2547960 *README.md
+2360ccdb8f20cad14d4835f7f3d4d5b6 *man/fasteraster-package.Rd
+b0915682ac3a19e18f4de9bfaf2767ff *man/raster2vector.Rd
+df47e1524627dbf8d52936f473a15186 *man/rasterZoneAnalyzer.Rd
+e03e69315e0b62476756b6558ce9e20c *src/RcppExports.cpp
+0d3d7af2d11769feab57a1132840ea6b *src/raster2vector.cpp
+94f8533d75df3c0cdbfdb767ad6caa88 *src/registerDynamicSymbol.cpp
+b0473016a8551bdd382b84aeb94ac622 *tests/dem1
+e2820aee375fa11c61497f4aedbff395 *tests/dem2
+dea19e7601d45baf5b377041bb33250e *tests/dem3
+d55c070b80233ec61e610bc83e05ba2a *tests/dem4
+ac0d7f532d527980dcdf730a890c49c0 *tests/dem5
+36ff76c3f11383696889f246e9059a56 *tests/raster2vector.R

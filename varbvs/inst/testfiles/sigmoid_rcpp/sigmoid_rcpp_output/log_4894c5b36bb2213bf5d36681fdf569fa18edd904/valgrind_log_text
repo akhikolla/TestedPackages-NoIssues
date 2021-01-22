@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (varbvs_deepstate_test_sigmoid_rcpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/varbvs/inst/testfiles/sigmoid_rcpp/sigmoid_rcpp_output/4894c5b36bb2213bf5d36681fdf569fa18edd904.pass`
+TRACE: Running: varbvs_deepstate_test_sigmoid_rcpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/varbvs/inst/testfiles/sigmoid_rcpp/sigmoid_rcpp_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -2.43318e-187
+input ends
+TRACE: Passed: varbvs_deepstate_test_sigmoid_rcpp_test

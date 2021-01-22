@@ -1,0 +1,996 @@
+---
+title: "Lathyrus vernus IPMs"
+author: Richard P. Shefferson, Shun Kurokawa, and Johan Ehrlén
+output: rmarkdown::html_vignette
+bibliography: Lefko3Tutorial.bib
+vignette: >
+  %\VignetteIndexEntry{Lathyrus vernus IPMs}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+This document was built in Markdown in R 4.0.3, and covers package `lefko3` version 3.1.0.
+
+## CASE STUDIES OF SWEDISH *Lathyrus vernus* POPULATION
+
+### ORGANISM AND POPULATION
+
+  <p style="text-indent: 20px">*Lathyrus vernus* (family Fabaceae) is a long-lived forest herb, native to Europe and large parts of northern Asia. Individuals increase slowly in size and usually flower only after 10-15 years of vegetative growth. Flowering individuals have an average conditional lifespan of 44.3 years [@ehrlen_how_2002]. *Lathyrus vernus* lacks organs for vegetative spread and individuals are well delimited [@ehrlen_assessing_2002]. One or several erect shoots of up to 40 cm height emerge from a subterranean rhizome in March-April. Flowering occurs about four weeks after shoot emergence. Shoot growth is determinate, and the number of flowers is determined in the previous year [@ehrlen_storage_2001]. Individuals may not produce aboveground structures every year but can remain dormant in one season. *Lathyrus vernus* is self-compatible but requires visits from bumble-bees to produce seeds. Individuals produce few, large seeds and establishment from seeds is relatively frequent [@ehrlen_seedling_1996]. The pre-dispersal seed predator *Bruchus atomarius* often consumes a large fraction of developing seeds, and roe deer (*Capreolus capreolus*) sometimes consume the shoots [@ehrlen_timing_2009].</p>
+  
+  <p style="text-indent: 20px">Data for this study were collected from six permanent plots in a population of *L. vernus* located in a deciduous forest in the Tullgarn area, SE Sweden (58.9496 N, 17.6097 E), during 1988–1991 [@ehrlen_demography_1995]. The six plots were relatively similar with regard to soil type, elevation, slope, and canopy cover. Within each plot, all individuals were marked with numbered tags that remained over the study period, and their locations were carefully mapped. New individuals were included in the study in each year. Individuals were recorded at least three times every growth season. At the time of shoot emergence, we recorded whether individuals were alive and produced above-ground shoots, and if shoots had been grazed. During flowering, we recorded flower number and the height and diameter of all shoots. At fruit maturation, we counted the number of intact and damaged seeds. To derive a measure of above-ground size for each individual, we calculated the volume of each shoot as $\pi × (\frac{1}{2} diameter)^2 × height$, and summed the volumes of all shoots. This measure is closely correlated with the dry mass of aboveground tissues ($R^2 = 0.924$, $P < 0.001$, $n = 50$, log-transformed values; Ehrlén 1995). Size of individuals that had been grazed was estimated based on measures of shoot diameter in grazed shoots, and the relationship between shoot diameter and shoot height in non-grazed individuals. Only individuals with an aboveground volume of more than 230 mm<sup>3</sup> flowered and produced fruits during this study. Individuals that lacked aboveground structures in one season but reappeared in the following year were considered dormant. Individuals that lacked aboveground structures in two subsequent seasons were considered dead from the year in which they first lacked aboveground structures. Probabilities of seeds surviving to the next year, and of being present as seedlings or seeds in the soil seed bank, were derived from separate yearly sowing experiments in separate plots adjacent to each subplot [@ehrlen_seedling_1996].</p>
+
+### ANALYSES WITH *LATHYRUS* DATA
+
+  <p style="text-indent: 20px">We will complete three different analyses to illustrate some of the ways in which package `lefko3` can be used:</p> 
+  
+  1) through the estimation of **raw MPMs**, with the intention of producing matrices similar to those published in Ehrlén [-@ehrlen_dynamics_2000]; 
+  
+  2) through the estimation of **function-based MPMs** using a stage classification different from Ehrlén [-@ehrlen_dynamics_2000], developed using the natural logarithm of the size measure used in that study; and
+  
+  3) through the construction of a complex **integral projection model**.
+  
+  <p style="text-indent: 20px">In this vignette, we focus on analysis (3).
+  
+
+### Analysis 3: Integral projection models (IPMs)
+
+  <p style="text-indent: 20px">In this analysis, we will build historical and ahistorical integral projection models (IPMs). An IPM is a kind of function-based matrix in which transitions are modeled on a continuous state variable rather than discrete stages [@ellner_integral_2006]. A size measure is often used as this continuous state variable. In practice, the matrix requires discrete size classes, and so size is modeled as Gaussian and the size distribution is broken up into many fine-scale, equally sized classes or size bins. Although the number of these bins varies from analysis to analysis, package `lefko3` uses a default of 100 (this can be changed as an option). Because vital rates are modeled rather than directly calculated from the data, the number of individuals  moving through particular size classes at any time does not need to be considered in determining stage boundaries (as they would be in raw MPM estimation). IPMs are often complex, meaning that they include some life history stages that fall outside of the size classifications developed for the matrices, such as dormant seeds or juveniles. `Lefko3` can handle all of this.</p>
+  
+#### Step 1. Life history model development
+
+  <p style="text-indent: 20px">To begin, we need to create a stageframe for this dataset, in which we identify the key stages used in analysis. We will base all of this on Ehrlén [-@ehrlen_dynamics_2000], but use a different size classification to allow IPM construction and make all mature stages other than vegetative dormancy reproductive.</p>
+  
+  <p style="text-indent: 20px">In the stageframe code below, we show that we want an IPM by choosing two stages that serve as the size limits for IPM size classification. These two size classes should have exactly the same characteristics in the stageframe other than size. By choosing these two, we can skip adding and describing the many size classes that will fall between these limits - `sf_create()` will create all of these for us. We mark these limits in the vector that we load into the `stagenames` option using the string `ipm`. Package `lefko3` will then rename all IPM size classes according to its own conventions. The default number of size classes is 100 bins. We can alter this if we wish using the `ipmbins` option.</p>
+
+```r
+rm(list=ls(all=TRUE))
+
+library(lefko3)
+
+data(lathyrus)
+
+sizevector <- c(0, 100, 0, 1, 7100)
+stagevector <- c("Sd", "Sdl", "Dorm", "ipm", "ipm")
+repvector <- c(0, 0, 0, 1, 1)
+obsvector <- c(0, 1, 0, 1, 1)
+matvector <- c(0, 0, 1, 1, 1)
+immvector <- c(1, 1, 0, 0, 0)
+propvector <- c(1, 0, 0, 0, 0)
+indataset <- c(0, 1, 1, 1, 1)
+binvec <- c(0, 100, 0.5, 1, 1)
+
+lathframeipm <- sf_create(sizes = sizevector, stagenames = stagevector, 
+                          repstatus = repvector, obsstatus = obsvector, 
+                          matstatus = matvector, immstatus = immvector, 
+                          indataset = indataset, binhalfwidth = binvec, 
+                          propstatus = propvector, ipmbins = 100, roundsize = 3)
+```
+
+  <p style="text-indent: 20px">We will also add some descriptive comments to this stageframe so that we know what each of these stages is, and then look at the first 6 entries and the dimenstions of the stageframe.</p>
+
+```r
+lathframeipm$comments <- c("Dormant seed", "Seedling", "Dormant", rep("ipm stage", 100))
+head(lathframeipm)[,1:6]
+#>              stagenames    size repstatus obsstatus propstatus immstatus
+#> 1                    Sd   0.000         0         0          1         1
+#> 2                   Sdl 100.000         0         1          0         1
+#> 3                  Dorm   0.000         0         0          0         0
+#> 4  sz36.495 rp1 mt1 ob1  36.495         1         1          0         0
+#> 5 sz107.485 rp1 mt1 ob1 107.485         1         1          0         0
+#> 6 sz178.475 rp1 mt1 ob1 178.475         1         1          0         0
+head(lathframeipm)[,7:12]
+#>   matstatus indataset binhalfwidth_raw min_age max_age sizebin_min
+#> 1         0         0            0.000      NA      NA        0.00
+#> 2         0         1          100.000      NA      NA        0.00
+#> 3         1         1            0.500      NA      NA       -0.50
+#> 4         1         1           35.495      NA      NA        1.00
+#> 5         1         1           35.495      NA      NA       71.99
+#> 6         1         1           35.495      NA      NA      142.98
+head(lathframeipm)[,13:16]
+#>   sizebin_max sizebin_center sizebin_width     comments
+#> 1        0.00          0.000          0.00 Dormant seed
+#> 2      200.00        100.000        200.00     Seedling
+#> 3        0.50          0.000          1.00      Dormant
+#> 4       71.99         36.495         70.99    ipm stage
+#> 5      142.98        107.485         70.99    ipm stage
+#> 6      213.97        178.475         70.99    ipm stage
+```
+
+  <p style="text-indent: 20px">This stageframe shows has 103 stages (we can see this by typing `dim(lathframeipm)`). The IPM portion technically starts with the fourth stage and keeps going until the 103rd stage. Stage names within this range are concatenations of the central size (designated with `sz`), reproductive status (designated with `rp`), maturity status (designated with `mt`), and observation status (designated with `ob`). The first three stages, which fall outside of the IPM classification, are left unaltered.</p>
+
+#### Step 2a. Dataset organization
+
+  <p style="text-indent: 20px">To work with this dataset, we first need to format the data into 'vertical' format, in which each row corresponds to the state of a single individual in two (if ahistorical) or three (if historical) consecutive time intervals. Because this is an IPM, we will need to estimate linear models of vital rates, and that will require that NAs in size and fecundity are avoided in key terms used in estimation. For this purpose, we will set `NAas0 = TRUE`. We will also set `NRasRep = TRUE` because all adult stages are assumed to be reproductive, and there are mature individuals in the dataset that do not reproduce but need to be included in reproductive stages (setting this option to TRUE makes sure that the reproductive status of non-reproductive individuals is set to 1, although the actual fecundity is not altered). Finally, we will ignore patches this time and estimate matrices only for the full population, in order to preserve statistical power for vital rate modeling in historical IPM analysis.</p>
+
+```r
+lathvertipm <- verticalize3(lathyrus, noyears = 4, firstyear = 1988, 
+                            individcol = "GENET", blocksize = 9, juvcol = "Seedling1988", 
+                            sizeacol = "Volume88", repstracol = "FCODE88",
+                            fecacol = "Intactseed88", deadacol = "Dead1988", 
+                            nonobsacol = "Dormant1988", stageassign = lathframeipm, 
+                            stagesize = "sizea", censorcol = "Missing1988",censorkeep = NA, 
+                            censor = TRUE, NAas0 = TRUE, NRasRep = TRUE)
+```
+
+  <p style="text-indent: 20px">Before we move on to the next key steps in analysis, let's take a closer look at fecundity. We can either treat fecundity as a continuous variable, or round the values and treat it as a count variable. In this dataset, fecundity is mostly a count of intact seeds, and only differs in six cases where the seed output was estimated based on other models. So, we will round fecundity so that we can assume count variables in the analysis, as below.</p>
+
+```r
+lathvertipm$feca2 <- round(lathvertipm$feca2)
+lathvertipm$feca1 <- round(lathvertipm$feca1)
+lathvertipm$feca3 <- round(lathvertipm$feca3)
+```
+
+  <p style="text-indent: 20px">Although we wish to treat fecundity as a count, it is still not clear what underlying distribution we should use. This package currently allows 5 choices: Gaussian, Poisson, negative binomial, zero-inflated Poisson, and zero-inflated negative binomial. To assess which to use, we should first assess whether the mean and variance of the count are equal using a dispersion test. This test allows us to test whether the variance is greater than that expected under our mean value for fecundity using a chi-squared test. If it is not significantly different, then we may use some variant of the Poisson distribution. If the data are overdispersed, then we should use the negative binomial distribution. We should also test whether the number of zeroes is more than expected under these distributions, and make the distribution zero-inflated if so.</p>
+  
+  <p style="text-indent: 20px">Let's start off by looking at a plot of the distribution of fecundity.</p>
+
+```r
+hist(subset(lathvertipm, repstatus2 == 1)$feca2, main = "Fecundity", xlab = "Intact seeds produced in time t")
+```
+
+![Figure 15. Histogram of fecundity in time t](Ch2ban3.5-1.png)
+
+We see that the distribution conforms to a classic count variable with a very low mean value. The first bar suggests that there may be too many zeroes, as well, and we can see this in the following plot.
+
+```r
+hist(subset(lathvertipm, repstatus2 == 1)$feca2[which(subset(lathvertipm, repstatus2 == 1)$feca2 < 11)], 
+     main = "Fecundity", xlab = "Intact seeds produced in time t")
+```
+
+![Figure 16. Histogram of fecundity in time t, only cases with <10 seeds produced](Ch2ban3.6-1.png)
+
+This is fairly ample evidence that we should use a zero-inflated distribution of some sort. Let's now go to a formal test of the two assumptions of mean = variance and no excess 0s. Both use chi-squared distribution-based approaches, with the zero-inflation test in particular based on van der Broek [-@van_den_broek_score_1995].
+
+```r
+sf_distrib(lathvertipm, fec = "feca2", repst = "repstatus2")
+#> 
+#> Mean fecundity is 4.791
+#> The variance in fecundity is 70.14
+#> The probability of overdispersion is 0
+#> 
+#> Fecundity is significantly overdispersed.
+#> 
+#> 
+#> Mean lambda is 0.008302
+#> The actual number of 0s in fecundity is 334
+#> The expected number of 0s in fecundity is 4.973
+#> The probability of this deviation in 0s is 0
+#> 
+#> Fecundity is significantly zero-inflated.
+#> NULL
+```
+
+Such significant results for both tests show us that we really need to use a zero-inflated negative binomial distribution here.
+
+  <p style="text-indent: 20px">We encourage users to explore the reorganized dataset, which now includes 2,527 historical transitions (rows) and 42 variables (columns). Now we move on to create the extra bits of information needed for matrix estimation.</p>
+  
+#### Step 2b: Develop supplemental information for matrix estimation
+
+  <p style="text-indent: 20px">Now we will provide some given transitions. These are the same overwrite objects as used before.</p>
+
+```r
+lathover2 <- overwrite(stage3 = c("Sd", "Sdl"), stage2 = c("Sd", "Sd"), 
+                      givenrate = c(0.345, 0.054))
+
+lathover3 <- overwrite(stage3 = c("Sd", "Sd", "Sdl"), stage2 = c("Sd", "Sd", "Sd"), 
+                      stage1 = c("Sd", "rep", "rep"), givenrate = c(0.345, 0.345, 0.054))
+```
+
+  <p style="text-indent: 20px">We will also create a reproductive matrix, which describes not only which stages are reproductive, but which stages they lead to the reproduction of, and at what level. This matrix is composed mostly of 0s, with fecundity noted as non-zero entries equal to a scalar multiplier to the full fecundity estimated by R. This matrix has rows and columns equal to the number of stages described in the stageframe for this dataset, and the rows and columns refer to these stages in the same order as in the stageframe. In many ways, it looks like a nearly empty population matrix, but notes the per-individual mean modifiers on fecundity for each stage that actually reproduces. Here, we first create a 0 matrix with dimensions equal to the number of rows in `lathframeipm`. Then we modify elements corresponding to fecundity by the expected mean seed dormancy probability (row 1), and by the germination rate (row 2).</p>
+
+```r
+lathrepmipm <- matrix(0, 103, 103)
+lathrepmipm[1, 4:103] <- 0.345
+lathrepmipm[2, 4:103] <- 0.054
+```
+
+
+#### Step 3. Tests of history, and vital rate modeling
+
+  <p style="text-indent: 20px">Integral projection models (IPMs) require functions of vital rates to populate them. Here, we will develop these functions as linear models using `modelsearch()`. This looks similar to the `modelsearch` call in the last example, although we will not include models of reproductive status because we assume that all adults are reproductive (though perhaps not successfully so). First we will create the historical models in order to assess whether history is a significant influence on vital rates.</p>
+
+```r
+lathmodels3ipm <- modelsearch(lathvertipm, historical = TRUE, approach = "mixed", 
+                              suite = "size", vitalrates = c("surv", "obs", "size", "fec"), 
+                              juvestimate = "Sdl", bestfit = "AICc&k", 
+                              sizedist = "gaussian", fecdist = "negbin", 
+                              fec.zero = TRUE, indiv = "individ", year = "year2", 
+                              year.as.random = TRUE, juvsize = TRUE, 
+                              show.model.tables = TRUE, quiet = TRUE)
+#> Warning: Some predictor variables are on very different scales: consider rescaling
+#> Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model failed to converge with max|grad| = 0.0158034 (tol =
+#> 0.002, component 1)
+#> Warning in checkConv(attr(opt, "derivs"), opt$par, ctrl = control$checkConv, : Model is nearly unidentifiable: very large eigenvalue
+#>  - Rescale variables?;Model is nearly unidentifiable: large eigenvalue ratio
+#>  - Rescale variables?
+#> Warning: Some predictor variables are on very different scales: consider rescaling
+#> boundary (singular) fit: see ?isSingular
+#> Warning: Some predictor variables are on very different scales: consider rescaling
+#> boundary (singular) fit: see ?isSingular
+#> Warning in fitTMB(TMBStruc): Model convergence problem; non-positive-definite Hessian matrix. See vignette('troubleshooting')
+#> boundary (singular) fit: see ?isSingular
+#> boundary (singular) fit: see ?isSingular
+
+summary(lathmodels3ipm)
+#> This LefkoMod object includes 7 linear models.
+#> Best-fit model criterion used: AICc&k
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> Survival model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: alive3 ~ sizea1 + (1 | year2) + (1 | individ)
+#>    Data: surv.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#>  910.3733  933.2409 -451.1866  902.3733      2242 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0.2571  
+#>  year2   (Intercept) 0.6149  
+#> Number of obs: 2246, groups:  individ, 257; year2, 3
+#> Fixed Effects:
+#> (Intercept)       sizea1  
+#>    2.589549     0.001786  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 3 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Observation model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: obsstatus3 ~ (1 | year2) + (1 | individ)
+#>    Data: obs.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#> 1353.5346 1370.5136 -673.7673 1347.5346      2118 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0.01967 
+#>  year2   (Intercept) 0.00000 
+#> Number of obs: 2121, groups:  individ, 254; year2, 3
+#> Fixed Effects:
+#> (Intercept)  
+#>       2.235  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Size model:
+#> Linear mixed model fit by REML ['lmerMod']
+#> Formula: sizea3 ~ sizea1 + sizea2 + (1 | year2) + (1 | individ) + sizea1:sizea2
+#>    Data: size.data
+#> REML criterion at convergence: 29132.25
+#> Random effects:
+#>  Groups   Name        Std.Dev.
+#>  individ  (Intercept)   0.0   
+#>  year2    (Intercept) 247.2   
+#>  Residual             480.4   
+#> Number of obs: 1916, groups:  individ, 254; year2, 3
+#> Fixed Effects:
+#>   (Intercept)         sizea1         sizea2  sizea1:sizea2  
+#>     8.998e+01      3.119e-01      5.954e-01     -9.417e-05  
+#> fit warnings:
+#> Some predictor variables are on very different scales: consider rescaling
+#> optimizer (nloptwrap) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Reproductive status model:
+#> [1] 1
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Fecundity model:
+#> Formula:          feca2 ~ (1 | year2) + (1 | individ)
+#> Zero inflation:         ~sizea2 + (1 | year2) + (1 | individ)
+#> Data: fec.data
+#>       AIC       BIC    logLik  df.resid 
+#>  2889.505  2935.240 -1436.752      2238 
+#> Random-effects (co)variances:
+#> 
+#> Conditional model:
+#>  Groups  Name        Std.Dev.
+#>  year2   (Intercept) 0.419688
+#>  individ (Intercept) 0.000388
+#> 
+#> Zero-inflation model:
+#>  Groups  Name        Std.Dev. 
+#>  year2   (Intercept) 2.577e-05
+#>  individ (Intercept) 1.020e+00
+#> 
+#> Number of obs: 2246 / Conditional model: year2, 3; individ, 257 / Zero-inflation model: year2, 3; individ, 257
+#> 
+#> Overdispersion parameter for nbinom2 family (): 0.233 
+#> 
+#> Fixed Effects:
+#> 
+#> Conditional model:
+#> (Intercept)  
+#>       1.514  
+#> 
+#> Zero-inflation model:
+#> (Intercept)       sizea2  
+#>    6.231072    -0.007315  
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> Juvenile survival model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: alive3 ~ (1 | year2) + (1 | individ)
+#>    Data: juvsurv.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#>  323.6696  334.5847 -158.8348  317.6696       278 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0       
+#>  year2   (Intercept) 0       
+#> Number of obs: 281, groups:  individ, 187; year2, 3
+#> Fixed Effects:
+#> (Intercept)  
+#>       1.084  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Juvenile observation model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: obsstatus3 ~ (1 | year2) + (1 | individ)
+#>    Data: juvobs.data
+#>      AIC      BIC   logLik deviance df.resid 
+#>  91.4924 101.5338 -42.7462  85.4924      207 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 16.009  
+#>  year2   (Intercept)  1.221  
+#> Number of obs: 210, groups:  individ, 154; year2, 3
+#> Fixed Effects:
+#> (Intercept)  
+#>       10.39  
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Juvenile size model:
+#> Linear mixed model fit by REML ['lmerMod']
+#> Formula: sizea3 ~ sizea2 + (1 | year2) + (1 | individ)
+#>    Data: juvsize.data
+#> REML criterion at convergence: 1243.43
+#> Random effects:
+#>  Groups   Name        Std.Dev.
+#>  individ  (Intercept) 1.384   
+#>  year2    (Intercept) 1.962   
+#>  Residual             5.831   
+#> Number of obs: 193, groups:  individ, 144; year2, 3
+#> Fixed Effects:
+#> (Intercept)       sizea2  
+#>      3.0559       0.8482  
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Juvenile reproduction model:
+#> [1] 1
+#> 
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> 
+#> Number of models in survival table:4
+#> 
+#> Number of models in observation table:5
+#> 
+#> Number of models in size table:5
+#> 
+#> Number of models in reproduction status table: 1
+#> 
+#> Number of models in fecundity table:25
+#> 
+#> Number of models in juvenile survival table:2
+#> 
+#> Number of models in juvenile observation table:2
+#> 
+#> Number of models in juvenile size table:2
+#> 
+#> Number of models in juvenile reproduction table: 1
+#> 
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> 
+#> General model parameter names (column 1), and specific names used in these models (column 2):
+#>                       parameter_names mainparams
+#> 1                              time t      year2
+#> 2                          individual    individ
+#> 3                               patch      patch
+#> 4                   alive in time t+1      surv3
+#> 5                observed in time t+1       obs3
+#> 6                    size in time t+1      size3
+#> 7     reproductive status in time t+1     repst3
+#> 8               fecundity in time t+1       fec3
+#> 9                 fecundity in time t       fec2
+#> 10                     size in time t      size2
+#> 11                   size in time t-1      size1
+#> 12      reproductive status in time t     repst2
+#> 13     reprodutive status in time t-1     repst1
+#> 14                      age in time t        age
+#> 15   individual covariate a in time t   indcova2
+#> 16 individual covariate a in time t-1   indcova1
+#> 17   individual covariate b in time t   indcovb2
+#> 18 individual covariate b in time t-1   indcovb1
+#> 19   individual covariate c in time t   indcovc2
+#> 20 individual covariate c in time t-1   indcovc1
+#> 
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> 
+#> Quality control:
+#> 
+#> Survival estimated with 257 individuals and 2246 individual transitions.
+#> Observation estimated with 254 individuals and 2121 individual transitions.
+#> Size estimated with 254 individuals and 1916 individual transitions.
+#> Reproduction probability not estimated.
+#> Fecundity estimated with 257 individuals and 2246 individual transitions.
+#> Juvenile survival estimated with 187 individuals and 281 individual transitions.
+#> Juvenile observation estimated with 154 individuals and 210 individual transitions.
+#> Juvenile size estimated with 144 individuals and 193 individual transitions.
+#> Juvenile reproduction probability not estimated.
+#> NULL
+```
+
+  <p style="text-indent: 20px">We see here, as before, that size in time *t*-1 exerts an influence on some vital rates, including survival to time *t*+1 and size in time *t*+1. So, the historical IPM is the correct choice here. However, we will also create an ahistorical IPM. For that purpose, we will create the ahistorical linear model set.</p>
+
+```r
+lathmodels2ipm <- modelsearch(lathvertipm, historical = FALSE, approach = "mixed", 
+                              suite = "size", vitalrates = c("surv", "obs", "size", "fec"), 
+                              juvestimate = "Sdl", bestfit = "AICc&k", 
+                              sizedist = "gaussian", fecdist = "negbin",
+                              fec.zero = TRUE, indiv = "individ", year = "year2", 
+                              year.as.random = TRUE, juvsize = TRUE, 
+                              show.model.tables = TRUE, quiet = TRUE)
+#> boundary (singular) fit: see ?isSingular
+#> boundary (singular) fit: see ?isSingular
+#> boundary (singular) fit: see ?isSingular
+#> boundary (singular) fit: see ?isSingular
+#> boundary (singular) fit: see ?isSingular
+
+summary(lathmodels2ipm)
+#> This LefkoMod object includes 7 linear models.
+#> Best-fit model criterion used: AICc&k
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> Survival model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: alive3 ~ sizea2 + (1 | year2) + (1 | individ)
+#>    Data: surv.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#>  933.6973  956.5649 -462.8486  925.6973      2242 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0.5305  
+#>  year2   (Intercept) 0.0000  
+#> Number of obs: 2246, groups:  individ, 257; year2, 3
+#> Fixed Effects:
+#> (Intercept)       sizea2  
+#>    2.503007     0.001221  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Observation model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: obsstatus3 ~ (1 | year2) + (1 | individ)
+#>    Data: obs.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#> 1353.5346 1370.5136 -673.7673 1347.5346      2118 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0.01967 
+#>  year2   (Intercept) 0.00000 
+#> Number of obs: 2121, groups:  individ, 254; year2, 3
+#> Fixed Effects:
+#> (Intercept)  
+#>       2.235  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Size model:
+#> Linear mixed model fit by REML ['lmerMod']
+#> Formula: sizea3 ~ sizea2 + (1 | year2) + (1 | individ)
+#>    Data: size.data
+#> REML criterion at convergence: 29294.15
+#> Random effects:
+#>  Groups   Name        Std.Dev.
+#>  individ  (Intercept)   0.0   
+#>  year2    (Intercept) 210.9   
+#>  Residual             504.6   
+#> Number of obs: 1916, groups:  individ, 254; year2, 3
+#> Fixed Effects:
+#> (Intercept)       sizea2  
+#>    164.0695       0.6211  
+#> optimizer (nloptwrap) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Reproductive status model:
+#> [1] 1
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Fecundity model:
+#> Formula:          feca2 ~ (1 | year2) + (1 | individ)
+#> Zero inflation:         ~sizea2 + (1 | year2) + (1 | individ)
+#> Data: fec.data
+#>       AIC       BIC    logLik  df.resid 
+#>  2889.505  2935.240 -1436.752      2238 
+#> Random-effects (co)variances:
+#> 
+#> Conditional model:
+#>  Groups  Name        Std.Dev.
+#>  year2   (Intercept) 0.419688
+#>  individ (Intercept) 0.000388
+#> 
+#> Zero-inflation model:
+#>  Groups  Name        Std.Dev. 
+#>  year2   (Intercept) 2.577e-05
+#>  individ (Intercept) 1.020e+00
+#> 
+#> Number of obs: 2246 / Conditional model: year2, 3; individ, 257 / Zero-inflation model: year2, 3; individ, 257
+#> 
+#> Overdispersion parameter for nbinom2 family (): 0.233 
+#> 
+#> Fixed Effects:
+#> 
+#> Conditional model:
+#> (Intercept)  
+#>       1.514  
+#> 
+#> Zero-inflation model:
+#> (Intercept)       sizea2  
+#>    6.231072    -0.007315  
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> Juvenile survival model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: alive3 ~ (1 | year2) + (1 | individ)
+#>    Data: juvsurv.data
+#>       AIC       BIC    logLik  deviance  df.resid 
+#>  323.6696  334.5847 -158.8348  317.6696       278 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 0       
+#>  year2   (Intercept) 0       
+#> Number of obs: 281, groups:  individ, 187; year2, 3
+#> Fixed Effects:
+#> (Intercept)  
+#>       1.084  
+#> optimizer (Nelder_Mead) convergence code: 0 (OK) ; 0 optimizer warnings; 1 lme4 warnings 
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Juvenile observation model:
+#> Generalized linear mixed model fit by maximum likelihood (Laplace Approximation) ['glmerMod']
+#>  Family: binomial  ( logit )
+#> Formula: obsstatus3 ~ (1 | year2) + (1 | individ)
+#>    Data: juvobs.data
+#>      AIC      BIC   logLik deviance df.resid 
+#>  91.4924 101.5338 -42.7462  85.4924      207 
+#> Random effects:
+#>  Groups  Name        Std.Dev.
+#>  individ (Intercept) 16.009  
+#>  year2   (Intercept)  1.221  
+#> Number of obs: 210, groups:  individ, 154; year2, 3
+#> Fixed Effects:
+#> (Intercept)  
+#>       10.39  
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Juvenile size model:
+#> Linear mixed model fit by REML ['lmerMod']
+#> Formula: sizea3 ~ sizea2 + (1 | year2) + (1 | individ)
+#>    Data: juvsize.data
+#> REML criterion at convergence: 1243.43
+#> Random effects:
+#>  Groups   Name        Std.Dev.
+#>  individ  (Intercept) 1.384   
+#>  year2    (Intercept) 1.962   
+#>  Residual             5.831   
+#> Number of obs: 193, groups:  individ, 144; year2, 3
+#> Fixed Effects:
+#> (Intercept)       sizea2  
+#>      3.0559       0.8482  
+#> 
+#> ────────────────────────────────────────
+#> 
+#> Juvenile reproduction model:
+#> [1] 1
+#> 
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> 
+#> Number of models in survival table:2
+#> 
+#> Number of models in observation table:2
+#> 
+#> Number of models in size table:2
+#> 
+#> Number of models in reproduction status table: 1
+#> 
+#> Number of models in fecundity table:4
+#> 
+#> Number of models in juvenile survival table:2
+#> 
+#> Number of models in juvenile observation table:2
+#> 
+#> Number of models in juvenile size table:2
+#> 
+#> Number of models in juvenile reproduction table: 1
+#> 
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> 
+#> General model parameter names (column 1), and specific names used in these models (column 2):
+#>                       parameter_names mainparams
+#> 1                              time t      year2
+#> 2                          individual    individ
+#> 3                               patch      patch
+#> 4                   alive in time t+1      surv3
+#> 5                observed in time t+1       obs3
+#> 6                    size in time t+1      size3
+#> 7     reproductive status in time t+1     repst3
+#> 8               fecundity in time t+1       fec3
+#> 9                 fecundity in time t       fec2
+#> 10                     size in time t      size2
+#> 11                   size in time t-1      size1
+#> 12      reproductive status in time t     repst2
+#> 13     reprodutive status in time t-1     repst1
+#> 14                      age in time t        age
+#> 15   individual covariate a in time t   indcova2
+#> 16 individual covariate a in time t-1   indcova1
+#> 17   individual covariate b in time t   indcovb2
+#> 18 individual covariate b in time t-1   indcovb1
+#> 19   individual covariate c in time t   indcovc2
+#> 20 individual covariate c in time t-1   indcovc1
+#> 
+#> 
+#> ────────────────────────────────────────────────────────────────────────────────
+#> 
+#> Quality control:
+#> 
+#> Survival estimated with 257 individuals and 2246 individual transitions.
+#> Observation estimated with 254 individuals and 2121 individual transitions.
+#> Size estimated with 254 individuals and 1916 individual transitions.
+#> Reproduction probability not estimated.
+#> Fecundity estimated with 257 individuals and 2246 individual transitions.
+#> Juvenile survival estimated with 187 individuals and 281 individual transitions.
+#> Juvenile observation estimated with 154 individuals and 210 individual transitions.
+#> Juvenile size estimated with 144 individuals and 193 individual transitions.
+#> Juvenile reproduction probability not estimated.
+#> NULL
+```
+
+  <p style="text-indent: 20px">We note some strong similarities here, although obviously size in time *t*-1 is no longer present. Let's move on now to the matrices themselves.</p>
+
+#### Step 4. IPM estimation
+
+  <p style="text-indent: 20px">We will now create the historical suite of matrices covering the years of study. Be aware that the output matrices will be extremely large - large enough that some computers might have difficulty with them. If you encounter an error message telling you that you hae run out of memory, then please try this on a more powerful computer.</p>
+
+```r
+lathmat3ipm <- flefko3(stageframe = lathframeipm, repmatrix = lathrepmipm, 
+                       modelsuite = lathmodels3ipm, overwrite = lathover3,
+                       data = lathvertipm, year.as.random = FALSE, 
+                       patch.as.random = FALSE, reduce = FALSE)
+summary(lathmat3ipm)
+#> 
+#> This historical lefkoMat object contains 3 matrices.
+#> 
+#> Each matrix is a square matrix with 10609 rows and columns, and a total of 112550881 elements.
+#> A total of 3122121 survival transitions were estimated, with 1040707 per matrix.
+#> A total of 61800 fecundity transitions were estimated, with 20600 per matrix.
+#> 
+#> Vital rate modeling quality control:
+#> 
+#> Survival estimated with 257 individuals and 2246 individual transitions.
+#> Observation estimated with 254 individuals and 2121 individual transitions.
+#> Size estimated with 254 individuals and 1916 individual transitions.
+#> Reproduction probability not estimated.
+#> Fecundity estimated with 257 individuals and 2246 individual transitions.
+#> Juvenile survival estimated with 187 individuals and 281 individual transitions.
+#> Juvenile observation estimated with 154 individuals and 210 individual transitions.
+#> Juvenile size estimated with 144 individuals and 193 individual transitions.
+#> Juvenile reproduction probability not estimated.
+#> NULL
+```
+
+  <p style="text-indent: 20px">These are giant matrices. With 10,609 rows and columns, there are a total of 112,550,881 elements per matrix. But they are also amazingly sparse - with 1,061,307 elements estimated, 0.9% of elements per matrix are non-zero.</p>
+  
+  <p style="text-indent: 20px">Let's now build the ahistorical IPMs.</p>
+
+```r
+lathmat2ipm <- flefko2(stageframe = lathframeipm, repmatrix = lathrepmipm, 
+                       modelsuite = lathmodels2ipm, overwrite = lathover2,
+                       data = lathvertipm, year.as.random = FALSE, 
+                       patch.as.random = FALSE, reduce = FALSE)
+summary(lathmat2ipm)
+#> 
+#> This ahistorical lefkoMat object contains 3 matrices.
+#> 
+#> Each matrix is a square matrix with 103 rows and columns, and a total of 10609 elements.
+#> A total of 30621 survival transitions were estimated, with 10207 per matrix.
+#> A total of 600 fecundity transitions were estimated, with 200 per matrix.
+#> 
+#> Vital rate modeling quality control:
+#> 
+#> Survival estimated with 257 individuals and 2246 individual transitions.
+#> Observation estimated with 254 individuals and 2121 individual transitions.
+#> Size estimated with 254 individuals and 1916 individual transitions.
+#> Reproduction probability not estimated.
+#> Fecundity estimated with 257 individuals and 2246 individual transitions.
+#> Juvenile survival estimated with 187 individuals and 281 individual transitions.
+#> Juvenile observation estimated with 154 individuals and 210 individual transitions.
+#> Juvenile size estimated with 144 individuals and 193 individual transitions.
+#> Juvenile reproduction probability not estimated.
+#> NULL
+```
+
+  <p style="text-indent: 20px">The ahistorical IPMs are certainly smaller than the historical IPMs, but are nonetheless huge in comparison to the matrices estimated in previous analyses. Although huge, these matrices are not sparse - 10,407 elements out of 10,609 per matrix are estimated (98.1%). Fortunately, we can assume that neither IPM is overparameterized, since ultimately the elements in an IPM and any other function-based matrix reflect the statistical power of the underlying vital rate models. In `lefko3`, the vital rate models used are the best-fit models from exhaustive model selection, and so are already the most parsimonious from within the suite of tested models.</p>
+
+  <p style="text-indent: 20px">Let's take a look at the top-left corner of the first ahistorical matrix (the matrix is too huge to inspect in full here).</p>
+
+```r
+print(lathmat2ipm$A[[1]][1:25,1:5], digits = 3)
+#>        [,1]      [,2]    [,3]    [,4]    [,5]
+#>  [1,] 0.345  0.00e+00 0.00000 0.34412 0.34352
+#>  [2,] 0.054  0.00e+00 0.00000 0.16252 0.16252
+#>  [3,] 0.000  4.82e-05 0.08933 0.08962 0.09017
+#>  [4,] 0.000  4.68e-07 0.04247 0.04173 0.04007
+#>  [5,] 0.000  5.09e-69 0.04476 0.04426 0.04303
+#>  [6,] 0.000 2.38e-195 0.04625 0.04602 0.04530
+#>  [7,] 0.000  0.00e+00 0.04685 0.04692 0.04675
+#>  [8,] 0.000  0.00e+00 0.04653 0.04689 0.04730
+#>  [9,] 0.000  0.00e+00 0.04531 0.04595 0.04692
+#> [10,] 0.000  0.00e+00 0.04325 0.04414 0.04564
+#> [11,] 0.000  0.00e+00 0.04048 0.04157 0.04351
+#> [12,] 0.000  0.00e+00 0.03715 0.03839 0.04068
+#> [13,] 0.000  0.00e+00 0.03342 0.03475 0.03728
+#> [14,] 0.000  0.00e+00 0.02947 0.03085 0.03350
+#> [15,] 0.000  0.00e+00 0.02548 0.02684 0.02951
+#> [16,] 0.000  0.00e+00 0.02160 0.02290 0.02549
+#> [17,] 0.000  0.00e+00 0.01796 0.01915 0.02158
+#> [18,] 0.000  0.00e+00 0.01463 0.01571 0.01792
+#> [19,] 0.000  0.00e+00 0.01169 0.01263 0.01458
+#> [20,] 0.000  0.00e+00 0.00915 0.00995 0.01163
+#> [21,] 0.000  0.00e+00 0.00703 0.00769 0.00910
+#> [22,] 0.000  0.00e+00 0.00529 0.00583 0.00698
+#> [23,] 0.000  0.00e+00 0.00391 0.00433 0.00525
+#> [24,] 0.000  0.00e+00 0.00283 0.00315 0.00387
+#> [25,] 0.000  0.00e+00 0.00201 0.00225 0.00280
+```
+
+This matrix is very large, of course, so is difficult to read properly. We can get another handle on quality control by checking the column sums of the first U matrix, to make sure that all column sums look like survival probabilities.
+
+```r
+summary(colSums(lathmat2ipm$U[[1]]))
+#>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#> 0.0000487 0.9838110 0.9987809 0.9540850 0.9998662 0.9999848
+```
+
+Everything looks OK, with stage survival probabilities within the realm of possibility.
+
+  <p style="text-indent: 20px">Let's now repeat with the historical matrices. First the top corner of the first historical matrix.</p>
+
+```r
+print(lathmat3ipm$A[[1]][1:25,1:10], digits = 3)
+#>        [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+#>  [1,] 0.345    0    0    0    0    0    0    0    0     0
+#>  [2,] 0.000    0    0    0    0    0    0    0    0     0
+#>  [3,] 0.000    0    0    0    0    0    0    0    0     0
+#>  [4,] 0.000    0    0    0    0    0    0    0    0     0
+#>  [5,] 0.000    0    0    0    0    0    0    0    0     0
+#>  [6,] 0.000    0    0    0    0    0    0    0    0     0
+#>  [7,] 0.000    0    0    0    0    0    0    0    0     0
+#>  [8,] 0.000    0    0    0    0    0    0    0    0     0
+#>  [9,] 0.000    0    0    0    0    0    0    0    0     0
+#> [10,] 0.000    0    0    0    0    0    0    0    0     0
+#> [11,] 0.000    0    0    0    0    0    0    0    0     0
+#> [12,] 0.000    0    0    0    0    0    0    0    0     0
+#> [13,] 0.000    0    0    0    0    0    0    0    0     0
+#> [14,] 0.000    0    0    0    0    0    0    0    0     0
+#> [15,] 0.000    0    0    0    0    0    0    0    0     0
+#> [16,] 0.000    0    0    0    0    0    0    0    0     0
+#> [17,] 0.000    0    0    0    0    0    0    0    0     0
+#> [18,] 0.000    0    0    0    0    0    0    0    0     0
+#> [19,] 0.000    0    0    0    0    0    0    0    0     0
+#> [20,] 0.000    0    0    0    0    0    0    0    0     0
+#> [21,] 0.000    0    0    0    0    0    0    0    0     0
+#> [22,] 0.000    0    0    0    0    0    0    0    0     0
+#> [23,] 0.000    0    0    0    0    0    0    0    0     0
+#> [24,] 0.000    0    0    0    0    0    0    0    0     0
+#> [25,] 0.000    0    0    0    0    0    0    0    0     0
+```
+
+The sparseness of the matrix means that the vast majority of it will be composed of 0s. Let's take a look at a summary of the column sums of the first survival-transition matrix.
+
+```r
+summary(colSums(lathmat3ipm$U[[1]]))
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>  0.0000  0.9963  0.9999  0.9690  1.0000  1.0000
+```
+
+These numbers also all look fine.
+
+  <p style="text-indent: 20px">Now let's estimate the mean IPM matrices. This code will estimate 1 mean matrix each, because we did not separate patches in the data reorganization and vital rate modeling.</p>
+
+```r
+lath2ipmmean <- lmean(lathmat2ipm)
+summary(lath2ipmmean)
+#> 
+#> This ahistorical lefkoMat object contains 1 matrices.
+#> 
+#> Each matrix is a square matrix with 103 rows and columns, and a total of 10609 elements.
+#> A total of 10207 survival transitions were estimated, with 10207 per matrix.
+#> A total of 200 fecundity transitions were estimated, with 200 per matrix.
+#> 
+#> Vital rate modeling quality control:
+#> 
+#> Survival estimated with 257 individuals and 2246 individual transitions.
+#> Observation estimated with 254 individuals and 2121 individual transitions.
+#> Size estimated with 254 individuals and 1916 individual transitions.
+#> Reproduction probability not estimated.
+#> Fecundity estimated with 257 individuals and 2246 individual transitions.
+#> Juvenile survival estimated with 187 individuals and 281 individual transitions.
+#> Juvenile observation estimated with 154 individuals and 210 individual transitions.
+#> Juvenile size estimated with 144 individuals and 193 individual transitions.
+#> Juvenile reproduction probability not estimated.
+#> NULL
+
+lath3ipmmean <- lmean(lathmat3ipm)
+summary(lath3ipmmean)
+#> 
+#> This historical lefkoMat object contains 1 matrices.
+#> 
+#> Each matrix is a square matrix with 10609 rows and columns, and a total of 112550881 elements.
+#> A total of 1040707 survival transitions were estimated, with 1040707 per matrix.
+#> A total of 20600 fecundity transitions were estimated, with 20600 per matrix.
+#> 
+#> Vital rate modeling quality control:
+#> 
+#> Survival estimated with 257 individuals and 2246 individual transitions.
+#> Observation estimated with 254 individuals and 2121 individual transitions.
+#> Size estimated with 254 individuals and 1916 individual transitions.
+#> Reproduction probability not estimated.
+#> Fecundity estimated with 257 individuals and 2246 individual transitions.
+#> Juvenile survival estimated with 187 individuals and 281 individual transitions.
+#> Juvenile observation estimated with 154 individuals and 210 individual transitions.
+#> Juvenile size estimated with 144 individuals and 193 individual transitions.
+#> Juvenile reproduction probability not estimated.
+#> NULL
+```
+
+  <p style="text-indent: 20px">As a final check, let's take a look at the column sums of the grand mean survival-transition matrix from each case.</p>
+
+```r
+writeLines("\nAhistorical matrix stage survival distribution: ")
+#> 
+#> Ahistorical matrix stage survival distribution:
+summary(colSums(lath2ipmmean$U[[1]]))
+#>      Min.   1st Qu.    Median      Mean   3rd Qu.      Max. 
+#> 0.0000404 0.9765161 0.9987748 0.9451579 0.9998662 0.9999849
+
+writeLines("\nHistorical matrix stage-pair survival distribution: ")
+#> 
+#> Historical matrix stage-pair survival distribution:
+summary(colSums(lath3ipmmean$U[[1]]))
+#>    Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+#>  0.0000  0.9887  0.9994  0.9603  1.0000  1.0000
+```
+
+All looks fine!
+
+#### Step 5. MPM analysis
+
+  <p style="text-indent: 20px">Now let's estimate the deterministic population growth rates and plot them.</p>
+
+```r
+ipm2lambda <- lambda3(lathmat2ipm)
+ipm3lambda <- lambda3(lathmat3ipm)
+
+meanlambda2 <- lambda3(lath2ipmmean)
+meanlambda3 <- lambda3(lath3ipmmean)
+
+plot(lambda ~ year2, data = ipm2lambda, xlab = "Year", ylab = "Lambda", ylim = c(0.65, 1.00),
+     type = "l", lwd = 2, bty = "n")
+lines(lambda ~ year2, data = ipm3lambda, lwd = 2, lty = 2, col = "red")
+legend("bottomleft", c("ahistorical", "historical"), lty = c(1, 2), col = c("black", "red"), lwd = 2, bty = "n")
+```
+
+![Figure 17. Ahistorical vs. historical lambda](Ch2can3.20-1.png)
+
+Ahistorical estimates of $\lambda$ are lower than historical estimates, and the historical $\lambda$ values are more in line with estimates from the previous analyses.
+
+  <p style="text-indent: 20px">Now let's look at the stable stage distribution. We will only look at the summary and first 6 entries, given the size of the output.</p>
+
+```r
+ipm2ss <- stablestage3(lath2ipmmean)
+ipm3ss <- stablestage3(lath3ipmmean)
+
+ss_put_together <- cbind.data.frame(ipm2ss$ss_prop, ipm3ss$ahist$ss_prop)
+names(ss_put_together) <- c("ahist", "hist")
+rownames(ss_put_together) <- ipm2ss$stage_id
+
+barplot(t(ss_put_together), beside=T, ylab = "Proportion", xlab = "Stage",
+        col = c("black", "red"), bty = "n")
+legend("topright", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+![Figure 18. Ahistorical vs. historically-corrected stable stage distribution](Ch2can3.21-1.png)
+
+Both ahistorical and historical approaches show the stable stage distribution dominated by the first stage, which is the dormant seed stage. The importance of the seed bank to the population is quite clear in this analysis! However, the historical analysis suggests a stronger weighting of larger adults, with the distribution moving rightward slightly.
+
+  <p style="text-indent: 20px">Next, the reproductive values.</p>
+
+```r
+ipm2rv <- repvalue3(lath2ipmmean)
+ipm3rv <- repvalue3(lath3ipmmean)
+
+rv_put_together <- cbind.data.frame(ipm2rv$rep_value, ipm3rv$ahist$rep_value)
+names(rv_put_together) <- c("ahist", "hist")
+rv_put_together$ahist <- rv_put_together$ahist / max(rv_put_together$ahist)
+rv_put_together$hist <- rv_put_together$hist / max(rv_put_together$hist)
+rownames(rv_put_together) <- ipm2rv$stage_id
+
+barplot(t(rv_put_together), beside=T, ylab = "Relative rep value", xlab = "Stage", 
+        col = c("black", "red"), bty = "n")
+legend("topleft", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+![Figure 19. Ahistorical vs. historically-corrected reproductive values](Ch2can3.22-1.png)
+
+A quick scan through these values shows that the highest reproductive values in the ahistorical analysis are for the largest adults, all the way at the bottom of the data frame output. Since these values have been scaled to the contribution of dormant seed, the reproductive values suggest the important contribution of large adults to the maintenance of the population. However, historically-corrected reproductive values drop off once adults get mildly large, with the largest value associated with plants with a leaf volume of 5076 (the maximum is >7000).
+
+  <p style="text-indent: 20px">Given the size of these matrices and the difficulty of working with them, we will skip sensitivity analysis here and move on to elasticity analysis.</p>
+
+```r
+lath2ipmelas <- elasticity3(lath2ipmmean)
+lath3ipmelas <- elasticity3(lath3ipmmean)
+
+writeLines("\nThe highest ahistorical elasticity is associated with element: ")
+#> 
+#> The highest ahistorical elasticity is associated with element:
+which(lath2ipmelas$elasmats[[1]] == max(lath2ipmelas$elasmats[[1]]))
+#> [1] 209
+
+writeLines("\nThe highest historically-corrected elasticity is associated with element: ")
+#> 
+#> The highest historically-corrected elasticity is associated with element:
+which(lath3ipmelas$ah_elasmats[[1]] == max(lath3ipmelas$ah_elasmats[[1]]))
+#> [1] 209
+```
+
+  <p style="text-indent: 20px">Both analyses agree that $\lambda$ is most elastic in response to stasis in vegetative dormancy, which is rather different from previous analyses, which suggested that transitions involving small adults or flowering adults had the strongest potential influence on $\lambda$. Let's plot the importance of stages from both perspectives.</p>
+
+```r
+elas_put_together <- cbind.data.frame(colSums(lath2ipmelas$elasmats[[1]]), colSums(lath3ipmelas$ah_elasmats[[1]]))
+names(elas_put_together) <- c("ahist", "hist")
+rownames(elas_put_together) <- lath2ipmelas$stages$stage_id
+
+barplot(t(elas_put_together), beside=T, ylab = "Elasticity of lambda", xlab = "Stage", 
+        col = c("black", "red"), bty = "n")
+legend("topright", c("ahistorical", "historical"), col = c("black", "red"), pch = 15, bty = "n")
+```
+
+![Figure 20. Ahistorical vs. historically-corrected elasticity of lambda to stage](Ch2can3.24-1.png)
+
+  <p style="text-indent: 20px">The plot of these distributions shows the strong importance of vegetative dormancy, which is the tallest bar in both plots. However, the distribution of elasticity values in adult stages is shifted to the right in the historically-corrected IPM. Thus, while the ahistorical IPM shows the second highest elasticity of $\lambda$ to be associated with plants with a leaf volume of 746, historically-corrected analysis suggests that the second highest elasticity is associated with plants with a leaf volume of 960.</p>
+
+
+## Acknowledgements
+
+  <p style="text-indent: 20px">We are grateful to two anonymous reviewers whose scrutiny improved the quality of this vignette. The project resulting in this package and this tutorial was funded by Grant-In-Aid 19H03298 from the Japan Society for the Promotion of Science.</p>
+  
+  
+## Literature cited
+
+<div id="refs"></div>

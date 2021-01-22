@@ -1,0 +1,105 @@
+useDynLib(hypervolume)
+
+export( 
+  ### (internal functions)
+  #sample_model_rejection,
+  #sample_model_ellipsoid,
+  #calculate_density,
+  #kdtree_build,
+  #kdtree_ball_query_multiple,
+  #nball_volume,
+  #evalfrectangular,
+  #evalfspherical,
+  
+  ### (external functions)
+  estimate_bandwidth, 
+  expectation_ball, 
+  expectation_box, 
+  expectation_convex,
+  expectation_convex, 
+  expectation_maximal, 
+  get_centroid,
+  get_volume, 
+  hypervolume_box,
+  hypervolume_distance, 
+  hypervolume_estimate_probability,
+  hypervolume_gaussian,
+  hypervolume_general_model,
+  hypervolume_holes, 
+  hypervolume_inclusion_test, 
+  hypervolume_join, 
+  hypervolume_overlap_statistics,
+  hypervolume_project,
+  hypervolume_prune, 
+  hypervolume_threshold,
+  hypervolume_redundancy,
+  hypervolume_save_animated_gif,
+  hypervolume_segment, 
+  hypervolume_set, 
+  hypervolume_svm,
+  hypervolume_thin, 
+  hypervolume_variable_importance, 
+  hypervolume, 
+  padded_range,
+  plot.Hypervolume,
+  plot.HypervolumeList,
+  print.Hypervolume,
+  print.HypervolumeList,
+  show.Hypervolume,
+  show.HypervolumeList,
+  summary.Hypervolume,
+  summary.HypervolumeList,
+  weight_data
+
+       ) 
+
+exportClasses(
+    "Hypervolume",
+     "HypervolumeList" 
+)
+
+S3method(show, Hypervolume)
+S3method(show, HypervolumeList)
+ 	
+S3method(print, Hypervolume)
+S3method(print, HypervolumeList)
+S3method(summary, Hypervolume)
+S3method(summary, HypervolumeList)
+S3method(plot, Hypervolume)
+S3method(plot, HypervolumeList)
+S3method("[[",HypervolumeList)
+S3method("[[<-",HypervolumeList)
+
+S3method(get_volume, Hypervolume)
+S3method(get_volume, HypervolumeList)
+
+import(Rcpp)
+import(geometry)
+import(MASS)
+import(methods)
+import(rgl)
+import(ks)
+import(fastcluster)
+import(compiler)
+import(e1071)
+import(mvtnorm)
+import(data.table)
+import(progress)
+import(pdist)
+#import(alphahull)
+#import(concaveman)
+
+importFrom("raster","raster", "getValues","values","extent","rasterToPolygons","rasterize")
+importFrom("grDevices", "col2rgb", "rainbow", "rgb", "hsv", "rgb2hsv")
+importFrom("graphics", ".filled.contour", "axis", "box", "contour","par", "plot", "points", "text","lines")
+importFrom("stats", "cor", "cutree", "dist", "na.omit", "pgamma","rnorm", "runif", "sd", "median", "quantile","rbinom")
+importFrom("utils", "data", "head")
+importFrom("maps", "map")
+importFrom("graphics", "abline", "legend", "mtext")
+importFrom("stats", "predict", "var")
+importFrom("utils", "str")
+importFrom("rgeos","gBuffer")
+
+# problematic sections when using rastertopolygons with dissolve=TRUE
+#importMethodsFrom("rgeos", "rbind2")
+#importFrom(sp, rbind.SpatialPolygons)

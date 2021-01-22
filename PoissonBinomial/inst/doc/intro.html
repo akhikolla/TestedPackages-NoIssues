@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Efficient Computation of Ordinary and Generalized Poisson Binomial Distributions</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Efficient Computation of Ordinary and Generalized Poisson Binomial Distributions</h1>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a><ul>
+<li><a href="#ordinary-poisson-binomial-distribution">Ordinary Poisson Binomial Distribution</a></li>
+<li><a href="#generalized-poisson-binomial-distribution">Generalized Poisson Binomial Distribution</a></li>
+<li><a href="#existing-r-packages">Existing R Packages</a></li>
+</ul></li>
+<li><a href="#exact-procedures">Exact Procedures</a><ul>
+<li><a href="#ordinary-poisson-binomial-distribution-1">Ordinary Poisson Binomial Distribution</a></li>
+<li><a href="#generalized-poisson-binomial-distribution-1">Generalized Poisson Binomial Distribution</a></li>
+<li><a href="#examples">Examples</a></li>
+</ul></li>
+<li><a href="#approximations">Approximations</a><ul>
+<li><a href="#ordinary-poisson-binomial-distribution-2">Ordinary Poisson Binomial Distribution</a></li>
+<li><a href="#generalized-poisson-binomial-distribution-2">Generalized Poisson Binomial Distribution</a></li>
+<li><a href="#examples-1">Examples</a></li>
+</ul></li>
+<li><a href="#handling-special-cases-zeros-and-ones">Handling special cases, zeros and ones</a><ul>
+<li><a href="#ordinary-poisson-binomial-distributions">Ordinary Poisson Binomial Distributions</a></li>
+<li><a href="#generalized-poisson-binomial-distributions">Generalized Poisson Binomial Distributions</a></li>
+</ul></li>
+<li><a href="#usage-with-rcpp">Usage with Rcpp</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The Poisson binomial distribution (in the following abbreviated as PBD) is becoming increasingly important, especially in the areas of statistics, finance, insurance mathematics and quality management. This package provides functions for two types of PBDs: ordinary and generalized PBDs (henceforth referred to as O-PBDs and G-PBDs).</p>
+<div id="ordinary-poisson-binomial-distribution" class="section level3">
+<h3>Ordinary Poisson Binomial Distribution</h3>
+<p>The O-PBD is the distribution of the sum of a number <span class="math inline">\(n\)</span> of independent Bernoulli-distributed random indicators <span class="math inline">\(X_i \in \{0, 1\}\)</span> <span class="math inline">\((i = 1, ..., n)\)</span>: <span class="math display">\[X := \sum_{i = 1}^{n}{X_i}.\]</span> Each of the <span class="math inline">\(X_i\)</span> possesses a predefined probability of success <span class="math inline">\(p_i := P(X_i = 1)\)</span> (subsequently <span class="math inline">\(P(X_i = 0) = 1 - p_i =: q_i\)</span>). With this, mean, variance and skewness can be expressed as <span class="math display">\[E(X) = \sum_{i = 1}^{n}{p_i} \quad \quad Var(X) = \sum_{i = 1}^{n}{p_i q_i} \quad \quad Skew(X) = \frac{\sum_{i = 1}^{n}{p_i q_i(q_i - p_i)}}{\sqrt{Var(X)}^3}.\]</span> All possible observations are in <span class="math inline">\(\{0, ..., n\}\)</span>.</p>
+</div>
+<div id="generalized-poisson-binomial-distribution" class="section level3">
+<h3>Generalized Poisson Binomial Distribution</h3>
+<p>The G-PBD is defined very similar. Again, it is the distribution of a sum random variables, but here, each <span class="math inline">\(X_i \in \{u_i, v_i\}\)</span> with <span class="math inline">\(P(X_i = u_i) =: p_i\)</span> and <span class="math inline">\(P(X_i = v_i) = 1 - p_i =: q_i\)</span>. Using ordinary Bernoulli-distributed random variables <span class="math inline">\(Y_i\)</span>, <span class="math inline">\(X_i\)</span> can be expressed as <span class="math inline">\(X_i = u_i Y_i + v_i(1 - Y_i) = v_i + Y_i \cdot (u_i - v_i)\)</span>. As a result, mean, variance and skewness are given by <span class="math display">\[E(X) = \sum_{i = 1}^{n}{v_i} + \sum_{i = 1}^{n}{p_i (u_i - v_i)} \quad \quad Var(X) = \sum_{i = 1}^{n}{p_i q_i(u_i - v_i)^2} \\Skew(X) = \frac{\sum_{i = 1}^{n}{p_i q_i(q_i - p_i)(u_i - v_i)^3}}{\sqrt{Var(X)}^3}.\]</span> All possible observations are in <span class="math inline">\(\{U, ..., V\}\)</span> with <span class="math inline">\(U := \sum_{i = 1}^{n}{\min\{u_i, v_i\}}\)</span> and <span class="math inline">\(V := \sum_{i = 1}^{n}{\max\{u_i, v_i\}}\)</span>. Note that the size <span class="math inline">\(m := V - U\)</span> of the distribution does not generally equal <span class="math inline">\(n\)</span>!</p>
+</div>
+<div id="existing-r-packages" class="section level3">
+<h3>Existing R Packages</h3>
+<p>Computing these distributions exactly is computationally demanding, but in the last few years, some efficient algorithms have been developed. Particularly significant in this respect are the works of <a href="http://dx.doi.org/10.1016/j.csda.2012.10.006">Hong (2013)</a>, who derived the DFT-CF procedure for O-PBDs, <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a> who developed two immensely faster algorithms for O-PBDs, namely the DC and DC-FFT procedures, and <a href="https://doi.org/10.1080/00949655.2018.1440294">Zhang, Hong and Balakrishnan (2018)</a> who further developed <a href="http://dx.doi.org/10.1016/j.csda.2012.10.006">Hong’s (2013)</a> DFT-CF algorithm for G-PBDs (in the following, this generalized procedure is referred to as G-DFT-CF). Still, only a few R packages exist for the calculation of either ordinary and generalized PBDs, e.g. <a href="https://cran.r-project.org/package=poibin"><code>poibin</code></a> and <a href="https://cran.r-project.org/package=poisbinom"><code>poisbinom</code></a> for O-PBDs and <a href="https://cran.r-project.org/package=GPB"><code>GPB</code></a> for G-PDBs. Before the release of this <code>PoissonBinomial</code> package, there has been no R package that implemented the DC and DC-FFT algorithms of <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a>, as they only published a <a href="https://github.com/biscarri1/convpoibin">reference implementation</a> for R, but refrained from releasing it as a package. Additionally, there are no comparable approaches for G-PBDs to date.</p>
+<p>The <code>poibin</code> package implements the DFT-CF algorithm along with the exact recursive method of <a href="http://dx.doi.org/10.1109/TR.1984.5221843">Barlow &amp; Heidtmann (1984)</a> and Normal and Poisson approximations. However, both exact procedures of this package possess some disadvantages, i.e. they are relatively slow at computing very large distributions, with the recursive algorithm being also very memory consuming. The G-DFT-CF procedure is implemented in the <code>GPB</code> package and inherits this performance drawback. The <code>poisbinom</code> package provides a more efficient and much faster DFT-CF implementation. The performance improvement over the <code>poibin</code> package lies in the use of the <a href="http://www.fftw.org">FFTW C library</a>. Unfortunately, it sometimes yields some negative probabilities in the tail regions, especially for large distributions. However, this numerical issue has not been addressed to date. This <code>PoissonBinomial</code> also utilizes FFTW for both DFT-CF and G-DFT-CF algorithms, but corrects that issue. In addition to the disadvantages regarding computational speed (<code>poibin</code> and <code>GPB</code>) or numerics (<code>poisbinom</code>), especially for very large distributions, the aforementioned packages do not provide headers for their internal C/C++ functions, so that they cannot be imported directly by C or C++ code of other packages that use for example <code>Rcpp</code>.</p>
+<p>In some situations, people might have to deal with Poisson binomial distributions that include Bernoulli variables with <span class="math inline">\(p_i \in \{0, 1\}\)</span>. Calculation performance can be further optimized by handling these indicators before the actual computations. Approximations also benefit from this in terms of accuracy. None of the aforementioned packages implements such optimizations. Therefore, the advantages of this <code>PoissonBinomial</code> package can be summarized as follows:</p>
+<ul>
+<li>Efficient computation of very large distributions with both exact and approximate algorithms for O-PBDs and G-PBDs</li>
+<li>Provides headers for the C++ functions so that other packages may include them in their own C++ code</li>
+<li>Handles (sometimes large numbers of) 0- and 1-probabilities to speed up performance</li>
+</ul>
+<p>In total, this package includes 10 different algorithms of computing ordinary Poisson binomial distributions, including optimized versions of the Normal, Refined Normal and Poisson approaches, and 5 approaches for generalized PBDs. In addition, the implementation of the exact recursive procedure for O-PBDs was rewritten so that it is considerably less memory intensive: the <code>poibin</code> implementation needs the memory equivalent of <span class="math inline">\((n + 1)^2\)</span> values of type <code>double</code>, while ours only needs <span class="math inline">\(3 \cdot (n + 1)\)</span>.</p>
+<hr />
+</div>
+</div>
+<div id="exact-procedures" class="section level2">
+<h2>Exact Procedures</h2>
+<div id="ordinary-poisson-binomial-distribution-1" class="section level3">
+<h3>Ordinary Poisson Binomial Distribution</h3>
+<p>In this package implements the following exact algorithms for computing ordinary Poisson binomial distributions:</p>
+<ul>
+<li>the <em>Direct Convolution</em> approach of <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a>,</li>
+<li>the <em>Divide &amp; Conquer FFT Tree Convolution</em> procedure of <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a>,</li>
+<li>the <em>Discrete Fourier Transformation of the Characteristic Function</em> algorithm of <a href="http://dx.doi.org/10.1016/j.csda.2012.10.006">Hong (2013)</a> and</li>
+<li>the <em>Recursive Formula</em> of <a href="http://dx.doi.org/10.1109/TR.1984.5221843">Barlow &amp; Heidtmann (1984)</a>.</li>
+</ul>
+</div>
+<div id="generalized-poisson-binomial-distribution-1" class="section level3">
+<h3>Generalized Poisson Binomial Distribution</h3>
+<p>For generalized Poisson binomial distributions, this package provides:</p>
+<ul>
+<li>a generalized adaptation of the <em>Direct Convolution</em> approach of <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a>,</li>
+<li>a generalized <em>Divide &amp; Conquer FFT Tree Convolution</em>, inspired by the respective procedure of <a href="http://dx.doi.org/10.1016/j.csda.2018.01.007">Biscarri, Zhao &amp; Brunner (2018)</a> for O-PDBs,</li>
+<li>the <em>Generalized Discrete Fourier Transformation of the Characteristic Function</em> algorithm of <a href="https://doi.org/10.1080/00949655.2018.1440294">Zhang, Hong and Balakrishnan (2018)</a>.</li>
+</ul>
+</div>
+<div id="examples" class="section level3">
+<h3>Examples</h3>
+<p>Examples and performance comparisons of these procedures are presented in a <a href="proc_exact.html">separate vignette</a>.</p>
+<hr />
+</div>
+</div>
+<div id="approximations" class="section level2">
+<h2>Approximations</h2>
+<div id="ordinary-poisson-binomial-distribution-2" class="section level3">
+<h3>Ordinary Poisson Binomial Distribution</h3>
+<p>In addition, the following O-PBD approximation methods are included:</p>
+<ul>
+<li>the <em>Poisson Approximation</em> approach,</li>
+<li>the <em>Arithmetic Mean Binomial Approximation</em> procedure,</li>
+<li><em>Geometric Mean Binomial Approximation</em> algorithms,</li>
+<li>the <em>Normal Approximation</em> and</li>
+<li>the <em>Refined Normal Approximation</em>.</li>
+</ul>
+</div>
+<div id="generalized-poisson-binomial-distribution-2" class="section level3">
+<h3>Generalized Poisson Binomial Distribution</h3>
+<p>For G-PBDs, there are</p>
+<ul>
+<li>the <em>Normal Approximation</em> and</li>
+<li>the <em>Refined Normal Approximation</em>.</li>
+</ul>
+</div>
+<div id="examples-1" class="section level3">
+<h3>Examples</h3>
+<p>Examples and performance comparisons of these approaches are provided in a <a href="proc_approx.html">separate vignette</a> as well.</p>
+<hr />
+</div>
+</div>
+<div id="handling-special-cases-zeros-and-ones" class="section level2">
+<h2>Handling special cases, zeros and ones</h2>
+<p>Handling special cases, such as ordinary binomial distributions, zeros and ones is useful to speed up performance. Unfortunately, some approximations do not work well for Bernoulli trials with <span class="math inline">\(p_i \in \{0, 1\}\)</span>, e.g. the Geometric Mean Binomial Approximations. This is why handling these values <em>before</em> the actual computation of the distribution is not only a performance tweak, but sometimes even a necessity. It is achieved by some simple preliminary considerations.</p>
+<div id="ordinary-poisson-binomial-distributions" class="section level3">
+<h3>Ordinary Poisson Binomial Distributions</h3>
+<ol style="list-style-type: decimal">
+<li>All <span class="math inline">\(p_i = p\)</span> are equal?<br />
+In this case, we have a usual binomial distribution. The specified method of computation is then ignored. In particular, the following applies:
+<ol style="list-style-type: lower-alpha">
+<li><span class="math inline">\(p = 0\)</span>: The only observable value is <span class="math inline">\(0\)</span>, i.e. <span class="math inline">\(P(X = 0) = 1\)</span> and <span class="math inline">\(P(X \neq 0) = 0\)</span>.</li>
+<li><span class="math inline">\(p = 1\)</span>: The only observable value is <span class="math inline">\(n\)</span>, i.e. <span class="math inline">\(P(X = n) = 1\)</span> and <span class="math inline">\(P(X \neq n) = 0\)</span>.</li>
+</ol></li>
+<li>All <span class="math inline">\(p_i \in \{0, 1\} (i = 1, ..., n)\)</span>?<br />
+If one <span class="math inline">\(p_i\)</span> is 1, it is impossible to measure 0 successes. Following the same logic, if two <span class="math inline">\(p_i\)</span> are 1, we cannot observe 0 and 1 successes and so on. In general, a number of <span class="math inline">\(n_1\)</span> values with <span class="math inline">\(p_i = 1\)</span> makes it impossible to measure <span class="math inline">\(0, ..., n_1 - 1\)</span> successes. Likewise, if there are <span class="math inline">\(n_0\)</span> Bernoulli trials with <span class="math inline">\(p_i = 0\)</span>, we cannot observe <span class="math inline">\(n - n_0 + 1, ..., n\)</span> successes. If all <span class="math inline">\(p_i \in \{0, 1\}\)</span>, it holds <span class="math inline">\(n = n_0 + n_1\)</span>. As a result, the only observable value is <span class="math inline">\(n_1\)</span>, i.e. <span class="math inline">\(P(X = n_1) = 1\)</span> and <span class="math inline">\(P(X \neq n_1) = 0\)</span>.</li>
+<li>Are there <span class="math inline">\(p_i \notin \{0, 1\}\)</span>?<br />
+Using the deductions from above, we can only observe an “inner” distribution in the range of <span class="math inline">\(n_1, n_1 + 1, ..., n - n_0\)</span>, i.e. <span class="math inline">\(P(X \in \{n_1, ..., n - n_0\}) &gt; 0\)</span> and <span class="math inline">\(P(X &lt; n_1) = P(X &gt; n - n_0) = 0\)</span>. As a result, <span class="math inline">\(X\)</span> can be expressed as <span class="math inline">\(X = n_1 + Y\)</span> with <span class="math inline">\(Y \sim PBin(\{p_i|0 &lt; p_i &lt; 1\})\)</span> and <span class="math inline">\(|\{p_i|0 &lt; p_i &lt; 1\}| = n - n_0 - n_1\)</span>. Subsequently, the Poisson binomial distribution must only be computed for <span class="math inline">\(Y\)</span>. Especially, if there is only one <span class="math inline">\(p_i \notin \{0, 1\}\)</span>, <span class="math inline">\(Y\)</span> follows a Bernoulli distribution with parameter <span class="math inline">\(p_i\)</span>, i.e. <span class="math inline">\(P(X = n_1) = P(Y = 0) = 1 - p_i\)</span> and <span class="math inline">\(P(X = n_1 + 1) = P(Y = 1) = p_i\)</span>.</li>
+</ol>
+<p>These cases are illustrated in the following example:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="co"># Case 1</span></span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">rep</span>(<span class="fl">0.3</span>, <span class="dv">7</span>))</span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="co">#&gt; [1] 0.0823543 0.2470629 0.3176523 0.2268945 0.0972405 0.0250047 0.0035721</span></span>
+<span id="cb1-4"><a href="#cb1-4"></a><span class="co">#&gt; [8] 0.0002187</span></span>
+<span id="cb1-5"><a href="#cb1-5"></a><span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">7</span>, <span class="dv">7</span>, <span class="fl">0.3</span>) <span class="co"># equal results</span></span>
+<span id="cb1-6"><a href="#cb1-6"></a><span class="co">#&gt; [1] 0.0823543 0.2470629 0.3176523 0.2268945 0.0972405 0.0250047 0.0035721</span></span>
+<span id="cb1-7"><a href="#cb1-7"></a><span class="co">#&gt; [8] 0.0002187</span></span>
+<span id="cb1-8"><a href="#cb1-8"></a></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)) <span class="co"># only 0 is observable</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="co">#&gt; [1] 1 0 0 0 0 0 0 0</span></span>
+<span id="cb1-11"><a href="#cb1-11"></a><span class="kw">dpbinom</span>(<span class="dv">0</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>)) <span class="co"># confirmation</span></span>
+<span id="cb1-12"><a href="#cb1-12"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)) <span class="co"># only 7 is observable</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="co">#&gt; [1] 0 0 0 0 0 0 0 1</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="kw">dpbinom</span>(<span class="dv">7</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)) <span class="co"># confirmation</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb1-18"><a href="#cb1-18"></a></span>
+<span id="cb1-19"><a href="#cb1-19"></a><span class="co"># Case 2</span></span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)) <span class="co"># only 3 is observable</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="co">#&gt; [1] 0 0 0 1 0 0 0 0</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="kw">dpbinom</span>(<span class="dv">3</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>)) <span class="co"># confirmation</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb1-24"><a href="#cb1-24"></a></span>
+<span id="cb1-25"><a href="#cb1-25"></a><span class="co"># Case 3</span></span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)) <span class="co"># only 1-5 are observable</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="co">#&gt; [1] 0.0000 0.0864 0.4344 0.3784 0.0944 0.0064 0.0000 0.0000</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="kw">dpbinom</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.1</span>, <span class="fl">0.2</span>, <span class="fl">0.4</span>, <span class="fl">0.8</span>, <span class="dv">1</span>)) <span class="co"># confirmation</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a><span class="co">#&gt; [1] 0.0864 0.4344 0.3784 0.0944 0.0064</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.4</span>, <span class="dv">1</span>)) <span class="co"># only 1 and 2 are observable</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="co">#&gt; [1] 0.0 0.6 0.4 0.0 0.0</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="kw">dpbinom</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.4</span>, <span class="dv">1</span>)) <span class="co"># confirmation</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="co">#&gt; [1] 0.6 0.4</span></span></code></pre></div>
+</div>
+<div id="generalized-poisson-binomial-distributions" class="section level3">
+<h3>Generalized Poisson Binomial Distributions</h3>
+<ol style="list-style-type: decimal">
+<li>All <span class="math inline">\(u_i \in \{0, 1\}\)</span> and all <span class="math inline">\(v_i = 1 - u_i\)</span>?<br />
+Then, it is an ordinary Poisson binomial distribution with parameters <span class="math inline">\(p_i&#39; = p_i\)</span> for all <span class="math inline">\(i\)</span> for which <span class="math inline">\(u_i = 1\)</span> and <span class="math inline">\(p_i&#39; = 1 - p_i\)</span> otherwise. This includes all the special cases described above.</li>
+<li>All <span class="math inline">\(u_i = u\)</span> are equal and all <span class="math inline">\(v_i = v\)</span> are equal?<br />
+In this case, we have a linearly transformed ordinary Poisson binomial distribution, i.e. <span class="math inline">\(X\)</span> can be expressed as <span class="math inline">\(X = uY + v(n - Y)\)</span> with <span class="math inline">\(Y \sim PBin(p_1, ..., p_n)\)</span>. In particular, if all <span class="math inline">\(p_i = p\)</span> are also the same, we have a linear transformation of the usual binomial distribution, i.e. <span class="math inline">\(X = uZ + v(n - Z)\)</span> with <span class="math inline">\(Z \sim Bin(n, p)\)</span>. Summarizing this, the following applies:
+<ol style="list-style-type: lower-alpha">
+<li>All <span class="math inline">\(p_i = 0\)</span>: The only observable value is <span class="math inline">\(n \cdot v\)</span>, i.e. <span class="math inline">\(P(X = n \cdot v) = 1\)</span> and <span class="math inline">\(P(X \neq n \cdot v) = 0\)</span>.</li>
+<li>All <span class="math inline">\(p_i = 1\)</span>: The only observable value is <span class="math inline">\(n \cdot u\)</span>, i.e. <span class="math inline">\(P(X = n \cdot u) = 1\)</span> and <span class="math inline">\(P(X \neq n \cdot u) = 0\)</span>.</li>
+<li>All <span class="math inline">\(p_i = p\)</span>: Observable values are in <span class="math inline">\(\{u \cdot k + v \cdot (n - k) | k = 0, ..., n\}\)</span> and <span class="math inline">\(P(X = u \cdot k + v \cdot (n - k)) = P(Z = k)\)</span>.</li>
+<li>Otherwise: Observable values are in <span class="math inline">\(\{u \cdot k + v \cdot (n - k) | k = 0, ..., n\})\)</span> and <span class="math inline">\(P(X = u \cdot k + v(n - k)) = P(Y = k)\)</span></li>
+</ol></li>
+<li>All <span class="math inline">\(p_i \in \{0, 1\}\)</span>?<br />
+Let <span class="math inline">\(I = \{i\, |\, p_i = 1\} \subseteq \{1, ..., n\}\)</span> and <span class="math inline">\(J = \{i\, |\, p_i = 0\} \subseteq \{1, ..., n\}\)</span>. Then, we have:
+<ol style="list-style-type: lower-alpha">
+<li>All <span class="math inline">\(p_i = 0\)</span>: The only observable value is <span class="math inline">\(v^* := \sum_{i = 1}^{n}{v_i}\)</span>, i.e. <span class="math inline">\(P(X = v^*) = 1\)</span> and <span class="math inline">\(P(X \neq v^*) = 0\)</span>.</li>
+<li>All <span class="math inline">\(p_i = 1\)</span>: The only observable value is <span class="math inline">\(u^* := \sum_{i = 1}^{n}{u_i}\)</span>, i.e. <span class="math inline">\(P(X = u^*) = 1\)</span> and <span class="math inline">\(P(X \neq u^*) = 0\)</span>.</li>
+<li>Otherwise, The only observable value is <span class="math inline">\(w^* := \sum_{i \in I}{u_i} + \sum_{i \in J}{v_i}\)</span>, i.e. <span class="math inline">\(P(X = w^*) = 1\)</span> and <span class="math inline">\(P(X \neq w^*) = 0\)</span>. Note that the case that any <span class="math inline">\(u_i = v_i\)</span> is equivalent to <span class="math inline">\(p_i = 1\)</span>, because the corresponding random variable <span class="math inline">\(X_i\)</span> has always the same (non-random) value.<br />
+</li>
+</ol></li>
+<li>Are there <span class="math inline">\(p_i \notin \{0, 1\}\)</span>?<br />
+Let <span class="math inline">\(I\)</span>, <span class="math inline">\(J\)</span> and <span class="math inline">\(w^*\)</span> as above and <span class="math inline">\(K = \{i\, |\, p_i &gt; 0 \, \wedge p_i &lt; 1\} \subseteq \{1, ..., n\}\)</span>. Then, <span class="math inline">\(X\)</span> can be expressed as <span class="math inline">\(X = w^* + Z\)</span> with <span class="math inline">\(Z = \sum_{i \in K}{X_i}\)</span> following a (reduced) generalized Poisson Bernoulli distribution. In particular, if only one <span class="math inline">\(p_i \notin \{0, 1\}\)</span>, Z follows a linearly transformed Bernoulli distribution.</li>
+</ol>
+<p>These cases are illustrated in the following example:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">set.seed</span>(<span class="dv">1</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a>pp &lt;-<span class="st"> </span><span class="kw">runif</span>(<span class="dv">7</span>)</span>
+<span id="cb2-3"><a href="#cb2-3"></a>va &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">7</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a>vb &lt;-<span class="st"> </span><span class="kw">sample</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">6</span>, <span class="dv">7</span>, <span class="ot">TRUE</span>)</span>
+<span id="cb2-5"><a href="#cb2-5"></a></span>
+<span id="cb2-6"><a href="#cb2-6"></a><span class="co"># Case 1</span></span>
+<span id="cb2-7"><a href="#cb2-7"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">7</span>))</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="co">#&gt; [1] 8.114776e-05 3.112722e-03 4.063146e-02 2.115237e-01 3.793308e-01</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="co">#&gt; [6] 2.735489e-01 8.297278e-02 8.798512e-03</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp) <span class="co"># equal results</span></span>
+<span id="cb2-11"><a href="#cb2-11"></a><span class="co">#&gt; [1] 8.114776e-05 3.112722e-03 4.063146e-02 2.115237e-01 3.793308e-01</span></span>
+<span id="cb2-12"><a href="#cb2-12"></a><span class="co">#&gt; [6] 2.735489e-01 8.297278e-02 8.798512e-03</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">7</span>))</span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="co">#&gt; [1] 8.798512e-03 8.297278e-02 2.735489e-01 3.793308e-01 2.115237e-01</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="co">#&gt; [6] 4.063146e-02 3.112722e-03 8.114776e-05</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>pp) <span class="co"># equal results</span></span>
+<span id="cb2-18"><a href="#cb2-18"></a><span class="co">#&gt; [1] 8.798512e-03 8.297278e-02 2.735489e-01 3.793308e-01 2.115237e-01</span></span>
+<span id="cb2-19"><a href="#cb2-19"></a><span class="co">#&gt; [6] 4.063146e-02 3.112722e-03 8.114776e-05</span></span>
+<span id="cb2-20"><a href="#cb2-20"></a></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">4</span>)), <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">3</span>), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">4</span>)))</span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="co">#&gt; [1] 3.062225e-02 1.998504e-01 3.769239e-01 2.828424e-01 9.450797e-02</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="co">#&gt; [6] 1.426764e-02 9.620692e-04 2.331571e-05</span></span>
+<span id="cb2-24"><a href="#cb2-24"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(pp[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>], <span class="dv">1</span> <span class="op">-</span><span class="st"> </span>pp[<span class="dv">4</span><span class="op">:</span><span class="dv">7</span>])) <span class="co"># reorder for 0 and 1; equal results</span></span>
+<span id="cb2-25"><a href="#cb2-25"></a><span class="co">#&gt; [1] 3.062225e-02 1.998504e-01 3.769239e-01 2.828424e-01 9.450797e-02</span></span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; [6] 1.426764e-02 9.620692e-04 2.331571e-05</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="co"># Case 2 a)</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">4</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">7</span>)) <span class="co"># only 14 is observable</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co">#&gt;  [1] 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="kw">dgpbinom</span>(<span class="dv">7</span> <span class="op">*</span><span class="st"> </span><span class="dv">2</span>, <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">4</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">7</span>)) <span class="co"># confirmation</span></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="co"># Case 2 b)</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">4</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">7</span>)) <span class="co"># only 28 is observable</span></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="co">#&gt;  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1</span></span>
+<span id="cb2-37"><a href="#cb2-37"></a><span class="kw">dgpbinom</span>(<span class="dv">7</span> <span class="op">*</span><span class="st"> </span><span class="dv">4</span>, <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">4</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">7</span>)) <span class="co"># confirmation</span></span>
+<span id="cb2-38"><a href="#cb2-38"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb2-39"><a href="#cb2-39"></a></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="co"># Case 2 c)</span></span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">rep</span>(<span class="fl">0.3</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">4</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">7</span>))</span>
+<span id="cb2-42"><a href="#cb2-42"></a><span class="co">#&gt;  [1] 0.0823543 0.0000000 0.2470629 0.0000000 0.3176523 0.0000000 0.2268945</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="co">#&gt;  [8] 0.0000000 0.0972405 0.0000000 0.0250047 0.0000000 0.0035721 0.0000000</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a><span class="co">#&gt; [15] 0.0002187</span></span>
+<span id="cb2-45"><a href="#cb2-45"></a><span class="kw">dbinom</span>(<span class="dv">0</span><span class="op">:</span><span class="dv">7</span>, <span class="dv">7</span>, <span class="fl">0.3</span>) <span class="co"># equal results, but on different support set</span></span>
+<span id="cb2-46"><a href="#cb2-46"></a><span class="co">#&gt; [1] 0.0823543 0.2470629 0.3176523 0.2268945 0.0972405 0.0250047 0.0035721</span></span>
+<span id="cb2-47"><a href="#cb2-47"></a><span class="co">#&gt; [8] 0.0002187</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a></span>
+<span id="cb2-49"><a href="#cb2-49"></a><span class="co"># Case 2 d)</span></span>
+<span id="cb2-50"><a href="#cb2-50"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, pp, <span class="kw">rep</span>(<span class="dv">4</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">2</span>, <span class="dv">7</span>))</span>
+<span id="cb2-51"><a href="#cb2-51"></a><span class="co">#&gt;  [1] 8.114776e-05 0.000000e+00 3.112722e-03 0.000000e+00 4.063146e-02</span></span>
+<span id="cb2-52"><a href="#cb2-52"></a><span class="co">#&gt;  [6] 0.000000e+00 2.115237e-01 0.000000e+00 3.793308e-01 0.000000e+00</span></span>
+<span id="cb2-53"><a href="#cb2-53"></a><span class="co">#&gt; [11] 2.735489e-01 0.000000e+00 8.297278e-02 0.000000e+00 8.798512e-03</span></span>
+<span id="cb2-54"><a href="#cb2-54"></a><span class="kw">dpbinom</span>(<span class="ot">NULL</span>, pp) <span class="co"># equal results, but on different support set</span></span>
+<span id="cb2-55"><a href="#cb2-55"></a><span class="co">#&gt; [1] 8.114776e-05 3.112722e-03 4.063146e-02 2.115237e-01 3.793308e-01</span></span>
+<span id="cb2-56"><a href="#cb2-56"></a><span class="co">#&gt; [6] 2.735489e-01 8.297278e-02 8.798512e-03</span></span>
+<span id="cb2-57"><a href="#cb2-57"></a></span>
+<span id="cb2-58"><a href="#cb2-58"></a><span class="co"># Case 3 a)</span></span>
+<span id="cb2-59"><a href="#cb2-59"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>), va, vb) <span class="co"># only sum(vb) is observable</span></span>
+<span id="cb2-60"><a href="#cb2-60"></a><span class="co">#&gt;  [1] 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0</span></span>
+<span id="cb2-61"><a href="#cb2-61"></a><span class="kw">dgpbinom</span>(<span class="kw">sum</span>(vb), <span class="kw">rep</span>(<span class="dv">0</span>, <span class="dv">7</span>), va, vb) <span class="co"># confirmation</span></span>
+<span id="cb2-62"><a href="#cb2-62"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb2-63"><a href="#cb2-63"></a></span>
+<span id="cb2-64"><a href="#cb2-64"></a><span class="co"># Case 3 b)</span></span>
+<span id="cb2-65"><a href="#cb2-65"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), va, vb) <span class="co"># only sum(va) is observable</span></span>
+<span id="cb2-66"><a href="#cb2-66"></a><span class="co">#&gt;  [1] 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0</span></span>
+<span id="cb2-67"><a href="#cb2-67"></a><span class="kw">dgpbinom</span>(<span class="kw">sum</span>(va), <span class="kw">rep</span>(<span class="dv">1</span>, <span class="dv">7</span>), va, vb) <span class="co"># confirmation</span></span>
+<span id="cb2-68"><a href="#cb2-68"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb2-69"><a href="#cb2-69"></a></span>
+<span id="cb2-70"><a href="#cb2-70"></a><span class="co"># Case 3 c)</span></span>
+<span id="cb2-71"><a href="#cb2-71"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), va, vb) <span class="co"># only sum(va[4:7], vb[1:3]) is observable</span></span>
+<span id="cb2-72"><a href="#cb2-72"></a><span class="co">#&gt;  [1] 0 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0</span></span>
+<span id="cb2-73"><a href="#cb2-73"></a><span class="kw">dgpbinom</span>(<span class="kw">sum</span>(va[<span class="dv">4</span><span class="op">:</span><span class="dv">7</span>], vb[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>]), <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), va, vb) <span class="co"># confirmation</span></span>
+<span id="cb2-74"><a href="#cb2-74"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb2-75"><a href="#cb2-75"></a></span>
+<span id="cb2-76"><a href="#cb2-76"></a><span class="co"># Case 4</span></span>
+<span id="cb2-77"><a href="#cb2-77"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>, <span class="fl">0.6</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), va, vb)</span>
+<span id="cb2-78"><a href="#cb2-78"></a><span class="co">#&gt;  [1] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.18 0.00 0.00 0.12 0.42 0.00 0.00 0.28</span></span>
+<span id="cb2-79"><a href="#cb2-79"></a><span class="co">#&gt; [16] 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00 0.00</span></span>
+<span id="cb2-80"><a href="#cb2-80"></a>sure &lt;-<span class="st"> </span><span class="kw">sum</span>(va[<span class="dv">5</span><span class="op">:</span><span class="dv">7</span>], vb[<span class="dv">1</span><span class="op">:</span><span class="dv">2</span>])</span>
+<span id="cb2-81"><a href="#cb2-81"></a>x.transf &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="kw">pmin</span>(va[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>], vb[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>]))<span class="op">:</span><span class="kw">sum</span>(<span class="kw">pmax</span>(va[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>], vb[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>]))</span>
+<span id="cb2-82"><a href="#cb2-82"></a><span class="kw">dgpbinom</span>(sure <span class="op">+</span><span class="st"> </span>x.transf, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.3</span>, <span class="fl">0.6</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), va, vb)</span>
+<span id="cb2-83"><a href="#cb2-83"></a><span class="co">#&gt; [1] 0.18 0.00 0.00 0.12 0.42 0.00 0.00 0.28</span></span>
+<span id="cb2-84"><a href="#cb2-84"></a><span class="kw">dgpbinom</span>(x.transf, <span class="kw">c</span>(<span class="fl">0.3</span>, <span class="fl">0.6</span>), va[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>], vb[<span class="dv">3</span><span class="op">:</span><span class="dv">4</span>]) <span class="co"># equal results</span></span>
+<span id="cb2-85"><a href="#cb2-85"></a><span class="co">#&gt; [1] 0.18 0.00 0.00 0.12 0.42 0.00 0.00 0.28</span></span>
+<span id="cb2-86"><a href="#cb2-86"></a></span>
+<span id="cb2-87"><a href="#cb2-87"></a><span class="kw">dgpbinom</span>(<span class="ot">NULL</span>, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.6</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), va, vb)</span>
+<span id="cb2-88"><a href="#cb2-88"></a><span class="co">#&gt;  [1] 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.6 0.0 0.0 0.4 0.0 0.0 0.0 0.0</span></span>
+<span id="cb2-89"><a href="#cb2-89"></a><span class="co">#&gt; [20] 0.0 0.0 0.0 0.0 0.0 0.0</span></span>
+<span id="cb2-90"><a href="#cb2-90"></a>sure &lt;-<span class="st"> </span><span class="kw">sum</span>(va[<span class="dv">5</span><span class="op">:</span><span class="dv">7</span>], vb[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</span>
+<span id="cb2-91"><a href="#cb2-91"></a>x.transf &lt;-<span class="st"> </span>va[<span class="dv">4</span>]<span class="op">:</span>vb[<span class="dv">4</span>]</span>
+<span id="cb2-92"><a href="#cb2-92"></a><span class="kw">dgpbinom</span>(sure <span class="op">+</span><span class="st"> </span>x.transf, <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">0</span>, <span class="dv">0</span>, <span class="fl">0.6</span>, <span class="dv">1</span>, <span class="dv">1</span>, <span class="dv">1</span>), va, vb)</span>
+<span id="cb2-93"><a href="#cb2-93"></a><span class="co">#&gt; [1] 0.6 0.0 0.0 0.4</span></span>
+<span id="cb2-94"><a href="#cb2-94"></a><span class="kw">dgpbinom</span>(x.transf, <span class="fl">0.6</span>, va[<span class="dv">4</span>], vb[<span class="dv">4</span>]) <span class="co"># equal results; essentially transformed Bernoulli</span></span>
+<span id="cb2-95"><a href="#cb2-95"></a><span class="co">#&gt; [1] 0.6 0.0 0.0 0.4</span></span></code></pre></div>
+<hr />
+</div>
+</div>
+<div id="usage-with-rcpp" class="section level2">
+<h2>Usage with Rcpp</h2>
+<p>How to import and use the internal C++ functions in <code>Rcpp</code> based packages is described in a <a href="use_with_rcpp.html">separate vignette</a>.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

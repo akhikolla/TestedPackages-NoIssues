@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./c_gmd_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/ImpactEffectsize/inst/testfiles/c_gmd/c_gmd_output/1aa6c3061f7c786b6e4cc17ed0d368282cee0e41.pass</line>
+</preamble>
+
+<pid>274225</pid>
+<ppid>274224</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/ImpactEffectsize/inst/testfiles/c_gmd/c_gmd_output/log_1aa6c3061f7c786b6e4cc17ed0d368282cee0e41/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./c_gmd_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/ImpactEffectsize/inst/testfiles/c_gmd/c_gmd_output/1aa6c3061f7c786b6e4cc17ed0d368282cee0e41.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.025 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.189 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.733 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

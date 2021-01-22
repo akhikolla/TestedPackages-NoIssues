@@ -1,0 +1,570 @@
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Using the fromo package}
+\documentclass[10pt,a4paper,english]{article}
+
+% front matter%FOLDUP
+\usepackage{url}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+\usepackage{xcolor}
+\hypersetup{
+    colorlinks = true,
+		pdfborder = {0 0 0},
+		urlcolor = blue,
+		linkcolor = blue,
+		citecolor = red
+}
+    %linkcolor={red!50!black},
+    %citecolor={blue!50!black},
+    %urlcolor={blue!80!black}
+\usepackage[square,numbers]{natbib}
+%\usepackage[authoryear]{natbib}
+%\usepackage[iso]{datetime}
+%\usepackage{datetime}
+
+% packages%FOLDUP
+\RequirePackage{url}
+\RequirePackage{amsmath}
+\RequirePackage{amsfonts}
+\RequirePackage{hyperref}
+
+%\usepackage[environments,commands,meshstuff,shortcuts]{sepmath}
+%\usepackage[environments,commands,shortcuts]{sepmath}
+
+\RequirePackage{ifthen}
+\RequirePackage{xspace}
+%UNFOLD
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% meta meta commands
+% emptyP if 1 is empty give 2 else give 3
+%\providecommand{\mtP}[3]{\ifx\@empty#1\@empty#2\else#3\fi}
+%\def\mtP#1#2#3{\ifx\@empty#1\@empty#2\else#3\fi}
+%\def\mtP#1#2#3{\ifx\@empty\detokenize{#1}\@empty#2\else#3\fi}
+\def\mtP#1#2#3{\if\relax\detokenize{#1}\relax#2\else#3\fi}
+% listmore if 1 is empty give 1 else give `,1'
+%\def\lMr#1{\ifx\@empty#1\@empty\relax\else{,#1}\fi}
+\def\lMr#1{\ifx\@empty\detokenize{#1}\@empty\relax\else{,#1}\fi}
+\providecommand{\MATHIT}[1]{\ensuremath{#1}\xspace}
+\providecommand{\neUL}[3]{\mtP{#2}{\mtP{#3}{#1}{{#1}_{#3}}}{\mtP{#3}{{#1}^{#2}}{{#1}^{#2}_{#3}}}}
+\providecommand{\neSUP}[2]{\mtP{#2}{#1}{{{#1}^{#2}}}}
+\providecommand{\mathSUB}[2]{\MATHIT{\neSUB{#1}{#2}}}
+\providecommand{\mathUL}[3]{\MATHIT{\neUL{#1}{#2}{#3}}}
+
+\providecommand{\wrapParens}[1]{\left(#1\right)}
+\providecommand{\wrapBraces}[1]{\left\{#1\right\}}
+\providecommand{\wrapBracks}[1]{\left[#1\right]}
+
+%\providecommand{\wrapNeParens}[1]{\if\relax\detokenize{#1}\relax\else\wrapParens{#1}\fi}
+
+\providecommand{\wrapNeParens}[1]{\mtP{#1}{}{\wrapParens{#1}}}
+\providecommand{\wrapNeBraces}[1]{\mtP{#1}{}{\wrapBraces{#1}}}
+\providecommand{\wrapNeBracks}[1]{\mtP{#1}{}{\wrapBracks{#1}}}
+\providecommand{\neSUB}[2]{\mtP{#2}{#1}{{{#1}_{#2}}}}
+
+\providecommand{\abs}[1]{\MATHIT{\left| #1 \right|}}
+\providecommand{\mathSUB}[2]{\MATHIT{\neSUB{#1}{#2}}}
+
+%\providecommand{\rcode}[1]{\texttt{\verb{#1}}}
+\providecommand{\Rcode}[1]{{\texttt{#1}}}
+% stolen from synapter vignette:
+\providecommand{\Rfunction}[1]{{\texttt{#1}}}
+\providecommand{\Robject}[1]{{\texttt{#1}}}
+\providecommand{\Rpackage}[1]{{\mbox{\normalfont\textsf{#1}}}\xspace}
+\providecommand{\email}[1]{\href{mailto:#1}{\normalfont\texttt{#1}}}
+
+\providecommand{\ndf}[1]{\mathSUB{n}{#1}}
+\providecommand{\twt}[1]{\mathSUB{W}{#1}}
+\providecommand{\wmupow}[2]{\mathUL{\mu}{#2}{#1}}
+%\providecommand{\wmu}[1]{\mathSUB{\mu}{#1}}
+\providecommand{\wmu}[1]{\wmupow{#1}{}}
+\providecommand{\mom}[2]{\mathSUB{\mathcal{S}}{#1,#2}}
+\providecommand{\cmom}[2]{\mathSUB{\mathcal{M}}{#1,#2}}
+\providecommand{\scmom}[2]{\mathSUB{\mathcal{Y}}{#1,#2}}
+
+\providecommand{\ccum}[2]{\mathSUB{\mathcal{K}}{#1,#2}}
+\providecommand{\sccum}[2]{\mathSUB{\mathcal{G}}{#1,#2}}
+
+\providecommand{\tiltwt}[1]{\mathSUB{\tilde{W}}{#1}}
+\providecommand{\tilwmu}[1]{\mathSUB{\tilde{\mu}}{#1}}
+\providecommand{\tilmom}[2]{\mathSUB{\tilde{\mathcal{S}}}{#1,#2}}
+
+\providecommand{\aset}[1]{\MATHIT{\mathcal{#1}}}
+\providecommand{\sta}{\aset{A}}
+\providecommand{\stb}{\aset{B}}
+\providecommand{\stc}{\aset{C}}
+\providecommand{\std}{\aset{D}}
+\providecommand{\data}[1]{\mathSUB{x}{#1}}
+\providecommand{\outp}[1]{\mathSUB{y}{#1}}
+\providecommand{\wt}[1]{\mathSUB{w}{#1}}
+\providecommand{\kth}[1]{\MATHIT{#1^{\text{th}}}}
+\providecommand{\sdevpow}[2]{\mathUL{\sigma}{#2}{#1}}
+\providecommand{\sdev}[1]{\sdevpow{#1}{}}
+\providecommand{\tim}[1]{\mathSUB{t}{#1}}
+\providecommand{\dltim}[1]{\mathSUB{d}{#1}}
+
+\providecommand{\fromo}{\Rpackage{fromo}}
+
+\makeatletter
+\makeatother
+
+%\input{sr_defs.tex}
+%\usepackage{SharpeR}
+
+% knitr setup%FOLDUP
+
+<<'preamble', include=FALSE, warning=FALSE, message=FALSE>>=
+library(knitr)
+
+# set the knitr options ... for everyone!
+# if you unset this, then vignette build bonks. oh, joy.
+#opts_knit$set(progress=TRUE)
+opts_knit$set(eval.after='fig.cap')
+# for a package vignette, you do want to echo.
+# opts_chunk$set(echo=FALSE,warning=FALSE,message=FALSE)
+opts_chunk$set(warning=FALSE,message=FALSE)
+#opts_chunk$set(results="asis")
+opts_chunk$set(cache=TRUE,cache.path="cache/fromo_")
+
+#opts_chunk$set(fig.path="figure/",dev=c("pdf","cairo_ps"))
+opts_chunk$set(fig.path="figure/fromo_",dev=c("pdf"))
+opts_chunk$set(fig.width=5,fig.height=4,dpi=64)
+
+# doing this means that png files are made of figures;
+# the savings is small, and it looks like shit:
+#opts_chunk$set(fig.path="figure/",dev=c("png","pdf","cairo_ps"))
+#opts_chunk$set(fig.width=4,fig.height=4)
+# for figures? this is sweave-specific?
+#opts_knit$set(eps=TRUE)
+
+# this would be for figures:
+#opts_chunk$set(out.width='.8\\textwidth')
+# for text wrapping:
+options(width=64,digits=2)
+opts_chunk$set(size="small")
+opts_chunk$set(tidy=TRUE,tidy.opts=list(width.cutoff=50,keep.blank.line=TRUE))
+
+compile.time <- Sys.time()
+
+# from the environment
+
+# only recompute if FORCE_RECOMPUTE=True w/out case match.
+FORCE_RECOMPUTE <- 
+	(toupper(Sys.getenv('FORCE_RECOMPUTE',unset='False')) == "TRUE")
+
+# compiler flags!
+
+# not used yet
+LONG.FORM <- FALSE
+@
+%UNFOLD
+%UNFOLD
+
+% document incantations%FOLDUP
+\begin{document}
+
+\title{Computing Moments with fromo}
+\author{Steven E. Pav %
+\thanks{\email{shabbychef@gmail.com}}}
+%\date{\today, \currenttime}
+
+\maketitle
+%UNFOLD
+
+\begin{abstract}%FOLDUP
+The \fromo  package provides fast robust summation using the Welford-Terriberry method.
+The update formula used therein is described, as well as the output produced
+by various functions.
+\end{abstract}%UNFOLD
+
+\section{The update formula}
+
+Let \sta be a set of indices over the data \data{i} and corresponding weights
+$\wt{i} > 0$. The weights are \emph{replication weights}, and are intended
+to simulate having observed multiple identical, though independent, values of
+\data{i}. In the standard setting the weights are identically 1.
+
+Define the total elements, sum of weights, and (weighted) mean over \sta via
+\begin{align*}
+\ndf{\sta} &= \abs{\sta},\\
+\twt{\sta} &= \sum_{i \in \sta} \wt{i},\\
+\wmu{\sta} &= \frac{\sum_{i \in \sta} \wt{i} \data{i}}{\twt{\sta}}.
+\end{align*}
+Then go on to define the \kth{k} centered weighted sum via
+$$
+\mom{\sta}{k} = \sum_{i \in \sta} \wt{i} \wrapParens{\data{i} - \wmu{\sta}}^k.
+$$
+Note that we have
+$$
+\mom{\sta}{0} = \twt{\sta},\qquad\mbox{and}\qquad\mom{\sta}{1} = 0.
+$$
+When \sta consists of a single observation, that is when $\ndf{\sta}=1$, we have
+$\wmu{\sta} = \data{a}$ for the unique $a \in \sta$, and 
+$\mom{\sta}{k} = 0$ for all $k\ge 1$.
+
+Let \stb and \stc be sets of indices with the
+restriction that 
+$\sta \cap \stb = \emptyset$, 
+$\stc \subseteq \sta$, and define
+$$
+\std = \sta \cup \stb \setminus \stc.
+$$
+Thus \std is \sta `plus' \stb `minus' \stc. 
+Consider how to compute \twt{\std}, \wmu{\std}, and \mom{\std}{k} from
+the sums of weights, weighted means, and centered sums over the
+sets \sta, \stb, and \stc. \cite{bennett,cook,terriberry}
+We have:
+\begin{align*}
+	\ndf{\std} &= \ndf{\sta} + \ndf{\stb} - \ndf{\stc},\\
+	\twt{\std} &= \twt{\sta} + \twt{\stb} - \twt{\stc},\\
+	\wmu{\std} &= \frac{\twt{\sta}\wmu{\sta} + \twt{\stb}\wmu{\stb} - \twt{\stc}\wmu{\stc}}{\twt{\std}},\\
+	&= \wmu{\sta} + \frac{\twt{\stb}\wrapParens{\wmu{\stb} - \wmu{\sta}} - \twt{\stc}\wrapParens{\wmu{\stc}-\wmu{\sta}}}{\twt{\std}},
+\end{align*}
+and
+\begin{align*}
+	\mom{\std}{k}&=\sum_{i \in \std} \wt{i} \wrapParens{\data{i} - \wmu{\std}}^k,\\
+	&=\sum_{i \in \sta} \wt{i} \wrapParens{\data{i} - \wmu{\std}}^k +
+	\sum_{i \in \stb} \wt{i} \wrapParens{\data{i} - \wmu{\std}}^k -
+	\sum_{i \in \stc} \wt{i} \wrapParens{\data{i} - \wmu{\std}}^k,\\
+	&=\sum_{i \in \sta} \wt{i} \wrapParens{\data{i} - \wmu{\sta} + \wmu{\sta} - \wmu{\std}}^k +
+	\sum_{i \in \stb} \wt{i} \wrapParens{\data{i} - \wmu{\stb} + \wmu{\stb} - \wmu{\std}}^k -
+	\sum_{i \in \stc} \wt{i} \wrapParens{\data{i} - \wmu{\stc} + \wmu{\stc} - \wmu{\std}}^k,\\
+	&= \sum_{i \in \sta} \sum_{0 \le j \le k}{k \choose j}
+		\wt{i} \wrapParens{\data{i} - \wmu{\sta}}^j \wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j}\\
+	&\phantom{=}\,+
+	\sum_{i \in \stb} \sum_{0 \le j \le k}{k \choose j}
+		\wt{i} \wrapParens{\data{i} - \wmu{\stb}}^j \wrapParens{\wmu{\stb} - \wmu{\std}}^{k-j}\\
+	&\phantom{=}\,-
+	\sum_{i \in \stc} \sum_{0 \le j \le k}{k \choose j}
+		\wt{i} \wrapParens{\data{i} - \wmu{\stc}}^j \wrapParens{\wmu{\stc} - \wmu{\std}}^{k-j},\\
+	&=\sum_{0 \le j \le k}{k \choose j}\wrapBraces{
+		\mom{\sta}{j} \wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j} +
+		\mom{\stb}{j} \wrapParens{\wmu{\stb} - \wmu{\std}}^{k-j} -
+		\mom{\stc}{j} \wrapParens{\wmu{\stc} - \wmu{\std}}^{k-j}},\\
+	&= \mom{\sta}{k} + \mom{\stb}{k} - \mom{\stc}{k} +
+		\twt{\sta} \wrapParens{\wmu{\sta} - \wmu{\std}}^{k} +
+		\twt{\stb} \wrapParens{\wmu{\stb} - \wmu{\std}}^{k} -
+		\twt{\stc} \wrapParens{\wmu{\stc} - \wmu{\std}}^{k}\\
+  &\phantom{=}\,+ \sum_{2 \le j < k}{k \choose j}\wrapBraces{
+		\mom{\sta}{j} \wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j} +
+		\mom{\stb}{j} \wrapParens{\wmu{\stb} - \wmu{\std}}^{k-j} -
+		\mom{\stc}{j} \wrapParens{\wmu{\stc} - \wmu{\std}}^{k-j}}.
+\end{align*}
+
+Note that if the centered sums are to be computed \emph{in place}, that is,
+overwriting the vector of \mom{\sta}{j} with values of \mom{\std}{j}, then
+they should be computed in decreasing order, as updates to higher order
+sums require the old values of lower order sums.
+
+It should also be noted that we did not use the restriction that
+$\wt{i} > 0$. True, negative values of $\wt{i}$ can cause 
+\twt{\std} to be zero, and therefore \wmu{\std} is not defined, nor
+is \mom{\std}{k}. Negative weights also make no sense for most 
+statistical uses. However, notice what happens when we subsitute
+every $\wt{c}$ with $-\wt{c}$ for $c \in \stc$. If we compute 
+the total weight, \twt{\stc}, its sign has flipped, as has that
+of \mom{\stc}{k}, but not of \wmu{\stc}. In this case, using the
+negative weights we have
+\begin{align*}
+	\mom{\std}{k} 
+	&= \mom{\sta}{k} + \mom{\stb}{k} + \tilmom{\stc}{k} +
+		\twt{\sta} \wrapParens{\wmu{\sta} - \wmu{\std}}^{k} +
+		\twt{\stb} \wrapParens{\wmu{\stb} - \wmu{\std}}^{k} +
+		\tiltwt{\stc} \wrapParens{\tilwmu{\stc} - \wmu{\std}}^{k}\\
+  &\phantom{=}\,+ \sum_{2 \le j < k}{k \choose j}\wrapBraces{
+		\mom{\sta}{j} \wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j} +
+		\mom{\stb}{j} \wrapParens{\wmu{\stb} - \wmu{\std}}^{k-j} +
+		\tilmom{\stc}{j} \wrapParens{\tilwmu{\stc} - \wmu{\std}}^{k-j}},
+\end{align*}
+where the \tiltwt{\stc}, \tilwmu{\stc}, and \tilmom{\stc}{j} denote that
+they are computed with negative weights.
+Now the update formula for removing \stc from \sta looks just like that
+for adding \stb, except negative weights are used.
+
+
+
+%Now consider the difference in means. We have
+%\begin{align*}
+	%\wmu{\sta} - \wmu{\std} &= 
+		%\frac{\sum_{i \in \sta} \wt{i} \data{i}}{\twt{\sta}} -
+		%\frac{\sum_{i \in \sta} \wt{i} \data{i} +
+		%\sum_{i \in \stb} \wt{i} \data{i} -
+		%\sum_{i \in \stc} \wt{i} \data{i}}{\twt{\std}},\\
+		%&= \frac{\twt{\std} - \twt{\sta}}{\twt{\std}\twt{\sta}}
+		%\sum_{i \in \sta} \wt{i} \data{i}
+		%- \frac{\sum_{i \in \stb} \wt{i} \data{i} - \sum_{i \in \stc} \wt{i} \data{i}}{\twt{\std}}.
+%\end{align*}
+%Similar formul{\ae} 
+%exist for 
+%$\wmu{\stb} - \wmu{\std}$ and
+%$\wmu{\stc} - \wmu{\std}$, though these are only useful for simple cases.
+
+%We recover Welford's method in the special case of $k=2$, with
+%\begin{align*}
+	%\mom{\std}{2}&= \mom{\sta}{2} + \mom{\stb}{2} - \mom{\stc}{2} +
+		%\twt{\sta} \wrapParens{\wmu{\sta} - \wmu{\std}}^{2} +
+		%\twt{\stb} \wrapParens{\wmu{\stb} - \wmu{\std}}^{2} -
+		%\twt{\stc} \wrapParens{\wmu{\stc} - \wmu{\std}}^{2},\\
+	%&= \mom{\sta}{2} + \mom{\stb}{2} - \mom{\stc}{2} 
+		%+ \wrapParens{\twt{\sta} + \twt{\stb} - \twt{\stc}} \wmupow{\std}{2}\\
+	%&\phantom{=}\,\, 
+		%+ \twt{\sta} \wmupow{\sta}{2}
+		%+ \twt{\stb} \wmupow{\stb}{2}
+		%- \twt{\stc} \wmupow{\stc}{2}
+		%- 2 \wmu{\std} \wrapParens{
+			%\twt{\sta} \wmu{\sta}
+			%+ \twt{\stb} \wmu{\stb}
+			%- \twt{\stc} \wmu{\stc}},\\
+	%&= \mom{\sta}{2} + \mom{\stb}{2} - \mom{\stc}{2} 
+		%- \twt{\std} \wmupow{\std}{2}
+		%+ \twt{\sta} \wmupow{\sta}{2}
+		%+ \twt{\stb} \wmupow{\stb}{2}
+		%- \twt{\stc} \wmupow{\stc}{2}.
+%\end{align*}
+%Again, further simplifications are possible when \stb or \stc consist of a single index.
+
+%There is temptation to store the uncentered second sums, as one notices they are additive:
+%$$
+%\mom{\std}{2} + \twt{\std}\wmupow{\std}{2} = 
+%\mom{\sta}{2} + \twt{\sta}\wmupow{\sta}{2} 
+%+ \mom{\stb}{2} + \twt{\stb}\wmupow{\stb}{2} 
+%- \mom{\stc}{2} + \twt{\stc}\wmupow{\stc}{2}.
+%$$
+%However, recovering the centered sums from the uncentered sums is not numerically robust, and
+%can result in significant roundoff errors.
+
+\subsection{Adding a single observation}%FOLDUP
+
+We now consider the special case where \stc is empty, and \stb consists of the single index
+$b$. We then have $\twt{\std} = \twt{\sta} + \wt{b},$
+\begin{align*}
+\wmu{\std} &= \frac{\twt{\sta}\wmu{\sta} + \wt{b}\data{b}}{\twt{\sta} + \wt{b}},\\
+	&= \wmu{\sta} + \wt{b}\frac{\data{b} - \wmu{\sta}}{\twt{\sta} + \wt{b}},\\
+	&= \wmu{\sta} + \wt{b}\frac{\data{b} - \wmu{\sta}}{\twt{\std}}.
+\end{align*}
+So then
+$$
+\wmu{\sta} - \wmu{\std} = -\wt{b}\frac{\data{b} - \wmu{\sta}}{\twt{\std}}.
+$$
+Also
+\begin{align*}
+\data{b} - \wmu{\std} &= \data{b} - \wmu{\sta} + \wmu{\sta} - \wmu{\std},\\
+	&= \data{b} - \wmu{\sta} -\wt{b}\frac{\data{b} - \wmu{\sta}}{\twt{\std}},\\
+	&= \twt{\sta}\frac{\data{b} - \wmu{\sta}}{\twt{\std}}.
+\end{align*}
+Since \stb is a single index, $\mom{\stb}{k} = 0$ for $k > 0$, then we have
+\begin{align*}
+	\mom{\std}{k} &= \mom{\sta}{k} 
+	+	\twt{\sta} \wrapParens{-\wt{b}\frac{\data{b} - \wmu{\sta}}{\twt{\std}}}^{k} 
+	+ \wt{b} \wrapParens{\twt{\sta}\frac{\data{b} - \wmu{\sta}}{\twt{\std}}}^{k}\\
+	&\phantom{=}\,
+	+ \sum_{2 \le j < k}{k \choose j}{\mom{\sta}{j}\wrapParens{-\wt{b}\frac{\data{b} - \wmu{\sta}}{\twt{\std}}}^{k-j}},\\
+	&= \mom{\sta}{k} 
+	+ \wt{b}\wrapParens{\data{b} - \wmu{\std}}^{k} 
+	\wrapBracks{1 + \wrapParens{\frac{-\wt{b}}{\twt{\sta}}}^{k-1}}\\
+	&\phantom{=}\,
+	+ \sum_{2 \le j < k}{k \choose j}{\mom{\sta}{j}\wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j}},\\
+	&= \mom{\sta}{k} 
+	+ \twt{\sta}\wrapParens{\wmu{\sta} - \wmu{\std}}^{k}
+	\wrapBracks{1 - \wrapParens{\frac{\twt{\sta}}{-\wt{b}}}^{k-1}}\\
+	&\phantom{=}\,
+	+ \sum_{2 \le j < k}{k \choose j}{\mom{\sta}{j}\wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j}}.
+\end{align*}
+For the $k=2$ case this further simplifies to
+\begin{align*}
+	\mom{\std}{2} &= \mom{\sta}{2} +	\frac{\twt{\sta} \wt{b}}{\twt{\std}} \wrapParens{\data{b} - \wmu{\sta}}^{2},\\
+	&= \mom{\sta}{2} +	\frac{\twt{\std} \wt{b}}{\twt{\sta}} \wrapParens{\data{b} - \wmu{\std}}^{2},\\
+	&= \mom{\sta}{2} + \twt{\std} \wrapParens{\data{b} - \wmu{\std}} \wrapParens{\wmu{\std} - \wmu{\sta}}.
+\end{align*}
+Note that the quantity $\twt{\std}\wrapParens{\wmu{\std} - \wmu{\sta}} = 
+\wt{b}\wrapParens{\data{b} - \wmu{\sta}}$ is computed as an intermediary in updating
+the weighted mean, resulting in some computational savings.
+%UNFOLD
+\subsubsection{Removing a single observation}%FOLDUP
+
+As noted above, removing a single observation should look just like adding a single
+observation, except signs on the weights and weighted sums are flipped. Let $c$ be the
+single index in \stc. Then
+$c$. We then have $\twt{\std} = \twt{\sta} - \wt{c},$ and
+\begin{align*}
+\wmu{\std} &= \wmu{\sta} - \wt{c}\frac{\data{c} - \wmu{\sta}}{\twt{\std}}.
+\end{align*}
+The centered sum update formula is
+%&= \mom{\sta}{k} 
+%+	\twt{\sta} \wrapParens{\wt{c}\frac{\data{c} - \wmu{\sta}}{\twt{\std}}}^{k} 
+%- \wt{c} \wrapParens{\twt{\sta}\frac{\data{c} - \wmu{\sta}}{\twt{\std}}}^{k}\\
+%&\phantom{=}\,
+%+ \sum_{2 \le j < k}{k \choose j}{\mom{\sta}{j}\wrapParens{\wt{c}\frac{\data{c} - \wmu{\sta}}{\twt{\std}}}^{k-j}},\\
+\begin{align*}
+	\mom{\std}{k} 
+	&= \mom{\sta}{k} 
+	- \wt{c}\wrapParens{\data{c} - \wmu{\std}}^{k} 
+	\wrapBracks{1 + \wrapParens{\frac{\wt{c}}{\twt{\sta}}}^{k-1}}\\
+	&\phantom{=}\,
+	+ \sum_{2 \le j < k}{k \choose j}{\mom{\sta}{j}\wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j}},\\
+	&= \mom{\sta}{k} 
+	+ \twt{\sta}\wrapParens{\wmu{\sta} - \wmu{\std}}^{k}
+	\wrapBracks{1 - \wrapParens{\frac{\twt{\sta}}{\wt{c}}}^{k-1}}\\
+	&\phantom{=}\,
+	+ \sum_{2 \le j < k}{k \choose j}{\mom{\sta}{j}\wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j}}.
+\end{align*}
+%For the $k=2$ case this further simplifies to
+%\begin{align*}
+	%\mom{\std}{2} &= \mom{\sta}{2} +	\frac{\twt{\sta} \twt{\stb}}{\twt{\std}} \wrapParens{\wmu{\stb} - \wmu{\sta}}^{2},\\
+	%&= \mom{\sta}{2} + \twt{\std} \wrapParens{\wmu{\stb} - \wmu{\std}} \wrapParens{\wmu{\std} - \wmu{\sta}}.
+%\end{align*}
+For the $k=2$ case this further simplifies to
+\begin{align*}
+	\mom{\std}{2} 
+	&= \mom{\sta}{2} -\frac{\twt{\sta} \wt{c}}{\twt{\std}} \wrapParens{\data{c} - \wmu{\sta}}^{2},\\
+	&= \mom{\sta}{2} -\frac{\twt{\std} \wt{c}}{\twt{\sta}} \wrapParens{\data{c} - \wmu{\std}}^{2},\\
+	&= \mom{\sta}{2} + \twt{\std} \wrapParens{\data{c} - \wmu{\std}} \wrapParens{\wmu{\std} - \wmu{\sta}}.
+\end{align*}
+%UNFOLD
+\subsection{Adding and removing a single observation}%FOLDUP
+
+Consider the case of adding a single $b \in\stb$ and removing a single
+$c\in\stc$.  The total number elements, \ndf{\sta}, is unchanged, of course. 
+We have
+\begin{align*}
+\twt{\std}&=\twt{\sta} + \wt{b} - \wt{c},\\
+	\wmu{\std}&=\wmu{\sta} + \frac{\wt{b}\wrapParens{\data{b} - \wmu{\sta}} - \wt{c}\wrapParens{\data{c}-\wmu{\sta}}}{\twt{\std}}.
+\end{align*}
+The update formula for \mom{\std}{k} is
+\begin{align*}
+	\mom{\std}{k}
+	&= \mom{\sta}{k} + \mom{\stb}{k} - \mom{\stc}{k} +
+		\twt{\sta} \wrapParens{\wmu{\sta} - \wmu{\std}}^{k} +
+		\wt{b} \wrapParens{\data{b} - \wmu{\std}}^{k} -
+		\wt{c} \wrapParens{\data{c} - \wmu{\std}}^{k}\\
+  &\phantom{=}\,+ \sum_{2 \le j < k}{k \choose j}\wrapBraces{
+		\mom{\sta}{j} \wrapParens{\wmu{\sta} - \wmu{\std}}^{k-j} +
+		\mom{\stb}{j} \wrapParens{\data{b} - \wmu{\std}}^{k-j} -
+		\mom{\stc}{j} \wrapParens{\data{c} - \wmu{\std}}^{k-j}}.
+\end{align*}
+In the $k=2$ case this simplifies to 
+\begin{align*}
+	\mom{\std}{2}
+	&= \mom{\sta}{2} + 
+		\twt{\sta} \wrapParens{\wmu{\sta} - \wmu{\std}}^{2} +
+		\wt{b} \wrapParens{\data{b} - \wmu{\std}}^{2} -
+		\wt{c} \wrapParens{\data{c} - \wmu{\std}}^{2},\\
+	&= \mom{\sta}{2} 
+	+ \wrapParens{\wmu{\sta}-\wmu{\std}}^2 \wrapParens{\twt{\sta} - \twt{\std}}
+	+ \wt{b} \wrapParens{\data{b} - \wmu{\std}}\wrapParens{\data{b} - \wmu{\sta}}
+	- \wt{c} \wrapParens{\data{c} - \wmu{\std}}\wrapParens{\data{c} - \wmu{\sta}},\\
+	&= \mom{\sta}{2} 
+	+ \frac{\twt{\sta}\wt{b} \wrapParens{\data{b}-\wmu{\sta}}^2 - \twt{\std}\wt{c}\wrapParens{\data{c}-\wmu{\std}}^2}{\twt{\sta} + \wt{b}}.
+\end{align*}
+Further simplifications are possible when $\wt{b}=\wt{c}$ (as occurs in the vanilla
+case of equal weighted moments), and we arrive at
+\begin{align*}
+\wmu{\std}&=\wmu{\sta} + \frac{\wt{b}\wrapParens{\data{b} - \data{c}}}{\twt{\std}},\\
+\mom{\std}{2} &= \mom{\sta}{2} 
+	+ \wt{b} \wrapParens{\data{b}+\data{c}-\wmu{\sta}-\wmu{\std}} \wrapParens{\data{b}-\data{c}}.
+\end{align*}
+
+% 2FIX: almost done. start from here...
+%2FIX: continue from here...
+	%&= \mom{\sta}{2} 
+	%+ \wt{b}\wrapParens{\data{b}-\wmu{\sta}}\wrapParens{\data{b}-\wmu{\std}}
+	%- \wt{c}\wrapParens{\data{c}-\wmu{\sta}}\wrapParens{\data{c}-\wmu{\std}},
+%UNFOLD
+
+
+
+\section{The output}
+
+Several kinds of output are produced by the \fromo  package. We describe them in more detail here.
+
+\begin{itemize}
+	\item[mean] The (weighted) mean over the index set \sta is simply \wmu{\sta}.
+	\item[standard deviation] The standard deviation over the index set \sta is 
+$$
+		\sdev{\sta} = \sqrt{\frac{\mom{\sta}{2}}{\twt{\sta} - \nu}},
+$$
+where $\nu$ are the `consumed degrees of freedom', and is typically set to $1$. 
+When the normalization flag is set to true, however, it is intended that the weights
+be normalized to have mean value $1$. In this case the standard deviation over 
+\sta is defined as
+$$
+		\sdev{\sta} = \sqrt{\frac{\mom{\sta}{2}}{\twt{\sta}}\frac{\ndf{\sta}}{\ndf{\sta} - \nu}}.
+$$
+When $\nu=0$, these are identical.
+	\item[centered moment] The \kth{k} centered moment is defined as
+$$
+\cmom{\sta}{k} = \frac{\mom{\sta}{k}}{\twt{\sta}}.
+$$
+Note that for $k>2$ we do not support consumed degrees of freedom, and so
+normalization of weights has no effect.
+	\item[standardized moment] The \kth{k} standardized (and centered) moment is defined as
+$$
+\scmom{\sta}{k} = \frac{\cmom{\sta}{k}}{\sdevpow{\sta}{k}}.
+$$
+Normalization and consumed degrees of freedom affect the computation of \sdevpow{\sta}{k},
+		and so affect the standardized moments.
+	\item[centered value] For a given index $i$ and some fixed set \sta, the centered version of
+		\data{i} is merely $\data{i} - \wmu{\sta}$.
+	\item[standardized value] For a given index $i$ and some fixed set \sta, the standardized version of
+		\data{i} is merely $\data{i}/\sdev{\sta}$. 
+		It is affected by normalization and consumed degrees of freedom.
+	\item[z-scored value] For a given index $i$ and some fixed set \sta, the z-scored version of
+		\data{i} is $\wrapParens{\data{i} - \wmu{\sta}}/\sdev{\sta}$. 
+		It is affected by normalization and consumed degrees of freedom.
+
+	\item[Cumulants] Sometimes called ``centered cumulants'' in the package, though this is 
+		redundant and not common usage. Cumulants are defined from the centered moments by
+		the recursive formula: \cite{willink2003}
+\begin{equation}
+	\ccum{\sta}{r} = \cmom{\sta}{r} - \sum_{j=0}^{r - 2} {r-1 \choose j} \cmom{\sta}{j} \ccum{\sta}{r-j}.
+\end{equation}
+	%\ccum{\sta}{r} = \cmom{\sta}{r} - \sum_{j=0}^{r - 2} \binom{r-1}{j} \cmom{\sta}{j} \ccum{\sta}{r-j}.
+
+	\item[Standardized Cumulants] These are the regular cumulants normalized by the
+		computed standard deviation:
+\begin{equation}
+	\sccum{\sta}{r} = \frac{\ccum{\sta}{r}}{\sdevpow{\sta}{r}}.
+\end{equation}
+
+
+\end{itemize}
+
+
+\section{Running Moments}%FOLDUP
+
+The \fromo  package can also perform 
+running\footnote{Variously known also as \emph{rolling}, \emph{boxcar}, or \emph{finite impulse response} computations.} computations
+of moments, centered moments, centered values, standardized values, z-scored values and so on. Given an integral window, $W$,
+and data and weights vectors $\data{i},$ $\wt{i}$, we compute output \outp{i} as follows: let \std be the set of $j$ with
+$i - W < j \le i$. Then compute the desired moment over \std, and return it as \outp{i}.  The `comparison' operations 
+(computed centered, standardized, or z-scored versions of a variable) admit a \emph{lookahead} parameter, $l$. In this case,
+we let \std be the set of $j$ with $i - W + l < j \le i + l$, then compute the moments over \std and normalize \data{i} with
+respect to those moments. When $l > 0$, we are using future information to compute \outp{i}. That is, \outp{i} will depend
+on \data{j} with $j > i$. This is not the case for the typical moments computations or for the case where the lookahead is
+non-positive.
+
+We also support a time (or other counter) based running computation. Here the input are the data, and weights vectors, \data{i}, \wt{i},
+but also a vector of time indices, say \tim{i} which are non-decreasing: $\tim{1} \le \tim{2} \le \ldots$. It is assumed that
+$\tim{0}$ is essentially $-\infty$. The window, $W$ is now a time-based window. The output \outp{i} is defined in terms of the
+moments computations over the set \std which are all $j$ such that $\tim{i} - W < \tim{j} \le \tim{i}$. For comparison functions,
+we again admit a lookahead so that \std are all $j$ such that $\tim{i} - W + l < \tim{j} \le \tim{i} + l$. Obviously if we 
+let $\tim{i} = i$, we recover the `vanilla' running moments computations. We also support supplying the \tim{i} implicitly as the
+sum of positive deltas: let vector \dltim{i} of strictly positive elements be given. Then we assume
+$$
+\tim{i} = \sum_{1 \le j \le i} \dltim{j},
+$$
+and then perform the time-based running computation. We also support the case where the \dltim{i} are actually just the \wt{i}.
+
+%UNFOLD
+% bibliography%FOLDUP
+%\bibliographystyle{jss}
+%\bibliographystyle{ieeetr}
+\bibliographystyle{plainnat}
+%\bibliographystyle{acm}
+\bibliography{fromo}
+%UNFOLD
+
+\end{document}
+%for vim modeline: (do not edit)
+% vim:fdm=marker:fmr=FOLDUP,UNFOLD:cms=%%s:syn=rnoweb:ft=rnoweb:tw=180

@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (wicket_deepstate_test_wkt_centroid_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/wicket/inst/testfiles/wkt_centroid/wkt_centroid_output/2345676103015dc4e5c02c5dcce8dbcfe1458a68.pass`
+TRACE: Running: wicket_deepstate_test_wkt_centroid_test from /home/akhila/fuzzer_packages/fuzzedpackages/wicket/inst/testfiles/wkt_centroid/wkt_centroid_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+wkt values: "dxzacqdxrb" "afoykrklhomoufedlot" "hfltbndpjtppqwzocxzk" "wrvwmnjhqkhmpltvcl" "fooexjrodohhsxee" "NA" "NA" "wkcsnahvixeejdkyhaqo" "xnpitiwyalvhnjmtfxin" "gutvlotwtrsvevfrkbs" "vjhdxpfahts"
+input ends
+TRACE: Passed: wicket_deepstate_test_wkt_centroid_test

@@ -1,0 +1,8 @@
+/*
+ *  Amalgamation file of Rcpp/C functions for "wordspace" package
+ *  (source code merged into single file in order to avoid slow re-loading of Rcpp headers)
+ */
+
+#include <Rcpp.h>
+using namespace Rcpp;
+

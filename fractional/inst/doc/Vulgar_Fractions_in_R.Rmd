@@ -1,0 +1,204 @@
+---
+title: "Vulgar Fractions in R"
+author: "Bill Venables"
+date: "`r Sys.Date()`"
+bibliography: refs.bib
+output: 
+  rmarkdown::html_vignette:
+    css: fractional_style.css
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{1 Vulgar Fractions in R}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r c0, include = FALSE}
+## rmarkdown::tufte_handout
+library(knitr)
+opts_chunk$set(comment = "", warning = FALSE, message = FALSE, fig.height = 4.94, 
+               fig.width = 8, out.width = "690px", out.height = "426px")
+oldOpt <- options(scipen = 10, width = 95)
+```
+
+# Introduction
+
+The `MASS` package contains two small helper functions called `fractions` and `rational`.  Originally these were included to allow patterns in patterned matrices to be more easily 
+exhibited and hence, detected.  This happens when the entries are expressible in the form 
+of "vulgar" fractions, i.e. numerator/denominator, rather than as recurring decimals.  
+
+For example a Hilbert matrix:
+
+```{r c1, results = "asis", echo = FALSE}
+Hilbert <- function(n) {
+  structure(outer(1:n, 1:n, function(r, c) 1/(r+c-1)), 
+            dimnames = list(paste0("R",1:n), paste0("C", 1:n)))
+}
+H5 <- Hilbert(5)
+kable(H5, align = "c")
+```
+
+has a pattern much easier to appreciate if the entries are expressed as vulgar fractions:
+
+```{r c2, results = "asis", echo = FALSE}
+library(dplyr)
+library(fractional)
+H5 %>% fractional %>% as.character %>% kable(align = "r")
+```
+
+This package facilitates the calculation and presentation of numerical quantities as rational approximations.  
+
+To be more specific, a rational approximation to a real number is a ratio of two __*integers*__,
+the _numerator_ and _denominator_, with the denominator _positive_.  For uniqueness of representation we assume that the numerator and denominator are _relatively prime_, that is, have no common factor, or in other words the fraction is expressed in its _lowest terms_.  
+
+A second vignette, _Theory_, outlines, for the curious reader, the standard method used 
+to find them, using continued fractions, and some basic mathematical properties.  It is
+of mathematical interest, but not necessary to use the package itself.
+
+## Caveat
+
+This small package offers merely a way to present numerical values by means of close rational approximations, displayed as vulgar fractions.  It does _not_ provide exact rational arithmetic.  Such a facility would require unlimited precision rational arithmetic, which is well beyond the scope of this package.  In fact, integer overflow is a constant limitation in our use of fractions in the present package.
+
+# Functions
+
+The package provides two main functions: __`fractional`__ and __`numerical`__, and several auxiliaries. We discuss these in sequence now.
+
+Readers interested in the details of the algorithm used and its implementation in `R` should refer to the _Theory_ vignette.
+
+## `fractional` and `unfractional`
+
+`fractional` is the main function of the package.  The argument list is as follows:
+
+```
+function (x, eps = 1e-06, maxConv = 20, sync = FALSE) 
+```
+
+* __`x`__ A numeric vector, matrix or array.  
+* __`eps = 1e-06`__ An absolute error tolerance.  The rational approximation is the first convergent for which the absolute error falls below this bound.  
+* __`maxConv = 20`__ A secondary stopping criterion.  An upper limit on the number of convergents (See _Theory_ vignette) to consider.  
+* __`sync = FALSE`__ Should the numerical value be "synchronized" with the displayed numerical approximation?  See below.  
+
+The value returned is a numeric vector like `x`, but inheriting from class `fractional`.  It may be used in arithmetic operations in the normal way and retains full floating point accuracy, unless `sync = TRUE`.  When printed, or coerced to character, however, the rational approximation is used as the representation, which as a numerical value may not precisely equal the full floating point value.
+
+If `sync = TRUE` is set, then the numerical value is changed to agree with the numerical value and this agreement is maintained in synchrony, as much as possible with floating point arithmetic, during future numerical operations.
+
+### `unfractional`
+
+The function __`unfractional`__ is a convenience function that strips the class and some additional attributes from an object of class `"fractional"`, thus demoting it back to a numerical object like the one from which it was generated.
+
+### Use of `fractional` objects in arithmetic operations.
+
+Methods are provided for the `S3` group generic functions `Ops` and `Math`, allowing the mathematical operators and simple mathematical functions to be used with them.  The normal rules apply.  In an expression `e1 + e2` (where `+` can be any of the operators) the `fractional` method is dispatched if _either_ `e1` _or_ `e2` _(or both)_ is/are of class `fractional`, and the result is of class `fractional`.
+
+For the `Math` group generic, operations are conducted but treating the objects as a normal numeric object, that is, ignoring the `fractional` class.  
+
+## `as.character`
+
+The package provides a method for the primitive generic function `base::as.character` 
+for objects of class `"fractional"`.  The arguments are as follows:
+
+```
+function (x, eps = attr(x, "eps"), maxConv = attr(x, "maxConv"), ...)
+```
+
+That is, the values for `eps` and `maxConv` are carried forward from the original call.  This is because it is only when the object is displayed or coerced to character that the computation of the continued fraction is carried out.  
+
+The result is a character string object of primary class `charFrac`.  This primary class membership essentially ensures that the object is printed without quotation marks.  
+
+## `numerators` and `denominators`
+
+These two `S3` generic functions will extract the numerators and denominators, respectively.
+
+The argument is a single object, `x`, and the result is an object of type `integer`, but carrying attributes such as `dim` or `dimnames` from the original.
+
+Methods are provided for objects of `S3` class `fractional` or `charFrac`
+
+## `numerical`
+
+This is essentially a method function for `base::as.numeric` providing coercion to numeric for objects of `S3` class `fractional` or `charFrac`.  
+
+It is written as an S3 generic function, and the main methods uses `numerators` and `denominators` in an obvious way. 
+
+The `default` method passes the object to `base::as.numeric`.
+
+## `rat`, `ratr` and `.ratr`
+
+The function `rat` is a front-end to the `C++` function that carries out the continued fraction computations.  It would normally not be called directly by users.
+
+The functions `ratr` and `.ratr`, in combination, provide the identical computation but done in pure `R`.  They are provided for pedagogical and timing purposes only.
+
+## `vfractional`
+
+This is a variant on `fractional`, without the `sync` argument, but _vectorized_ with respect to the three arguments `x`, `eps` and `maxConv`.  It is mainly used for examples.
+
+
+## Some simple examples
+
+The _Theory_ vignette provides many example in context, but the following very elementary examples may give the flavour of how the functions are used.
+
+### Arithmetic operations
+
+```{r}
+library(dplyr)
+(x <- matrix(1:9/12, 3, 3) %>% fractional)
+(xr <- 1/x)
+x + 10
+(x2 <- x^2)
+(sx2 <- sqrt(x2))  ## demoted back to numeric by sqrt()
+fractional(sx2)    ## reinstated
+
+solve(xr) %>% fractional  ## xr is non-singular with a simple inverse
+
+numerators(x2)     ## numerators and denominators are available
+denominators(x2)
+```
+
+
+### The Golden Ratio and Fibonacci numbers
+
+The _golden ratio_ of the ancient Greeks, 
+$\phi = \left(\sqrt{5}+1\right)/2 = 1.61803398874989490\dots$ is well-known to be the limit of the ratio of successive Fibonacci numbers.  As a partial indication of this result, the following demonstration is at least suggestive:
+
+```{r, include = FALSE}
+oldWidth <- options(width = 80)
+```
+
+```{r}
+F <- c(1,1,numeric(15))
+for(i in 3:17) ## Fibonacci sequence by recurrence
+  F[i] <- F[i-1] + F[i-2]  
+F
+(phi <- (sqrt(5) + 1)/2)
+```
+
+The function _`vfractional`_ may be used to provide a sequence of optimal^[Optimal in a sense to be described in the _Theory_ vignette.] rational approximations with non-decreasing denominators:
+
+```{r}
+vfractional(phi, eps = 0, maxConv = 1:16)
+```
+
+```{r, include = FALSE}
+options(oldWidth)
+```
+
+### Random fractions
+
+With random numbers it is mildly interesting from a theoretical point of view to look at the distribution of the number of convergents in the continued fraction expansion needed to achieve a specific error tolerance.  We have the tools to explore this somewhat arcane issue:
+
+```{r}
+library(ggplot2)
+N <- 500000
+set.seed(3210)
+
+rat(rnorm(N), eps = 1.0e-07)[, "n"] %>% 
+  table(x = .)                      %>% 
+  as.data.frame(responseName = "f") %>% 
+  ggplot(.) + aes(x = x, y = f/N) +
+  geom_bar(stat = "identity", fill = "steel blue") +
+  ylab("Relative frequency") + xlab("Convergents")
+```
+
+In particular this appears to justify the choice of `maxConv = 20` as a suitable default^[The visual aspect ratio of this figure is $y/x \approx 1/\phi$, giving it nearly the ideal proportions according to the ancient Greek aesthetic rules.].
+
+

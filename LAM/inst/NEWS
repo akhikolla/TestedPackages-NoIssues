@@ -1,0 +1,110 @@
+********************************************************
+****       CHANGES IN LAM PACKAGE VERSIONS          ****
+********************************************************
+
+
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+Some Latent Variable Models (LAM)
+A. Robitzsch
+
+ __         ______     __    __    
+/\ \       /\  __ \   /\ "-./  \   
+\ \ \____  \ \  __ \  \ \ \-./\ \  
+ \ \_____\  \ \_\ \_\  \ \_\ \ \_\ 
+  \/_____/   \/_/\/_/   \/_/  \/_/ 
+                    
+
+mailto:
+-------
+Alexander Robitzsch
+robitzsch@ipn.uni-kiel.de
+
+For reporting a bug, please always provide a reproducible R script 
+and (if necessary) a corresponding dataset.
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+
+
+
+------------------------------------------------------------------------
+VERSIONS LAM 0.5  |  2020-05-09  |  Last: LAM 0.5-15
+------------------------------------------------------------------------
+
+NOTE  * changed computation of standard errors in pmle(). Now included
+        just the likelihood part.
+NOTE  * changed Metropolis-Hastings algorithm in amh() for handling boundary
+        constraints
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: ---
+
+------------------------------------------------------------------------
+VERSIONS LAM 0.4  |  2019-05-06  |  Last: LAM 0.4-17
+------------------------------------------------------------------------
+
+NOTE  * changed default optimizer in pmle() to "nlminb"
+ADDED * added function clpm_to_ctm() for transformation of path 
+        coefficients to different time intervals for cross-lagged
+        panel model (due to a discussion with Steffani Sass)
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: clpm_to_ctm (1,2,3)
+
+------------------------------------------------------------------------
+VERSIONS LAM 0.3  |  2018-06-06  |  Last: LAM 0.3-48
+------------------------------------------------------------------------
+
+ADDED * included Rcpp implementations for loglike_mvnorm() and
+        loglike_mvnorm_NA_pattern() functions
+NOTE  * optimization function stats::nlminb() can be used in
+        the pmle() function as an alternative to stats::optim()
+NOTE  * added 'numDeriv' package to the list of imported packages
+NOTE  * included argument 'proposal_equal' in amh()
+NOTE  * set the argument 'prior=NULL' as the default in pmle()
+ADDED * included argument 'model_grad' in pmle() which allows the 
+        specification of the gradient of the log-likelihood function
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: amh (1)
+
+------------------------------------------------------------------------
+VERSIONS LAM 0.2  |  2018-03-20  |  Last: LAM 0.2-9
+------------------------------------------------------------------------
+
+ADDED * included function suff_stat_NA_pattern() which computes sufficient
+        statistics for a given dataset with missing response patterns
+ADDED * included function loglike_mvnorm_NA_pattern() which computed
+        the multivariate normal log-likelihood for data with missing
+        response patterns
+NOTE  * fixed a problem with only one phase for tuning proposal distribution
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: suff_stat_NA_pattern (1),
+        loglike_mvnorm (2)
+
+------------------------------------------------------------------------
+VERSIONS LAM 0.1  |  2017-11-24  |  Last: LAM 0.1-22
+------------------------------------------------------------------------
+
+NOTE  * added Example 3 in amh() which was transferred from the 'STARTS'
+        package to the 'LAM' package
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: amh (3)
+
+------------------------------------------------------------------------
+VERSIONS LAM 0.0  |  2017-05-11  |  Last: LAM 0.0-17
+------------------------------------------------------------------------
+
+ADDED * moved amh(), loglike_mvnorm(), mlnormal() and pmle() functions 
+        from 'sirt' package to 'LAM' package
+NOTE  * included value acceptance_rates_history() in amh() containing
+        acceptance rates of parameters during burn-in phase
+
+DATA  * included/modified datasets: ---
+EXAMP * included/modified examples: ---
+

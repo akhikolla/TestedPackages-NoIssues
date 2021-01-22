@@ -1,0 +1,8 @@
+S3method(coef,BT)
+S3method(predict,BT)
+export(LassoBT)
+export(cvLassoBT)
+import(Matrix)
+importFrom(Rcpp,sourceCpp)
+importFrom(parallel,mclapply)
+useDynLib(LassoBacktracking, .registration=TRUE)

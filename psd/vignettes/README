@@ -1,0 +1,59 @@
+Notes:
+	* do not use \include (use \input)
+	(build creates aux files and CRAN checks NOTE/COMPLAIN)
+
+##
+##
+##
+
+>>>>>>>>>>>>>>>
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{title of vignette}
+-->
+
+```{r, echo = FALSE, message = FALSE}
+knitr::opts_chunk$set(
+  comment = "#>",
+  error = FALSE,
+  tidy = FALSE
+)
+```
+
+yada yada yada
+:
+<<<<<<<<<<<<<<<
+
+##
+## DFT benchmark vignette [DONE]
+##
+	fftw.Rnw
+		fftw_bench_even.pdf
+		fftw_bench_odd.pdf
+		# see /Users/abarbour/Google\ Drive/PUB/psd
+
+##
+## Normalization vignette [DONE]
+##
+	normalization.Rnw
+	supp_norms.tex		normalization definitions
+
+##
+## Overview benchmark vignette [DONE]
+##
+	psd_overview.Rnw
+		yuml.sh*
+			yuml.fawk*
+				yuml_d.png
+				yuml_n.png
+
+##
+## Common files
+##
+	supp_symdefs.tex	math symbol definitions
+	supp_specprogs.tex	spectral estimation programs
+	REFS.bib		references
+
+##
+## Misc.
+##

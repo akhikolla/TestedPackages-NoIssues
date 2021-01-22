@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="date" content="2019-12-04" />
+
+<title>Comparison of computation time</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Comparison of computation time</h1>
+<h4 class="date">2019-12-04</h4>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(TLMoments)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"><span class="kw">library</span>(lmomco)</a>
+<a class="sourceLine" id="cb1-3" data-line-number="3"><span class="kw">library</span>(Lmoments)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4"><span class="kw">library</span>(lmom)</a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"><span class="kw">sessionInfo</span>()</a></code></pre></div>
+<pre><code>## R version 3.6.1 (2019-07-05)
+## Platform: x86_64-pc-linux-gnu (64-bit)
+## Running under: Ubuntu 18.04.3 LTS
+## 
+## Matrix products: default
+## BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
+## LAPACK: /usr/lib/x86_64-linux-gnu/lapack/liblapack.so.3.7.1
+## 
+## locale:
+##  [1] LC_CTYPE=de_DE.UTF-8       LC_NUMERIC=C              
+##  [3] LC_TIME=de_DE.UTF-8        LC_COLLATE=C              
+##  [5] LC_MONETARY=de_DE.UTF-8    LC_MESSAGES=de_DE.UTF-8   
+##  [7] LC_PAPER=de_DE.UTF-8       LC_NAME=C                 
+##  [9] LC_ADDRESS=C               LC_TELEPHONE=C            
+## [11] LC_MEASUREMENT=de_DE.UTF-8 LC_IDENTIFICATION=C       
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] lmom_2.8        Lmoments_1.3-1  lmomco_2.3.2    TLMoments_0.7.5
+## [5] Rcpp_1.0.3     
+## 
+## loaded via a namespace (and not attached):
+##  [1] digest_0.6.23   MASS_7.3-51.4   magrittr_1.5    evaluate_0.14  
+##  [5] rlang_0.4.2     stringi_1.4.3   goftest_1.2-2   rmarkdown_1.18 
+##  [9] tools_3.6.1     stringr_1.4.0   xfun_0.11       yaml_2.2.0     
+## [13] compiler_3.6.1  htmltools_0.4.0 knitr_1.26</code></pre>
+<p>This document shows a comparison of computation time of TL-moments between different packages available, as well as between the different approaches built-in in this package.</p>
+<p>This package offers the following computation methods (available via <code>computation.method</code>-attribute in <code>TLMoments</code> or <code>TLMoment</code>):</p>
+<ul>
+<li><p><em>direct</em>: Calculation as a weighted mean of the ordered data vector</p></li>
+<li><p><em>pwm</em>: Calculation of probabilty-weighted moments and using the conversion to TL-moments</p></li>
+<li><p><em>recursive</em>: An alternative recursive estimation of the weights of the direct approach</p></li>
+<li><p><em>recurrence</em>: Estimating the L-moments first and using the recurrence property to derive TL-moments</p></li>
+</ul>
+<p>For a complete and thorough analysis of all these approaches and another speed comparison see Hosking &amp; Balakrishnan (2015, <em>A uniqueness result for L-estimators, with applications to L-moments</em>, Statistical Methodology, 24, 69-80).</p>
+<p>Besides our implementation, L-moments and/or TL-moments can be calculated using the packages</p>
+<ul>
+<li><p><code>lmomco</code>: L-moments and TL-moments</p></li>
+<li><p><code>Lmoments</code>: L-moments and TL(1,1)-moments</p></li>
+<li><p><code>lmom</code>: only L-moments</p></li>
+</ul>
+<p>(all availabe at CRAN). The functions <code>lmomco::lmoms</code>, <code>lmomco::TLmoms</code>, and <code>Lmoments::Lmoments</code> return list objects with (T)L-moments and (T)L-moment-ratios and are therefore compared to our <code>TLMoments</code>. The function <code>lmom::samlmu</code> returns a vector of lambdas and is compared to the function <code>TLMoment</code> (which is a faster bare-bone function to compute TL-moments but is not suited to be transmitted to <code>parameters</code> or other functions of this package).</p>
+<div id="calculation-of-l-moments" class="section level2">
+<h2>Calculation of L-moments</h2>
+<p>First we check if all calculation approaches in <code>TLMoments</code> give the same results (lmomco::lmoms is added as comparison):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">10000</span>, <span class="dv">50000</span>)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">sapply</span>(n, <span class="cf">function</span>(nn) {</a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">  x &lt;-<span class="st"> </span><span class="kw">rgev</span>(nn)</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">  check &lt;-<span class="st"> </span>lmomco<span class="op">::</span><span class="kw">lmoms</span>(x, <span class="dv">4</span>)<span class="op">$</span>lambdas</a>
+<a class="sourceLine" id="cb3-5" data-line-number="5">  <span class="kw">sapply</span>(<span class="kw">c</span>(<span class="st">&quot;direct&quot;</span>, <span class="st">&quot;pwm&quot;</span>, <span class="st">&quot;recursive&quot;</span>), <span class="cf">function</span>(comp) {</a>
+<a class="sourceLine" id="cb3-6" data-line-number="6">    <span class="kw">isTRUE</span>(<span class="kw">all.equal</span>(<span class="kw">TLMoment</span>(x, <span class="dt">order =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">computation.method =</span> comp), check, <span class="dt">check.attributes =</span> <span class="ot">FALSE</span>))</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  })</a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">})</a></code></pre></div>
+<pre><code>##           [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8]
+## direct    TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## pwm       TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE
+## recursive TRUE TRUE TRUE TRUE TRUE TRUE TRUE TRUE</code></pre>
+<p>Now we compare the functions giving L-moments and L-moment-ratios simultaneously regarding computation speed:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1">possib &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2">  <span class="dt">TLMoments_direct =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;direct&quot;</span>), </a>
+<a class="sourceLine" id="cb5-3" data-line-number="3">  <span class="dt">TLMoments_pwm =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;pwm&quot;</span>), </a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">  <span class="dt">TLMoments_recursive =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;recursive&quot;</span>), </a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">  <span class="dt">lmomco =</span> <span class="cf">function</span>(x) lmomco<span class="op">::</span><span class="kw">lmoms</span>(x, <span class="dv">4</span>), </a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">Lmoments =</span> <span class="cf">function</span>(x) Lmoments<span class="op">::</span><span class="kw">Lmoments</span>(x, <span class="dt">returnobject =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb5-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb5-9" data-line-number="9"><span class="co"># n = 50</span></a>
+<a class="sourceLine" id="cb5-10" data-line-number="10">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, <span class="kw">rgev</span>(<span class="dv">50</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb5-14" data-line-number="14">}))</a></code></pre></div>
+<pre><code>##                     elapsed
+## TLMoments_direct      0.037
+## TLMoments_pwm         0.032
+## TLMoments_recursive   0.026
+## lmomco                0.509
+## Lmoments              0.018</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="co"># n = 1000</span></a>
+<a class="sourceLine" id="cb7-2" data-line-number="2">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, evd<span class="op">::</span><span class="kw">rgev</span>(<span class="dv">1000</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb7-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb7-4" data-line-number="4"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb7-5" data-line-number="5">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb7-6" data-line-number="6">}))</a></code></pre></div>
+<pre><code>##                     elapsed
+## TLMoments_direct      0.242
+## TLMoments_pwm         0.189
+## TLMoments_recursive   0.054
+## lmomco                9.276
+## Lmoments              0.027</code></pre>
+<p><code>Lmoments</code> (since version 1.3-1) is the fastest implementation. Within <code>TLMoments</code> the <em>recursive approach</em> is the fastest. After this, the <em>pwm approach</em> is to be prefered over the <em>direct approach</em>. The implementation in <code>lmomco</code> is slow, compared to the others, especially for longer data vectors.</p>
+<p>Comparison of functions that only return a vector of L-moments:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1">possib &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb9-2" data-line-number="2">  <span class="dt">TLMoments_direct =</span> <span class="cf">function</span>(x) <span class="kw">TLMoment</span>(x, <span class="dt">order =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;direct&quot;</span>), </a>
+<a class="sourceLine" id="cb9-3" data-line-number="3">  <span class="dt">TLMoments_pwm =</span> <span class="cf">function</span>(x) <span class="kw">TLMoment</span>(x, <span class="dt">order =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;pwm&quot;</span>), </a>
+<a class="sourceLine" id="cb9-4" data-line-number="4">  <span class="dt">TLMoments_recursive =</span> <span class="cf">function</span>(x) <span class="kw">TLMoment</span>(x, <span class="dt">order =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;recursive&quot;</span>), </a>
+<a class="sourceLine" id="cb9-5" data-line-number="5">  <span class="dt">lmom =</span> <span class="cf">function</span>(x) lmom<span class="op">::</span><span class="kw">samlmu</span>(x, <span class="dv">4</span>), </a>
+<a class="sourceLine" id="cb9-6" data-line-number="6">  <span class="dt">Lmoments =</span> <span class="cf">function</span>(x) Lmoments<span class="op">::</span><span class="kw">Lmoments</span>(x, <span class="dt">returnobject =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb9-7" data-line-number="7">)</a>
+<a class="sourceLine" id="cb9-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb9-9" data-line-number="9"><span class="co"># n = 50</span></a>
+<a class="sourceLine" id="cb9-10" data-line-number="10">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, <span class="kw">rgev</span>(<span class="dv">50</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb9-11" data-line-number="11"></a>
+<a class="sourceLine" id="cb9-12" data-line-number="12"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb9-13" data-line-number="13">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb9-14" data-line-number="14">}))</a></code></pre></div>
+<pre><code>##                     elapsed
+## TLMoments_direct      0.018
+## TLMoments_pwm         0.014
+## TLMoments_recursive   0.007
+## lmom                  0.008
+## Lmoments              0.010</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># n = 1000</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, <span class="kw">rgev</span>(<span class="dv">1000</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb11-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb11-4" data-line-number="4"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb11-5" data-line-number="5">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb11-6" data-line-number="6">}))</a></code></pre></div>
+<pre><code>##                     elapsed
+## TLMoments_direct      0.217
+## TLMoments_pwm         0.163
+## TLMoments_recursive   0.034
+## lmom                  0.019
+## Lmoments              0.020</code></pre>
+<p>For smaller data vectors our <em>recursive</em>-implementation is as fast as <code>lmom::samlmu</code>, but for longer data vectors <code>lmom::samlmu</code> and <code>Lmoments::Lmoments</code> are faster.</p>
+</div>
+<div id="calculation-of-tl-moments" class="section level2">
+<h2>Calculation of TL-moments</h2>
+<p>Again, first we check if all approaches give the same results (lmomco::Tlmoms is added as comparison):</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1">n &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="dv">25</span>, <span class="dv">50</span>, <span class="dv">100</span>, <span class="dv">150</span>, <span class="dv">200</span>, <span class="dv">500</span>, <span class="dv">1000</span>, <span class="dv">10000</span>)</a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">names</span>(n) &lt;-<span class="st"> </span><span class="kw">paste</span>(<span class="st">&quot;n&quot;</span>, n, <span class="dt">sep =</span> <span class="st">&quot;=&quot;</span>)</a>
+<a class="sourceLine" id="cb13-3" data-line-number="3"><span class="kw">sapply</span>(n, <span class="cf">function</span>(nn) {</a>
+<a class="sourceLine" id="cb13-4" data-line-number="4">  x &lt;-<span class="st"> </span><span class="kw">rgev</span>(nn)</a>
+<a class="sourceLine" id="cb13-5" data-line-number="5">  check &lt;-<span class="st"> </span>lmomco<span class="op">::</span><span class="kw">TLmoms</span>(x, <span class="dv">4</span>, <span class="dt">leftrim =</span> <span class="dv">0</span>, <span class="dt">rightrim =</span> <span class="dv">1</span>)<span class="op">$</span>lambdas</a>
+<a class="sourceLine" id="cb13-6" data-line-number="6">  <span class="kw">sapply</span>(<span class="kw">c</span>(<span class="st">&quot;direct&quot;</span>, <span class="st">&quot;pwm&quot;</span>, <span class="st">&quot;recursive&quot;</span>, <span class="st">&quot;recurrence&quot;</span>), <span class="cf">function</span>(comp) {</a>
+<a class="sourceLine" id="cb13-7" data-line-number="7">    tlm &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">TLMoments</span>(x, <span class="dt">rightrim =</span> <span class="dv">1</span>, <span class="dt">computation.method =</span> comp)<span class="op">$</span>lambdas)</a>
+<a class="sourceLine" id="cb13-8" data-line-number="8">    <span class="kw">isTRUE</span>(<span class="kw">all.equal</span>(tlm, check, <span class="dt">check.attributes =</span> <span class="ot">FALSE</span>))</a>
+<a class="sourceLine" id="cb13-9" data-line-number="9">  })</a>
+<a class="sourceLine" id="cb13-10" data-line-number="10">})</a></code></pre></div>
+<pre><code>##            n=25 n=50 n=100 n=150 n=200 n=500 n=1000 n=10000
+## direct     TRUE TRUE  TRUE  TRUE  TRUE  TRUE   TRUE    TRUE
+## pwm        TRUE TRUE  TRUE  TRUE  TRUE  TRUE   TRUE    TRUE
+## recursive  TRUE TRUE  TRUE  TRUE FALSE FALSE  FALSE   FALSE
+## recurrence TRUE TRUE  TRUE  TRUE  TRUE  TRUE   TRUE    TRUE</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="kw">sapply</span>(n, <span class="cf">function</span>(nn) {</a>
+<a class="sourceLine" id="cb15-2" data-line-number="2">  x &lt;-<span class="st"> </span><span class="kw">rgev</span>(nn)</a>
+<a class="sourceLine" id="cb15-3" data-line-number="3">  check &lt;-<span class="st"> </span>lmomco<span class="op">::</span><span class="kw">TLmoms</span>(x, <span class="dv">4</span>, <span class="dt">leftrim =</span> <span class="dv">2</span>, <span class="dt">rightrim =</span> <span class="dv">4</span>)<span class="op">$</span>lambdas</a>
+<a class="sourceLine" id="cb15-4" data-line-number="4">  <span class="kw">sapply</span>(<span class="kw">c</span>(<span class="st">&quot;direct&quot;</span>, <span class="st">&quot;pwm&quot;</span>, <span class="st">&quot;recursive&quot;</span>, <span class="st">&quot;recurrence&quot;</span>), <span class="cf">function</span>(comp) {</a>
+<a class="sourceLine" id="cb15-5" data-line-number="5">    tlm &lt;-<span class="st"> </span><span class="kw">suppressWarnings</span>(<span class="kw">TLMoments</span>(x, <span class="dt">leftrim =</span> <span class="dv">2</span>, <span class="dt">rightrim =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> comp)<span class="op">$</span>lambdas)</a>
+<a class="sourceLine" id="cb15-6" data-line-number="6">    <span class="kw">isTRUE</span>(<span class="kw">all.equal</span>(tlm, check, <span class="dt">check.attributes =</span> <span class="ot">FALSE</span>))</a>
+<a class="sourceLine" id="cb15-7" data-line-number="7">  })</a>
+<a class="sourceLine" id="cb15-8" data-line-number="8">})</a></code></pre></div>
+<pre><code>##            n=25 n=50 n=100 n=150 n=200 n=500 n=1000 n=10000
+## direct     TRUE TRUE  TRUE  TRUE  TRUE  TRUE   TRUE    TRUE
+## pwm        TRUE TRUE  TRUE  TRUE  TRUE  TRUE   TRUE    TRUE
+## recursive  TRUE TRUE  TRUE  TRUE FALSE FALSE  FALSE   FALSE
+## recurrence TRUE TRUE  TRUE  TRUE  TRUE  TRUE   TRUE    TRUE</code></pre>
+<p>The <em>recursive approach</em> fails when n exceeds 150. All other implementations give the same results.</p>
+<p>Speed comparison for TL(0,1)-moments:</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1">possib &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb17-2" data-line-number="2">  <span class="dt">TLMoments_direct =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">leftrim =</span> <span class="dv">0</span>, <span class="dt">rightrim =</span> <span class="dv">1</span>, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;direct&quot;</span>), </a>
+<a class="sourceLine" id="cb17-3" data-line-number="3">  <span class="dt">TLMoments_pwm =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">leftrim =</span> <span class="dv">0</span>, <span class="dt">rightrim =</span> <span class="dv">1</span>, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;pwm&quot;</span>), </a>
+<a class="sourceLine" id="cb17-4" data-line-number="4">  <span class="dt">TLMoments_recurrence =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">leftrim =</span> <span class="dv">0</span>, <span class="dt">rightrim =</span> <span class="dv">1</span>, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;recurrence&quot;</span>), </a>
+<a class="sourceLine" id="cb17-5" data-line-number="5">  <span class="dt">lmomco =</span> <span class="cf">function</span>(x) lmomco<span class="op">::</span><span class="kw">TLmoms</span>(x, <span class="dv">4</span>, <span class="dt">leftrim =</span> <span class="dv">0</span>, <span class="dt">rightrim =</span> <span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb17-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb17-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb17-8" data-line-number="8"><span class="co"># n = 50</span></a>
+<a class="sourceLine" id="cb17-9" data-line-number="9">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, <span class="kw">rgev</span>(<span class="dv">50</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb17-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb17-11" data-line-number="11"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb17-12" data-line-number="12">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb17-13" data-line-number="13">}))</a></code></pre></div>
+<pre><code>##                      elapsed
+## TLMoments_direct       0.101
+## TLMoments_pwm          0.033
+## TLMoments_recurrence   0.025
+## lmomco                 0.495</code></pre>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># n = 1000</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, <span class="kw">rgev</span>(<span class="dv">1000</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb19-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb19-4" data-line-number="4"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb19-5" data-line-number="5">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb19-6" data-line-number="6">}))</a></code></pre></div>
+<pre><code>##                      elapsed
+## TLMoments_direct       1.730
+## TLMoments_pwm          0.247
+## TLMoments_recurrence   0.058
+## lmomco                 9.040</code></pre>
+<p>Speed comparison for TL(2,4)-moments:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1">possib &lt;-<span class="st"> </span><span class="kw">list</span>(</a>
+<a class="sourceLine" id="cb21-2" data-line-number="2">  <span class="dt">TLMoments_direct =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">leftrim =</span> <span class="dv">2</span>, <span class="dt">rightrim =</span> <span class="dv">4</span>, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;direct&quot;</span>), </a>
+<a class="sourceLine" id="cb21-3" data-line-number="3">  <span class="dt">TLMoments_pwm =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">leftrim =</span> <span class="dv">2</span>, <span class="dt">rightrim =</span> <span class="dv">4</span>, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;pwm&quot;</span>), </a>
+<a class="sourceLine" id="cb21-4" data-line-number="4">  <span class="dt">TLMoments_recurrence =</span> <span class="cf">function</span>(x) <span class="kw">TLMoments</span>(x, <span class="dt">leftrim =</span> <span class="dv">2</span>, <span class="dt">rightrim =</span> <span class="dv">4</span>, <span class="dt">max.order =</span> <span class="dv">4</span>, <span class="dt">computation.method =</span> <span class="st">&quot;recurrence&quot;</span>), </a>
+<a class="sourceLine" id="cb21-5" data-line-number="5">  <span class="dt">lmomco =</span> <span class="cf">function</span>(x) lmomco<span class="op">::</span><span class="kw">TLmoms</span>(x, <span class="dv">4</span>, <span class="dt">leftrim =</span> <span class="dv">2</span>, <span class="dt">rightrim =</span> <span class="dv">4</span>)</a>
+<a class="sourceLine" id="cb21-6" data-line-number="6">)</a>
+<a class="sourceLine" id="cb21-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb21-8" data-line-number="8"><span class="co"># n = 50</span></a>
+<a class="sourceLine" id="cb21-9" data-line-number="9">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, evd<span class="op">::</span><span class="kw">rgev</span>(<span class="dv">50</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb21-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb21-11" data-line-number="11"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb21-12" data-line-number="12">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb21-13" data-line-number="13">}))</a></code></pre></div>
+<pre><code>##                      elapsed
+## TLMoments_direct       0.099
+## TLMoments_pwm          0.040
+## TLMoments_recurrence   0.025
+## lmomco                 0.449</code></pre>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># n = 1000</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2">datalist &lt;-<span class="st"> </span><span class="kw">replicate</span>(<span class="dv">200</span>, evd<span class="op">::</span><span class="kw">rgev</span>(<span class="dv">1000</span>), <span class="dt">simplify =</span> <span class="ot">FALSE</span>)</a>
+<a class="sourceLine" id="cb23-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb23-4" data-line-number="4"><span class="kw">do.call</span>(<span class="st">&quot;rbind&quot;</span>, <span class="kw">lapply</span>(possib, <span class="cf">function</span>(f) {</a>
+<a class="sourceLine" id="cb23-5" data-line-number="5">  <span class="kw">system.time</span>(<span class="kw">lapply</span>(datalist, f))[<span class="dv">3</span>]</a>
+<a class="sourceLine" id="cb23-6" data-line-number="6">}))</a></code></pre></div>
+<pre><code>##                      elapsed
+## TLMoments_direct       1.784
+## TLMoments_pwm          0.459
+## TLMoments_recurrence   0.076
+## lmomco                 8.974</code></pre>
+<p>In this calculations the <em>recurrence approach</em> clearly outperforms the other implementations. Calculation using <em>probabilty-weighted moments</em> is relatively fast, but using the <em>direct calculation</em> should be avoided, regarding calculation speed. This package’s implementation is clearly faster than those in <code>lmomco</code>.</p>
+</div>
+<div id="conclusion" class="section level2">
+<h2>Conclusion</h2>
+<p>This results encourage to use the <em>recursive approach</em> for L-moments and the <em>recurrence approach</em> when calculating TL-moments. Therefore these are the defaults in this package, but the other computation methods (<em>direct</em> and <em>pwm</em>) are still available (by using the argument <code>computation.method</code>).</p>
+<p>In comparison to other packages <code>Lmoments</code> is faster but only supports L-moments and TL(1,1)-moments.</p>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

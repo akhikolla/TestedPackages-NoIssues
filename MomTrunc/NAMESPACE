@@ -1,0 +1,20 @@
+useDynLib(MomTrunc)
+import(Rcpp)
+importFrom("tlrmvnmvt","pmvn","pmvt","GenzBretz")
+importFrom("mvtnorm","dmvnorm","dmvt","rmvnorm","rmvt","pmvnorm","TVPACK")
+importFrom("stats", "dnorm", "dt", "pnorm", "pt","rnorm","integrate","rgamma","mahalanobis", "var","qt","runif")
+importFrom("hypergeo","genhypergeo")
+export(
+        #  Kan.LRIC,RcppmeanvarN,Vaida.LRIC,
+        #  Fpmvt_cpp,pmvt_cpp,
+        #  Rcppqfun,Rcppqfun_b,Rcppqfun_ab,
+        #RcppMCT.lin,MCT.lin,
+        #RcppTT.GS,
+        pmvnormt,
+        MCmeanvarTMD,
+        dmvSN,pmvSN,rmvSN,
+       dmvST,pmvST,rmvST,
+       dmvESN,pmvESN,rmvESN,
+       dmvEST,pmvEST,rmvEST,
+       onlymeanTMD,meanvarTMD,momentsTMD,
+       meanvarFMD,momentsFMD,cdfFMD)

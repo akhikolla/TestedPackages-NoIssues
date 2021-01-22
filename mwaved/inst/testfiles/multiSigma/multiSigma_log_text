@@ -1,0 +1,65 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (mwaved_deepstate_test_multiSigma_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+signal values: 1.05415e-68 1.86447e-211 4.49059e+17 2.72551e-214 6.53679e-70 2.42643e+241 1.65687e+24
+
+deg values: 644268439
+input ends
+ERROR: Crashed: mwaved_deepstate_test_multiSigma_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiSigma/multiSigma_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+signal values: 2.58036e-206    -inf     nan
+
+deg values: 1078897549
+input ends
+ERROR: Crashed: mwaved_deepstate_test_multiSigma_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/mwaved/inst/testfiles/multiSigma/multiSigma_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+signal values: 2.01769e+47 1.43678e-133 3.24864e+70 1.20447e-16
+5.91096e+64 7.46115e-258 6.40668e-255 1.62054e+203
+4.71376e-48 5.01413e+184 4.51599e-206 1.34759e+170
+1.75062e-260 1.58739e-68 1.92056e-182 1.67897e-132
+4.13273e+261 29072.6 1.10966e+192 2.30932e+295
+7.50348e-71 1.41003e-86 4.42315e+80 1.54458e+60
+1.28334e+144 1.93644e+180 1.54664e-118 3.41101e+171
+2.90402e-286 1.99326e-62 5.07882e+283 3.58420e+261
+3.56215e-230 1.39816e-16 1.74133e+63 1.53532e+63
+
+deg values: -767861348
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+signal values: 1.71990e-51 1.51667e-225 1.86531e+250 1.44529e+91
+4.07917e+165 6.61249e-257 1.02818e-81 4.09428e+146
+11.4127 2.62736e-264 1.83374e-104 8.78821e+143
+5.71162e+62 8.62422e-89 9.93170e-171 1.60646e-158
+3.92548e+14 1.01363e+74 1088.08 2.54096e-21
+4.49653e+83 2.14829e+78 8.88077e+282 2.36295e+123
+8.29783e+300 1.56356e-81 5.10578e-14 1.93465e-43
+1.44694e-22 1.87145e+289 9.71140e-241 0.00892625
+5.24924e+272 4.33714e-104 7.70719e-71 1.30327e+122
+4.59987e+18 8.95062e-07 1.49741e+196 4.33867e+27
+
+deg values: -342746351
+input ends
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+signal values:     inf
+   -inf
+2.46562e-85
+    nan
+1.78433e+169
+
+deg values: 88940557
+input ends
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 2 failed/3 passed/0 abandoned tests

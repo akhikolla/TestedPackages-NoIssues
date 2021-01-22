@@ -1,0 +1,44 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (updog_deepstate_test_rbetabinom_int_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+size values: 467495432
+mu values: 8.08981e-307
+rho values: 3.76873e+222
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+size values: -498905818
+mu values: -1.17448e-142
+rho values: 2.30186e+66
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+size values: -293123844
+mu values: -2.57108e+123
+rho values: 2.98766e-188
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+size values: -1105761949
+mu values: 1.27891e-188
+rho values: -1.09367e-292
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+size values: 954479852
+mu values: 1.42154e+226
+rho values: -2.0456e+54
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+size values: 1344097580
+mu values: 6.64201e-211
+rho values: 8.46933e-99
+input ends

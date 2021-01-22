@@ -1,0 +1,8 @@
+exportPattern("^[[:alpha:]]+")
+S3method(ypinterim, default)
+S3method(summary, ypinterim)
+S3method(print, ypinterim)
+importFrom("stats", "quantile", "rnorm", "runif", "dnorm", "integrate", "pnorm", "qnorm")
+
+useDynLib(YPInterimTesting)
+importFrom(Rcpp, sourceCpp)

@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (lobstr_deepstate_test_v_size_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/lobstr/inst/testfiles/v_size/v_size_output/a10f94580624e52eb058510f7b56033a43ad7f67.pass`
+TRACE: Running: lobstr_deepstate_test_v_size_test from /home/akhila/fuzzer_packages/fuzzedpackages/lobstr/inst/testfiles/v_size/v_size_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+n values: -2.43318e-187
+element_size values: -1053990400
+input ends
+TRACE: Passed: lobstr_deepstate_test_v_size_test

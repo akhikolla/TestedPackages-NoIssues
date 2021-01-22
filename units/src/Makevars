@@ -1,0 +1,2 @@
+PKG_CPPFLAGS = -DUDUNITS2_DIR=0   
+PKG_LIBS = -lexpat  -lexpat -ludunits2

@@ -1,0 +1,16 @@
+citHeader("To cite EMMIXgene in publications use:")
+
+citEntry(entry = "article",
+  title="A Mixture Model-based Approach to the Clustering of Microarray Expression
+  Data",
+  author=personList( as.person( "Geoffrey J. McLachlan"),
+   as.person( "RW Bean"), 
+   as.person( "David Peel")),
+  journal="Bioinformatics",
+  volume="18",
+  number="3",
+  pages="413--422",
+  year="2002",
+  publisher="Oxford University Press",
+  textVersion = paste('McLachlan, Geoffrey J., R. W. Bean, and David Peel. "A mixture    model-based approach to the clustering of microarray expression data." Bioinformatics   18.3 (2002): 413-422.')
+)

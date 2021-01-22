@@ -1,0 +1,33 @@
+import(sp)
+import(spdep)
+import(methods)
+import(httr)
+import(meteoland)
+import(ggplot2)
+importFrom("stats", "aggregate","filter","uniroot", "median",
+           "cor","quantile")
+importFrom("grDevices", "rainbow")
+importFrom("graphics", "axis", "abline", "barplot", "legend", "lines", "matplot","mtext",
+           "matlines", "par", "polygon","axis.Date")
+importFrom("utils", "setTxtProgressBar", "txtProgressBar", "head", "tail")
+useDynLib(medfate, .registration = TRUE)
+exportPattern("^[[:alpha:]]+")
+
+importFrom(jsonlite,fromJSON)
+
+importFrom(Rcpp, evalCpp)
+S3method(plot,pwb)
+S3method(plot,pwb_day)
+S3method(plot,spwb)
+S3method(plot,spwb_day)
+S3method(plot,growth)
+S3method(plot,growth_day)
+
+S3method(summary, pwb)
+S3method(summary, spwb)
+S3method(summary, growth)
+S3method(summary, forest)
+
+
+S3method(print, summary.forest)
+S3method(print, soil)

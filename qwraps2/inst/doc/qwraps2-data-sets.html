@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Peter DeWitt" />
+
+
+<title>qwraps2 Data Sets</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">qwraps2 Data Sets</h1>
+<h4 class="author">Peter DeWitt</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#mtcars2"><span class="toc-section-number">1</span> mtcars2</a></li>
+<li><a href="#construction-of-mtcars2"><span class="toc-section-number">2</span> Construction of mtcars2</a></li>
+<li><a href="#summary-of-mtcars2"><span class="toc-section-number">3</span> Summary of mtcars2</a></li>
+<li><a href="#pefr"><span class="toc-section-number">4</span> pefr</a></li>
+<li><a href="#references"><span class="toc-section-number">5</span> References</a></li>
+<li><a href="#session-info"><span class="toc-section-number">6</span> Session Info</a></li>
+</ul>
+</div>
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(qwraps2)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true"></a><span class="kw">packageVersion</span>(<span class="st">&quot;qwraps2&quot;</span>)</span></code></pre></div>
+<pre><code>## [1] &#39;0.5.0&#39;</code></pre>
+<div id="mtcars2" class="section level1" number="1">
+<h1 number="1"><span class="header-section-number">1</span> mtcars2</h1>
+<p>The base R package datasets provides the mtcars data set. The information in mtcars is the fuel consumption and automobile characteristics of 32 automobiles as reported in the March, April, June and July 1974 issues of <em>Motor Trend</em> magazine <span class="citation">(Hocking 1976)</span>.</p>
+<p>That dataset is modified and extended to provide support for examples within the qwraps2 package documentation. This vignette documents the construction of mtcars2.</p>
+</div>
+<div id="construction-of-mtcars2" class="section level1" number="2">
+<h1 number="2"><span class="header-section-number">2</span> Construction of mtcars2</h1>
+<p>Starting with the original mtcars:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a>mtcars2 &lt;-<span class="st"> </span>mtcars</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true"></a><span class="kw">str</span>(mtcars2)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    32 obs. of  11 variables:
+##  $ mpg : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+##  $ cyl : num  6 6 4 6 8 6 8 4 4 6 ...
+##  $ disp: num  160 160 108 258 360 ...
+##  $ hp  : num  110 110 93 110 175 105 245 62 95 123 ...
+##  $ drat: num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+##  $ wt  : num  2.62 2.88 2.32 3.21 3.44 ...
+##  $ qsec: num  16.5 17 18.6 19.4 17 ...
+##  $ vs  : num  0 0 1 1 0 1 0 1 1 1 ...
+##  $ am  : num  1 1 1 0 0 0 0 0 0 0 ...
+##  $ gear: num  4 4 4 3 3 3 3 4 4 4 ...
+##  $ carb: num  4 4 1 1 2 1 4 2 2 4 ...</code></pre>
+<p>The cyl column provides the number of cylinders for in the engine of the automobiles. We will use two additional versions of this information, one as character column and one as a factor. Please note that the order of the factor levels is intentionally set to be non-sequential. This will help to illustrate the ordering or results when using a factor or a character vector as a grouping variable.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true"></a>mtcars2<span class="op">$</span>cyl_character &lt;-<span class="st"> </span><span class="kw">paste</span>(mtcars2<span class="op">$</span>cyl, <span class="st">&quot;cylinders&quot;</span>)</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true"></a>mtcars2<span class="op">$</span>cyl_factor    &lt;-<span class="st"> </span><span class="kw">factor</span>(mtcars2<span class="op">$</span>cyl,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true"></a>                                <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">8</span>),</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true"></a>                                <span class="dt">labels =</span> <span class="kw">paste</span>( <span class="kw">c</span>(<span class="dv">6</span>, <span class="dv">4</span>, <span class="dv">8</span>), <span class="st">&quot;cylinders&quot;</span>))</span></code></pre></div>
+<p>Create other factor variables.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true"></a>mtcars2<span class="op">$</span>gear_factor &lt;-</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">factor</span>(mtcars2<span class="op">$</span>gear, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="dt">labels =</span> <span class="kw">paste</span>(<span class="kw">c</span>(<span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">5</span>), <span class="st">&quot;forward gears&quot;</span>))</span></code></pre></div>
+<p>Engine configuration: the <code>vs</code> column is an integer vector for indicating V-shaped or straight. The constructed column engine is a factor the same information as a labeled factor.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>mtcars2<span class="op">$</span>engine &lt;-</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">factor</span>(mtcars2<span class="op">$</span>vs, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;V-shaped&quot;</span>, <span class="st">&quot;straight&quot;</span>))</span></code></pre></div>
+<p>Transmission: the <code>am</code> column is an integer vector indicating if the transmission is automatic or manual. We construct a <code>transmission</code> column to provide the same information as a factor.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true"></a>mtcars2<span class="op">$</span>transmission &lt;-</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">factor</span>(mtcars2<span class="op">$</span>am, <span class="dt">levels =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">1</span>), <span class="dt">labels =</span> <span class="kw">c</span>(<span class="st">&quot;Automatic&quot;</span>, <span class="st">&quot;Manual&quot;</span>))</span></code></pre></div>
+<p>The rownames of the mtcars2 data set provide the make and model of the automobiles. Here we will create columns for make and model and then omit the rownames.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true"></a>mtcars2<span class="op">$</span>make  &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;^(</span><span class="ch">\\</span><span class="st">w+)</span><span class="ch">\\</span><span class="st">s(.+)&quot;</span>, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">1&quot;</span>, <span class="kw">rownames</span>(mtcars2))</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true"></a>mtcars2<span class="op">$</span>model &lt;-<span class="st"> </span><span class="kw">sub</span>(<span class="st">&quot;^(</span><span class="ch">\\</span><span class="st">w+)</span><span class="ch">\\</span><span class="st">s(.+)&quot;</span>, <span class="st">&quot;</span><span class="ch">\\</span><span class="st">2&quot;</span>, <span class="kw">rownames</span>(mtcars2))</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true"></a><span class="kw">rownames</span>(mtcars2) &lt;-<span class="st"> </span><span class="ot">NULL</span></span></code></pre></div>
+<p>To have some dates to use in examples we are going to add an mostly arbitrary date column to mtcars2. Given that the data came from the March through July issues of <em>Motor Trend</em> in 1974, we will create a <code>test_date</code> column starting in January 1974 forward with one to three tests per week through May 1974. This assumes the data is in chronological order of the data.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true"></a><span class="kw">set.seed</span>(<span class="dv">42</span>)</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true"></a>mtcars2<span class="op">$</span>test_date &lt;-</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">as.POSIXct</span>(<span class="st">&quot;1974-01-03&quot;</span>, <span class="dt">tz =</span> <span class="st">&quot;GMT&quot;</span>) <span class="op">+</span></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true"></a><span class="st">  </span><span class="kw">cumsum</span>(<span class="kw">sample</span>(<span class="kw">c</span>(<span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>, <span class="dv">7</span>) <span class="op">*</span><span class="st"> </span><span class="dv">3600</span> <span class="op">*</span><span class="st"> </span><span class="dv">24</span>, <span class="dt">size =</span> <span class="kw">nrow</span>(mtcars2), <span class="dt">replace =</span> <span class="ot">TRUE</span>))</span></code></pre></div>
+<p>Lastly we will order the columns of mtcars2 so similar columns are next to each other.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>mtcars2 &lt;-</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a><span class="st">  </span>mtcars2[, <span class="kw">c</span>(<span class="st">&quot;make&quot;</span>, <span class="st">&quot;model&quot;</span>, <span class="st">&quot;mpg&quot;</span>, <span class="st">&quot;disp&quot;</span>, <span class="st">&quot;hp&quot;</span>, <span class="st">&quot;drat&quot;</span>, <span class="st">&quot;wt&quot;</span>, <span class="st">&quot;qsec&quot;</span>,</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>              <span class="st">&quot;cyl&quot;</span>, <span class="st">&quot;cyl_character&quot;</span>, <span class="st">&quot;cyl_factor&quot;</span>,</span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true"></a>              <span class="st">&quot;vs&quot;</span>, <span class="st">&quot;engine&quot;</span>,</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true"></a>              <span class="st">&quot;am&quot;</span>, <span class="st">&quot;transmission&quot;</span>,</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true"></a>              <span class="st">&quot;gear&quot;</span>, <span class="st">&quot;gear_factor&quot;</span>,</span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true"></a>              <span class="st">&quot;carb&quot;</span>,</span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true"></a>              <span class="st">&quot;test_date&quot;</span>)]</span></code></pre></div>
+</div>
+<div id="summary-of-mtcars2" class="section level1" number="3">
+<h1 number="3"><span class="header-section-number">3</span> Summary of mtcars2</h1>
+<p>mtcars2 is a data frame with 32 observations with 19 variables. Some of the variables tell us the same information, but in different formats.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a><span class="kw">str</span>(mtcars2)</span></code></pre></div>
+<pre><code>## &#39;data.frame&#39;:    32 obs. of  19 variables:
+##  $ make         : chr  &quot;Mazda&quot; &quot;Mazda&quot; &quot;Datsun&quot; &quot;Hornet&quot; ...
+##  $ model        : chr  &quot;RX4&quot; &quot;RX4 Wag&quot; &quot;710&quot; &quot;4 Drive&quot; ...
+##  $ mpg          : num  21 21 22.8 21.4 18.7 18.1 14.3 24.4 22.8 19.2 ...
+##  $ disp         : num  160 160 108 258 360 ...
+##  $ hp           : num  110 110 93 110 175 105 245 62 95 123 ...
+##  $ drat         : num  3.9 3.9 3.85 3.08 3.15 2.76 3.21 3.69 3.92 3.92 ...
+##  $ wt           : num  2.62 2.88 2.32 3.21 3.44 ...
+##  $ qsec         : num  16.5 17 18.6 19.4 17 ...
+##  $ cyl          : num  6 6 4 6 8 6 8 4 4 6 ...
+##  $ cyl_character: chr  &quot;6 cylinders&quot; &quot;6 cylinders&quot; &quot;4 cylinders&quot; &quot;6 cylinders&quot; ...
+##  $ cyl_factor   : Factor w/ 3 levels &quot;6 cylinders&quot;,..: 1 1 2 1 3 1 3 2 2 1 ...
+##  $ vs           : num  0 0 1 1 0 1 0 1 1 1 ...
+##  $ engine       : Factor w/ 2 levels &quot;V-shaped&quot;,&quot;straight&quot;: 1 1 2 2 1 2 1 2 2 2 ...
+##  $ am           : num  1 1 1 0 0 0 0 0 0 0 ...
+##  $ transmission : Factor w/ 2 levels &quot;Automatic&quot;,&quot;Manual&quot;: 2 2 2 1 1 1 1 1 1 1 ...
+##  $ gear         : num  4 4 4 3 3 3 3 4 4 4 ...
+##  $ gear_factor  : Factor w/ 3 levels &quot;3 forward gears&quot;,..: 2 2 2 1 1 1 1 2 2 2 ...
+##  $ carb         : num  4 4 1 1 2 1 4 2 2 4 ...
+##  $ test_date    : POSIXct, format: &quot;1974-01-05&quot; &quot;1974-01-07&quot; ...</code></pre>
+<table>
+<colgroup>
+<col width="11%" />
+<col width="21%" />
+<col width="66%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th align="right">Element</th>
+<th align="left">Name</th>
+<th align="left">Description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="right">[, 1]</td>
+<td align="left">make</td>
+<td align="left">Vehicle Manufacturer</td>
+</tr>
+<tr class="even">
+<td align="right">[, 2]</td>
+<td align="left">model</td>
+<td align="left">Vehicle model</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 3]</td>
+<td align="left">mpg</td>
+<td align="left">Miles/(US) gallon</td>
+</tr>
+<tr class="even">
+<td align="right">[, 4]</td>
+<td align="left">disp</td>
+<td align="left">Displacement (cu.in.)</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 5]</td>
+<td align="left">hp</td>
+<td align="left">Gross horsepower</td>
+</tr>
+<tr class="even">
+<td align="right">[, 6]</td>
+<td align="left">drat</td>
+<td align="left">Rear axle ratio</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 7]</td>
+<td align="left">wt</td>
+<td align="left">Weight (1000 lbs)</td>
+</tr>
+<tr class="even">
+<td align="right">[, 8]</td>
+<td align="left">qsec</td>
+<td align="left">1/4 mile time</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 9]</td>
+<td align="left">cyl</td>
+<td align="left">Number of cylinders</td>
+</tr>
+<tr class="even">
+<td align="right">[, 10]</td>
+<td align="left">cyl_character</td>
+<td align="left">Number of cylinders as a character string</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 11]</td>
+<td align="left">cyl_factor</td>
+<td align="left">Number of cylinders as a factor</td>
+</tr>
+<tr class="even">
+<td align="right">[, 12]</td>
+<td align="left">vs</td>
+<td align="left">Engine (0 = V-shaped, 1 = straight)</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 13]</td>
+<td align="left">engine</td>
+<td align="left">same info as vs, but as a factor</td>
+</tr>
+<tr class="even">
+<td align="right">[, 14]</td>
+<td align="left">am</td>
+<td align="left">Transmission (0 = automatic, 1 = manual)</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 15]</td>
+<td align="left">transmission</td>
+<td align="left">same info as am as a factor</td>
+</tr>
+<tr class="even">
+<td align="right">[, 16]</td>
+<td align="left">gear</td>
+<td align="left">Number of forward gears</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 17]</td>
+<td align="left">gear_factor</td>
+<td align="left">Number of forward gears as a factor</td>
+</tr>
+<tr class="even">
+<td align="right">[, 18]</td>
+<td align="left">carb</td>
+<td align="left">Number of carburetors</td>
+</tr>
+<tr class="odd">
+<td align="right">[, 19]</td>
+<td align="left">test_date</td>
+<td align="left">arbitrary date - created to approximate when the vehicle would have been assessed.</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="pefr" class="section level1" number="4">
+<h1 number="4"><span class="header-section-number">4</span> pefr</h1>
+<p>Peak expiratory flow rate (pefr) data is used for examples within the qwraps2 package. The data has been transcribed from <span class="citation">(Bland and Altman 1986)</span>.</p>
+<blockquote>
+<p>The sample comprised colleagues and family of J.M.B. chosen to give a wide range of PEFR but in no way representative of any defined population. Two measurements were made with a Wright peak flow meter and two with a mini Wright meter, in random order. All measurements were taken by J.M.B., using the same two instruments. (These data were collected to demonstrate the statistical method and provide no evidence on the comparability of these two instruments.) We did not repeat suspect readings and took a single reading as our measurement of PEFR. Only the first measurement by each method is used to illustrate the comparison of methods, the second measurements being used in the study of repeatability.</p>
+</blockquote>
+<p>The units of measure for the pefr are liters per minute (L/min).</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true"></a><span class="co"># copied text from the manuscript</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true"></a>pefr_table &lt;-</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true"></a><span class="st">  </span><span class="kw">read.delim</span>(</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true"></a>             <span class="dt">header =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true"></a>             <span class="dt">text =</span> <span class="st">&quot;</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true"></a><span class="st">1   494 490 512 525</span></span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true"></a><span class="st">2   395 397 430 415</span></span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true"></a><span class="st">3   516 512 520 508</span></span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true"></a><span class="st">4   434 401 428 444</span></span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true"></a><span class="st">5   476 470 500 500</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true"></a><span class="st">6   557 611 600 625</span></span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true"></a><span class="st">7   413 415 364 460</span></span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true"></a><span class="st">8   442 431 380 390</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true"></a><span class="st">9   650 638 658 642</span></span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true"></a><span class="st">10  433 429 445 432</span></span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true"></a><span class="st">11  417 420 432 420</span></span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true"></a><span class="st">12  656 633 626 605</span></span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true"></a><span class="st">13  267 275 260 227</span></span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true"></a><span class="st">14  478 492 477 467</span></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true"></a><span class="st">15  178 165 259 268</span></span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true"></a><span class="st">16  423 372 350 370</span></span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true"></a><span class="st">17  427 421 451 443&quot;</span>)</span></code></pre></div>
+<p>Build the data set</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>pefr &lt;-</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a><span class="st">  </span><span class="kw">expand.grid</span>(<span class="dt">subject =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">17</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>              <span class="dt">measurement =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">2</span>,</span>
+<span id="cb15-4"><a href="#cb15-4" aria-hidden="true"></a>              <span class="dt">meter   =</span> <span class="kw">c</span>(<span class="st">&quot;Wright peak flow meter&quot;</span>, <span class="st">&quot;Mini Wright peak flow meter&quot;</span>),</span>
+<span id="cb15-5"><a href="#cb15-5" aria-hidden="true"></a>              <span class="dt">KEEP.OUT.ATTRS =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb15-6"><a href="#cb15-6" aria-hidden="true"></a>              <span class="dt">stringsAsFactors =</span> <span class="ot">FALSE</span>)</span>
+<span id="cb15-7"><a href="#cb15-7" aria-hidden="true"></a>pefr<span class="op">$</span>pefr &lt;-<span class="st"> </span><span class="kw">do.call</span>(c, pefr_table[, <span class="dv">2</span><span class="op">:</span><span class="dv">5</span>])</span>
+<span id="cb15-8"><a href="#cb15-8" aria-hidden="true"></a></span>
+<span id="cb15-9"><a href="#cb15-9" aria-hidden="true"></a><span class="kw">head</span>(pefr)</span></code></pre></div>
+<pre><code>##   subject measurement                  meter pefr
+## 1       1           1 Wright peak flow meter  494
+## 2       2           1 Wright peak flow meter  395
+## 3       3           1 Wright peak flow meter  516
+## 4       4           1 Wright peak flow meter  434
+## 5       5           1 Wright peak flow meter  476
+## 6       6           1 Wright peak flow meter  557</code></pre>
+<p>See <code>vignette(&quot;qwraps2-graphics&quot;, package = &quot;qwraps2&quot;)</code> for examples using this data set.</p>
+</div>
+<div id="references" class="section level1" number="5">
+<h1 number="5"><span class="header-section-number">5</span> References</h1>
+<div id="refs" class="references hanging-indent">
+<div id="ref-bland1986statistical">
+<p>Bland, J Martin, and DouglasG Altman. 1986. “Statistical Methods for Assessing Agreement Between Two Methods of Clinical Measurement.” <em>The Lancet</em> 327 (8476): 307–10.</p>
+</div>
+<div id="ref-hocking1976biometrics">
+<p>Hocking, Ronald R. 1976. “A Biometrics Invited Paper. The Analysis and Selection of Variables in Linear Regression.” <em>Biometrics</em> 32 (1): 1–49.</p>
+</div>
+</div>
+</div>
+<div id="session-info" class="section level1" number="6">
+<h1 number="6"><span class="header-section-number">6</span> Session Info</h1>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true"></a><span class="kw">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.0.2 (2020-06-22)
+## Platform: x86_64-apple-darwin17.0 (64-bit)
+## Running under: macOS Catalina 10.15.6
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRblas.dylib
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.0/Resources/lib/libRlapack.dylib
+## 
+## locale:
+## [1] C/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## attached base packages:
+## [1] stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+## [1] qwraps2_0.5.0
+## 
+## loaded via a namespace (and not attached):
+##  [1] compiler_4.0.2  magrittr_1.5    htmltools_0.5.0 tools_4.0.2    
+##  [5] yaml_2.2.1      Rcpp_1.0.5      stringi_1.4.6   rmarkdown_2.3  
+##  [9] knitr_1.29      stringr_1.4.0   digest_0.6.25   xfun_0.16      
+## [13] rlang_0.4.7     evaluate_0.14</code></pre>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

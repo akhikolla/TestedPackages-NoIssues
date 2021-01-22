@@ -1,0 +1,12 @@
+useDynLib(FastGaSP)
+
+# Import
+import("Rcpp", "methods")
+importFrom("Rcpp", "evalCpp")
+importFrom("stats","rnorm","qnorm","sd","optim","optimize")
+importFrom("graphics","legend","plot")
+# Exports
+export(fgasp, log_lik, Get_log_det_S2,Kalman_smoother)
+exportMethods(show,predict)
+exportClasses(fgasp,predictobj.fgasp)
+

@@ -1,0 +1,15 @@
+WARNING: No test specified, defaulting to first test defined (junctions_deepstate_test_sim_inf_chrom_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/junctions/inst/testfiles/sim_inf_chrom/sim_inf_chrom_output/733d0dcd6c484c5abba82ad07834dae4d21dfdb5.fail`
+TRACE: Running: junctions_deepstate_test_sim_inf_chrom_test from /home/akhila/fuzzer_packages/fuzzedpackages/junctions/inst/testfiles/sim_inf_chrom/sim_inf_chrom_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+pop_size values: 467495432
+init_heterozygosity values: 8.08981e-307
+run_time values: 77470436
+size_in_Morgan values: -1.66668e-49
+markers values: 1668042617
+seed values: 338649647
+input ends
+ERROR: Crashed: junctions_deepstate_test_sim_inf_chrom_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/junctions/inst/testfiles/sim_inf_chrom/sim_inf_chrom_output/733d0dcd6c484c5abba82ad07834dae4d21dfdb5.fail crashed

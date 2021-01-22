@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (frailtySurv_deepstate_test_deriv_lt_dgamma_c_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dgamma_c/deriv_lt_dgamma_c_output/328848021a48a7d93c56b31d740660392b264285.pass`
+TRACE: Running: frailtySurv_deepstate_test_deriv_lt_dgamma_c_test from /home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dgamma_c/deriv_lt_dgamma_c_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: -293123844
+s values: -2.57108e+123
+theta values: 2.98766e-188
+input ends
+TRACE: Passed: frailtySurv_deepstate_test_deriv_lt_dgamma_c_test

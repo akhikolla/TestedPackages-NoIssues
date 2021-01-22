@@ -1,0 +1,173 @@
+---
+title: "IntervalSurgeon"
+author: "Daniel Greene"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Usage}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+```{r echo=FALSE}
+knitr::opts_chunk$set(fig.width=7, fig.height=5, dev="svg", fig.align="center")
+```
+
+## Introduction
+
+`IntervalSurgeon` presents functions for intersecting, overlapping, piling and annotating integer-bounded intervals. 
+Underlying algorithms are written in C++ for efficiency where appropriate (with the help of the `Rcpp` package). 
+A typical use case would be for manipulating genomic intervals.
+
+For the purposes of this package, intervals are represented as two-column integer matrices where the inclusive start points are in the first column and the exclusive end points are in the second column. 
+
+```{r}
+library(IntervalSurgeon)
+
+starts <- 3*1:10
+ends <- 5*1:10
+
+intervals <- cbind(starts, ends)
+```
+
+The lengths of the intervals are therefore: `intervals[,2]-intervals[,1]`.
+
+A key concept in `IntervalSurgeon` is breaking ranges which contain intervals into 'sections' delimited by the unique start/end points in the set.
+The sections for a set of intervals `x` is therefore a two-column `matrix` representing a set of intervals which partitions the range of `x` by the sorted start and end points.
+The sorted start and end points can be obtained using the `breaks` function (so named to reflect start/end points of intervals frequently being referred to as 'breakpoints' in genomics), which is equivalent to: `sort(unique(as.integer(intervals)))`). 
+The sections can be computed from the sorted start and end points using the `sections` function.
+
+One can use the `depth` and `pile` functions respectively to obtain the depth of intervals over their 'sections' (within which the depth is constant), and the row indices of original intervals which cover each section.
+
+The `flatten` function returns a non-touching, non-overlapping set of intervals (as a `matrix`) which overlap at least one of a given set.
+
+```{r}
+sectioned <- sections(breaks(intervals))
+flattened <- flatten(intervals)
+depths <- depth(intervals)
+piles <- pile(intervals)
+```
+
+```{r fig.width=7, fig.height=3, echo=FALSE}
+plot_intervals <- function(ints, y, whisker_size=0.1, ...) {
+	segments(x0=ints[,1], x1=ints[,2], y0=y, y1=y, ...)
+	for (i in 1:2)
+		segments(y0=y-whisker_size/2, y1=y+whisker_size/2, x0=ints[,i], x1=ints[,i], ...)
+}
+par(mar=rep(0, 4))
+plot(x=NULL, xlab="", ylab="", axes=FALSE, xlim=range(intervals), ylim=c(0, 6))
+cent <- mean(range(intervals))
+text(x=cent, pos=3, offset=1, labels="intervals", y=5)
+with(list(y=4.75+0.5*seq(from=1, to=-1, length.out=nrow(intervals))), plot_intervals(whisker_size=0, lwd=2, col="black", ints=intervals, y=y))
+text(x=cent, pos=3, offset=1, labels="sectioned", y=3.25)
+text(x=cent, pos=3, offset=1, labels="flattened", y=2)
+text(x=cent, pos=3, offset=1, labels="depths", y=1)
+rect(xleft=sectioned[,1], xright=sectioned[,2], ytop=depths/max(depths), ybottom=0, col="light grey")
+plot_intervals(lwd=2, col="blue", ints=sectioned, y=3.25)
+plot_intervals(lwd=2, col="red", ints=flattened, y=2)
+#axis(side=1)
+```
+
+## Detached intervals
+
+`IntervalSurgeon` provides functions which are optimised for dealing with detached (i.e. non-overlapping and non-touching) intervals which are sorted and non-empty. Here, we generate two such sets of intervals:
+
+```{r}
+x_starts <- 10*1:10
+x <- cbind(x_starts, x_starts + 5)
+
+y_starts <- 20*1:5 + 1
+y <- cbind(y_starts, y_starts + 7)
+```
+
+We can determine that they are indeed detached, sorted and non-empty using the `detached_sorted_nonempty` function. 
+
+```{r}
+detached_sorted_nonempty(x)
+```
+
+The `IntervalSurgeon` functions for operating on such sets of detached, sorted, non-empty intervals are analogues of the set operation functions in the `base` package, namely: `intersect`, `union` and `setdiff`. Here, the function names are in plural (i.e. with extra s's on the end).
+
+```{r fig.width=7, fig.height=4, echo=FALSE}
+all_ints <- c(
+	list(x=x, y=y),
+	lapply(
+		lapply(FUN=match.fun, X=setNames(nm=c("intersects", "unions", "setdiffs"))),
+		function(f) f(x,y,check=TRUE)
+	)
+)
+pts <- breaks(c(x, y))
+par(mar=rep(0, 4))
+plot(axes=FALSE, x=NULL, xlab="", ylab="", xlim=range(c(x, y)), ylim=c(0.5, length(all_ints)+0.5))
+#axis(side=1)
+abline(v=pts, col="grey")
+for (i in seq_along(all_ints)) {
+	ypos <- length(all_ints) - i + 1
+	plot_intervals(ints=all_ints[[i]], y=ypos, lwd=2, col=rainbow(length(all_ints))[i])
+	text(x=mean(range(c(x, y))), pos=3, offset=1, labels=names(all_ints)[i], y=ypos)
+}
+```
+
+For a given set of sorted, non-overlapping intervals, some of the start points might be the same as the end points of adjacent intervals. 
+These intervals are therefore 'touching' and can be 'stitched' together using the `stitch` function.
+If there were overlaps, the `flatten` function can be used to generate a set of sorted disjoint intervals.
+Note that `flatten` will also stitch touching intervals, although the `stitch` function is faster (albeit requiring intervals to be sorted).
+
+## Finding overlaps between sets of intervals
+
+Information about overlaps between sets of intervals can be obtained by 'joining' the sets.
+This is analogous to an SQL inner-join of two tables, and can be performed on sets of intervals using the `join` function.
+This function returns a matrix containing all overlaps of intervals from each set.
+Each row in the returned matrix corresponds to a specific overlap of intervals with one from each of the sets passed to the function.
+The `n`th element in a row contains the row index of the interval in the `n`th set of intervals passed to the function.
+Depending on the value of the `output` argument, there may two additional columns giving the start and end coordinates of the overlap (the default: `output="intervals"`,
+no extra columns (`output="indices"`) or one additional column giving the row index of the 'section' of the complete set of intervals (`output="sections"`, see `?sections`). 
+
+```{r}
+x <- cbind(3*1:8, 5*1:8)
+y <- cbind(4*1:4, 7*1:4)
+join_xy <- join(x, y)
+
+head(join_xy)
+```
+
+One common task would be to tag intervals with overlapping intervals, perhaps from a different set. 
+For example, this might be useful for tagging a set of genomic intervals with the names of genes which they overlap.
+The `annotate` function is provided for this exact purpose.
+
+```{r}
+x <- cbind(0, c(a=10, b=20, c=30))
+y <- cbind(c(A=0, B=10, C=20), c(5, 15, 25))
+```
+```{r fig.width=7, fig.height=3.5, echo=FALSE}
+brks <- breaks(rbind(x, y))
+lx <- nrow(x); ly <- nrow(y)
+par(mar=rep(0, 4))
+plot(x=NULL, xlab="", ylab="", axes=FALSE, xlim=range(c(x, y)), ylim=c(0, lx+ly))
+abline(v=brks, col="grey")
+ys <- lx+ly-seq(from=0.5, length.out=lx+ly)
+plot_intervals(lwd=2, col=rep(rainbow(2), times=c(lx, ly)), y=ys, ints=rbind(x, y))
+text(labels=c(rownames(x), rownames(y)), x=(c(x[,1], y[,1])+c(x[,2], y[,2]))/2, y=ys, pos=3)
+```
+```{r}
+annotate(x, y)
+```
+
+## Use with genomic intervals
+
+Genomic intervals are often represented in R as `data.frame`s with columns corresponding to chromosome name, start position and end position.
+Obviously intervals do not intersect if they are on different chromosomes, so in order to manipulate such intervals with `IntervalSurgeon`, genome-wide operations must be performed chromosome-at-a-time. Using `split` to create a list of chromosome specific `data.frames`, or looping over the names of chromosomes and subsetting the original table, before `cbind`ing/`as.matrix`ing the start and end columns then makes the data accessible to the `IntervalSurgeon` functions.
+
+```{r echo=FALSE}
+	regions <- data.frame(chr=c("X", 2), start=1:2, end=100:101)
+	genes <- data.frame(chr=c(1, "X", 2, 2), start=1:4, end=2:5)
+```
+```{r}
+regions_annotated_with_genes <- lapply(
+	c(1:22, "X", "Y"),
+	function(chromosome) {
+		regions_on_chr <- as.matrix(regions[regions$chr == chromosome,c("start", "end")])
+		genes_on_chr <- as.matrix(genes[genes$chr == chromosome,c("start","end")])
+		annotate(regions_on_chr, genes_on_chr)
+	}
+)
+```

@@ -1,0 +1,35 @@
+#year = sub('.*(2[[:digit:]]{3})-.*', '\\1', meta$Date, perl = TRUE)
+#vers = paste('R package version', meta$Version)
+#ttl = paste("psd:", meta$Title)
+#tvers = sprintf("R. L. Parker and A. J. Barbour (%s), %s, %s", year, ttl, vers)
+#
+#bibentry('Manual',
+#  title = ttl,
+#  author = meta$Author,
+#  year = year,
+#  note = vers,
+#  key = paste0("Rpsd",year),
+#  url = meta$URL,
+#  textVersion = tvers,
+#  mheader = "To cite 'psd' in publications use:",
+#  mfooter = "We also have a peer-reviewer article documenting the software:"
+#)
+
+bibentry("Article",
+  title = '{psd: Adaptive, sine multitaper power spectral density estimation for R}',
+  author = 'Andrew J Barbour and Robert L Parker',
+  journal = 'Computers & Geosciences',
+  month = 'February',
+  volume = '63',
+  pages = '1-8',
+  year = '2014',
+  doi = '10.1016/j.cageo.2013.09.015',
+  key = "Barbour2014",
+  mheader = "To cite 'psd' in publications, please use:",
+  textVersion = paste('Barbour, A. J. and R. L. Parker (2014)', 
+  	'psd: Adaptive, sine multitaper power spectral density estimation for R',
+	'Computers & Geosciences', 'Volume 63', 'February 2014', 'Pages 1-8', 
+	'ISSN 0098-3004', 'http://dx.doi.org/10.1016/j.cageo.2013.09.015',sep=", "),
+  mfooter = "If you cannot access the article, please contact A. Barbour for re-prints."
+)
+

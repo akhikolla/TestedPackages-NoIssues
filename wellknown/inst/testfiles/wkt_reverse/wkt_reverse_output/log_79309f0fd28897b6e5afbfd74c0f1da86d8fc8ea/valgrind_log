@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./wkt_reverse_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/wellknown/inst/testfiles/wkt_reverse/wkt_reverse_output/79309f0fd28897b6e5afbfd74c0f1da86d8fc8ea.pass</line>
+</preamble>
+
+<pid>897145</pid>
+<ppid>897144</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/wellknown/inst/testfiles/wkt_reverse/wkt_reverse_output/log_79309f0fd28897b6e5afbfd74c0f1da86d8fc8ea/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./wkt_reverse_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/wellknown/inst/testfiles/wkt_reverse/wkt_reverse_output/79309f0fd28897b6e5afbfd74c0f1da86d8fc8ea.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.026 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.443 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.964 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

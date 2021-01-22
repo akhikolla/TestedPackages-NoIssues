@@ -1,0 +1,18 @@
+WARNING: No test specified, defaulting to first test defined (wordspace_deepstate_test_CPP_col_norms_sparse_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/wordspace/inst/testfiles/CPP_col_norms_sparse/CPP_col_norms_sparse_output/6d0a59024328d7ea456724a6a8cf864e4499e9b2.pass`
+TRACE: Running: wordspace_deepstate_test_CPP_col_norms_sparse_test from /home/akhila/fuzzer_packages/fuzzedpackages/wordspace/inst/testfiles/CPP_col_norms_sparse/CPP_col_norms_sparse_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+nr values: 467495432
+nc values: 1827680409
+p values: -835858507 1668042617 338649647 214710137 -1134095747 -1787462247 328695087 1906416959 -831654863 -649876499 1913461887 -648742763 -1156967856 2140137874 644268439 123721430 -859175003 246583936 -1079050344 49753534 37686913 -822602508 1591053158 878787584 742630714 -164119883 -423997720 -1317296461 -1145752183 -1387692533 503935315 1806521239 -235286041 814455830 1173028855 1722133025 1524607495 673715015 847551133 854406179 -435877353 -1868157482 -1859334665 -763946964 1472345215 -347617763 -882853123 1324228660 -215331965 -780576414 -1524213385 -1636719371
+Missing value
+row_of values: -486007082 862542340 523975658 -624951432
+Missing value
+x values: 2.59209e-42 2.60723e+99 -2.72163e-171 2.60723e+99 -1.05877e+151 nan 2.71379e-129 -2.99574e+172 -3.92218e+180 3.87645e+40 2.8753e-21 2.16137e-216 -1.24268e+93 inf 0
+norm_code values: -1583175625
+p_norm values: 1.08824e+193
+input ends
+Exception Handled
+TRACE: Passed: wordspace_deepstate_test_CPP_col_norms_sparse_test

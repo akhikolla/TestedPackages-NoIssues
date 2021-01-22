@@ -1,0 +1,284 @@
+---
+title: "Some Theory behind `fractional`"
+author: "Bill Venables"
+date: "`r Sys.Date()`"
+bibliography: refs.bib
+output: 
+  rmarkdown::html_vignette:
+    css: fractional_style.css
+    toc: true
+    number_sections: true
+vignette: >
+  %\VignetteIndexEntry{2 Theory and Implementation}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r c0, include = FALSE}
+## rmarkdown::tufte_handout
+library(knitr)
+opts_chunk$set(comment = "", warning = FALSE, message = FALSE, fig.height = 4.94, 
+               fig.width = 8, out.width = "690px", out.height = "426px")
+oldOpt <- options(scipen = 10, width = 75)
+library(dplyr)
+library(fractional)
+library(ggplot2)
+```
+
+> __NOTE:__ If the mathematical inserts in this vignette are not displaying correctly or
+> even replaced by messages <span style="color:red">_[Math processing error]_</span>
+> it is most likely a caching problem with your browser.  This may be solved by
+> a "hard reload", that is, by holding down the _Shift_ key while clicking on
+> the "reload/refresh" button.  See, for example,
+> [this stackexchange query and reply](http://meta.math.stackexchange.com/questions/3627/why-is-math-processing-error-all-over-the-place-today).
+
+# Rational approximation by continued fractions
+
+The notation we use is that of @khovanskii_1963, which is a fundamental reference.
+
+A continued fraction is a development of the form:
+
+$$
+b_0 + \cfrac{a_1}{b_1 + \cfrac{a_2}{b_2 + \cfrac{a_3}{b_3 + \dotsb \vphantom{\cfrac{a_4}{b_4}}}}}
+$$
+
+where the quantities $a_1, a_2, \ldots$ are called the _**partial numerators**_ and $b_1, b_2, \dots$ the _**partial denominators**_.  If $b_0$ as well as the partial numerators and denominators are all integers, with the partial denominators positive, then terminating the development at any stage leads to a result that may be written as a ratio of two integers, that is, as a _**vulgar fraction**_.  If the termination is after $n$ steps, we write the result as 
+
+$$
+\frac{P_n}{Q_n} = b_0 + \cfrac{a_1}{b_1 + \cfrac{a_2}{b_2 + \cfrac{a_3}{\begin{matrix}
+b_3 + \cdots\vphantom{\cfrac{1}{}} & \\
+& b_{n-1} + \cfrac{a_n}{b_n}
+\end{matrix}
+}}}
+$$
+
+Put $P_0/Q_0 = b_0/1$. The ratios $P_n/Q_n, n = 0, 1, 2, \dots$ are called the _**convergents**_ of the continued fraction (whether they converge in the mathematical sense or not).
+
+It is convenient to extend the series of convergents artificially further back one step and put:
+
+$$
+\frac{P_{-1}}{Q_{-1}} = \frac{1}{0}, 
+\frac{P_0}{Q_0} = \frac{b_0}{1},
+\frac{P_1}{Q_1}, \frac{P_2}{Q_2}, \cdots
+$$
+
+With this definition, an easy inductive argument [@khovanskii_1963, page 3] shows that the numerators and denominators of the convergents may be calculated progressively using a two-term recurrence relation.  In fact the numerators and denominators have the same recurrence relations, namely:
+
+$$\left.
+\begin{align}
+P_{n+1} & =  b_{n+1}P_n + a_{n+1}P_{n-1} \\
+Q_{n+1} & =  b_{n+1}Q_n + a_{n+1}Q_{n-1}
+\end{align}
+\right\} \quad n = 0, 1, 2, \ldots
+$$
+
+but of course $P_n$ and $Q_n$ have different starting values.
+
+## Real numbers into continued fractions
+
+A rational approximation to a real number is an approximation in the form of the ratio of two integers, numerator and denominator.  The denominator should be positive, and for definiteness we require the numerator and denominator to be *relatively prime*, that is with greatest common divisor equal to 1.  
+
+The simplest and most powerful to find rational approximation for real numbers is to express them as continued fractions, with the convergents forming the approximations.  An algorithm to do this is most easily described as a series of steps.
+
+0. Let $x$ be a real number for which the approximation is wanted.
+
+1. Write $b_0 = \lfloor x\rfloor$ and put $x = b_0 + (x - \lfloor x\rfloor) = b_0 + r_0$.  
+
+2. $0 \leq r_0 \lt 1$, by definition.  There are two cases:
+
+    + If $r_0 = 0$ the process is complete.  The rational approximation is exact.
+
+    + If $r_0 > 0$, note that $1/r_0 > 1$. Write $1/r_0 = \lfloor 1/r_0 \rfloor + (1/r_0 - \lfloor 1/r_0 \rfloor) = b_1+r_1$, with $b_1 \geq 1$ and $0 \leq r_1 < 1$. Then:
+    $$ x = b_0 + \frac{1}{1/r_0} = b_0 + \cfrac{1}{b_1 + r_1}$$
+
+3. Continuing in this way we produce a continued fraction expansion for the real number of the form:
+
+$$
+x = b_0 + \cfrac{1}{b_1 + \cfrac{1}{b_2 + \cfrac{1}{b_3 + \dotsb \vphantom{\cfrac{1}{b_4}}}}}
+$$
+
+where the partial numerators are all equal to 1 and the partial denominators are all positive integers.  The fraction terminates if at any stage a 'excess' term, $r_n$, becomes $0$, preventing the process from continuing.
+
+Continued fractions with all $a_i=1,\; i = 1, 2, \ldots$ are usually called __simple__.
+
+### Some theoretical examples
+
+In some special cases the process can be conducted theoretically, yielding the entire fraction.  For example the "golden ratio", $\varphi = \left(\sqrt 5 + 1\right)/2$ is the positive root of the equation $1/\varphi =  \varphi - 1$.  Writing this as $\varphi - 1 = 1/\{1 + (\varphi-1)\}$ and iterating the right hand side leads directly to possibly the simplest continued fraction of the above form:
+
+$$
+\varphi = 1 + \cfrac{1}{1 + \cfrac{1}{1 + \cfrac{1}{1 + \cdots \vphantom{\cfrac{1}{1}}}}}
+$$
+
+Further, the recurrence relations for the $P_n$ and $Q_n$ are out-of-step Fibonacci sequence relations.  This shows the well-known result that $\varphi$ is the limit of the ratio of consecutive Fibonacci numbers:
+
+```{r}
+F <- c(1, 1, numeric(15))
+for(i in 3:17) ## Fibonacci sequence by recurrence
+  F[i] <- F[i-1] + F[i-2]  
+F
+vfractional((sqrt(5) + 1)/2, eps = 0, maxConv = 1:16)
+```
+
+In a similar way we may write:
+
+$$
+\left(\sqrt 2 - 1\right) = \frac{\sqrt 2 - 1}{1}\times \frac{1 + \sqrt2}{1 + \sqrt2}
+= \frac{1}{1 + \sqrt2} = \frac{1}{2 + \left(\sqrt2 - 1\right)}
+$$
+
+Iterating this equation in the same way, and slightly re-arranging, leads to the continued fraction:
+
+$$
+\sqrt 2 = 1 + \cfrac{1}{2 + \cfrac{1}{2 + \cfrac{1}{2 + \cdots \vphantom{\cfrac{1}{2}}}}}
+$$
+
+One way to appreciate the algorithm is to look at how it might be coded in `R`.
+
+The package provides no function to return the partial denominators, $b_n$, explicitly.  However writing such a bespoke function is simple.
+
+```{r pdenom}
+partial_denominators <- function(x, k = 10) {
+  b <- rep(NA, k)
+  r <- x
+  for(i in 1:k) {
+    b[i] <- floor(r)
+    r <- r - b[i]
+    if(isTRUE(all.equal(r, 0))) break
+    r <- 1/r
+  }
+  structure(b, names = paste0("b", 1:k-1))
+}
+```
+
+To see it in action, we consider what it produces for the golden ratio, $\varphi$, 
+the circular ratio, $\pi$, the base of natural logarithms, $e$, and the square roots of the first few positive integers.  Irrational numbers have periodic continued fraction expansions, so the patterns will become clear.
+
+```{r pdenom_2, results = "asis"}
+x <- c(pi = base::pi, e = exp(1), phi = (sqrt(5) + 1)/2, 
+       structure(sqrt(1:9), names = paste0("sqrt(", 1:9, ")")))
+tab <- x %>% sapply(partial_denominators) %>% t 
+tab[is.na(tab)] <- ""
+kable(tab, align = "r", caption = "Partial denominators")
+```
+
+That $\pi$ and $e$ do not appear to have any stable periodic pattern is not surprising, as they are known to be _transcendental_ rather than merely irrational.  The Euler constant $e$ has a pattern of period 3, but with the third term increasing by two in each cycle.  By contrast the denominators for $\pi$ appear to be entirely random[^1].
+
+[^1]: $\pi$ does have a regularly patterned continued fractions expression, 
+      but unlike $e$, it appears to have no such _simple_ continued fraction.
+
+These, and many others are listed in the [On-line Encyclopedia of Integer 
+Sequences, (OIES)](https://oeis.org/).
+
+
+# Implementation in `R`
+
+In `R` the implementation is simple.  The following routine computes the convergents (as pairs of integers), terminating either when the error in the rational approximation is below a set tolerance, or a prescribed maximum number of convergents is reached.  The return value is a vector of the final three values: $(P_n, Q_n, n)$.
+
+```
+.ratr <- function(x, eps = 1.0e-6, maxConv = 20) {
+  PQ1 <- c(1, 0)
+  PQ2 <- c(floor(x), 1)
+  r <- x - PQ2[1]
+  i <- 0
+  while((i <- i+1) < maxConv && abs(x - PQ2[1]/PQ2[2]) > eps) {
+    b <- floor(1/r)
+    r <- 1/r - b
+    PQ0 <- PQ1
+    PQ1 <- PQ2
+    PQ2 <- b*PQ1 + PQ0
+  }
+  return(c(PQ2, i-1))
+}
+```
+
+We can check the result with a well-known rational approximation:
+
+```{r check, results = "hold"}
+pq <- .ratr(pi)
+cat("Pn = ", pq[1], ", Qn = ", pq[2], ", n = ", pq[3], "\n", sep = "")
+cat("pi = ", format(pi, digits = 15), 
+    ", Pn/Qn = ", format(pq[1]/pq[2], digits = 15), 
+    ", Error = ", pi - pq[1]/pq[2], "\n", sep = "")
+```
+
+## Some elementary properties
+
+The convergents for a rational approximation constructed in this way have some interesting elementary properties.  Again, all results are taken from Chapter 1 of @khovanskii_1963.
+
+* For the convergents so obtained, $P_n/Q_n$, the numerators and denominators will be _relatively prime_, that is, the fraction will be expressed in its lowest terms.
+
+* The even numbered convergents, $P_{2n}/Q_{2n}$ form an increasing series of lower bounds to the true value and the odd numbered ones, $P_{2n+1}/Q_{2n+1}$ form a decreasing series of upper bounds:
+$$ \frac{P_0}{Q_0} < \frac{P_2}{Q_2} < \cdots < \frac{P_{2k}}{Q_{2k}} < x <
+ \frac{P_{2k+1}}{Q_{2k+1}} < \cdots <\frac{P_3}{Q_3} < \frac{P_1}{Q_1} $$
+ Hence the errors at any stage, $x - P_n/Q_n$ are alternately positive and negative.
+ 
+* The absolute error at any stage is bounded as follows:
+$$\left|x - \frac{P_n}{Q_n}\right| < \frac{1}{Q_{n-1}Q_n}, \qquad n = 1, 2, \dots$$
+
+* From the recurrence relation, the denominators, $Q_n$, are non-decreasing, ultimately increasing monotonically without limit, unless the continued fraction terminates after a finite number of convergents. It follows that the continued fraction either terminates at the true value, or converges in the limit to it.  In practice, convergence is rapid.
+
+We can illustrate some of these properties by looking at the sequence of convergents the process generates for $\pi$.  Notice how the errors alternate in sign and rapidly decrease in absolute value.  For reference, the accurate value of $\pi$ is `3.141592653589793116`.
+
+```{r pi, echo = FALSE}
+oldOpt <- options(scipen = 15, digits = 15)
+pi_approx <- vfractional(base::pi, eps = 0, maxConv = 1:10)
+tab <- within(data.frame(fraction = pi_approx, stringsAsFactors = FALSE), {
+  value = numerical(fraction)
+#  pi = base::pi
+  error = base::pi - value
+  n = seq_along(value) - 1
+})[, c("n", "fraction", "value", "error")]
+names(tab)[2] <- "Pn/Qn"
+kable(tab, align = c("c", "c", "c", "r"))
+options(oldOpt)
+```
+
+Given a fixed denominator, $d$, the optimal rational approximation to $x$ is clearly obtained by rounding $x d$, that is using $\left\lfloor xd+\frac12\right\rfloor/d$.  The denominators $Q_n$ of the convergents usually correspond to points where there is a sudden increase in accuracy.  To illustrate this we consider approximating $\sqrt 5$. The first few convergents are as follows:
+
+```{r sqrt5}
+(s5 <- vfractional(sqrt(5), eps = 0, maxConv = 1:7))
+d5 <- denominators(s5)
+e5 <- abs(sqrt(5) - numerical(s5))
+```
+
+Now consider all rational approximations with denominators no larger:
+
+```{r sqrt5_2}
+d <- seq(max(d5))
+n <- round(sqrt(5) * d)
+```
+
+To simplify the graph we may remove any which are not in their lowest terms.
+
+```{r}
+gcd <- mapply(FUN = function(a, b) if(b == 0) a else Recall(b, a %% b),
+              n, d)
+nd <- cbind(n, d)/gcd
+nd <- nd[!duplicated(nd), ]
+e <- abs(sqrt(5) - nd[, 1]/nd[, 2])
+```
+
+To see the detail of what is happening, we need to use a log-log scale:
+
+```{r sqrt5_3,echo=FALSE}
+dat <- data.frame(Denominator = nd[,2], Error = e)
+dat5 <- data.frame(Denominator = d5, Error = e5)
+ggplot(dat) + aes(x = Denominator, y = Error) + 
+  geom_point(colour = "steel blue", size = 0.5) +
+  scale_x_log10(breaks = 5^(0:5)) + scale_y_log10() +
+  geom_point(data = dat5, mapping = aes(x = Denominator, y = Error), colour = "red",
+             shape = 1, size = 3) +
+  geom_step(data = dat5, mapping = aes(x = Denominator, y = Error),
+            colour = "red", size = 0.5) +
+  xlab(expression(paste("Denominator, ", italic(d)))) +
+  ylab("Absolute error") +
+  ggtitle(expression(paste("Errors in Rational Approximations, ",
+                             italic(n)/italic(d), ", to ", sqrt(5))))
+```
+
+The blue points give the errors in the approximations for all denominators up to `r max(d5)`; the red points and lines indicate the subset of them which are the continued fraction convergents.
+
+Note that the convergent, $P_n/Q_n$, is the most accurate approximation for any with denominator less that or equal to $Q_n$, and is closer than at most one or two with denominators less than $Q_{n+1}$.
+
+# References
+

@@ -1,0 +1,10 @@
+f825c81a2484970ce53d73fca0b10341 *DESCRIPTION
+7701a4bc8e62fda4c963c29ca8c1f0c7 *NAMESPACE
+984809039db6af08d232691339bb60b6 *R/RcppExports.R
+770607269ec63499c984a1350bd563f6 *R/sharks.R
+c08cc53d741610c1d17cb1446b92255c *R/vennplot.R
+ce3d3143fc00959ce1ebdf9c9dcc674d *data/sharks.rda
+7b89b3f74bb3805554bb2018ea298893 *man/sharks.Rd
+8f3180a706c5a2b21f5a9ab54aed1d78 *man/vennplot.Rd
+79494fe7dfec280277c06f83b285c420 *src/RcppExports.cpp
+acafd6df514092b03381526a682d02d2 *src/vennCpp6.cpp

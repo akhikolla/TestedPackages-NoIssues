@@ -1,0 +1,87 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (updog_deepstate_test_post_prob_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+dosage values: 467495432
+ploidy values: 1827680409
+mu values: -1.64581e+174
+sigma2 values: -1.66668e-49
+alpha values: 1.91698e-80
+rho values: 2.93871e+294
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: updog_deepstate_test_post_prob_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+dosage values: -498905818
+ploidy values: 569042049
+mu values: -1.20777e+13
+sigma2 values: 2.79236e-196
+alpha values: 1.26379e+187
+rho values: 1.42068e+49
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: updog_deepstate_test_post_prob_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+dosage values: -293123844
+ploidy values: -555281357
+mu values: -2.88162e-134
+sigma2 values: 8.18711e+299
+alpha values: 0.00468189
+rho values: 9.28697e-257
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: updog_deepstate_test_post_prob_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+dosage values: -1105761949
+ploidy values: 304498753
+mu values: 3.72126e-82
+sigma2 values: 5.29799e-243
+alpha values: 7.52749e+12
+rho values: -2.14488e+105
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: updog_deepstate_test_post_prob_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+dosage values: 954479852
+ploidy values: -194229631
+mu values: -4.2952e-278
+sigma2 values: 4.24195e+22
+alpha values: -1.34847e-218
+rho values: 8.07634e-201
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: updog_deepstate_test_post_prob_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+dosage values: 1344097580
+ploidy values: -1433424706
+mu values: -5.48117e-145
+sigma2 values: 4.79212e-250
+alpha values: 9.60637e+283
+rho values: 5.00463e-274
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: updog_deepstate_test_post_prob_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+dosage values: -823343871
+ploidy values: -1944840741
+mu values: 7.96752e+95
+sigma2 values: -4.40542e-65
+alpha values: 9.93765e+292
+rho values: 2.32003e+83
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: updog_deepstate_test_post_prob_test
+INFO: Done fuzzing! Ran 7 tests (3 tests/second) with 0 failed/0 passed/7 abandoned tests

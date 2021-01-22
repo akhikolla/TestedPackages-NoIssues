@@ -1,0 +1,17 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (teachingApps_deepstate_test_rbeta4_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+n values: 467495432
+min values: 8.08981e-307
+max values: 3.76873e+222
+shape1 values: 2.1759e+276
+shape2 values: 8.23909e+275
+seed values: -6.77057e-186
+input ends
+terminate called after throwing an instance of 'boost::wrapexcept<boost::math::evaluation_error>'
+  what():  Error in function boost::math::tools::newton_raphson_iterate<long double>: There appears to be no root to be found in boost::math::tools::newton_raphson_iterate, perhaps we have a local minima near current best guess of 0.392012898693983790369
+ERROR: Failed: teachingApps_deepstate_test_rbeta4_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/teachingApps/inst/testfiles/rbeta4/rbeta4_output/50e854092c48877819a792836db242ca2b27f201.fail`
+INFO: Done fuzzing! Ran 1 tests (0 tests/second) with 1 failed/0 passed/0 abandoned tests

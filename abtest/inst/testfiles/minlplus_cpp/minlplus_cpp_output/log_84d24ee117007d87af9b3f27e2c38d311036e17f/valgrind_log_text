@@ -1,0 +1,18 @@
+WARNING: No test specified, defaulting to first test defined (abtest_deepstate_test_minlplus_cpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/abtest/inst/testfiles/minlplus_cpp/minlplus_cpp_output/84d24ee117007d87af9b3f27e2c38d311036e17f.pass`
+TRACE: Running: abtest_deepstate_test_minlplus_cpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/abtest/inst/testfiles/minlplus_cpp/minlplus_cpp_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+beta values: -8.5119e-07
+xi values: -5.48117e-145
+y1 values: 1216778795
+y2 values: -1083036916
+n1 values: 805659460
+n2 values: 715973754
+mu_beta values: 5.00463e-274
+sigma_beta values: 7.52379e-133
+mu_psi values: -2.04487e-51
+sigma_psi values: 10.9345
+input ends
+TRACE: Passed: abtest_deepstate_test_minlplus_cpp_test

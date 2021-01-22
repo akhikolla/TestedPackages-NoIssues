@@ -1,0 +1,1086 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+<meta name="date" content="2018-02-13" />
+
+<title>Introduction to inferr</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; position: absolute; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; }
+pre.numberSource a.sourceLine:empty
+  { position: absolute; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: absolute; left: -5em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to inferr</h1>
+<h4 class="date"><em>2018-02-13</em></h4>
+
+
+
+<p>Inferential statistics allows us to make generalizations about populations using data drawn from the population. We use them when it is impractical or impossible to collect data about the whole population under study and instead, we have a sample that represents the population under study and using inferential statistics technique, we make generalizations about the population from the sample. <strong>inferr</strong> builds upon the solid set of statistical tests provided in <strong>stats</strong> package by including additional data types as inputs, expanding and restructuring the test results.</p>
+<p>The <strong>inferr</strong> package:</p>
+<ul>
+<li>builds upon the statistical tests provided in <strong>stats</strong><br />
+</li>
+<li>provides additional and flexible options</li>
+<li>more detailed and structured test results</li>
+</ul>
+<p>As of version 0.1, <strong>inferr</strong> includes a select set of parametric and non-parametric statistical tests which are listed below:</p>
+<ul>
+<li>One Sample t Test</li>
+<li>Paired Sample t Test</li>
+<li>Independent Sample t Test</li>
+<li>One Sample Proportion Test</li>
+<li>Two Sample Proportion Test</li>
+<li>One Sample Variance Test</li>
+<li>Two Sample Variance Test</li>
+<li>Binomial Test</li>
+<li>ANOVA</li>
+<li>Chi Square Goodness of Fit Test</li>
+<li>Chi Square Independence Test</li>
+<li>Levene’s Test</li>
+<li>Cochran’s Q Test</li>
+<li>McNemar Test</li>
+<li>Runs Test for Randomness</li>
+</ul>
+<p>These tests are described in more detail in the following sections.</p>
+<div id="one-sample-t-test" class="section level2">
+<h2>One Sample t Test</h2>
+<p>A one sample t-test is used to determine whether a sample of observations comes from a population with a specific mean. The observations must be continuous, independent of each other, approximately distributed and should not contain any outliers.</p>
+<div id="example" class="section level3">
+<h3>Example</h3>
+<p>Using the hsb data, test whether the average of write differs significantly from 50.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">infer_os_t_test</span>(hsb, write, <span class="dt">mu =</span> <span class="dv">50</span>, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##                               One-Sample Statistics                               
+## ---------------------------------------------------------------------------------
+##  Variable    Obs     Mean     Std. Err.    Std. Dev.    [95% Conf. Interval] 
+## ---------------------------------------------------------------------------------
+##   write      200    52.775     0.6702       9.4786       51.4537    54.0969   
+## ---------------------------------------------------------------------------------
+## 
+##                                Ho: mean(write) ~=50                              
+## 
+##         Ha: mean &lt; 50              Ha: mean ~= 50               Ha: mean &gt; 50        
+##          t = 4.141                   t = 4.141                   t = 4.141         
+##        P &lt; t = 1.0000             P &gt; |t| = 0.0001             P &gt; t = 0.0000</code></pre>
+</div>
+</div>
+<div id="paired-t-test" class="section level2">
+<h2>Paired t test</h2>
+<p>A paired (samples) t-test is used when you want to compare the means between two related groups of observations on some continuous dependent variable. In a paired sample test, each subject or entity is measured twice. It can be used to evaluate the effectiveness of training programs or treatments. If the dependent variable is dichotomous, use the McNemar test.</p>
+<div id="examples" class="section level3">
+<h3>Examples</h3>
+<p>Using the hsb data, test whether the mean of read is equal to the mean of write.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="co"># Lower Tail Test</span></a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"><span class="kw">infer_ts_paired_ttest</span>(hsb, read, write, <span class="dt">alternative =</span> <span class="st">'less'</span>)</a></code></pre></div>
+<pre><code>##                          Paired Samples Statistics                           
+## ----------------------------------------------------------------------------
+## Variables    Obs     Mean     Std. Err.    Std. Dev.    [95% Conf. Interval] 
+## ----------------------------------------------------------------------------
+##    read       200    52.23     0.7249921    10.25294        50.8      53.66   
+##    write      200    52.775    0.6702372    9.478586       51.45       54.1    
+## ----------------------------------------------------------------------------
+##    diff       200    -0.545    0.6283822    8.886666       -1.78       0.69    
+## ----------------------------------------------------------------------------
+## 
+##          Paired Samples Correlations         
+## -------------------------------------------
+##   Variables      Obs    Correlation    Sig.
+##  read &amp; write    200       0.60        0 
+## -------------------------------------------
+## 
+##           Paired Samples Test            
+##           -------------------            
+##        Ho: mean(read - write) = 0        
+##        Ha: mean(read - write) &lt; 0        
+## 
+## ----------------------------------------
+##   Variables         t       df     Sig.  
+## ----------------------------------------
+##  read - write    -0.8673    199    0.193 
+## ----------------------------------------</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="co"># Test all alternatives</span></a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"><span class="kw">infer_ts_paired_ttest</span>(hsb, read, write, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##                          Paired Samples Statistics                           
+## ----------------------------------------------------------------------------
+## Variables    Obs     Mean     Std. Err.    Std. Dev.    [95% Conf. Interval] 
+## ----------------------------------------------------------------------------
+##    read       200    52.23     0.7249921    10.25294        50.8      53.66   
+##    write      200    52.775    0.6702372    9.478586       51.45       54.1    
+## ----------------------------------------------------------------------------
+##    diff       200    -0.545    0.6283822    8.886666       -1.78       0.69    
+## ----------------------------------------------------------------------------
+## 
+##          Paired Samples Correlations         
+## -------------------------------------------
+##   Variables      Obs    Correlation    Sig.
+##  read &amp; write    200       0.60        0 
+## -------------------------------------------
+## 
+##                 Ho: mean(read - write) = mean(diff) = 0                  
+## 
+##    Ha: mean(diff) &lt; 0      Ha: mean(diff) ~= 0       Ha: mean(diff) &gt; 0    
+##        t = -0.8673              t = -0.8673              t = -0.8673       
+##      P &lt; t = 0.193           P &gt; |t| = 0.387           P &gt; t = 0.807</code></pre>
+</div>
+</div>
+<div id="two-independent-sample-t-test" class="section level2">
+<h2>Two Independent Sample t Test</h2>
+<p>An independent samples t-test is used to compare the means of a normally distributed continuous dependent variable for two unrelated groups. The dependent variable must be approximately normally distributed and the cases/subjects in the two groups must be different i.e. a subject in one group cannot also be a subject of the other group. It can be used to answer whether:</p>
+<ul>
+<li>average number of products produced by two machines differ significantly?</li>
+<li>average salaries of graduate students differ based on gender?</li>
+</ul>
+<div id="example-1" class="section level3">
+<h3>Example</h3>
+<p>Using the hsb data, test whether the mean for write is the same for males and females.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" data-line-number="1"><span class="kw">infer_ts_ind_ttest</span>(hsb, female, write, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##                               Group Statistics                                
+## -----------------------------------------------------------------------------
+##   Group       Obs     Mean     Std. Err.    Std. Dev.    [95% Conf. Interval] 
+## -----------------------------------------------------------------------------
+##     0          91    50.121      1.080       10.305       47.97539   52.26661  
+##     1         109    54.991      0.779        8.134       53.44689   56.53511  
+## -----------------------------------------------------------------------------
+##  combined     200    52.775      0.67         9.479       51.45379   54.09621  
+## -----------------------------------------------------------------------------
+##    diff       200    -4.87       1.304        9.231       -7.42623   -2.31377  
+## -----------------------------------------------------------------------------
+## 
+##                         Independent Samples Test                         
+##                       ------------------------                        
+## 
+##                     Ho: mean(0) - mean(1) = diff = 0                     
+## 
+##       Ha: diff &lt; 0            Ha: diff ~= 0             Ha: diff &gt; 0       
+## 
+##                                   Pooled                                   
+## ------------------------------------------------------------------------
+##        t = -3.7341              t = -3.7341              t = -3.7341       
+##      P &lt; t = 0.0001          P &gt; |t| = 0.0002          P &gt; t = 0.9999      
+## 
+##                               Satterthwaite                                
+## ------------------------------------------------------------------------
+##        t = -3.6564              t = -3.6564              t = -3.6564       
+##      P &lt; t = 0.0002          P &gt; |t| = 0.0003          P &gt; t = 0.9998      
+## 
+## 
+##                 Test for Equality of Variances                  
+## ---------------------------------------------------------------
+##  Variable      Method     Num DF    Den DF    F Value    P &gt; F  
+## ---------------------------------------------------------------
+##   write       Folded F      90       108       1.605     0.0188 
+## ---------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div id="one-sample-test-of-proportion" class="section level2">
+<h2>One Sample Test of Proportion</h2>
+<p>One sample test of proportion compares proportion in one group to a specified population proportion.</p>
+<div id="examples-1" class="section level3">
+<h3>Examples</h3>
+<p>Using hsb data, test whether the proportion of females is 50%.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" data-line-number="1"><span class="co"># Using Variables</span></a>
+<a class="sourceLine" id="cb9-2" data-line-number="2"><span class="kw">infer_os_prop_test</span>(hsb, female, <span class="dt">prob =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<pre><code>##      Test Statistics      
+## -------------------------
+## Sample Size           200 
+## Exp Prop              0.5 
+## Obs Prop            0.545 
+## z                  1.2728 
+## Pr(|Z| &gt; |z|)      0.2031 
+## 
+## -----------------------------------------------------------------
+## Category    Observed    Expected    % Deviation    Std. Residuals 
+## -----------------------------------------------------------------
+##    0           91         100          -9.00           -0.90      
+##    1          109         100           9.00            0.90      
+## -----------------------------------------------------------------</code></pre>
+<p>Using Calculator</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" data-line-number="1"><span class="co"># Calculator</span></a>
+<a class="sourceLine" id="cb11-2" data-line-number="2"><span class="kw">infer_os_prop_test</span>(<span class="dv">200</span>, <span class="dt">prob =</span> <span class="fl">0.5</span>, <span class="dt">phat =</span> <span class="fl">0.3</span>)</a></code></pre></div>
+<pre><code>##      Test Statistics       
+## --------------------------
+## Sample Size            200 
+## Exp Prop               0.5 
+## Obs Prop               0.3 
+## z                  -5.6569 
+## Pr(|Z| &gt; |z|)            0 
+## 
+## -----------------------------------------------------------------
+## Category    Observed    Expected    % Deviation    Std. Residuals 
+## -----------------------------------------------------------------
+##    0          140         100          40.00            4.00      
+##    1           60         100         -40.00           -4.00      
+## -----------------------------------------------------------------</code></pre>
+</div>
+</div>
+<div id="two-sample-test-of-proportion" class="section level2">
+<h2>Two Sample Test of Proportion</h2>
+<p>Two sample test of proportion performs tests on the equality of proportions using large-sample statistics. It tests that a categorical variable has the same proportion within two groups or that two variables have the same proportion.</p>
+<div id="examples-2" class="section level3">
+<h3>Examples</h3>
+<div id="using-variables" class="section level4">
+<h4>Using Variables</h4>
+<p>Using the treatment data, test equality of proportion of two treatments</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" data-line-number="1"><span class="co"># Using Variables</span></a>
+<a class="sourceLine" id="cb13-2" data-line-number="2"><span class="kw">infer_ts_prop_test</span>(treatment, treatment1, treatment2, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##        Test Statistics        
+## -----------------------------
+## Total Observations        100 
+## z                       0.403 
+## Pr(|Z| &lt; |z|)           0.687 
+## Pr(Z &lt; z)               0.656 
+## Pr(Z &gt; z)               0.344</code></pre>
+</div>
+<div id="use-grouping-variable" class="section level4">
+<h4>Use Grouping Variable</h4>
+<p>Using the treatment2 data, test whether outcome has same proportion for male and female</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" data-line-number="1"><span class="co"># Using Grouping Variable</span></a>
+<a class="sourceLine" id="cb15-2" data-line-number="2"><span class="kw">infer_ts_prop_grp</span>(treatment2, outcome, female, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##        Test Statistics        
+## -----------------------------
+## Total Observations        200 
+## z                       0.351 
+## Pr(|Z| &lt; |z|)           0.726 
+## Pr(Z &lt; z)               0.637 
+## Pr(Z &gt; z)               0.363</code></pre>
+</div>
+<div id="using-calculator" class="section level4">
+<h4>Using Calculator</h4>
+<p>Test whether the same proportion of people from two batches will pass a review exam for a training program. In the first batch of 30 participants, 30% passed the review, whereas in the second batch of 25 participants, 50% passed the review.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" data-line-number="1"><span class="co"># Calculator</span></a>
+<a class="sourceLine" id="cb17-2" data-line-number="2"><span class="kw">infer_ts_prop_calc</span>(<span class="dt">n1 =</span> <span class="dv">30</span>, <span class="dt">n2 =</span> <span class="dv">25</span>, <span class="dt">p1 =</span> <span class="fl">0.3</span>, <span class="dt">p2 =</span> <span class="fl">0.5</span>, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##        Test Statistics         
+## ------------------------------
+## Total Observations          55 
+## z                       -1.514 
+## Pr(|Z| &lt; |z|)             0.13 
+## Pr(Z &lt; z)                0.065 
+## Pr(Z &gt; z)                0.935</code></pre>
+</div>
+</div>
+</div>
+<div id="one-sample-variance-test" class="section level2">
+<h2>One Sample Variance Test</h2>
+<p>One sample variance comparison test compares the standard deviation (variances) to a hypothesized value. It determines whether the standard deviation of a population is equal to a hypothesized value. It can be used to answer the following questions:</p>
+<ul>
+<li>Is the variance equal to some pre-determined threshold value?</li>
+<li>Is the variance greater than some pre-determined threshold value?</li>
+<li>Is the variance less than some pre-determined threshold value?</li>
+</ul>
+<div id="examples-3" class="section level3">
+<h3>Examples</h3>
+<p>Using the mtcars data, compare the standard deviation of mpg to a hypothesized value.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" data-line-number="1"><span class="co"># Lower Tail Test</span></a>
+<a class="sourceLine" id="cb19-2" data-line-number="2"><span class="kw">infer_os_var_test</span>(mtcars, mpg, <span class="fl">0.3</span>, <span class="dt">alternative =</span> <span class="st">'less'</span>)</a></code></pre></div>
+<pre><code>##                             One-Sample Statistics                             
+## -----------------------------------------------------------------------------
+##  Variable    Obs     Mean      Std. Err.    Std. Dev.    [95% Conf. Interval] 
+## -----------------------------------------------------------------------------
+##    mpg       32     20.0906     1.0654       6.0269        3.8737    10.6527   
+## -----------------------------------------------------------------------------
+## 
+##              Lower Tail Test             
+##              ---------------             
+##             Ho: sd(mpg) &gt;= 0.3           
+##              Ha: sd(mpg) &lt; 0.3            
+## 
+##       Chi-Square Test for Variance       
+## ----------------------------------------
+##  Variable        c         DF      Sig       
+## ----------------------------------------
+##    mpg       12511.635     31     1.0000  
+## ----------------------------------------</code></pre>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" data-line-number="1"><span class="co"># Test all alternatives</span></a>
+<a class="sourceLine" id="cb21-2" data-line-number="2"><span class="kw">infer_os_var_test</span>(mtcars, mpg, <span class="fl">0.3</span>, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##                             One-Sample Statistics                             
+## -----------------------------------------------------------------------------
+##  Variable    Obs     Mean      Std. Err.    Std. Dev.    [95% Conf. Interval] 
+## -----------------------------------------------------------------------------
+##    mpg       32     20.0906     1.0654       6.0269        3.8737    10.6527   
+## -----------------------------------------------------------------------------
+## 
+##                                Ho: sd(mpg) = 0.3                               
+## 
+##         Ha: sd &lt; 0.3              Ha: sd != 0.3               Ha: sd &gt; 0.3        
+##       c = 12511.6354             c = 12511.6354             c = 12511.6354      
+##      Pr(C &lt; c) = 1.0000       2 * Pr(C &gt; c) = 0.0000       Pr(C &gt; c) = 0.0000</code></pre>
+</div>
+</div>
+<div id="two-sample-variance-test" class="section level2">
+<h2>Two Sample Variance Test</h2>
+<p>Two sample variance comparison tests equality of standard deviations (variances). It tests that the standard deviation of a continuous variable is same within two groups or the standard deviation of two continuous variables is equal.</p>
+<div id="example-2" class="section level3">
+<h3>Example</h3>
+<div id="use-grouping-variable-1" class="section level4">
+<h4>Use Grouping Variable</h4>
+<p>Using the mtcars data, compare the standard deviation in miles per gallon for automatic and manual vehicles.</p>
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb23-1" data-line-number="1"><span class="co"># Using Grouping Variable</span></a>
+<a class="sourceLine" id="cb23-2" data-line-number="2"><span class="kw">infer_ts_var_test</span>(hsb, read, <span class="dt">group_var =</span> female, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##                Variance Ratio Test                 
+## --------------------------------------------------
+##   Group      Obs    Mean     Std. Err.    Std. Dev. 
+## --------------------------------------------------
+##    0        91     52.82       1.1         10.51   
+##    1        109    51.73      0.96         10.06   
+## --------------------------------------------------
+##  combined    200    52.23      0.72         10.25   
+## --------------------------------------------------
+## 
+##                 Variance Ratio Test                 
+## --------------------------------------------------
+##         F              Num DF           Den DF      
+## --------------------------------------------------
+##       1.0913             90              108        
+## --------------------------------------------------
+## 
+##        Null &amp; Alternate Hypothesis        
+## ----------------------------------------
+##           ratio = sd(0) / (1)           
+##               Ho: ratio = 1              
+## 
+##     Ha: ratio &lt; 1        Ha: ratio &gt; 1    
+##   Pr(F &lt; f) = 0.6694   Pr(F &gt; f) = 0.3306 
+## ----------------------------------------</code></pre>
+</div>
+<div id="using-variables-1" class="section level4">
+<h4>Using Variables</h4>
+<p>Using the hsb data, compare the standard deviation of reading and writing scores.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb25-1" data-line-number="1"><span class="co"># Using Variables</span></a>
+<a class="sourceLine" id="cb25-2" data-line-number="2"><span class="kw">infer_ts_var_test</span>(hsb, read, write, <span class="dt">alternative =</span> <span class="st">'all'</span>)</a></code></pre></div>
+<pre><code>##                Variance Ratio Test                 
+## --------------------------------------------------
+##   Group      Obs    Mean     Std. Err.    Std. Dev. 
+## --------------------------------------------------
+##   read      200    52.23      0.72         10.25   
+##  write      200    52.77      0.67         9.48    
+## --------------------------------------------------
+##  combined    400    52.5       0.49         9.86    
+## --------------------------------------------------
+## 
+##                 Variance Ratio Test                 
+## --------------------------------------------------
+##         F              Num DF           Den DF      
+## --------------------------------------------------
+##       1.1701            199              199        
+## --------------------------------------------------
+## 
+##        Null &amp; Alternate Hypothesis        
+## ----------------------------------------
+##        ratio = sd(read) / (write)       
+##               Ho: ratio = 1              
+## 
+##     Ha: ratio &lt; 1        Ha: ratio &gt; 1    
+##   Pr(F &lt; f) = 0.8656   Pr(F &gt; f) = 0.1344 
+## ----------------------------------------</code></pre>
+</div>
+</div>
+</div>
+<div id="binomial-probability-test" class="section level2">
+<h2>Binomial Probability Test</h2>
+<p>A one sample binomial test allows us to test whether the proportion of successes on a two-level categorical dependent variable significantly differs from a hypothesized value.</p>
+<div id="examples-4" class="section level3">
+<h3>Examples</h3>
+<p>Using the hsb data, test whether the proportion of females and males are equal.</p>
+<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb27-1" data-line-number="1"><span class="co"># Using variables</span></a>
+<a class="sourceLine" id="cb27-2" data-line-number="2"><span class="kw">infer_binom_test</span>(hsb, female, <span class="dt">prob =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<pre><code>##              Binomial Test              
+##  ---------------------------------------
+##   Group     N     Obs. Prop    Exp. Prop 
+##  ---------------------------------------
+##     0       91        0.455        0.500 
+##     1      109        0.545        0.500 
+##  ---------------------------------------
+## 
+## 
+##                   Test Summary                  
+##  ----------------------------------------------
+##   Tail               Prob              p-value  
+##  ----------------------------------------------
+##   Lower          Pr(k &lt;= 109)          0.910518 
+##   Upper          Pr(k &gt;= 109)          0.114623 
+##  ----------------------------------------------</code></pre>
+<div id="using-calculator-1" class="section level4">
+<h4>Using Calculator</h4>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb29-1" data-line-number="1"><span class="co"># calculator</span></a>
+<a class="sourceLine" id="cb29-2" data-line-number="2"><span class="kw">infer_binom_calc</span>(<span class="dv">32</span>, <span class="dv">16</span>, <span class="dt">prob =</span> <span class="fl">0.5</span>)</a></code></pre></div>
+<pre><code>##             Binomial Test              
+##  --------------------------------------
+##   Group    N     Obs. Prop    Exp. Prop 
+##  --------------------------------------
+##     0      16          0.5        0.500 
+##     1      16          0.5        0.500 
+##  --------------------------------------
+## 
+## 
+##                  Test Summary                 
+##  --------------------------------------------
+##   Tail              Prob             p-value  
+##  --------------------------------------------
+##   Lower         Pr(k &lt;= 16)          0.569975 
+##   Upper         Pr(k &gt;= 16)          0.569975 
+##  --------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+<div id="anova" class="section level2">
+<h2>ANOVA</h2>
+<p>The one-way analysis of variance (ANOVA) is used to determine whether there are any statistically significant differences between the means of two or more independent (unrelated) groups. It tests the null hypothesis that samples in two or more groups are drawn from populations with the same mean values. It cannot tell you which specific groups were statistically significantly different from each other but only that at least two groups were different and can be used only for numerical data.</p>
+<div id="examples-5" class="section level3">
+<h3>Examples</h3>
+<p>Using the hsb data, test whether the mean of write differs between the three program types.</p>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb31-1" data-line-number="1"><span class="kw">infer_oneway_anova</span>(hsb, write, prog)</a></code></pre></div>
+<pre><code>##                                 ANOVA                                  
+## ----------------------------------------------------------------------
+##                    Sum of                                             
+##                    Squares     DF     Mean Square      F        Sig.  
+## ----------------------------------------------------------------------
+## Between Groups    3175.698      2      1587.849      21.275    0.0000 
+## Within Groups     14703.177    197      74.635                        
+## Total             17878.875    199                                    
+## ----------------------------------------------------------------------
+## 
+##                  Report                   
+## -----------------------------------------
+## Category     N       Mean      Std. Dev. 
+## -----------------------------------------
+##    1        45      51.333       9.398   
+##    2        105     56.257       7.943   
+##    3        50      46.760       9.319   
+## -----------------------------------------
+## 
+## Number of obs = 200       R-squared     = 0.1776 
+## Root MSE      = 8.6392    Adj R-squared = 0.1693</code></pre>
+</div>
+</div>
+<div id="chi-square-goodness-of-fit-test" class="section level2">
+<h2>Chi Square Goodness of Fit Test</h2>
+<p>A chi-square goodness of fit test allows us to compare the observed sample distribution with expected probability distribution. It tests whether the observed proportions for a categorical variable differ from hypothesized proportions. The proportion of cases expected in each group of categorical variable may be equal or unequal. It can be applied to any univariate distribution for which you can calculate the cumulative distribution function. It is applied to binned data and the value of the chi square test depends on how the data is binned. For the chi square approximation to be valid, the sample size must be sufficiently large.</p>
+<div id="example-3" class="section level3">
+<h3>Example</h3>
+<p>Using the hsb data, test whether the observed proportions for race differs significantly from the hypothesized proportions.</p>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb33-1" data-line-number="1"><span class="co"># basic example</span></a>
+<a class="sourceLine" id="cb33-2" data-line-number="2"><span class="kw">infer_chisq_gof_test</span>(hsb, race, <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">20</span> , <span class="dv">140</span>))</a></code></pre></div>
+<pre><code>##     Test Statistics     
+## -----------------------
+## Chi-Square       5.0286 
+## DF                    3 
+## Pr &gt; Chi Sq      0.1697 
+## Sample Size         200 
+## 
+##                          Variable: race                           
+## -----------------------------------------------------------------
+## Category    Observed    Expected    % Deviation    Std. Residuals 
+## -----------------------------------------------------------------
+##    1           24          20          20.00            0.89      
+##    2           11          20         -45.00           -2.01      
+##    3           20          20           0.00            0.00      
+##    4          145         140           3.57            0.42      
+## -----------------------------------------------------------------</code></pre>
+<div id="continuity-correction" class="section level4">
+<h4>Continuity Correction</h4>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb35-1" data-line-number="1"><span class="co"># using continuity correction</span></a>
+<a class="sourceLine" id="cb35-2" data-line-number="2"><span class="kw">infer_chisq_gof_test</span>(hsb, race, <span class="kw">c</span>(<span class="dv">20</span>, <span class="dv">20</span>, <span class="dv">20</span> , <span class="dv">140</span>), <span class="dt">correct =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>##     Test Statistics     
+## -----------------------
+## Chi-Square       4.3821 
+## DF                    3 
+## Pr &gt; Chi Sq      0.2231 
+## Sample Size         200 
+## 
+##                          Variable: race                           
+## -----------------------------------------------------------------
+## Category    Observed    Expected    % Deviation    Std. Residuals 
+## -----------------------------------------------------------------
+##    1           24          20          17.50            0.78      
+##    2           11          20         -47.50           -2.12      
+##    3           20          20          -2.50           -0.11      
+##    4          145         140           3.21            0.38      
+## -----------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+<div id="chi-square-test-of-independence" class="section level2">
+<h2>Chi Square Test of Independence</h2>
+<p>A chi-square test is used when you want to test if there is a significant relationship between two nominal (categorical) variables.</p>
+<div id="examples-6" class="section level3">
+<h3>Examples</h3>
+<p>Using the hsb data, test if there is a relationship between the type of school attended (schtyp) and students’ gender (female).</p>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb37-1" data-line-number="1"><span class="kw">infer_chisq_assoc_test</span>(hsb, female, schtyp)</a></code></pre></div>
+<pre><code>##                Chi Square Statistics                 
+## 
+## Statistics                     DF    Value      Prob 
+## ----------------------------------------------------
+## Chi-Square                     1    0.0470    0.8284
+## Likelihood Ratio Chi-Square    1    0.0471    0.8282
+## Continuity Adj. Chi-Square     1    0.0005    0.9822
+## Mantel-Haenszel Chi-Square     1    0.0468    0.8287
+## Phi Coefficient                     0.0153          
+## Contingency Coefficient             0.0153          
+## Cramer's V                          0.0153          
+## ----------------------------------------------------</code></pre>
+<p>Using the hsb data, test if there is a relationship between the type of school attended (schtyp) and students’ socio economic status (ses).</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb39-1" data-line-number="1"><span class="kw">infer_chisq_assoc_test</span>(hsb, schtyp, ses)</a></code></pre></div>
+<pre><code>##                Chi Square Statistics                 
+## 
+## Statistics                     DF    Value      Prob 
+## ----------------------------------------------------
+## Chi-Square                     2    6.3342    0.0421
+## Likelihood Ratio Chi-Square    2    7.9060    0.0192
+## Phi Coefficient                     0.1780          
+## Contingency Coefficient             0.1752          
+## Cramer's V                          0.1780          
+## ----------------------------------------------------</code></pre>
+</div>
+</div>
+<div id="levenes-test" class="section level2">
+<h2>Levene’s Test</h2>
+<p>Levene’s test is used to determine if k samples have equal variances. It is less sensitive to departures from normality and is an alternative to Bartlett’s test. This test returns Levene’s robust test statistic and the two statistics proposed by Brown and Forsythe that replace the mean in Levene’s formula with alternative location estimators. The first alternative replaces the mean with the median and the second alternative replaces the mean with the 10% trimmed mean.</p>
+<div id="examples-7" class="section level3">
+<h3>Examples</h3>
+<div id="use-grouping-variable-2" class="section level4">
+<h4>Use Grouping Variable</h4>
+<p>Using the hsb data, test whether variance in reading score is same across race.</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb41-1" data-line-number="1"><span class="co"># Using Grouping Variable</span></a>
+<a class="sourceLine" id="cb41-2" data-line-number="2"><span class="kw">infer_levene_test</span>(hsb, read, <span class="dt">group_var =</span> race)</a></code></pre></div>
+<pre><code>##            Summary Statistics             
+## Levels    Frequency    Mean     Std. Dev  
+## -----------------------------------------
+##   1          24        46.67      10.24   
+##   2          11        51.91      7.66    
+##   3          20        46.8       7.12    
+##   4          145       53.92      10.28   
+## -----------------------------------------
+## Total        200       52.23      10.25   
+## -----------------------------------------
+## 
+##                              Test Statistics                              
+## -------------------------------------------------------------------------
+## Statistic                            Num DF    Den DF         F    Pr &gt; F 
+## -------------------------------------------------------------------------
+## Brown and Forsythe                        3       196      3.44    0.0179 
+## Levene                                    3       196    3.4792     0.017 
+## Brown and Forsythe (Trimmed Mean)         3       196    3.3936     0.019 
+## -------------------------------------------------------------------------</code></pre>
+</div>
+<div id="using-variables-2" class="section level4">
+<h4>Using Variables</h4>
+<p>Using the hsb data, test whether variance is equal for reading, writing and social studies scores.</p>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb43-1" data-line-number="1"><span class="co"># Using Variables</span></a>
+<a class="sourceLine" id="cb43-2" data-line-number="2"><span class="kw">infer_levene_test</span>(hsb, read, write, socst)</a></code></pre></div>
+<pre><code>##            Summary Statistics             
+## Levels    Frequency    Mean     Std. Dev  
+## -----------------------------------------
+##   0          200       52.23      10.25   
+##   1          200       52.77      9.48    
+##   2          200       52.41      10.74   
+## -----------------------------------------
+## Total        600       52.47      10.15   
+## -----------------------------------------
+## 
+##                              Test Statistics                              
+## -------------------------------------------------------------------------
+## Statistic                            Num DF    Den DF         F    Pr &gt; F 
+## -------------------------------------------------------------------------
+## Brown and Forsythe                        2       597    1.1683    0.3116 
+## Levene                                    2       597    1.3803    0.2523 
+## Brown and Forsythe (Trimmed Mean)         2       597    1.3258    0.2664 
+## -------------------------------------------------------------------------</code></pre>
+</div>
+</div>
+</div>
+<div id="cochrans-q-test" class="section level2">
+<h2>Cochran’s Q Test</h2>
+<p>Cochran’s Q test is an extension to the McNemar test for related samples that provides a method for testing for differences between three or more matched sets of frequencies or proportions. It is a procedure for testing if the proportions of 3 or more dichotomous variables are equal in some population. These outcome variables have been measured on the same people or other statistical units.</p>
+<div id="example-4" class="section level3">
+<h3>Example</h3>
+<p>The exam data set contains scores of 15 students for three exams (exam1, exam2, exam3). Test if three exams are equally difficult.</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb45-1" data-line-number="1"><span class="kw">infer_cochran_qtest</span>(exam, exam1, exam2, exam3)</a></code></pre></div>
+<pre><code>##    Test Statistics     
+## ----------------------
+## N                   15 
+## Cochran's Q       4.75 
+## df                   2 
+## p value          0.093 
+## ----------------------</code></pre>
+</div>
+</div>
+<div id="mcnemar-test" class="section level2">
+<h2>McNemar Test</h2>
+<p>McNemar test is a non parametric test created by Quinn McNemar and first published in <strong>Psychometrika</strong> in 1947. It is similar to a paired t test but applied to a dichotomous dependent variable. It is used to test if a statistically significant change in proportions have occurred on a dichotomous trait at two time points on the same population. It can be used to answer whether:</p>
+<ul>
+<li>two products are equally appealing?</li>
+<li>proportion of success vs failure significantly change after treatment?</li>
+<li>proportion of voters significantly change prior to and following a significant political development?</li>
+</ul>
+<div id="examples-8" class="section level3">
+<h3>Examples</h3>
+<p>Using the hsb data, test if the proportion of students in himath and hiread group is equal.</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb47-1" data-line-number="1">hb &lt;-</a>
+<a class="sourceLine" id="cb47-2" data-line-number="2"><span class="st">   </span>hsb <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb47-3" data-line-number="3"><span class="st">     </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb47-4" data-line-number="4">       <span class="dt">himath =</span> <span class="kw">if_else</span>(math <span class="op">&gt;</span><span class="st"> </span><span class="dv">60</span>, <span class="dv">1</span>, <span class="dv">0</span>),</a>
+<a class="sourceLine" id="cb47-5" data-line-number="5">       <span class="dt">hiread =</span> <span class="kw">if_else</span>(read <span class="op">&gt;</span><span class="st"> </span><span class="dv">60</span>, <span class="dv">1</span>, <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb47-6" data-line-number="6">     )</a>
+<a class="sourceLine" id="cb47-7" data-line-number="7"><span class="kw">infer_mcnemar_test</span>(hb, himath, hiread)</a></code></pre></div>
+<pre><code>##            Controls 
+## ---------------------------------
+## Cases       0       1       Total 
+## ---------------------------------
+##   0        135      21        156 
+##   1         18      26         44 
+## ---------------------------------
+## Total      153      47        200 
+## ---------------------------------
+## 
+##        McNemar's Test        
+## ----------------------------
+## McNemar's chi2        0.2308 
+## DF                         1 
+## Pr &gt; chi2              0.631 
+## Exact Pr &gt;= chi2      0.7493 
+## ----------------------------
+## 
+##        Kappa Coefficient         
+## --------------------------------
+## Kappa                     0.4454 
+## ASE                        0.075 
+## 95% Lower Conf Limit      0.2984 
+## 95% Upper Conf Limit      0.5923 
+## --------------------------------
+## 
+## Proportion With Factor 
+## ----------------------
+## cases             0.78 
+## controls         0.765 
+## ratio           1.0196 
+## odds ratio      1.1667 
+## ----------------------</code></pre>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb49-1" data-line-number="1">himath &lt;-<span class="st"> </span><span class="kw">ifelse</span>(hsb<span class="op">$</span>math <span class="op">&gt;</span><span class="st"> </span><span class="dv">60</span>, <span class="dv">1</span>, <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb49-2" data-line-number="2">hiread &lt;-<span class="st"> </span><span class="kw">ifelse</span>(hsb<span class="op">$</span>read <span class="op">&gt;</span><span class="st"> </span><span class="dv">60</span>, <span class="dv">1</span>, <span class="dv">0</span>)</a>
+<a class="sourceLine" id="cb49-3" data-line-number="3"><span class="kw">infer_mcnemar_test</span>(<span class="kw">table</span>(himath, hiread))</a></code></pre></div>
+<pre><code>##            Controls 
+## ---------------------------------
+## Cases       0       1       Total 
+## ---------------------------------
+##   0        135      21        156 
+##   1         18      26         44 
+## ---------------------------------
+## Total      153      47        200 
+## ---------------------------------
+## 
+##        McNemar's Test        
+## ----------------------------
+## McNemar's chi2        0.2308 
+## DF                         1 
+## Pr &gt; chi2              0.631 
+## Exact Pr &gt;= chi2      0.7493 
+## ----------------------------
+## 
+##        Kappa Coefficient         
+## --------------------------------
+## Kappa                     0.4454 
+## ASE                        0.075 
+## 95% Lower Conf Limit      0.2984 
+## 95% Upper Conf Limit      0.5923 
+## --------------------------------
+## 
+## Proportion With Factor 
+## ----------------------
+## cases             0.78 
+## controls         0.765 
+## ratio           1.0196 
+## odds ratio      1.1667 
+## ----------------------</code></pre>
+<p>Perform the above test using matrix as input.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb51-1" data-line-number="1"><span class="kw">infer_mcnemar_test</span>(<span class="kw">matrix</span>(<span class="kw">c</span>(<span class="dv">135</span>, <span class="dv">18</span>, <span class="dv">21</span>, <span class="dv">26</span>), <span class="dt">nrow =</span> <span class="dv">2</span>))</a></code></pre></div>
+<pre><code>##            Controls 
+## ---------------------------------
+## Cases       0       1       Total 
+## ---------------------------------
+##   0        135      21        156 
+##   1         18      26         44 
+## ---------------------------------
+## Total      153      47        200 
+## ---------------------------------
+## 
+##        McNemar's Test        
+## ----------------------------
+## McNemar's chi2        0.2308 
+## DF                         1 
+## Pr &gt; chi2              0.631 
+## Exact Pr &gt;= chi2      0.7493 
+## ----------------------------
+## 
+##        Kappa Coefficient         
+## --------------------------------
+## Kappa                     0.4454 
+## ASE                        0.075 
+## 95% Lower Conf Limit      0.2984 
+## 95% Upper Conf Limit      0.5923 
+## --------------------------------
+## 
+## Proportion With Factor 
+## ----------------------
+## cases             0.78 
+## controls         0.765 
+## ratio           1.0196 
+## odds ratio      1.1667 
+## ----------------------</code></pre>
+</div>
+</div>
+<div id="runs-test-for-randomness" class="section level2">
+<h2>Runs Test for Randomness</h2>
+<p>Runs Test can be used to decide if a data set is from a random process. It tests whether observations of a sequence are serially independent i.e. whether they occur in a random order by counting how many runs there are above and below a threshold. A run is defined as a series of increasing values or a series of decreasing values. The number of increasing, or decreasing, values is the length of the run. By default, the median is used as the threshold. A small number of runs indicates positive serial correlation; a large number indicates negative serial correlation.</p>
+<div id="examples-9" class="section level3">
+<h3>Examples</h3>
+<p>We will use runs test to check regression residuals for serial correlation.</p>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb53-1" data-line-number="1"><span class="co"># basic example</span></a>
+<a class="sourceLine" id="cb53-2" data-line-number="2"><span class="kw">infer_runs_test</span>(hsb, read)</a></code></pre></div>
+<pre><code>## Runs Test
+##  Total Cases:  200 
+##  Test Value :  50 
+##  Cases &lt; Test Value:  101 
+##  Cases &gt; Test Value:  99 
+##  Number of Runs:  95 
+##  Expected Runs:  100.99 
+##  Variance (Runs):  49.73874 
+##  z Statistic:  -0.8493358 
+##  p-value:  0.3956945</code></pre>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb55-1" data-line-number="1"><span class="co"># drop values equal to threshold</span></a>
+<a class="sourceLine" id="cb55-2" data-line-number="2"><span class="kw">infer_runs_test</span>(hsb, read, <span class="dt">drop =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## Runs Test
+##  Total Cases:  200 
+##  Test Value :  50 
+##  Cases &lt; Test Value:  83 
+##  Cases &gt; Test Value:  99 
+##  Number of Runs:  89 
+##  Expected Runs:  91.2967 
+##  Variance (Runs):  44.54805 
+##  z Statistic:  -0.3441046 
+##  p-value:  0.7307676</code></pre>
+<div class="sourceCode" id="cb57"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb57-1" data-line-number="1"><span class="co"># recode data in binary format</span></a>
+<a class="sourceLine" id="cb57-2" data-line-number="2"><span class="kw">infer_runs_test</span>(hsb, read, <span class="dt">split =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## Runs Test
+##  Total Cases:  200 
+##  Test Value :  50 
+##  Cases &lt; Test Value:  101 
+##  Cases &gt; Test Value:  99 
+##  Number of Runs:  95 
+##  Expected Runs:  100.99 
+##  Variance (Runs):  49.73874 
+##  z Statistic:  -0.8493358 
+##  p-value:  0.3956945</code></pre>
+<div class="sourceCode" id="cb59"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb59-1" data-line-number="1"><span class="co"># use mean as threshold</span></a>
+<a class="sourceLine" id="cb59-2" data-line-number="2"><span class="kw">infer_runs_test</span>(hsb, read, <span class="dt">mean =</span> <span class="ot">TRUE</span>)</a></code></pre></div>
+<pre><code>## Runs Test
+##  Total Cases:  200 
+##  Test Value :  52.23 
+##  Cases &lt; Test Value:  115 
+##  Cases &gt; Test Value:  85 
+##  Number of Runs:  93 
+##  Expected Runs:  98.75 
+##  Variance (Runs):  47.52418 
+##  z Statistic:  -0.8340854 
+##  p-value:  0.4042329</code></pre>
+<div class="sourceCode" id="cb61"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb61-1" data-line-number="1"><span class="co"># threshold to be used for counting runs</span></a>
+<a class="sourceLine" id="cb61-2" data-line-number="2"><span class="kw">infer_runs_test</span>(hsb, read, <span class="dt">threshold =</span> <span class="dv">0</span>)</a></code></pre></div>
+<pre><code>## Runs Test
+##  Total Cases:  200 
+##  Test Value :  0 
+##  Cases &lt; Test Value:  0 
+##  Cases &gt; Test Value:  200 
+##  Number of Runs:  1 
+##  Expected Runs:  1 
+##  Variance (Runs):  0 
+##  z Statistic:  NaN 
+##  p-value:  NaN</code></pre>
+</div>
+</div>
+<div id="credits" class="section level2">
+<h2>Credits</h2>
+<p>The examples and the data set used in the vignette are borrowed from the below listed sources:</p>
+<ul>
+<li>What statistical analysis should I use? UCLA: Statistical Consulting Group. from <a href="http://www.ats.ucla.edu/stat/mult_pkg/whatstat/" class="uri">http://www.ats.ucla.edu/stat/mult_pkg/whatstat/</a></li>
+</ul>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

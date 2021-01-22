@@ -1,0 +1,18 @@
+import(methods, graphics)
+useDynLib(VNM,.registration=TRUE)
+importFrom(Rcpp, sourceCpp)
+importFrom("stats", "na.omit", "runif")
+
+export(
+ "MOPT",
+ "ceff1",
+ "ceff2",
+ "Deff",
+ "S.Weight"
+)
+
+exportClasses(OPT, SW)
+exportMethods(plot,summary)
+
+
+

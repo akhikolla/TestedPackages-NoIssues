@@ -1,0 +1,57 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (frailtySurv_deepstate_test_deriv_lt_dpvf_coef_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 467495432
+j values: 1827680409
+alpha values: -1.64581e+174
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_deriv_lt_dpvf_coef_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dpvf_coef/deriv_lt_dpvf_coef_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 1520036990
+j values: -1852751851
+alpha values: 3.02006e-260
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_deriv_lt_dpvf_coef_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dpvf_coef/deriv_lt_dpvf_coef_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: -1294723540
+j values: 415152419
+alpha values: 6.24605e+181
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_deriv_lt_dpvf_coef_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dpvf_coef/deriv_lt_dpvf_coef_output/f97703d88b5f44f18c8a5478e4cc2152bc9b0638.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 1903691637
+j values: 1291204341
+alpha values: 5.14867e+83
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_deriv_lt_dpvf_coef_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dpvf_coef/deriv_lt_dpvf_coef_output/213c782907ee3299b362a396a6f846877b3f4584.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 205943663
+j values: 1482483795
+alpha values: 1.56396e+138
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_deriv_lt_dpvf_coef_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dpvf_coef/deriv_lt_dpvf_coef_output/b2a680a491c62b8e3c18e1b6a93cfd7bf1182ccb.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+p values: 1842876943
+j values: 320478838
+alpha values: 1.04605e+288
+input ends
+ERROR: Crashed: frailtySurv_deepstate_test_deriv_lt_dpvf_coef_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/frailtySurv/inst/testfiles/deriv_lt_dpvf_coef/deriv_lt_dpvf_coef_output/edf2b1f564b6bf974f9f08137dad67f45e70f655.crash`
+INFO: Done fuzzing! Ran 6 tests (3 tests/second) with 6 failed/0 passed/0 abandoned tests

@@ -1,0 +1,17 @@
+d24bc58007c6ad052ef377f9502a6edc *DESCRIPTION
+9f21336a49c72095b751634f09a01e73 *NAMESPACE
+f727aa48beb4a1d07ae7574f9f164d5c *R/RcppExports.R
+fcd3d44546985f0ea709cba8b5e4811b *R/dbvnorm.R
+4e94bcb5db8884347f25ef638ac2ac35 *R/pbvnorm.R
+30f765ccee3a96db49ef615565ffb25b *README.md
+8dcf7816dec9a518f035cf9cee3bbefc *build/partial.rdb
+9c099fa3eecf443aefeca87ebd023148 *inst/CITATION
+7e7f7bfc3d43314bb021475ee943f235 *inst/NEWS
+32f6c02b67f7f125a55aa3f6ea18fdec *inst/include/pbv.h
+ddeaa01cd3c02fa6705c1ba35254ebe8 *inst/include/pbv_RcppExports.h
+2bcf98d692f3828168173e7912c544c5 *man/pbv-package.Rd
+0ded94832b786cb61e00c16c1ef86bae *man/pbvnorm.Rd
+3900e4e4b505787e0f3cb83ad8ba2138 *src/Makevars
+36dc26a5d3e080089104b503a783361f *src/Makevars.win
+db5018a868c45f31b36dfb670986fe95 *src/RcppExports.cpp
+4c57e17ce6e8ea114007970815266ac2 *src/pbv_rcpp_bvnorm.cpp
