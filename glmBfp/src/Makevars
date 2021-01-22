@@ -1,0 +1,10 @@
+# Time-stamp: <[Makevars.in] by DSB Mon 13/12/2010 14:23 (CET)>
+
+# flags are needed:
+CXX_STD = CXX11
+PKG_LIBS = $(LAPACK_LIBS) $(BLAS_LIBS) $(FLIBS) -fopenmp   
+PKG_CXXFLAGS = -I. -fopenmp
+
+# Local Variables:
+# mode: makefile
+# End:

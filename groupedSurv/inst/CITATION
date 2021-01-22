@@ -1,0 +1,26 @@
+  citHeader("To cite groupedSurv in publications, please use:")
+  
+  citEntry(entry="article",
+           title = "Efficient estimation of grouped survival models",
+           author = personList( as.person("Zhiguo Li"),
+              as.person("Jiaxing Lin"),
+              as.person("Alexander B. Sibley"),
+              as.person("Tracy Truong"),
+              as.person("Katherina C. Chua"),
+              as.person("Yu Jiang"),
+              as.person("Janice McCarthy"),
+              as.person("Deanna L. Kroetz"),
+              as.person("Andrew Allen"),
+              as.person("Kouros Owzar")),
+           year = 2019,
+           journal = "BMC Bioinformatics",
+           volume = "20",
+           pages = "269",
+           doi = "10.1186/s12859-019-2899-x",
+           url = "https://doi.org/10.1186/s12859-019-2899-x",
+           paste("Zhiguo Li et al.",
+                 "Efficient estimation of grouped survival models",
+                 "BMC Bioinformatics (2019)20:269, https://doi.org/10.1186/s12859-019-2899-x" )
+  )
+  
+

@@ -1,0 +1,30 @@
+
+groupedSurv v1.0.4.2 (Release date: 2020-11-11)
+==================
+* Change Maintainer.
+* Reset options() at the end of the vignettes.
+* Shorten the title to "Efficient Estimation of Grouped Survival Models". 
+
+groupedSurv v1.0.4.1 (Release date: 2020-01-31)
+==================
+* Remove depended orphoned packages.
+
+groupedSurv v1.0.4 (Release date: 2019-12-02)
+==================
+* Add citation for the package and fixed bugs 
+
+groupedSurv v1.0.3 (Release date: 2018-06-28)
+==================
+* Revised package documentation and vignette
+
+groupedSurv v1.0.2 (Release date: 2018-06-20)
+==================
+* Added support for matrix input
+* Added more examples of importing data from different sources to vignette
+* Fixed warning from GenABEL in vignette
+
+groupedSurv v1.0.1 (Release date: 2018-05-15)
+==================
+* Fixed bugs causing errors on mac OSX and clang compiler
+* Revised package description
+

@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (ggrepel_deepstate_test_approximately_equal_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ggrepel/inst/testfiles/approximately_equal/approximately_equal_output/2bb2baf1a378bade4f253aab274c870a2ccd6bf0.pass`
+TRACE: Running: ggrepel_deepstate_test_approximately_equal_test from /home/akhila/fuzzer_packages/fuzzedpackages/ggrepel/inst/testfiles/approximately_equal/approximately_equal_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x1 values: -1.5615e-299
+x2 values: -1.20777e+13
+input ends
+TRACE: Passed: ggrepel_deepstate_test_approximately_equal_test

@@ -1,0 +1,160 @@
+---
+title: "Introduction to Gaussian Processes"
+author: "Collin Erickson"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Introduction to Gaussian Processes}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+
+
+A Gaussian process is a stochastic process that assumes that the 
+outputs for any set of input points follows a multivariate normal distribution.
+To determine the normal distribution, we must select a mean function that gives
+a mean for each point and a covariance function that gives the covariance
+between any set of points.
+
+Thus if we have mean function $\mu$, covariance function $C$, and the $n \times d$ matrix X with the input vectors $\mathbf{x_1}, ..., \mathbf{x_n}$ in its rows, then distribution of the output at these points, $\mathbf{y} = [y_1, \ldots, y_n]^T$ is given by:
+
+$$ \mathbf{y} \sim  N(\mu(X),~C(X)) $$
+
+Or in full element notation:
+
+$$ \begin{bmatrix} y_1 \\ \vdots \\ y_n \end{bmatrix} \sim N(\begin{bmatrix} \mu(\mathbf{x_1}) \\ \vdots \\ \mu(\mathbf{x_n}) \end{bmatrix}, \begin{bmatrix} C(\mathbf{x_1},\mathbf{x_1}) &\cdots &C(\mathbf{x_1},\mathbf{x_n}) \\ \vdots &\ddots &\vdots \\ C(\mathbf{x_n},\mathbf{x_1}) &\cdots &C(\mathbf{x_n},\mathbf{x_n}) \end{bmatrix})$$
+
+
+## Mean function $\mu$
+
+The mean function can be any function mapping the input space to the real numbers.
+The most commonly used mean function is a constant, so $\mu(\mathbf{x}) = \mu$.
+This means that over the entire space the predicted mean given no other information
+a constant.
+When fitting a GP model to data, $\mu$ is usually estimated using the data.
+Another commonly used mean function is zero.
+This works surprisingly well since the GP will interpolated between your data,
+meaning that the mean function work have much of an effect when there is enough data.
+
+A more advanced choice of mean function is to use a linear model, so 
+$$\mu(\mathbf{x}) = \beta_0 + \sum_{i=1}^d \beta_i x_i$$.
+Again these parameters must be estimated.
+This can be generalized to a linear combination of functions of the input data, 
+$f_1, \ldots, f_m$ so the mean function is
+$$\mu(\mathbf{x}) = \beta_0 + \sum_{i=1}^m \beta_i f_i(\mathbf{x})$$.
+
+It is generally recommended to just use a constant mean since the data itself
+should provide enough information to fit the true function.
+Some researchers say that using a linear model can have negative effects
+on fitting a good model.
+
+## Covariance function $C$
+
+The covariance function determines the "rough" the surface is,
+or how strong the correlation is between points.
+Notation: 
+A covariance/correlation function should take two vectors as input.
+For a $n \times d$ matrix $X$, $C(X)$ denotes the $n \times n$ matrix whose $(i, j)$ element
+is $C(\mathbf{x_i}, \mathbf{x_j})$.
+
+Often a correlation function, $R$, is used instead of a covariance function.
+The correlation function should map any pair of points to $[0,1]$.
+The correlation for any point with itself should be 1, i.e. $R(\mathbf{x}, \mathbf{x}) = 1$.
+When a correlation function is used, a variance parameter $\sigma^2$ must be estimated to scale
+the correlation matrix into a covariance matrix. 
+Thus the covariance matrix is $C(X) = \hat{\sigma}^2 R(X)$
+
+### Gaussian correlation
+
+The most commonly used correlation function is the Gausian.
+
+$$ R(\mathbf{u}, \mathbf{v}) = \exp{\sum_{i=1}^d} \theta_i (u_i - v_i)^2$$
+
+The parameters $\mathbf{\theta} = (\theta_1, \ldots, \theta_d)$ are the 
+correlation parameters for each dimensions.
+Generally they must be estimated from the data when fitting a Gaussian process model to data.
+
+
+## Likelihood function and parameter estimation
+
+The parameters are often estimated by finding the parameters that maximize the likelihood given a data set.
+
+The likelihood function is the usual multivariate normal pdf shown below, where $\mathbf{\mu} = \mu(X)$, $\Sigma = C(X)$
+
+$$ f(\mathbf{\theta};~X,~\mathbf{y}) = f(X,~\mathbf{y};~\mathbf{\theta}) = \frac{1}{(2 \pi)^{n/2} |\Sigma|^{1/2} } \exp{(-\frac{1}{2} (\mathbf{y} - \mathbf{\mu})^T \Sigma^{-1} (\mathbf{y} - \mathbf{\mu}))}$$
+
+As usual, we use negative two times the log-likelihood for simplicity, ignoring the constant terms.
+
+$$ \ell(\theta) = \ln |\Sigma| + (\mathbf{y} - \mathbf{\mu})^T \Sigma^{-1} (\mathbf{y} - \mathbf{\mu})$$
+
+This equation is minimized as a function of the correlation parameters to find the
+parameters that give the greatest likelihood.
+Since there is a determinant and matrix solve,
+this is an expensive function to optimize, with each evaluation being $O(n^3)$
+
+### Estimate for constant $\mu$
+
+If the mean is set to be constant, $\mu(X) = \mu \mathbf{1_n}$, then there is 
+a single parameter $\mu$ to estimate.
+Differentiating $\ell$ with respect to $\mu$ will then give
+$$ \frac{d \ell}{d \mu} = \mathbf{1_n}^T \Sigma^{-1}(\mathbf{y} - \mu \mathbf{1_n})$$
+Setting this equal to zero and solving for $\mu$ gives the maximum likelihood estimate $\hat{\mu}$
+$$ \hat{\mu} = \frac{\mathbf{1_n}^T \Sigma^{-1}\mathbf{y}}{\mathbf{1_n}^T \Sigma^{-1}\mathbf{1_n}}$$
+
+### Estimate for $\sigma$
+
+When using a correlation matrix so that $\Sigma = \sigma^2 R$, $\sigma$ must be estimated using maximum likelihood.
+
+$$ \frac{d \ell}{d \sigma^2} = \frac{n}{\sigma^2} - \frac{1}{\sigma^4}(\mathbf{y} - \mathbf{\mu})^T R^{-1} (\mathbf{y} - \mathbf{\mu})$$
+Setting equal to zero and solving for $\sigma^2$ gives
+$$ \hat{\sigma}^2 = \frac{1}{n} (\mathbf{y} - \mathbf{\mu})^T R^{-1} (\mathbf{y} - \mathbf{\mu})$$
+When estimating $\mu$ and $\sigma^2$ simultaneously, these estimates are valid and the
+estimate can simply be plugged into the equation.
+
+
+
+## Prediction of new points
+
+### Conditional distribution
+
+Suppose there are  vectors $\mathbf{y_1}$ and $\mathbf{y_2}$
+that are jointly multivariate normal.
+The joint distribution is
+$$ \begin{bmatrix} \mathbf{y_1} \\ \mathbf{y_2} \end{bmatrix} \sim N(
+\begin{bmatrix} \mathbf{\mu_1} \\ \mathbf{\mu_2} \end{bmatrix},
+~\begin{bmatrix} \Sigma_{11} \Sigma_{12} \\ \Sigma_{21} \Sigma_{22} \end{bmatrix} )
+$$
+
+The conditional distribution of $\mathbf{y_1}$ given $\mathbf{y_2}$ is 
+
+$$\mathbf{y_1} ~|~\mathbf{y_2} \sim 
+N(\mathbf{\mu_1} + \Sigma_{12} \Sigma_{22}^{-1}( \mathbf{y_2} - \mathbf{\mu_2})),
+~\Sigma_{11} - \Sigma_{12}\Sigma_{22}^{-1}\Sigma_{21})
+$$
+
+
+### Predicting
+
+Suppose there are two input matrices, $X_1$ and $X_2$, whose rows are the input points,
+with corresponding output vectors $\mathbf{y_1}$ and $\mathbf{y_2}$.
+Suppose we have the actual values for $\mathbf{y_2}$,
+and want to estimate, or predict, $\mathbf{y_1}$.
+We can use the conditional distribution above to get a posterior distribution for $\mathbf{y_1}$.
+
+If we only want to predict for a single point, i.e. we want to predict
+the output $y$ at $\mathbf{x}$, then this equation gives
+
+$$y ~|~\mathbf{y_2} \sim 
+N(\hat{y},
+~\hat{\sigma}^2(y))
+$$
+where
+$$ \hat{y} = \hat{\mu} + R(\mathbf{x},~X_2) R(X_2)^{-1}( \mathbf{y_2} - \mu\mathbf{1_n})) $$
+and
+$$ \hat{\sigma}^2(y) = R(\mathbf{x}) - R(\mathbf{x},~X_2) R(X_2)^{-1} R(X_2,~\mathbf{x}) $$
+
+Notice we get an estimate not only for the value of $y$,
+but also the standard error.
+This can be useful when we need a way to judge the prediction accuracy of the model.
+

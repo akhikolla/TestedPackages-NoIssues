@@ -1,0 +1,12 @@
+useDynLib(GLMaSPU)
+importFrom(Rcpp, evalCpp)
+import(MASS, mnormt, mvtnorm)
+importFrom("stats", "as.dist", "cophenetic", "fitted.values", "glm",
+             "rgamma", "rmultinom", "var", "rnbinom", "rnorm", "pnorm","rbinom","cor")
+importFrom("utils", "data")
+
+export(aSPU_apval)
+export(aSPU_perm)
+export(generate_data)
+export(Goeman_perm)
+export(HDGLM_perm)

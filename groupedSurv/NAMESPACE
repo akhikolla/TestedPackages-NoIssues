@@ -1,0 +1,14 @@
+useDynLib(groupedSurv)
+exportPattern("^[[:alpha:]]+")
+import(doParallel)
+import(foreach)
+import(parallel)
+importFrom(Rcpp, evalCpp)
+importFrom(stats, pchisq)
+importFrom(stats, optim)
+importFrom(stats, runif)
+importFrom(stats, complete.cases)
+importFrom(qvalue, qvalue)
+importFrom(stats, p.adjust)
+
+

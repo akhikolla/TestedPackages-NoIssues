@@ -1,0 +1,15 @@
+useDynLib(grpCox, .registration=TRUE)
+importFrom(Rcpp, evalCpp)
+import(Matrix)
+import(MASS)
+
+importFrom("stats", "approx", "setNames")
+importFrom("graphics", "box", "lines", "par", "plot", "polygon", "text", "title", "abline", "axis", "matplot", "points", "segments")
+importFrom(colorspace, "rainbow_hcl")
+
+export(grpCox, cv.grpCox, grpCoxOverlap, cv.grpCoxOverlap,        plot.Coef,plot.gCoef, plot.llCV)
+
+S3method(plot, Coef)
+S3method(plot, gCoef)
+S3method(plot, llCV)
+

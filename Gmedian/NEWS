@@ -1,0 +1,34 @@
+Change to version 1.2.4
+
+   - Allow to control the maximum number of iterations for the "kmeans" function used in the initialization of function Gmedian::kGmedian	
+
+Changes to version 1.2.3
+
+   - Update bibliography and correct the option scores=NULL in GmedianCov and WeiszfeldCov
+
+Changes to version 1.2.2
+
+   - Modify 'Makevars' and 'Makevars.win' files for compatibility with Rcpp (>= 0.12.6). 
+
+
+Changes to version 1.2.1
+
+   - Add robust estimation of the explained variance (standard deviation) for each principal axis in functions ‘WeiszfeldCov’ and ‘GmedianCov’. The robust estimation is obtained thanks to function robustbase::scaleTau2 	
+   
+   - Add the possibility to get a non negative estimated covariation matrix in function ‘GmedianCov’ by considering an approximation to the projection on the convex closed cone of the non negative matrices at each iteration of the Robbins-Monro algorithm. 
+
+
+Changes to Version 1.2
+
+   - Add function 'Weiszfeld' based on  Weiszfeld's algorithm for computing the geometric median. Slower than 'Gmedian' but more accurate for small and moderate sample sizes.
+
+   - Add function 'WeiszfeldCov' based on  Weiszfeld's algorithm for computing the median covariation matrix. Slower than 'GmedianCov' but more accurate for small and moderate sample sizes. Not appropriate for high dimension (d>500) data.
+
+
+
+Changes to Version 1.1
+
+   - Fixed bug in C++ related to the (forbidden) use of function 'sqrt' for integers
+
+   - Use function 'eig_sym' from package Rspectra instead of package rARPACK
+

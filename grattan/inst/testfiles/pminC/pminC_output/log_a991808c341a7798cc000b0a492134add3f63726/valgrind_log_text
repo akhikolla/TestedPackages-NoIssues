@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (grattan_deepstate_test_pminC_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/grattan/inst/testfiles/pminC/pminC_output/a991808c341a7798cc000b0a492134add3f63726.pass`
+TRACE: Running: grattan_deepstate_test_pminC_test from /home/akhila/fuzzer_packages/fuzzedpackages/grattan/inst/testfiles/pminC/pminC_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: 1.27891e-188 7.52749e+12 -2.14488e+105 inf -2.02048e-44 nan 3.42032e-93 8.27932e-269 -4.36409e-38 inf 0
+a values: 4.38983e+276
+input ends
+TRACE: Passed: grattan_deepstate_test_pminC_test

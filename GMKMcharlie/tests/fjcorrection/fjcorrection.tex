@@ -1,0 +1,210 @@
+\documentclass{article}
+\usepackage{setspace}
+%\documentclass[journal]{IEEEtran}
+\usepackage[title]{appendix}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{wrapfig}
+\usepackage{mdframed}
+\usepackage{amsbsy}
+\usepackage{hyperref}
+\usepackage{wrapfig}
+\usepackage{animate}
+\usepackage{algpseudocode}
+\usepackage{algorithm}
+\usepackage{algcompatible}
+\usepackage{tcolorbox}
+%\usepackage{caption}
+\usepackage[font={small,sf}]{caption}
+\usepackage{algorithmicx}
+\usepackage{algpseudocode}
+\usepackage{float}
+\usepackage{multicol}
+\usepackage{caption}
+\usepackage{amsfonts}
+\usepackage{subfig}
+\usepackage{color}
+\usepackage{subfig}
+%\usepackage[demo]{graphicx}
+\usepackage{url}
+\usepackage[export]{adjustbox}[2011/08/13]
+\usepackage{textpos}
+\usepackage[percent]{overpic}
+%\usepackage{minted}
+%\usemintedstyle{vs}
+%\usepackage{bbm}
+
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+
+
+%\newcommand{\minus}{\scalebox{0.8}{$-$}}
+\newcommand{\conv}{\scalebox{0.6}{$\perp$}}
+\newcommand{\como}{\scalebox{0.6}{$+$}}
+
+
+\definecolor{mygreen}{rgb}{0,0.45,0}
+\definecolor{mygray}{rgb}{0.99,0.99,0.99}
+\definecolor{mymauve}{rgb}{0.58,0,0.82}
+
+
+\usepackage{listings,lstautogobble}
+\lstset{
+	autogobble=true,
+	xleftmargin=0.25pt,
+	backgroundcolor=\color{mygray},   % choose the background color; you must add \usepackage{color} or \usepackage{xcolor}; should come as last argument
+	basicstyle=\small\ttfamily,        % the size of the fonts that are used for the code
+	breakatwhitespace=false,         % sets if automatic breaks should only happen at whitespace
+	breaklines=true,                 % sets automatic line breaking
+	captionpos=t,                    % sets the caption-position to bottom
+	commentstyle=\color{mygreen},    % comment style
+	%deletekeywords={...},            % if you want to delete keywords from the given language
+	escapeinside={\%*}{*)},          % if you want to add LaTeX within your code
+	extendedchars=true,              % lets you use non-ASCII characters; for 8-bits encodings only, does not work with UTF-8
+	%	frame=single,	                   % adds a frame around the code
+	keepspaces=true,                 % keeps spaces in text, useful for keeping indentation of code (possibly needs columns=flexible)
+	keywordstyle=\color{blue},       % keyword style
+	language=R,                 % the language of the code
+	morekeywords={*,...},           % if you want to add more keywords to the set
+	numbers=none,                    % where to put the line-numbers; possible values are (none, left, right)
+	%	numbersep=2pt,                   % how far the line-numbers are from the code
+	numberstyle=\tiny\color{white}, % the style that is used for the line-numbers
+	rulecolor=\color{black},         % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. comments (green here))
+	showspaces=false,                % show spaces everywhere adding particular underscores; it overrides 'showstringspaces'
+	showstringspaces=false,          % underline spaces within strings only
+	showtabs=false,                  % show tabs within strings adding particular underscores
+	stepnumber=1,                    % the step between two line-numbers. If it's 1, each line will be numbered
+	stringstyle=\color{mymauve},     % string literal style
+	tabsize=2,	                   % sets default tabsize to 2 spaces
+	title=\lstname                   % show the filename of files included with \lstinputlisting; also try caption instead of title
+}
+
+
+\lstdefinestyle{cplusplus}
+{
+	commentstyle=\color{mygreen}\ttfamily,
+	rulecolor=\color{black},
+	language=C++
+}
+\lstnewenvironment{cplusplus}{\lstset{style=cplusplus}}{}
+
+
+\usepackage{geometry}
+\geometry{a4paper, left=1.25in, top=1.25in, right=1.25in, bottom=1.25in}
+%\geometry{a4paper, left=1in, top=1in, right=1in, bottom=1in}
+
+
+%\usepackage[utf8]{inputenc}
+%\usepackage{times}
+
+%\renewcommand{\familydefault}{cmr}
+
+
+
+\hypersetup{
+	colorlinks   = true,
+	linkcolor    = blue,
+	urlcolor = blue
+}
+
+\begin{document}
+	
+	\title{FJ algorithm correction}
+	\author{Charlie Wusuo Liu}
+	\date{September 4, 2019}
+
+
+\section{Rewrite the algorithm}
+
+\begin{algorithm}
+	\caption{FJ source code}\label{alg}
+	 \textbf{Inputs:} $k_{\min}$, $k_{\max}$, $\epsilon$, initial parameters $\hat{\boldsymbol{\theta}}=\{\hat{\boldsymbol{\theta}}_1,\ldots,\hat{\boldsymbol{\theta}}_{k_{\max}},\hat{\alpha}_1,\ldots,\hat{\alpha}_{k_{\max}}\}$
+	 
+	\textbf{Output:} Mixture model in $\hat{\boldsymbol{\theta}}_{\text{best}}$
+
+	
+	\begin{algorithmic}[1]
+		\STATE $t\gets0$, $k_{nz}\gets k_{\max}$, $\mathcal{L}_{\min}\gets+\infty$
+     	\STATE $u_{m}^{(i)}\gets p(\boldsymbol{y}^{(i)}|\hat{\boldsymbol{\theta}}_{m})$, for $m=1,\ldots,k_{\max}$, and $i=1,\ldots,n$
+     	\WHILE{$k_{nz}\geq k_{\min}$}
+     	  \REPEAT
+     	  \STATE $t\gets t+1$
+     	  \FOR{$m=1$ to $k_{\max}$}
+     	  \STATE $w^{(i)}_{m}\gets\hat{\alpha}_mu^{(i)}_m\big(\sum_{j=1}^{k_{\max}}\hat{\alpha}_ju^{(i)}_j\big)^{-1}$, for $i=1,\ldots,n$
+     	  \STATE $\hat{\alpha}_m\gets\max\big\{0,\,\big(\sum_{i=1}^{n}w^{(i)}_m\big)-\frac{N}{2}\big\}\,/\,n$
+     	  \STATE $\{\hat{\alpha}_1,\ldots,\hat{\alpha}_{k_{\max}}\}\gets\{\hat{\alpha}_1,\ldots,\hat{\alpha}_{k_{\max}}\}\big(\sum_{m=1}^{k_{\max}}\hat{\alpha}_m\big)^{-1}$
+     	  \IF{$\hat{\alpha}_m>0$}
+     	  \STATE $\hat{\boldsymbol{\theta}}_m\gets\underset{\boldsymbol{\theta}_m}{\argmax}\log p(\mathcal{Y,\mathcal{W}|\boldsymbol{\theta}})$
+     	  \STATE $u^{(i)}_m\gets p(\boldsymbol{y}^{(i)}|\hat{\boldsymbol{\theta}}_m)$ for $i=1,\ldots,n$
+     	  \ELSE
+     	  \STATE $k_{nz}\gets k_{nz}-1$
+     	  \ENDIF
+     	  \ENDFOR
+     	  \STATE $\hat{\boldsymbol{\theta}}(t)\gets\{\hat{\boldsymbol{\theta}}_1,\ldots,\hat{\boldsymbol{\theta}}_{k_{\max}},\hat{\alpha}_1,\ldots,\hat{\alpha}_{k_{\max}}\}$
+     	  \STATE $L(t)\gets\sum_{i=1}^{n}\log\sum_{m=1}^{k}\hat{\alpha}_mu^{(i)}_m$
+     	  \UNTIL{$|L(t)-L(t-1)|<\epsilon|L(t-1)|$}
+     	  \STATE $\mathcal{L}[\hat{\boldsymbol{\theta}}(t),\mathcal{Y}]\gets\frac{N}{2}\underset{m:\hat{\alpha}_m>0}{\sum}\log\hat{\alpha}_m+\frac{1}{2}k(N+1)\log n-L(t)$
+     	 \IF{$\mathcal{L}[\hat{\boldsymbol{\theta}}(t),\mathcal{Y}]\leq\mathcal{L}_{\min}$}
+     	 \STATE $\mathcal{L}_{\min}\gets\mathcal{L}[\hat{\boldsymbol{\theta}}(t),\mathcal{Y}]$
+     	 \STATE $\hat{\boldsymbol{\theta}}_{\text{best}}\gets\hat{\boldsymbol{\theta}}(t)$
+     	 \ENDIF
+     	\STATE $m^*\gets\underset{m}{\argmin}\{\hat{\alpha}_m>0\}$, $\hat{\alpha}_{m^*}\gets0$, $k_{nz}\gets k_{nz}-1$
+     	\STATE $\{\hat{\alpha}_1,\ldots,\hat{\alpha}_{k_{\max}}\}\gets\{\hat{\alpha}_1,\ldots,\hat{\alpha}_{k_{\max}}\}\big(\sum_{m=1}^{k_{\max}}\hat{\alpha}_m\big)^{-1}$
+		\ENDWHILE
+	\end{algorithmic}
+\end{algorithm}
+
+
+
+
+
+%\begin{algorithm}
+%	\caption{FJ GMM source code}\label{sbs}
+%%	\textbf{LEFT BRANCH}:
+%	\begin{algorithmic}[1]
+%		\STATE $\beta\gets 0$\,. $\triangleleft$ $\beta=0$ implies the left branch, 1 the right branch.
+%		\STATE Copy $n$, dimensionality of the parent hyperrectangle;
+%		\STATE Copy MIN, MAX, $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(l(i_t)\big)$ , $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(u(i_t)\big)$ , $l$ and $u$ from the parent.
+%		\STATE\label{contract}Update the copied parameters through contraction. If it fails, \textbf{return} a failure signal.
+%		\STATE\label{findt}$T\gets\{t|u(i_t)=l(i_t)\}$ , $n_z\gets|T|$ . $\triangleleft$ $|T|$ is the cardinality.
+%		\STATE $l\gets\{l(i_t)|t\notin T\}$ , $u\gets\{u(i_t)|t\notin T\}$ , $n\gets n-n_z$ .
+%		\STATE Update $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(l(i_t)\big)$ and $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(u(i_t)\big)$ .
+%		\STATE\label{push}Push $\{u(i_t)|t\in T\}$ in a global buffer $B$ that is to hold a qualified subset. $\triangleleft$ This step goes concurrently with Step \ref{findt} .
+%		\STATE $\kappa\gets\underset{t}{\argmin}\big(u(i_t)-l(i_t)\big)$ .
+%		\STATE $u^{\prime}\gets\{u(i_0),\ldots,u(i_\kappa)\}$ , $S(u)\gets\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(u(i_t)\big)$ .
+%		\STATE For $t\in[0,\,\kappa]$ , $u(i_t)\gets\min\big(u(i_t),\,\lfloor u(i_\kappa)/2\rfloor-\kappa+t\big)$ . $\triangleleft$ Loop $t$ from $\kappa$ and stop once $u(i_t)\leq\lfloor u(i_\kappa)/2\rfloor-\kappa+t$ .
+%		\STATE Update $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(l(i_t)\big)$ , $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(u(i_t)\big)$ . $\triangleleft$ Use $\mathcal{M}$ for fast update. 
+%	\end{algorithmic}
+%%	If contraction succeeds in Step \ref{contract}, move to the right hyperrectangle in stack and execute the above steps again. Otherwise left-propagate through stack while erasing the last $n_z$ elements in buffer $B$ for each hyperrectangle, and stop once the current one has $\beta=0$ .
+%%	
+%%	\textbf{RIGHT BRANCH}:
+%%	\begin{algorithmic}[1]
+%%		\STATE $\beta\gets 1$ .
+%%		\STATE For $t\in[0,\,\kappa]$ , $u(i_t)\gets u^{\prime}(i_t)$ ; $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(u(i_t)\big)\gets S(u)$ .
+%%		\STATE For $t\in[\kappa,\,n-1]$ , $l(i_t)\gets\max\big(l(i_t),\,u(i_\kappa)+1+t-\kappa\big)$ . $\triangleleft$ Loop $t$ from $\kappa$ and stop once $l(i_t)\geq u(i_\kappa)+1+t-\kappa$ .
+%%		\STATE Update $\sum\limits_{t=0}^{n-1}\boldsymbol{x}\big(l(i_t)\big)$ . $\triangleleft$ Use $\mathcal{M}$ for fast update.
+%%	\end{algorithmic}
+%%	Move to the right hyperrectangle and execute \textbf{LEFT BRANCH}.
+%\end{algorithm}
+
+
+
+
+\end{document}
+
+
+
+
+
+
+
+
+
+
+
+
+
+

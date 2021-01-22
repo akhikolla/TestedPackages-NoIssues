@@ -1,0 +1,14 @@
+importFrom(RcppParallel, RcppParallelLibs)
+importFrom(Rcpp,sourceCpp)
+importFrom(Rcpp,evalCpp)
+importFrom(R6, R6Class)
+import(ggplot2)
+importFrom(grDevices, col2rgb, rgb)
+useDynLib(glow, .registration=TRUE)
+export("theme_night",
+       "additive_alpha",
+       "GlowMapper",
+       "GlowMapper4",
+       "LightMapper",
+       "LightMapper4",
+       "mollweide_projection")

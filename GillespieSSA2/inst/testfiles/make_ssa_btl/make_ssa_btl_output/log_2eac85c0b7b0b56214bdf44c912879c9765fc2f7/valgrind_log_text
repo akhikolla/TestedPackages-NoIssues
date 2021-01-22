@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (GillespieSSA2_deepstate_test_make_ssa_btl_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/GillespieSSA2/inst/testfiles/make_ssa_btl/make_ssa_btl_output/2eac85c0b7b0b56214bdf44c912879c9765fc2f7.pass`
+TRACE: Running: GillespieSSA2_deepstate_test_make_ssa_btl_test from /home/akhila/fuzzer_packages/fuzzedpackages/GillespieSSA2/inst/testfiles/make_ssa_btl/make_ssa_btl_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+mean_firings values: 3.16522e+06
+input ends
+TRACE: Passed: GillespieSSA2_deepstate_test_make_ssa_btl_test

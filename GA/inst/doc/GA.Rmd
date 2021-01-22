@@ -1,0 +1,610 @@
+---
+title: "A quick tour of GA"
+author: "Luca Scrucca"
+date: "`r format(Sys.time(), '%d %b %Y')`"
+output: 
+  rmarkdown::html_vignette:
+    toc: true
+    number_sections: false
+    css: "vignette.css"
+vignette: >
+  %\VignetteIndexEntry{A quick tour of GA}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+library(knitr)
+opts_chunk$set(fig.align = "center", 
+               out.width = "80%",
+               fig.width = 6, fig.height = 5,
+               dev.args=list(pointsize=10),
+               par = TRUE, # needed for setting hook 
+               collapse = TRUE, # collapse input & ouput code in chunks
+               warning = FALSE)
+
+knit_hooks$set(par = function(before, options, envir)
+  { if(before && options$fig.show != "none") 
+       par(family = "sans", mar=c(4.1,4.1,1.1,1.1), mgp=c(3,1,0), tcl=-0.5)
+})
+```
+
+
+# Introduction
+
+Genetic algorithms (GAs) are stochastic search algorithms inspired by the basic principles of biological evolution and natural selection. GAs simulate the evolution of living organisms, where the fittest individuals dominate over the weaker ones, by mimicking the biological mechanisms of evolution, such as selection, crossover and mutation.
+
+The R package **GA** provides a collection of general purpose functions for optimization using genetic algorithms. The package includes a flexible set of tools for implementing genetic algorithms search in both the continuous and discrete case, whether constrained or not. Users can easily define their own objective function depending on the problem at hand. Several genetic operators are available and can be combined to explore the best settings for the current task. Furthermore, users can define new genetic operators and easily evaluate their performances. Local search using general-purpose optimisation algorithms can be applied stochastically to exploit interesting regions. GAs can be run sequentially or in parallel, using an explicit master-slave parallelisation or a coarse-grain islands approach.
+
+This document gives a quick tour of **GA** (version `r packageVersion("GA")`) functionalities. It was written in R Markdown, using the [knitr](https://cran.r-project.org/package=knitr) package for production. 
+Further details are provided in the papers Scrucca (2013) and Scrucca (2017). See also `help(package="GA")` for a list of available functions and methods. 
+
+```{r, message = FALSE, echo=1}
+library(GA)
+cat(GA:::GAStartupMessage(), sep="")
+```
+
+# Function optimisation in one dimension
+
+Consider the function $f(x) = (x^2+x)\cos(x)$ defined over the range $-10 \le x \le 10$:
+```{r}
+f <- function(x)  (x^2+x)*cos(x)
+lbound <- -10; ubound <- 10
+curve(f, from = lbound, to = ubound, n = 1000)
+
+GA <- ga(type = "real-valued", fitness = f, lower = c(th = lbound), upper = ubound)
+summary(GA)
+plot(GA)
+
+curve(f, from = lbound, to = ubound, n = 1000)
+points(GA@solution, GA@fitnessValue, col = 2, pch = 19)
+```
+
+# Function optimisation in two dimensions
+
+Consider the *Rastrigin function*, a non-convex function often used as a test problem for optimization algorithms because it is a difficult problem due to its large number of local minima. In two dimensions it is defined as
+$$
+f(x_1, x_2) = 20 + x_1^2 + x_2^2 - 10(\cos(2\pi x_1) + \cos(2\pi x_2)),
+$$
+with $x_i \in [-5.12, 5.12]$ for $i=1,2$. It has a global minimum at $(0,0)$ where $f(0,0) = 0$. 
+
+```{r}
+Rastrigin <- function(x1, x2)
+{
+  20 + x1^2 + x2^2 - 10*(cos(2*pi*x1) + cos(2*pi*x2))
+}
+
+x1 <- x2 <- seq(-5.12, 5.12, by = 0.1)
+f <- outer(x1, x2, Rastrigin)
+persp3D(x1, x2, f, theta = 50, phi = 20, col.palette = bl2gr.colors)
+filled.contour(x1, x2, f, color.palette = bl2gr.colors)
+```
+
+A GA minimisation search is obtained as follows (note the minus sign used in the  definition of the local fitness function):
+```{r}
+GA <- ga(type = "real-valued", 
+         fitness =  function(x) -Rastrigin(x[1], x[2]),
+         lower = c(-5.12, -5.12), upper = c(5.12, 5.12), 
+         popSize = 50, maxiter = 1000, run = 100)
+summary(GA)
+plot(GA)
+```
+
+```{r}
+filled.contour(x1, x2, f, color.palette = bl2gr.colors, 
+  plot.axes = { axis(1); axis(2); 
+                points(GA@solution[,1], GA@solution[,2], 
+                       pch = 3, cex = 2, col = "white", lwd = 2) }
+)
+```
+
+The GA search process can be visualised by defining a monitoring function as follows:
+```{r, eval=FALSE}
+monitor <- function(obj) 
+{ 
+  contour(x1, x2, f, drawlabels = FALSE, col = grey(0.5))
+  title(paste("iteration =", obj@iter), font.main = 1)
+  points(obj@population, pch = 20, col = 2)
+  Sys.sleep(0.2)
+}
+
+GA <- ga(type = "real-valued", 
+         fitness =  function(x) -Rastrigin(x[1], x[2]),
+         lower = c(-5.12, -5.12), upper = c(5.12, 5.12), 
+         popSize = 50, maxiter = 100, 
+         monitor = monitor)
+```
+
+# Setting some members of the initial population
+
+The `suggestions` argument to `ga()` function call can be used to provide a matrix of solutions to be included in the initial population. 
+
+For example, consider the optimisation of the Rastrigin function introduced above:
+```{r}
+suggestedSol <- matrix(c(0.2,1.5,-1.5,0.5), nrow = 2, ncol = 2, byrow = TRUE)
+GA1 <- ga(type = "real-valued", 
+          fitness =  function(x) -Rastrigin(x[1], x[2]),
+          lower = c(-5.12, -5.12), upper = c(5.12, 5.12), 
+          suggestions = suggestedSol,
+          popSize = 50, maxiter = 1)
+head(GA1@population)
+```
+As it can be seen, the first two solutions considered are those provided, whereas the rest is filled randomly as usual.
+A full search can be obtained as follows:
+```{r}
+GA <- ga(type = "real-valued", 
+         fitness =  function(x) -Rastrigin(x[1], x[2]),
+         lower = c(-5.12, -5.12), upper = c(5.12, 5.12), 
+         suggestions = suggestedSol,
+         popSize = 50, maxiter = 100)
+summary(GA)
+```
+
+
+# Constrained optimisation
+
+This example shows how to minimize an objective function subject to nonlinear inequality constraints and bounds using GAs. Source: http://www.mathworks.it/it/help/gads/examples/constrained-minimization-using-the-genetic-algorithm.html
+
+We want to minimize a simple function of two variables $x_1$ and $x_2$
+$$
+\min_x f(x) = 100 (x_1^2 - x_2)^2 + (1 - x_1)^2;
+$$
+subject to the following nonlinear inequality constraints and bounds:
+
+- $x_1x_2 + x_1 - x_2 + 1.5 \le 0$ (*inequality constraint*),  
+- $10 - x_1x_2 \le 0$ (*inequality constraint*),  
+- $0 \le x_1 \le 1$ (*bounds*), and  
+- $0 \le x_2 \le 13$ (*bounds*).
+
+The above fitness function is known as "cam" as described in L.C.W. Dixon and G.P. Szego (eds.), **Towards Global Optimisation 2**, North-Holland, Amsterdam, 1978.
+
+```{r}
+f <- function(x)
+  { 100 * (x[1]^2 - x[2])^2 + (1 - x[1])^2 }
+
+c1 <- function(x) 
+  { x[1]*x[2] + x[1] - x[2] + 1.5 }
+
+c2 <- function(x) 
+  { 10 - x[1]*x[2] }
+```
+
+Plot the function and the feasible regions (coloured areas):
+```{r}
+ngrid <- 250
+x1 <- seq(0, 1, length = ngrid)
+x2 <- seq(0, 13, length = ngrid)
+x12 <- expand.grid(x1, x2)
+col <- adjustcolor(bl2gr.colors(4)[2:3], alpha = 0.2)
+plot(x1, x2, type = "n", xaxs = "i", yaxs = "i")
+image(x1, x2, matrix(ifelse(apply(x12, 1, c1) <= 0, 0, NA), ngrid, ngrid), 
+      col = col[1], add = TRUE)
+image(x1, x2, matrix(ifelse(apply(x12, 1, c2) <= 0, 0, NA), ngrid, ngrid), 
+      col = col[2], add = TRUE)
+contour(x1, x2, matrix(apply(x12, 1, f), ngrid, ngrid), 
+        nlevels = 21, add = TRUE)
+```
+
+MATLAB solution:
+```{r}
+x <- c(0.8122, 12.3104)
+f(x)
+```
+However, note that the provided solution does not satisfy the inequality constraints:
+```{r}
+c1(x)
+c2(x)
+```
+
+A GA solution can be obtained by defining a penalised fitness function:
+```{r}
+fitness <- function(x) 
+{ 
+  f <- -f(x)                         # we need to maximise -f(x)
+  pen <- sqrt(.Machine$double.xmax)  # penalty term
+  penalty1 <- max(c1(x),0)*pen       # penalisation for 1st inequality constraint
+  penalty2 <- max(c2(x),0)*pen       # penalisation for 2nd inequality constraint
+  f - penalty1 - penalty2            # fitness function value
+}
+```
+Then
+```{r}
+GA <- ga("real-valued", fitness = fitness, 
+         lower = c(0,0), upper = c(1,13), 
+         # selection = GA:::gareal_lsSelection_R,
+         maxiter = 1000, run = 200, seed = 123)
+summary(GA)
+
+fitness(GA@solution)
+f(GA@solution)
+c1(GA@solution)
+c2(GA@solution)
+```
+
+A graph showing the solution found is obtained as:
+```{r}
+plot(x1, x2, type = "n", xaxs = "i", yaxs = "i")
+image(x1, x2, matrix(ifelse(apply(x12, 1, c1) <= 0, 0, NA), ngrid, ngrid), 
+      col = col[1], add = TRUE)
+image(x1, x2, matrix(ifelse(apply(x12, 1, c2) <= 0, 0, NA), ngrid, ngrid), 
+      col = col[2], add = TRUE)
+contour(x1, x2, matrix(apply(x12, 1, f), ngrid, ngrid), 
+        nlevels = 21, add = TRUE)
+points(GA@solution[1], GA@solution[2], col = "dodgerblue3", pch = 3)  # GA solution
+```
+
+
+# Integer optimisation
+
+We consider here two approaches to integer optimisation via GAs, one using binary GA search, and one using real-valued GA search. In both cases an appropriate decoding function is used to convert the encoding of the decision variables to the natural encoding of the problem. 
+
+Consider the *acceptance sampling* example described in Scrucca (2013, Sec. 4.6). In essence, we must find the integers $n$ (sample size) and $c$ (acceptance number) that minimise a loss function measuring the difference between the objective and the achieved probability of acceptance of a lot. 
+For more details see Scrucca (2013, Sec. 4.6) and references therein.
+
+```{r}
+AQL   <- 0.01; alpha <- 0.05
+LTPD  <- 0.06; beta  <- 0.10
+plot(0, 0, type="n", xlim=c(0,0.2), ylim=c(0,1), bty="l", xaxs="i", yaxs="i", 
+     ylab="Prob. of acceptance", xlab=expression(p))
+lines(c(0,AQL), rep(1-alpha,2), lty=2, col="grey")
+lines(rep(AQL,2), c(1-alpha,0), lty=2, col="grey")
+lines(c(0,LTPD), rep(beta,2), lty=2, col="grey")
+lines(rep(LTPD,2), c(beta,0), lty=2, col="grey")
+points(c(AQL, LTPD), c(1-alpha, beta), pch=16)
+text(AQL, 1-alpha, labels=expression(paste("(", AQL, ", ", 1-alpha, ")")), pos=4)
+text(LTPD, beta, labels=expression(paste("(", LTPD, ", ", beta, ")")), pos=4)
+```
+
+
+**Binary search solution**
+
+```{r}
+decode1 <- function(x)
+{ 
+  x <- gray2binary(x)
+  n <- binary2decimal(x[1:l1])
+  c <- min(n, binary2decimal(x[(l1+1):(l1+l2)]))
+  out <- structure(c(n,c), names = c("n", "c"))
+  return(out)
+}
+
+fitness1 <- function(x) 
+{ 
+  par <- decode1(x)
+  n <- par[1]  # sample size
+  c <- par[2]  # acceptance number
+  Pa1 <- pbinom(c, n, AQL)
+  Pa2 <- pbinom(c, n, LTPD)
+  Loss <- (Pa1-(1-alpha))^2 + (Pa2-beta)^2
+  -Loss
+}
+
+n  <- 2:200                  # range of values to search
+b1 <- decimal2binary(max(n)) # max number of bits requires
+l1 <- length(b1)             # length of bits needed for encoding
+c  <- 0:20                   # range of values to search
+b2 <- decimal2binary(max(c)) # max number of bits requires
+l2 <- length(b2)             # length of bits needed for encoding
+
+GA1 <- ga(type = "binary", fitness = fitness1, 
+          nBits = l1+l2, 
+          popSize = 100, maxiter = 1000, run = 100)
+summary(GA1)
+decode1(GA1@solution)
+```
+
+```{r}
+plot(0,0,type="n", xlim=c(0,0.2), ylim=c(0,1), bty="l", xaxs="i", yaxs="i", 
+     ylab=expression(P[a]), xlab=expression(p))
+lines(c(0,AQL), rep(1-alpha,2), lty=2, col="grey")
+lines(rep(AQL,2), c(1-alpha,0), lty=2, col="grey")
+lines(c(0,LTPD), rep(beta,2), lty=2, col="grey")
+lines(rep(LTPD,2), c(beta,0), lty=2, col="grey")
+points(c(AQL, LTPD), c(1-alpha, beta), pch=16)
+text(AQL, 1-alpha, labels=expression(paste("(", AQL, ", ", 1-alpha, ")")), pos=4)
+text(LTPD, beta, labels=expression(paste("(", LTPD, ", ", beta, ")")), pos=4)
+n <- 87; c <- 2
+p <- seq(0, 0.2, by = 0.001)
+Pa <- pbinom(2, 87, p)
+lines(p, Pa, col = 2)
+```
+
+
+**Real-valued search solution**
+
+```{r}
+decode2 <- function(x)
+{ 
+  n <- floor(x[1])         # sample size
+  c <- min(n, floor(x[2])) # acceptance number
+  out <- structure(c(n,c), names = c("n", "c"))
+  return(out)
+}
+
+fitness2 <- function(x) 
+{ 
+  x <- decode2(x)
+  n <- x[1]  # sample size
+  c <- x[2]  # acceptance number
+  Pa1 <- pbinom(c, n, AQL)
+  Pa2 <- pbinom(c, n, LTPD)
+  Loss <- (Pa1-(1-alpha))^2 + (Pa2-beta)^2
+  return(-Loss)
+}
+
+GA2 <- ga(type = "real-valued", fitness = fitness2, 
+          lower = c(2,0), upper = c(200,20)+1,
+          popSize = 100, maxiter = 1000, run = 100)
+summary(GA2)
+t(apply(GA2@solution, 1, decode2))
+```
+
+
+**A comparison**
+
+```{r, eval=FALSE, echo=-(1:2)}
+set.seed(20181111)
+options(digits = 4)
+nrep <- 100
+systime <- loss <- niter <- matrix(as.double(NA), nrow = nrep, ncol = 2,
+                                   dimnames = list(NULL, c("Binary", "Real-valued")))
+for(i in 1:nrep)
+{
+  t <- system.time(GA1 <- ga(type = "binary", fitness = fitness1, 
+                             nBits = l1+l2, monitor = FALSE,
+                             popSize = 100, maxiter = 1000, run = 100))
+  systime[i,1] <- t[3]
+  loss[i,1]    <- -GA1@fitnessValue  
+  niter[i,1]   <- GA1@iter
+  #
+  t <- system.time(GA2 <- ga(type = "real-valued", fitness = fitness2, 
+                             lower = c(2,0), upper = c(200,20)+1, 
+                             monitor = FALSE,
+                             popSize = 100, maxiter = 1000, run = 100))
+  systime[i,2] <- t[3]
+  loss[i,2]    <- -GA2@fitnessValue  
+  niter[i,2]   <- GA2@iter
+}
+
+describe <- function(x) c(Mean = mean(x), sd = sd(x), quantile(x))
+
+t(apply(systime, 2, describe))
+#               Mean      sd    0%   25%    50%    75%  100%
+# Binary      0.6902 0.20688 0.421 0.553 0.6340 0.7455 1.463
+# Real-valued 0.3251 0.07551 0.252 0.275 0.2995 0.3470 0.665
+
+t(apply(loss, 2, describe))*1000
+#                Mean     sd      0%     25%     50%     75%   100%
+# Binary      0.09382 0.1919 0.05049 0.05049 0.05049 0.05049 1.5386
+# Real-valued 0.09600 0.1551 0.05049 0.05049 0.05049 0.05049 0.6193
+
+t(apply(niter, 2, describe))
+#              Mean    sd  0% 25%   50%   75% 100%
+# Binary      160.8 48.31 100 129 146.0 172.2  337
+# Real-valued 122.5 27.99 100 104 110.5 130.0  246
+```
+
+Based on this small example, real-valued GA search is about 50% faster, converges in fewer iterations, and has the same accuracy as binary search.
+
+
+# Hybrid GAs
+
+Hybrid Genetic Algorithms (HGAs) incorporate efficient local search algorithms into GAs. In case of real-valued optimisation problems, the **GA** package provides a simple way to start local searches from GA solutions after a certain number of iterations, so that, once a promising region is identified, the convergence to the global optimum can be speed up. 
+
+The use of HGAs is controlled by the optional argument `optim = TRUE` (by default is set to `FALSE`). 
+Local searches are executed using the base R function `optim()`, which makes available general-purpose optimisation methods, such as Nelder–Mead, quasi-Newton with and without box constraints, and conjugate-gradient algorithms. 
+The local search method to be used and other parameters are controlled with the optional argument `optimArgs`, which must be a list with the following structure and defaults:
+```{}
+optimArgs = list(method = "L-BFGS-B", 
+                 poptim = 0.05,
+                 pressel = 0.5,
+                 control = list(fnscale = -1, maxit = 100))
+```
+For more details see `help(ga)`.
+
+Consider again the two-dimensional *Rastrigin function* defined previously. A HGA search is obtained as follows:
+```{r}
+GA <- ga(type = "real-valued", 
+         fitness =  function(x) -Rastrigin(x[1], x[2]),
+         lower = c(-5.12, -5.12), upper = c(5.12, 5.12), 
+         popSize = 50, maxiter = 1000, run = 100,
+         optim = TRUE)
+summary(GA)
+plot(GA)
+```
+
+Note the improved solution obtained. 
+
+
+# Parallel computing
+
+By default searches performed using the **GA** package occur sequentially. In some cases, particularly when the evaluation of the fitness function is time consuming, parallelisation of the search algorithm may be able to speed up computing time. 
+Starting with version 2.0, the **GA** package provides facilities for implementing parallelisation of genetic algorithms. 
+
+Parallel computing with **GA** requires the following packages to be installed: 
+**parallel** (available in base R), [doParallel](https://cran.r-project.org/package=doParallel),
+[foreach](https://cran.r-project.org/package=foreach), and 
+[iterators](https://cran.r-project.org/package=iterators). 
+
+To use parallel computing with the **GA** package on a *single machine with multiple cores* is simple as manipulating the optional argument `parallel` in the `ga()` function call.
+
+The argument `parallel` can be a logical argument specifying if parallel computing should be used (`TRUE`) or not (`FALSE`, default) for evaluating the fitness function. This argument could also be used to specify the number of cores to employ; by default, this is taken from `detectCores()` function in **parallel** package. 
+
+Two types of parallel functionality are implemented depending on system OS: on Windows only *snow* type functionality is available, while on POSIX operating systems, such as Unix, GNU/Linux, and Mac OSX, both *snow* and *multicore* (default) functionalities are available. In the latter case a string can be used to specify which parallelisation method should be used.
+
+In all cases described above, at the end of GA iterations the cluster is automatically stopped by shutting down the workers.
+
+Consider the following simple example where a pause statement is introduced to simulate an expensive fitness function. 
+```{r, eval=FALSE}
+library(GA)
+fitness <- function(x)
+{
+  Sys.sleep(0.01)
+  x*runif(1)
+}
+
+library(rbenchmark)
+out <- benchmark(
+  GA1 = ga(type = "real-valued", 
+           fitness = fitness, lower = 0, upper = 1,
+           popSize = 50, maxiter = 100, monitor = FALSE,
+           seed = 12345),
+  GA2 = ga(type = "real-valued", 
+           fitness = fitness, lower = 0, upper = 1,
+           popSize = 50, maxiter = 100, monitor = FALSE,
+           seed = 12345, parallel = TRUE),
+  GA3 = ga(type = "real-valued", 
+           fitness = fitness, lower = 0, upper = 1,
+           popSize = 50, maxiter = 100, monitor = FALSE,
+           seed = 12345, parallel = 2),
+  GA4 = ga(type = "real-valued", 
+           fitness = fitness, lower = 0, upper = 1,
+           popSize = 50, maxiter = 100, monitor = FALSE,
+           seed = 12345, parallel = "snow"),
+  columns = c("test", "replications", "elapsed", "relative"),
+  order = "test", 
+  replications = 10)
+out$average <- with(out, average <- elapsed/replications)
+out[,c(1:3,5,4)]
+##   test replications elapsed average relative
+## 1  GA1           10 565.075 56.5075    3.975
+## 2  GA2           10 142.174 14.2174    1.000
+## 3  GA3           10 263.285 26.3285    1.852
+## 4  GA4           10 155.777 15.5777    1.096
+```
+
+The results above have been obtained on an iMac, Intel Core i5 at 2.8GHz, with 4 cores and 16 GB RAM, running OSX 10.11.
+
+If a *cluster of multiple machines* is available, `ga()` can be executed in parallel using all, or a subset of, the cores available to the machines belonging to the cluster. However, this option requires more work from the user, who needs to set up and register a parallel back end. 
+
+For instance, suppose that we want to create a cluster of two computers having IP addresses `141.250.100.1` and `141.250.105.3`, respectively. For each computer we require 8 cores, so we aim at having a cluster of 16 cores evenly distributed on the two machines.
+Note that communication between the master worker and the cluster nodes is done via SSH, so you should configure ssh to use password-less login. For more details see McCallum and Weston (2011, Chapter 2). 
+
+```{r, eval=FALSE}
+library(doParallel)
+workers <- rep(c("141.250.100.1", "141.250.105.3"), each = 8)
+cl <- makeCluster(workers, type = "PSOCK")
+registerDoParallel(cl)
+```
+The code above defines a vector of `workers` containing the IP address for each node of the cluster. This is used by `makeCluster()` to create a *PSOCK Snow cluster* object named `cl`.
+At this point, objects and functions, but also R packages, required during the evaluation of fitness function must be *exported* along the nodes of the cluster. For example, the following code export the vector `x`, the fitness function `fun`, and load the R package `mclust`, on each node of the socket cluster:
+```{r, eval=FALSE}
+clusterExport(cl, varlist = c("x", "fun"))
+clusterCall(cl, library, package = "mclust", character.only = TRUE)
+```
+
+At this point a `ga()` function call can be executed by providing the argument `parallel = cl`. For instance:
+```{r, eval=FALSE}
+GA5 <- ga(type = "real-valued", 
+          fitness = fitness, lower = 0, upper = 1,
+          popSize = 50, maxiter = 100, monitor = FALSE,
+          seed = 12345, parallel = cl)
+```
+Note that in this case the cluster must be explicitly stopped with the command:
+```{r, eval=FALSE}
+stopCluster(cl)
+```
+
+
+# Island evolution
+
+GAs can be designed to evolve using an Island evolution approach. Here the population is partitioned in a set of sub-populations (islands) in which isolated GAs are executed on separated processor runs. Occasionally, some individuals from an island migrate to another island, thus allowing sub-populations to share genetic material
+
+This approach is implemented in the `gaisl()` function, which has the same input arguments as the `ga()` function, with the addition of the following argument:
+
+- `numIslands`: an integer value specifying the number of islands to use (by default is set to 4)
+
+- `migrationRate`: a value in the range (0,1) which gives the proportion of individuals that undergo migration between islands in every exchange (by default equal to 0.10)
+
+- `migrationInterval`: an integer value specifying the number of iterations at which exchange of individuals takes place (by default set at 10).
+
+Parallel computing is used by default in the Island evolution approach. Hybridisation by local search is also available as discussed previously.
+
+As an example, consider again the two-dimensional *Rastrigin function*. An Island GA search is obtained as follows:
+```{r, echo=FALSE}
+# run not in parallel because it is not allowed in CRAN checks
+GA <- gaisl(type = "real-valued", 
+            fitness =  function(x) -Rastrigin(x[1], x[2]),
+            lower = c(-5.12, -5.12), upper = c(5.12, 5.12), 
+            popSize = 100, 
+            maxiter = 1000, run = 100, 
+            numIslands = 4, 
+            migrationRate = 0.2, 
+            migrationInterval = 50,
+            parallel = FALSE)
+```
+
+```{r, eval=FALSE}
+GA <- gaisl(type = "real-valued", 
+            fitness =  function(x) -Rastrigin(x[1], x[2]),
+            lower = c(-5.12, -5.12), upper = c(5.12, 5.12), 
+            popSize = 100, 
+            maxiter = 1000, run = 100,
+            numIslands = 4, 
+            migrationRate = 0.2,
+            migrationInterval = 50)
+```
+```{r}
+summary(GA)
+plot(GA, log = "x")
+```
+
+# Memoization
+
+In certain circumstances, particularly with binary GAs, [memoization](https://en.wikipedia.org/wiki/Memoization) can 
+be used to speed up calculations by using cached results. This is easily obtained using the [memoise](https://cran.r-project.org/package=memoise) package.
+
+```{r, eval = FALSE}
+data(fat, package = "UsingR")
+mod <- lm(body.fat.siri ~ age + weight + height + neck + chest + abdomen +
+          hip + thigh + knee + ankle + bicep + forearm + wrist, data = fat)
+summary(mod)
+x <- model.matrix(mod)[,-1]
+y <- model.response(mod$model)
+
+fitness <- function(string)
+{ 
+  mod <- lm(y ~ x[,string==1])
+  -BIC(mod)
+}
+
+library(memoise)
+mfitness <- memoise(fitness)
+is.memoised(fitness)
+## [1] FALSE
+is.memoised(mfitness)
+## [1] TRUE
+
+library(rbenchmark)
+tab <- benchmark(
+  GA1 = ga("binary", fitness = fitness, nBits = ncol(x), 
+           popSize = 100, maxiter = 100, seed = 1, monitor = FALSE),
+  GA2 = ga("binary", fitness = mfitness, nBits = ncol(x), 
+           popSize = 100, maxiter = 100, seed = 1, monitor = FALSE),
+  columns = c("test", "replications", "elapsed", "relative"), 
+  replications = 10)
+tab$average <- with(tab, elapsed/replications)
+tab
+##   test replications elapsed relative average
+## 1  GA1           10  59.071    5.673  5.9071
+## 2  GA2           10  10.413    1.000  1.0413
+
+# to clear cache use
+forget(mfitness)
+```
+
+
+# References
+
+McCallum, E. and Weston, S. (2011) *Parallel R*. O’Reilly Media.
+
+Scrucca, L. (2013) GA: A Package for Genetic Algorithms in R. *Journal of Statistical Software*, 53/4, 1-37. URL https://www.jstatsoft.org/v53/i04/
+
+Scrucca, L. (2017) On some extensions to GA package: hybrid optimisation, parallelisation and islands evolution. *The R Journal*, 9/1, 187–206. https://journal.r-project.org/archive/2017/RJ-2017-008
+
+
+----
+
+```{r}
+sessionInfo()
+```

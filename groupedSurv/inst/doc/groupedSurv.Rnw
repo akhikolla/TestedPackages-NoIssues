@@ -1,0 +1,511 @@
+\documentclass[10pt,xcolor=x11names,compress]{beamer}
+
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{booktabs}
+
+
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{groupedSurv}
+
+
+\newcommand{\R}{\texttt{R}}
+\newcommand{\pkgname}{\texttt{groupedSurv}}
+\newcommand{\Rcpp}{\texttt{Rcpp}}
+\newcommand{\Cpp}{\texttt{C++}}
+\newcommand{\rfunc}[1]{\texttt{#1()}}           % function name
+\newcommand{\df}{\texttt{data.frame}}
+\newcommand{\ie}{i.e.,}
+\newcommand{\eg}{e.g.,}
+
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{footline}[frame number]
+
+\setbeamertemplate{enumerate item}{\insertenumlabel}
+\setbeamertemplate{enumerate subitem}{\alph{enumii}.}
+
+
+\begin{document}
+<<setup1, include=FALSE, echo=FALSE>>=
+require(knitr)
+@
+
+<<setup2, include=FALSE,echo=FALSE>>=
+library(groupedSurv)
+old_ops <- options(width=80)  # make the printing fit on the page
+set.seed(1121)     # make the results repeatable
+stdt<-date()
+@
+
+\begin{frame}
+	\title{\pkgname}
+	\subtitle{Efficient Estimation of Grouped Survival Models Using the
+	Exact Likelihood Function}
+	\date{2020-11-11}
+	\titlepage
+\end{frame}
+
+\section{Introduction}
+\begin{frame}{Introduction}
+% \scriptsize
+  \begin{itemize}
+	\item This document provides examples demonstrating how to use the
+		\pkgname{} package to estimate the baseline survival rate, covariate, and fixed effect parameters, 
+		and compute the efficient score statistic, as well as gene-level statistics for grouped survival models. 
+  \item Additional functions can analyze grouped time-to-event data accounting for family structure of
+			related individuals (e.g., trios), and provide estimates of frailty
+			variance. Note, however, that the current implementation of the frailty model is sensitive 
+			to departures from model assumptions, and should be considered experimental.
+    \item The major algorithms in this package are written in \texttt{C++},
+      which is ported to \R{} by \Rcpp{}, to facilitate fast computation. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{Model assumptions}
+% \scriptsize
+  Data without family structure~\cite{prentice1978}
+  \begin{itemize}
+    \item The input data is assumed to be organized as a \texttt{matrix} or \df{}, with rows 
+    corresponding samples, and columns corresponding to variables of interest (and covariates) for the sample. 
+    \item Support is also provided for GenABEL \texttt{gwaa.data} objects as alternative inputs.
+  \end{itemize}
+  Data with family structure~\cite{ripatti2004} [Experimental]
+  \begin{itemize}
+	\item The input \texttt{matrix} or \df{} is assumed to be organized such that records for each
+      family occur consecutively, and that records for offspring precede those for
+      parents. The variance matrix for the random effects is assumed to be of the
+      form \texttt{var}$*$\texttt{K}, where \texttt{K} is a matrix of kinship
+      coefficients between family members. 
+	\item The following family groupings are permitted: (Individual),
+      (Offspring, Offspring), (Offspring, Parent), (Offspring, Parent, Parent), and
+      (Offspring, Offspring, Parent, Parent). Other family structures have not been
+      implemented. 
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]{Included functions}
+\scriptsize
+Functions for data without family structure\\
+<<without, eval=FALSE>>=
+thetaEst(Z=NULL, gtime, delta, method="BFGS")
+betaEst(x, Z=NULL, alpha, theta=NULL, gtime, delta)
+groupedSurv(x, Z=NULL, GenABEL.data=NULL, alpha, theta=NULL,
+         gtime, delta, beta=0, nCores=1, reScore=FALSE)
+geneStat(x, Z=NULL, GenABEL.data=NULL, alpha, theta=NULL,
+         gtime, delta, beta=0, nCores=1, 
+         FUN=function(Uij, weight){sum((colSums(Uij)*weight)^2)}, geneSet)
+@
+Functions for data with family structure [Experimental]\\
+<<with, eval=FALSE>>=
+alphaEstFam(gtime, delta) 
+betaEstFam(x, fam_group, fam_role, alpha, var, gtime, delta, lower, upper) 
+varEstFam(x, fam_group, fam_role, alpha, gtime, delta, lower, upper, beta = 0) 
+groupedSurvFam(x, fam_group, fam_role, alpha, var, gtime, delta, beta=0)
+varLLFam(x, fam_group, fam_role, alpha, var, gtime, delta, beta=0)
+@
+\end{frame}
+
+\begin{frame}[fragile]{Usage overview}
+\scriptsize
+Most users will interface with the package through the \rfunc{thetaEst} and
+\rfunc{groupedsurv} functions. The \rfunc{thetaEst} function provides maximum
+likelihood estimates (MLE) for the nuisance parameters, \ie{} the baseline
+survival rate and the parameters for any covariates. The estimates are computed
+under the null hypothesis, \ie{} that the variable of interest has no effect on
+the time to event. The \rfunc{thetaEst} function requires a vector of grouped survival
+times, \texttt{gtime} and a vector of event indicators, \texttt{delta}, as
+arguments. If the model includes covariates, these values, in the form of a
+\texttt{matrix} or \df{}, \texttt{Z}, are required as well. Optionally, users can specify the
+method of optimization (\texttt{method} = ``BFGS'' or ``CG'') which is passed to
+the \texttt{optim} function in \Cpp{}.\\
+\vspace{2mm}
+The \rfunc{groupedSurv} function is the core of the \pkgname{} package. As inputs,
+it requires a \texttt{matrix} or \df{} of variables to be tested for association with the outcome,
+\texttt{x}, a vector of grouped survival times and a vector of event indicators
+(\texttt{gtime} and \texttt{delta}), as well as estimates for the nuisance
+parameters (\texttt{alpha} and \texttt{theta}). Note that since \rfunc{thetaEst}
+estimates the nuisance parameters under the null hypothesis, these estimates can
+be reused to calculate the efficient score statistic for any number of variables
+of interest. If the model includes covariates, the \texttt{Z} \texttt{matrix} or \df{} is also
+required. 
+\vspace{2mm}
+In the context of GWAS, covariates and variables of interest can be
+provided as part of a GenABEL object (\texttt{gwaa.data}), with the arguments
+\texttt{x} and \texttt{Z} instead used to specify to the columns of
+\texttt{gwaa.data} to be included in the analyses.\\
+\end{frame}
+
+\begin{frame}[fragile]{Usage overview}
+\scriptsize
+Users also have the option of specifying the number of cores available for
+parallel processing (\texttt{nCores}). The \texttt{beta} argument is 0 by
+default, computing the statistics under the null hypothesis, but users have the
+option of specifying a different value, \eg{} in order to evaluate the statistic
+under an alternative hypothesis.\\
+\vspace{2mm}
+By default, the package returns a data frame containing the efficient score  
+statistics, along with the (unadjusted) asymptotic p-values, FWER-adjusted 
+p-values~\cite{bonfcorrect} and local FDRs~\cite{qvalue1,qvalue2} for each of the variables of interest. By setting the 
+optional argument \texttt{reScore=TRUE}, the \rfunc{groupedsurv} function will 
+also return a matrix of the contribution of each sample to the efficient score 
+statistic for each variable of interest.\\
+\vspace{2mm}
+A supporting function, \rfunc{betaEst}, takes a vector of values of a variable  
+of interest, \texttt{x}, along with the same arguments as the \rfunc{thetaEst} 
+function, and returns the MLE of the log hazard ratio, $\beta$.\\
+\vspace{2mm}
+Please refer to the individual function manuals for more detailed explanations of the arguments and returned values associated with each function.\\
+\end{frame}
+
+\begin{frame}[fragile]{A note about coding grouped survival times}
+\scriptsize
+Under the grouped failure time model, the continuous survival time, $time \in [0,\infty)$ is not observed. 
+Instead, subjects are assessed for failure only at pre-specified time points, $gtime_1, gtime_2, \dots, gtime_{r-1}$. 
+These time points form the right end-points of $r$ adjacent intervals, \ie{} $[0,gtime_1),[gtime_1,gtime_2),\dots,[gtime_{r-2},gtime_{r-1})[gtime_{r-1},\infty)$.\\
+\vspace{2mm}
+The contribution of each subject to the likelihood used in the efficient score is 
+composed of the combination of the intervals they survived and, if applicable, 
+that in which the event occurred. For example, a subject who 
+survives the first two intervals (\ie has not failed at $gtime_1$ or $gtime_2$)
+but then has failed by the third observation should be coded as (\texttt{gtime}$=gtime_3$, \texttt{delta}$=1$).
+Similarly, a subject who has not yet failed at the fourth observation time, but who is lost 
+to follow-up before the fifth observation time would be coded as (\texttt{gtime}$=gtime_5$, \texttt{delta}$=0$).\\
+\vspace{2mm}
+Note then that subjects who are censored at the first time point, (\texttt{gtime}$=gtime_1$, \texttt{delta}$=0$), contribute no information to the likelihood. Note also that subjects who have not failed by the final observation time point should be considered censored at infinity, and coded (\texttt{gtime}$=$\texttt{Inf}, \texttt{delta}$=0$).\\
+\end{frame}
+
+\section{Example with covariates}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% simulate data
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Simulate grouped survival data}
+\scriptsize
+We first simulate continuous survival data:
+<<inputParawithoutEffScore>>=
+set.seed(111)
+n <- 1000
+# effect size
+beta <- 0.3
+# covariate parameters
+theta <- c(0.2, 0.2) 
+# variable of interest associated with outcome
+MAF  <- 0.05
+x <- matrix(rbinom(n, 2, MAF), ncol = 1)
+# additional variables of interest
+xMore <- matrix(rbinom(n*100, 2, MAF), ncol = 100)
+xMore <- cbind(x, xMore)
+# covariate data (centered at 0) 
+z1 <- rnorm(n)
+z2 <- rbinom(n, 1, 0.5) - 0.5
+Z <- matrix(cbind(z1, z2), ncol = 2)
+# continuous survival time
+lam0 <- 1
+cmax <- 3
+lami <- lam0 * exp(x * beta + Z %*% theta)
+stime <- rexp(n, lami)
+ctime <- runif(n, 0, cmax)
+delta <- stime < ctime
+otime <- pmin(stime, ctime)
+@
+\end{frame}
+% by(otime, x, summary)
+
+\begin{frame}[fragile]{Generate grouped survival data}
+\scriptsize
+Then generate grouped survival times from continuous survival data:
+<<inputParawithoutEffScore2,eval=TRUE>>=
+# grouped observation time points
+ntps <- 5
+r <- ntps + 1
+# last observation time
+maxbreakq <- 0.85
+maxbreak <- qexp(maxbreakq, lam0)
+# grouped survival times
+breaks <- (1:ntps) * (maxbreak/ntps)
+gtime <- findInterval(otime, breaks) + 1 
+delta[gtime == r] <- FALSE 
+dctime <- findInterval(ctime, breaks) + 1
+delta[gtime == dctime] <- FALSE
+delta <- as.numeric(delta)
+gtime[which(gtime == r)] <- Inf
+table(gtime, delta)
+@
+\end{frame}
+
+% by(otime, x, summary)
+% table(x, gtime)
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% load package
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Example of \texttt{thetaEst}}
+\scriptsize
+Load \pkgname{} (after installing its dependent packages):
+<<loadpkg,eval=TRUE>>=
+library(groupedSurv)
+@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% example for thetaEst
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+Estimate $\theta$ (including baseline survival rate for each time interval and the covariate parameters) under the null hypothesis ($\beta = 0$):\\
+<<expa1,eval=FALSE>>=
+thetaest <- thetaEst(Z, gtime, delta)
+thetaest
+@
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% example for groupedSurv + betaEst
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Examples of \texttt{groupedSurv} and \texttt{betaEst}}
+\scriptsize
+Compute the efficient score under the null hypothesis based on the estimated $\theta$ :\\
+<<expa2, eval=FALSE>>=
+eff <- groupedSurv(x=xMore, Z=Z,  alpha=thetaest$alpha, theta=thetaest$theta, 
+                   gtime=gtime, delta=delta, beta=0, nCores=1)
+head(eff)
+@
+One may wish to estimate $\beta$ for variables of interest found to be associated with the outcome:\\
+<<expa4, eval=FALSE>>=
+betaest <- betaEst(x=x, Z=Z, alpha=thetaest$alpha, theta=thetaest$theta, 
+                   gtime=gtime, delta=delta)
+betaest
+@
+\end{frame}
+
+
+\section{Examples of alternative data sources}
+\begin{frame}[fragile]{Examples of alternative data sources}
+\scriptsize
+One can alternatively input SNP information directly from a GenABEL object. 
+<<expa3, eval=FALSE, message=FALSE>>=
+library(GenABEL)
+data(srdta)
+GenABELdat <- srdta[1:n]
+snpsToTest <- GenABELdat@gtdata@snpnames[1:200]
+eff <- groupedSurv(x=snpsToTest, Z=Z, GenABEL.data=GenABELdat, 
+                   alpha=thetaest$alpha, theta=thetaest$theta,
+                   gtime=gtime, delta=delta, beta=0, nCores=1)
+@
+Genotype data can be imported from binary PLINK~\cite{plink} file using the \texttt{BEDMatrix} package.
+<<bedtoSNPmatrix, eval=FALSE>>=
+library(BEDMatrix)
+path <- system.file("extdata", "example.bed", package = "BEDMatrix")
+m <- BEDMatrix(path)
+# Extract genotypes for the specified variants
+xPLINK <- m[, c("snp0_A", "snp1_C", "snp2_G")]
+@
+Or, genotype dosage data can also be directly extracted from a VCF file using the \texttt{VariantAnnotation} package~\cite{VariantAnnotation}.
+<<VCFtoSNPmatrix, eval=FALSE>>=
+system("wget ftp://share.sph.umich.edu/minimac3/DosageConvertor/DosageConvertor.v1.0.4.tar.gz")
+system("tar -xzvf DosageConvertor.v1.0.4.tar.gz")
+library(VariantAnnotation)
+exampleVcfFile <- "./DosageConvertor/test/TestDataImputedVCF.dose.vcf.gz"
+myvcf <- readVcf(exampleVcfFile, "hg19")
+dosedat <- assay(myvcf,"DS")
+xVCF <- t(dosedat)
+@
+\end{frame}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% example for genestat
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Analysis of gene sets}
+\begin{frame}[fragile]{Analysis of gene sets}
+\scriptsize
+Specify SNP and gene information:
+<<geneStat3, eval=TRUE>>=
+geneInfo <- data.frame(gene=c("BRCA1","BRCA2"), chr=c(17,13),
+                       start=c(41196312, 32889611), end=c(41277500, 32973805), 
+                       stringsAsFactors=FALSE)
+snpInfo <- data.frame(chr=c(17,17,13,13), pos=c(41211653,41213996,32890026,32890572),
+                      rsid=c("rs8176273","rs8176265","rs9562605","rs1799943"),
+                      stringsAsFactors=FALSE)
+@
+Use \texttt{snplist} package to create gene sets:
+<<snplist, eval=FALSE,  results='hide'>>=
+library(snplist)
+setGeneTable(geneInfo)
+setSNPTable(snpInfo)
+geneset <- makeGeneSet()
+@
+<<geneset, eval=FALSE>>=
+geneset
+@
+\end{frame}
+% snplist not actually evaluated, to avoid package dependence
+% genesetHide, echo=FALSE geneset <- list(BRCA1=c("rs8176273", "rs8176265"), BRCA2=c("rs9562605", "rs1799943"))
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% example for genestat
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Simulate SNP data and compute statistics}
+\scriptsize
+Simulate genotyping data:
+<<geneStat4, eval=FALSE>>=
+G <- matrix(rbinom(n*nrow(snpInfo), 2, 0.5), ncol=nrow(snpInfo))
+colnames(G) <- snpInfo$rsid
+@
+SNPs can be weighted within gene sets. Generate dummy weights and append them:
+<<geneStat5, eval=FALSE>>=
+for(i in seq_len(length(geneset))){
+  weight <- rep(1, length(geneset[[i]]))
+  geneset[[i]] <- list(geneset[[i]], weight)
+}
+@
+Compute SKAT statistics for each gene set:
+<<geneStat, eval=FALSE>>=
+res <- geneStat(x=G, Z=Z, alpha=thetaest$alpha, theta=thetaest$theta, 
+                gtime=gtime, delta=delta, geneSet=geneset)
+res$stat
+@
+\end{frame}
+
+
+\section{Example with family structure}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% example for family structure
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{frame}[fragile]{Incorporating family structure}
+\scriptsize
+Generate grouped survival data:
+<<inputPara3>>=
+#rm(list=ls())
+set.seed(111)
+m <- 10
+
+# family ID
+fgrp <- as.character(rep(1:m, each=3))
+
+# role within family
+f_ind <- rep(c('o','f','m'),m)
+
+# grouped survival data
+gtimes <- sample(1:4, m*3, replace=TRUE)
+deltas <- sample(0:1, m*3, replace=TRUE)
+
+# variable of interest
+g <- rbinom(m*3, 2, 0.1)
+
+# parameter search bounds
+upper  <- 2
+lower  <- 0
+@ 
+\end{frame}
+
+
+\begin{frame}[fragile]{Examples of \texttt{alphaEstFam} and \texttt{varEstFam}}
+\scriptsize
+Estimate baseline survival rates (always under the null hypothesis):
+<<expa, eval=FALSE>>=
+alphaest <- alphaEstFam(gtimes, deltas)
+alphaest
+@
+Estimate variance under the null by setting \texttt{beta=0}:
+<<expv, eval=FALSE>>=
+varest <- varEstFam(x=g, fam_group=fgrp, fam_role=f_ind, alpha=alphaest, 
+                    gtime=gtimes, delta=deltas, lower, upper, beta=0)
+varest
+@
+\end{frame}
+
+\begin{frame}[fragile]{Examples of \texttt{groupedSurvFam}, \texttt{PvalueFam}, and \texttt{betaEstFam}}
+\scriptsize
+Compute the efficient score under the null by setting \texttt{beta=0}, and compute the associated p-values:
+<<effscore3, eval=FALSE>>=
+effFam <- groupedSurvFam(x=g, fam_group=fgrp, fam_role=f_ind, alpha=alphaest, 
+                      var=varest, gtime=gtimes, delta=deltas, beta=0)
+PvalueFam(effFam)
+@
+Estimate $\beta$:
+<<expb2, eval=FALSE>>=
+betaEstFam(x=g, fam_group=fgrp, fam_role=f_ind, alpha=alphaest, 
+           var=varest, gtime=gtimes, delta=deltas, lower, upper)
+@
+\end{frame}
+
+\section*{References}
+\begin{frame}[fragile]{References}
+\scriptsize
+\begin{thebibliography}{9}
+\setbeamertemplate{bibliography item}[text]
+\bibitem{prentice1978}
+  Prentice, RL and  Gloeckler, LA
+  (1978).
+  Regression analysis of grouped survival data with application to breast cancer data. 
+  \emph{Biometrics}, 
+  34(1):57-67.
+  
+\bibitem{ripatti2004}
+  Ripatti, S and Palmgren, J
+  (2004).
+  Estimation of multivariate frailty models using penalized partial likelihood. 
+  \emph{Biometrics}, 
+  56(4):1016-1022.
+
+\bibitem{bonfcorrect}
+  Bonferroni, CE
+  (1935).
+  Il calcolo delle assicurazioni su gruppi di teste. 
+  \emph{Studi in Onore del Professore Salvatore Ortu Carbon}, 
+  13-60.
+
+\bibitem{qvalue1}
+  Storey, JD 
+  (2013).
+  The positive false discovery rate: a Bayesian interpretation and the q-value. 
+  \emph{Annals of Statistics}, 
+  31(6):2013-2035.
+
+\bibitem{qvalue2}
+  Storey, JD, Taylor, JE, and Siegmund, D
+  (2004).
+  Strong control, conservative point estimation and simultaneous conservative consistency of false discovery rates: a unified approach. 
+  \emph{Journal of the Royal Statistical Society Series B-Statistical Methodology}, 
+  66:187-205.
+
+\bibitem{plink}
+  Purcell, S, Neale, B, Todd-Brown, K, Thomas, L, Ferreira, MAR, 
+  Bender, D, Maller, J, Sklar, P, de Bakker, PIW, Daly, MJ, and Sham, PC 
+  (2007).
+  PLINK: a toolset for whole-genome association and population-based linkage analysis. 
+  \emph{American Journal of Human Genetics}, 
+  81.
+
+\bibitem{VariantAnnotation}
+  Obenchain, V, Lawrence, M, Carey, V, Gogarten, S, Shannon, P, and Morgan, M 
+  (20014).
+  VariantAnnotation: a Bioconductor package for exploration and annotation of genetic variants
+  \emph{Bioinformatics}, 
+  30(14):2076-2078.
+  
+% \bibitem{vcfR}
+%   Knaus, BJ., Gr{\"u}nwald, NJ 
+%   (20017).
+%   VCFR: a package to manipulate and visualize variant call format data in T
+%   \emph{Molecular Ecology Resources}, 
+%   17:44-53.
+% \setbeamertemplate{bibliography item}[triangle]
+\end{thebibliography}
+
+\end{frame}
+
+\section*{Session Information}
+\begin{frame}[fragile]{Session Information}
+\scriptsize
+<<sessinfo, echo=FALSE, include=TRUE, results='asis'>>=
+toLatex(sessionInfo(), locale=FALSE)
+## reset options
+options(old_ops)
+@ 
+%<<times, echo=FALSE, include=TRUE>>=
+%print(paste("Start Time",stdt))
+%print(paste("End Time  ",date()))
+%@ 
+\end{frame}
+
+\end{document}

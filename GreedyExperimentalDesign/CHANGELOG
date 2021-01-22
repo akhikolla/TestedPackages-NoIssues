@@ -1,0 +1,32 @@
+version 1.4
+
+* Binary match followed by greedy within-the-binary-pairs search / rerandomization
+
+version 1.35
+
+* Curation of designs based on minimizing orthogonality as measured by average absolute correlation between each pair of vectors
+* Hadamard matrix experimental designs
+
+version 1.31
+
+* Various speedups and bug fixes.
+
+version 1.3
+
+* Gurobi now works with Kernel distances.
+
+version 1.21
+
+* Fixed small bug, deleted vignette which was causing compilation issues.
+
+version 1.2
+
+* Gurobi setup for allocation searches via numerical optimization.
+
+version 1.1
+
+* Updated package to conform to CRAN's new policies.
+
+version 1.0
+
+* Initial Release

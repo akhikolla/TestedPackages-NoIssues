@@ -1,0 +1,61 @@
+gRbase v1.8-6.7 (Release date: 2020-06-28)
+==========================================
+
+Changes:
+
+  * doi's added to description file.
+  
+  * Some old c-code (from Bristol) removed and replaced by more readable c++ code.
+
+  * combn_prim reimplemented in cpp. Not quite as fast as the
+    original, but new implementation provides identical results to combn
+
+  * fastcombn added. Intended to be faster version of combn.
+
+
+gRbase v1.8-6.6 (Release date: 2020-06-14)
+==========================================
+
+Bug fixes
+
+  * tab_expand_ fixed and expanded to take arguement describing how
+    expansiion should bed made.
+
+  * list based coercion functions fixed to work with empty lists
+
+  * fixed minor bug in graph coercion.
+
+Other changes:
+
+  * matrix2list changed to take MARGIN argument
+  
+
+gRbase v1.8-5.3 (Release date: 2020-02-18)
+==========================================
+
+Bug fixes:
+
+  * Even more functions are exported (changed from manually generated
+    to automatically generated NAMESPACE file; this has caused
+    downstream trouble.
+
+Other changes:
+
+  * More tests added Would like to use snake_case rather than
+  * camelCase in function names, but this causes too much trouble to
+  * change downstream so we accept dual names for some functions for now.
+
+gRbase v1.8-5.2 (Release date: 2020-02-06)
+==========================================
+
+Bug fixes:
+
+  * More functiones are exported
+
+Other changes:
+
+  * NEWS file added
+  * NAMESPACE file is now generated automatically
+  * Cleaning up experimental features
+  * Added testthat (not very comprehensive tests, though)
+  

@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (GillespieSSA2_deepstate_test_make_ssa_etl_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/GillespieSSA2/inst/testfiles/make_ssa_etl/make_ssa_etl_output/435f8e1d4c8c153772f5c101738e25978e60d7e1.pass`
+TRACE: Running: GillespieSSA2_deepstate_test_make_ssa_etl_test from /home/akhila/fuzzer_packages/fuzzedpackages/GillespieSSA2/inst/testfiles/make_ssa_etl/make_ssa_etl_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+tau values: 1.27048e-62
+input ends
+TRACE: Passed: GillespieSSA2_deepstate_test_make_ssa_etl_test

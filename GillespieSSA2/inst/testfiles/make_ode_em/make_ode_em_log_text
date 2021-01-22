@@ -1,0 +1,33 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (GillespieSSA2_deepstate_test_make_ode_em_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+tau values: -2.43318e-187
+noise_strength values: -1.64581e+174
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+tau values: -1.5615e-299
+noise_strength values: -1.20777e+13
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+tau values: 1.27048e-62
+noise_strength values: -2.88162e-134
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+tau values: 3.16522e+06
+noise_strength values: 3.72126e-82
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+tau values: -1.92672e-302
+noise_strength values: -4.2952e-278
+input ends
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 0 failed/5 passed/0 abandoned tests

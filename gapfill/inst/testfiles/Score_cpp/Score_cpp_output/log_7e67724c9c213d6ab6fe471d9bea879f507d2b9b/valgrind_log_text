@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (gapfill_deepstate_test_Score_cpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/gapfill/inst/testfiles/Score_cpp/Score_cpp_output/7e67724c9c213d6ab6fe471d9bea879f507d2b9b.pass`
+TRACE: Running: gapfill_deepstate_test_Score_cpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/gapfill/inst/testfiles/Score_cpp/Score_cpp_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+mat values: 1.05415e-68 1.86447e-211 4.49059e+17 2.72551e-214 6.53679e-70 2.42643e+241 1.65687e+24
+
+input ends
+TRACE: Passed: gapfill_deepstate_test_Score_cpp_test

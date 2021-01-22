@@ -1,0 +1,9 @@
+useDynLib(Gmedian)
+
+importFrom(RSpectra, eigs_sym)
+importFrom(Rcpp, evalCpp)
+importFrom(stats, kmeans)
+importFrom(robustbase, scaleTau2)
+
+export(Gmedian,kGmedian,GmedianCov,Weiszfeld,WeiszfeldCov)  
+

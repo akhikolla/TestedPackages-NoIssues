@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Hugh Parsonage" />
+
+<meta name="date" content="2020-07-13" />
+
+<title>Model income tax and project</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Model income tax and project</h1>
+<h4 class="author">Hugh Parsonage</h4>
+<h4 class="date">2020-07-13</h4>
+
+
+
+<p>The functions <code>model_income_tax</code> and <code>project</code> are the core of the grattan package. Grattan applies them to the ATO’s 2% sample files to produce costings of changes to tax policy. The functions are both <span class="math inline">\(X^n \to X^n\)</span>. That is, they take a sample file and return a mutated sample file.</p>
+<p>With the mutated sample file, the costing for that particular tax year is the weighted sum of the difference between the <code>new_tax</code> and the <code>baseline_tax</code> columns. We can also use the mutated sample file to perform distributional analysis, such as the average change in tax by taxable income percentile.</p>
+<p>Since the input data consists of tax returns and the grattan package does not purport to generate inferences about the wider Australian population, these functions cannot (directly) analyse the effect of policies on households or on the wider population. For example, policies affecting welfare payments, changes to the tax settings of businesses or super funds, or changes which would tax people who do not currently file tax returns are not amenable to the kind of analysis these functions perform.</p>
+<div id="how-to-use-model_income_tax" class="section level2">
+<h2>How to use <code>model_income_tax</code></h2>
+<p><code>model_income_tax</code> takes a sample file and returns a sample file under the settings given by the function arguments.</p>
+<p>To start, let’s load the (minimal) packages we need. We’ll use the synthetic 2015-16 sample file contained in the suggested package <code>taxstats1516</code>. See <code>?install_taxstats</code> for installation instructions. For future years, use the latest sample file from the ATO.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(knitr)</a>
+<a class="sourceLine" id="cb1-2" title="2"><span class="kw">library</span>(data.table)</a>
+<a class="sourceLine" id="cb1-3" title="3"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb1-4" title="4"><span class="kw">library</span>(hutils)</a>
+<a class="sourceLine" id="cb1-5" title="5"><span class="kw">library</span>(grattan)</a>
+<a class="sourceLine" id="cb1-6" title="6"><span class="kw">require_taxstats1516</span>()</a>
+<a class="sourceLine" id="cb1-7" title="7"></a>
+<a class="sourceLine" id="cb1-8" title="8"><span class="co"># Use the actual sample file if you&#39;ve got it</span></a>
+<a class="sourceLine" id="cb1-9" title="9">s1516 &lt;-<span class="st"> </span><span class="kw">as.data.table</span>(sample_file_<span class="dv">1516</span>_synth)</a>
+<a class="sourceLine" id="cb1-10" title="10">s1516[, WEIGHT <span class="op">:</span><span class="er">=</span><span class="st"> </span>50L]</a></code></pre></div>
+<p>This function is purely cosmetic.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co">#&#39; @return Number formatted as dollar e.g. 30e3 =&gt; $30,000</span></a>
+<a class="sourceLine" id="cb2-2" title="2">dollar &lt;-<span class="st"> </span><span class="cf">function</span> (x, <span class="dt">digits =</span> <span class="dv">0</span>) {</a>
+<a class="sourceLine" id="cb2-3" title="3">  nsmall &lt;-<span class="st"> </span>digits</a>
+<a class="sourceLine" id="cb2-4" title="4">  commaz &lt;-<span class="st"> </span><span class="kw">format</span>(<span class="kw">abs</span>(x), <span class="dt">nsmall =</span> nsmall, <span class="dt">trim =</span> <span class="ot">TRUE</span>, <span class="dt">big.mark =</span> <span class="st">&quot;,&quot;</span>, </a>
+<a class="sourceLine" id="cb2-5" title="5">                   <span class="dt">scientific =</span> <span class="ot">FALSE</span>, <span class="dt">digits =</span> 1L)</a>
+<a class="sourceLine" id="cb2-6" title="6">  <span class="kw">if_else</span>(x <span class="op">&lt;</span><span class="st"> </span><span class="dv">0</span>, </a>
+<a class="sourceLine" id="cb2-7" title="7">          <span class="kw">paste0</span>(<span class="st">&quot;\U2212&quot;</span>,<span class="st">&quot;$&quot;</span>, commaz),</a>
+<a class="sourceLine" id="cb2-8" title="8">          <span class="kw">paste0</span>(<span class="st">&quot;$&quot;</span>, commaz))</a>
+<a class="sourceLine" id="cb2-9" title="9">}</a></code></pre></div>
+<p>All instances of <code>model_income_tax</code> have two mandatory arguments: <code>sample_file</code> and <code>baseline_fy</code>. These define the <code>baseline_tax</code> column in the result. When an argument is left as <code>NULL</code>, the <code>new_tax</code> column is calculated using the corresponding tax setting that applied in <code>baseline_fy</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="dt">baseline_fy =</span> <span class="st">&quot;2015-16&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="st">  </span><span class="kw">select_grep</span>(<span class="st">&quot;tax$&quot;</span>, <span class="st">&quot;Taxable_Income&quot;</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># just look at relevant cols</span></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="st">  </span>head <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="st">  </span>kable</a></code></pre></div>
+<p>Note that by default <code>new_tax</code> is a double precision vector, not rounded. You can use <code>return. = sample_file.int</code> to return rounded variables.</p>
+<p>With the use of a simple function to test equality, we can see that <code>new_tax</code> is just the same as <code>baseline_tax</code>, as expected.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1">is_all_equal &lt;-<span class="st"> </span><span class="cf">function</span>(x, y) {</a>
+<a class="sourceLine" id="cb4-2" title="2">  <span class="cf">if</span> (<span class="kw">is.integer</span>(x) <span class="op">&amp;&amp;</span><span class="st"> </span><span class="kw">is.integer</span>(y)) {</a>
+<a class="sourceLine" id="cb4-3" title="3">    <span class="kw">all</span>(x <span class="op">==</span><span class="st"> </span>y)</a>
+<a class="sourceLine" id="cb4-4" title="4">  } <span class="cf">else</span> {</a>
+<a class="sourceLine" id="cb4-5" title="5">    <span class="kw">isTRUE</span>(<span class="kw">all.equal</span>(x, y))</a>
+<a class="sourceLine" id="cb4-6" title="6">  }</a>
+<a class="sourceLine" id="cb4-7" title="7">}</a>
+<a class="sourceLine" id="cb4-8" title="8"></a>
+<a class="sourceLine" id="cb4-9" title="9">s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-10" title="10"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="dt">baseline_fy =</span> <span class="st">&quot;2015-16&quot;</span>, </a>
+<a class="sourceLine" id="cb4-11" title="11">                   <span class="dt">return. =</span> <span class="st">&quot;sample_file.int&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="st">  </span><span class="kw">select_grep</span>(<span class="st">&quot;tax$&quot;</span>, <span class="st">&quot;Taxable_Income&quot;</span>) <span class="op">%T&gt;%</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="st">  </span>.[, <span class="kw">stopifnot</span>(<span class="kw">is_all_equal</span>(baseline_tax, new_tax))] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="st">  </span>head <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb4-15" title="15"><span class="st">  </span>kable</a></code></pre></div>
+<p>The choice of rounded, unrounded, or truncated values may be important for some analysis. For instance, tax liabilities are calculated using whole dollar amounts, so a truncated value may be appropriate when the values of <code>new_tax</code> for each row need to be very precise. Unrounded values may be important to determine changes in marginal tax rates. Rounded values may be the most appropriate choice for costings.</p>
+<div id="changing-ordinary-tax-parameters" class="section level3">
+<h3>Changing ordinary tax parameters</h3>
+<p>You can change how the ‘ordinary tax’ is calculated by changing the arguments <code>ordinary_tax_thresholds</code> and <code>ordinary_tax_rates</code>. To replicate the 2015-16 tax scales, one would use.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1">s1516_no_changes &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="st">  </span><span class="co"># Temp budget repair levy not refundable against SBTO</span></a>
+<a class="sourceLine" id="cb5-3" title="3"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="dt">baseline_fy =</span> <span class="st">&quot;2015-16&quot;</span>,</a>
+<a class="sourceLine" id="cb5-5" title="5">                   <span class="dt">ordinary_tax_thresholds =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="dv">18200</span>, <span class="dv">37000</span>, <span class="dv">80000</span>, <span class="dv">180000</span>),</a>
+<a class="sourceLine" id="cb5-6" title="6">                                                               <span class="co"># temp budget </span></a>
+<a class="sourceLine" id="cb5-7" title="7">                                                               <span class="co"># repair levy</span></a>
+<a class="sourceLine" id="cb5-8" title="8">                   <span class="dt">ordinary_tax_rates =</span> <span class="kw">c</span>(<span class="dv">0</span>, <span class="fl">0.19</span>, <span class="fl">0.325</span>, <span class="fl">0.37</span>, <span class="fl">0.45</span> <span class="op">+</span><span class="st"> </span><span class="fl">0.02</span>), </a>
+<a class="sourceLine" id="cb5-9" title="9">                   <span class="dt">return. =</span> <span class="st">&quot;sample_file.int&quot;</span>)</a></code></pre></div>
+<p>Note that the temporary budget repair levy is not included by default, so I simulated it by topping up the $180,000 marginal tax rate. This simulation is imperfect because the small business tax offset does not offset levies. As a result, <code>baseline_tax</code> and <code>new_tax</code> are slightly different in <code>s1516_no_changes</code>. This is not a problem for tax years including and beyond 2018-19.</p>
+</div>
+<div id="changing-medicare-levy-parameters" class="section level3">
+<h3>Changing Medicare levy parameters</h3>
+<p>The Medicare levy is more complex to calculate than ordinary income tax. There are parameters relating to two thresholds, as well as different thresholds for families and SAPTO-eligible individuals. Even the simplest modification require changes to multiple parameters. Warnings are emitted whenever parameters are not internally consistent.</p>
+<p>Let’s try to increase the Medicare levy rate from 2% and 3%. Observe the warning messages.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1">m1516a &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb6-2" title="2"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-3" title="3"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2015-16&quot;</span>,</a>
+<a class="sourceLine" id="cb6-4" title="4">                   <span class="co"># Increase to 3%</span></a>
+<a class="sourceLine" id="cb6-5" title="5">                   <span class="dt">medicare_levy_rate =</span> <span class="fl">0.03</span>)</a></code></pre></div>
+<p>Note the warning messsage says that the parameter <strong>has</strong> been changed. However, you should never tolerate the warning; instead, change the parameter to the suggested one (if you agree with the warning message’s advice).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">m1516a &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2015-16&quot;</span>,</a>
+<a class="sourceLine" id="cb7-4" title="4">                   <span class="co"># Increase to 3%</span></a>
+<a class="sourceLine" id="cb7-5" title="5">                   <span class="dt">medicare_levy_rate =</span> <span class="fl">0.03</span>,</a>
+<a class="sourceLine" id="cb7-6" title="6">                   <span class="dt">medicare_levy_upper_threshold =</span> <span class="dv">30479</span>,</a>
+<a class="sourceLine" id="cb7-7" title="7">                   <span class="dt">medicare_levy_upper_sapto_threshold =</span> <span class="dv">48197</span>)</a></code></pre></div>
+<p>Since there are many degrees of freedom, and since thresholds are generally the things that are actually contemplated when making changes, warnings will suggest changing thresholds over changes to the rate or taper if there is a conflict. Only when the thresholds have been manually selected and there is still a conflict is a change to the taper or rate suggested. For example, if we didn’t want to change the upper threshold, but keep it at its 2015-16 value of $26,670, we could insist:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1">m1516a &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb8-2" title="2"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2015-16&quot;</span>,</a>
+<a class="sourceLine" id="cb8-4" title="4">                   <span class="co"># Increase to 3%</span></a>
+<a class="sourceLine" id="cb8-5" title="5">                   <span class="dt">medicare_levy_rate =</span> <span class="fl">0.03</span>,</a>
+<a class="sourceLine" id="cb8-6" title="6">                   <span class="co"># but keep the upper threshold the same</span></a>
+<a class="sourceLine" id="cb8-7" title="7">                   <span class="dt">medicare_levy_upper_threshold =</span> <span class="dv">26670</span>,</a>
+<a class="sourceLine" id="cb8-8" title="8">                   <span class="dt">medicare_levy_upper_sapto_threshold =</span> <span class="dv">48197</span>)</a></code></pre></div>
+<p>The warning still assumes the taper and rate are the same, but it can no longer suggest a change to the upper threshold (since we provided it), so it suggests a change to the lower threshold. Only once we exhaust the thresholds it can adjust does the warning message start to include changing the taper:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">m1516a &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2015-16&quot;</span>,</a>
+<a class="sourceLine" id="cb9-4" title="4">                   <span class="co"># Increase to 3%</span></a>
+<a class="sourceLine" id="cb9-5" title="5">                   <span class="dt">medicare_levy_rate =</span> <span class="fl">0.03</span>,</a>
+<a class="sourceLine" id="cb9-6" title="6">                   <span class="co"># but keep the upper threshold the same</span></a>
+<a class="sourceLine" id="cb9-7" title="7">                   <span class="dt">medicare_levy_lower_threshold =</span> <span class="dv">21335</span>,</a>
+<a class="sourceLine" id="cb9-8" title="8">                   <span class="dt">medicare_levy_upper_threshold =</span> <span class="dv">26670</span>,</a>
+<a class="sourceLine" id="cb9-9" title="9">                   <span class="dt">medicare_levy_upper_sapto_threshold =</span> <span class="dv">48197</span>)</a></code></pre></div>
+</div>
+<div id="changes-to-the-low-income-tax-offset" class="section level3">
+<h3>Changes to the Low Income Tax Offset</h3>
+<p>Here is a change to the LITO so that the maximum offset is $1000, rather than $445, with the 1.5% taper left as-is. Then we print the revenue foregone.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">L1516a &lt;-</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2015-16&quot;</span>, </a>
+<a class="sourceLine" id="cb10-4" title="4">                   <span class="dt">lito_max_offset =</span> <span class="dv">1000</span>)</a>
+<a class="sourceLine" id="cb10-5" title="5"><span class="kw">revenue_foregone</span>(L1516a)</a></code></pre></div>
+</div>
+</div>
+<div id="how-to-use-project" class="section level2">
+<h2>How to use <code>project</code></h2>
+<p>The function <code>project</code> takes a sample file and returns a sample file. The other mandatory argument is <code>h</code>, the number of integer years ahead of the sample file provided.</p>
+<p>Thus, to get a forecast for the 2018-19 tax year:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">s1819 &lt;-<span class="st"> </span><span class="kw">project</span>(s1516, <span class="dt">h =</span> 3L)</a></code></pre></div>
+<p>This uses the internal forecast methods. To specify specific forecast outcomes, you can use the <code>wage.series</code> and <code>lf.series</code></p>
+<div id="wage-and-labour-series" class="section level3">
+<h3>Wage and labour series</h3>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">s1819_lf2pc_wage2pc &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="st">  </span><span class="kw">project</span>(<span class="dt">h =</span> 3L, </a>
+<a class="sourceLine" id="cb12-4" title="4">          <span class="dt">lf.series =</span> <span class="fl">0.02</span>,</a>
+<a class="sourceLine" id="cb12-5" title="5">          <span class="dt">wage.series =</span> <span class="fl">0.02</span>) </a></code></pre></div>
+<p>To compare the tax collections under these different assumptions, one would use <code>income_tax</code> separately:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">tax_Grattan_<span class="dv">1819</span> &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="st">  </span>s1819 <span class="op">%$%</span></a>
+<a class="sourceLine" id="cb13-3" title="3"><span class="st">  </span><span class="kw">income_tax</span>(Taxable_Income, <span class="st">&quot;2018-19&quot;</span>, <span class="dt">.dots.ATO =</span> <span class="kw">copy</span>(s1819)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="st">  </span>sum <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="st">  </span><span class="co"># Weight (equi-weighted so do now)</span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="st">  </span><span class="kw">multiply_by</span>(s1819[[<span class="st">&quot;WEIGHT&quot;</span>]][1L])</a>
+<a class="sourceLine" id="cb13-7" title="7">tax_2pc_<span class="dv">1819</span> &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb13-8" title="8"><span class="st">  </span>s1819_lf2pc_wage2pc <span class="op">%$%</span></a>
+<a class="sourceLine" id="cb13-9" title="9"><span class="st">  </span><span class="kw">income_tax</span>(Taxable_Income, <span class="st">&quot;2018-19&quot;</span>, <span class="dt">.dots.ATO =</span> <span class="kw">copy</span>(s1819)) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="st">  </span>sum <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb13-11" title="11"><span class="st">  </span><span class="co"># Weight (equi-weighted so do now)</span></a>
+<a class="sourceLine" id="cb13-12" title="12"><span class="st">  </span><span class="kw">multiply_by</span>(s1819[[<span class="st">&quot;WEIGHT&quot;</span>]][1L])</a></code></pre></div>
+<p>Currently there is no interface to using the upper or lower bounds of the labour force or wage price indices. If you wanted the 80% upper bound of the prediction interval for salary out to 2020-21, for instance, you would pass <code>Sw_amt</code> to <code>excl_vars</code> and manually inflate.</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1">s2021 &lt;-<span class="st"> </span><span class="kw">project</span>(s1516, <span class="dt">h =</span> 5L)</a></code></pre></div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1">s2021_wage80pc &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="st">  </span>s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="st">  </span>copy <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="st">  </span>.[, Sw_amt <span class="op">:</span><span class="er">=</span><span class="st"> </span><span class="kw">wage_inflator</span>(Sw_amt, </a>
+<a class="sourceLine" id="cb15-5" title="5">                              <span class="dt">from_fy =</span> <span class="st">&quot;2015-16&quot;</span>,</a>
+<a class="sourceLine" id="cb15-6" title="6">                              <span class="dt">to_fy =</span> <span class="st">&quot;2020-21&quot;</span>, </a>
+<a class="sourceLine" id="cb15-7" title="7">                              <span class="dt">forecast.level =</span> <span class="dv">80</span>,</a>
+<a class="sourceLine" id="cb15-8" title="8">                              <span class="dt">forecast.series =</span> <span class="st">&quot;upper&quot;</span>)] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="st">  </span>.[] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb15-10" title="10"><span class="st">  </span><span class="kw">project</span>(<span class="dt">h =</span> 5L,</a>
+<a class="sourceLine" id="cb15-11" title="11">          <span class="dt">excl_vars =</span> <span class="st">&quot;Sw_amt&quot;</span>,</a>
+<a class="sourceLine" id="cb15-12" title="12">          <span class="dt">.copyDT =</span> <span class="ot">FALSE</span>) <span class="op">%&gt;%</span><span class="st">  </span><span class="co"># just for memory frugality</span></a>
+<a class="sourceLine" id="cb15-13" title="13"><span class="st">  </span>.[]</a></code></pre></div>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1">s2021[, <span class="kw">mean</span>(Sw_amt)] <span class="op">%&gt;%</span><span class="st"> </span>dollar</a>
+<a class="sourceLine" id="cb16-2" title="2">s2021_wage80pc[, <span class="kw">mean</span>(Sw_amt)] <span class="op">%&gt;%</span><span class="st"> </span>dollar</a>
+<a class="sourceLine" id="cb16-3" title="3">s2021[, <span class="kw">mean</span>(Taxable_Income)] <span class="op">%&gt;%</span><span class="st"> </span>dollar</a>
+<a class="sourceLine" id="cb16-4" title="4">s2021_wage80pc[, <span class="kw">mean</span>(Taxable_Income)] <span class="op">%&gt;%</span><span class="st"> </span>dollar</a></code></pre></div>
+</div>
+</div>
+<div id="combining-the-two" class="section level2">
+<h2>Combining the two</h2>
+<p>To cost a reduction in the capital gains tax discount from 50% to 25% over the four years from 2018-19, we would run</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1">cgt_25pc_fwd_estimates &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="st">  </span><span class="kw">lapply</span>(<span class="kw">yr2fy</span>(<span class="dv">2019</span><span class="op">:</span><span class="dv">2022</span>), <span class="cf">function</span>(fy) {</a>
+<a class="sourceLine" id="cb17-3" title="3">    s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-4" title="4"><span class="st">      </span><span class="kw">project_to</span>(<span class="dt">to_fy =</span> fy) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-5" title="5"><span class="st">      </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2018-19&quot;</span>,</a>
+<a class="sourceLine" id="cb17-6" title="6">                       <span class="dt">cgt_discount_rate =</span> <span class="fl">0.25</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-7" title="7"><span class="st">      </span>.[, fy_year <span class="op">:</span><span class="er">=</span><span class="st"> </span>fy]</a>
+<a class="sourceLine" id="cb17-8" title="8">  }) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb17-9" title="9"><span class="st">  </span>rbindlist</a></code></pre></div>
+<p>Note that this takes a few seconds, most of which is spent within <code>project</code>. We could improve the speed of this by caching the intermediate objects, either as objects in the environment or as files (say, <code>.fst</code> files). You should consider doing this when you find yourself running <code>project</code> many times – likely you are just repeating calculations.</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1">cgt_25pc_fwd_estimates <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="st">  </span><span class="kw">mutate_ntile</span>(<span class="st">&quot;Taxable_Income&quot;</span>, <span class="dt">n =</span> 5L, <span class="dt">keyby =</span> <span class="st">&quot;fy_year&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-3" title="3"><span class="st">  </span>.[, delta <span class="op">:</span><span class="er">=</span><span class="st"> </span>new_tax <span class="op">-</span><span class="st"> </span>baseline_tax] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-4" title="4"><span class="st">  </span>.[, .(<span class="dt">totDelta =</span> <span class="kw">sum</span>(delta),</a>
+<a class="sourceLine" id="cb18-5" title="5">        <span class="dt">avgDelta =</span> <span class="kw">mean</span>(delta)),</a>
+<a class="sourceLine" id="cb18-6" title="6">    keyby =<span class="st"> </span>.(fy_year, Taxable_IncomeQuintile)] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-7" title="7"><span class="st">  </span><span class="co"># cosmetic</span></a>
+<a class="sourceLine" id="cb18-8" title="8"><span class="st">  </span>.[, <span class="kw">lapply</span>(.SD, round), keyby =<span class="st"> </span><span class="kw">key</span>(.)] <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb18-9" title="9"><span class="st">  </span>kable</a></code></pre></div>
+<div id="lito_multi-for-custom-offsets" class="section level3">
+<h3><code>lito_multi</code> for custom offsets</h3>
+<p>While <code>model_income_tax</code> cannot account for the future imagination of tax policy makers, the argument <code>lito_multi</code> does provide a powerful mechanism for handling complicated offsets. The argument, if provided, must be a list of two components <code>x</code> and <code>y</code>. These can be used to define an offset: for every <code>(x_i, y_i)</code> defined the value of the offset for a taxable income <code>x_i</code> must be <code>y_i</code> with the points in between interpolated linearly.</p>
+<p>For example to simply mimic <code>LITO</code> in 2015-16:</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb19-1" title="1">s1516 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-2" title="2"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2015-16&quot;</span>,</a>
+<a class="sourceLine" id="cb19-3" title="3">                   <span class="dt">lito_multi =</span> <span class="kw">list</span>(<span class="dt">x =</span> <span class="kw">c</span>(<span class="op">-</span><span class="ot">Inf</span>, <span class="fl">37e3</span>, <span class="fl">200e3</span><span class="op">/</span><span class="dv">3</span>, <span class="ot">Inf</span>),</a>
+<a class="sourceLine" id="cb19-4" title="4">                                     <span class="dt">y =</span> <span class="kw">c</span>(<span class="dv">445</span>, <span class="dv">445</span>, <span class="dv">0</span>, <span class="dv">0</span>)),</a>
+<a class="sourceLine" id="cb19-5" title="5">                   <span class="dt">return. =</span> <span class="st">&quot;sample_file.int&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb19-6" title="6"><span class="st">  </span>.[new_tax <span class="op">!=</span><span class="st"> </span>baseline_tax]</a></code></pre></div>
+</div>
+<div id="budget_...-parameters" class="section level3">
+<h3><code>Budget_...</code> parameters</h3>
+<p>These were used to cost policies proposed in the 2018 Budget period by the Government and the Opposition. They’re unlikely to have much use except in reproducing past results.</p>
+</div>
+<div id="sapto" class="section level3">
+<h3>SAPTO</h3>
+<p>The Seniors and Pensioner Tax Offset (SAPTO) can also be modified. To cost the abolition of SAPTO, one would use:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb20-1" title="1">sapto_abolished1819 &lt;-<span class="st"> </span></a>
+<a class="sourceLine" id="cb20-2" title="2"><span class="st">  </span>s1819 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb20-3" title="3"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2018-19&quot;</span>, </a>
+<a class="sourceLine" id="cb20-4" title="4">                   <span class="dt">sapto_eligible =</span> <span class="ot">FALSE</span>)</a></code></pre></div>
+<p>To model a change to lower the SAPTO threshold from $32,279 to $27,000:</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb21-1" title="1">sapto_abolished_abv27k_<span class="dv">1819</span> &lt;-</a>
+<a class="sourceLine" id="cb21-2" title="2"><span class="st">  </span>s1819 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb21-3" title="3"><span class="st">  </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2018-19&quot;</span>,</a>
+<a class="sourceLine" id="cb21-4" title="4">                   <span class="dt">sapto_lower_threshold =</span> <span class="dv">27000</span>)</a></code></pre></div>
+<p>To cost the proposal in <em>Age of entitlement: age-based tax breaks</em> (2016)</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb22-1" title="1">s1718_AgeOfEntitlement &lt;-</a>
+<a class="sourceLine" id="cb22-2" title="2"><span class="st">    </span><span class="kw">project</span>(s1516, </a>
+<a class="sourceLine" id="cb22-3" title="3">            <span class="dt">h =</span> 2L) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb22-4" title="4"><span class="st">    </span><span class="kw">model_income_tax</span>(<span class="st">&quot;2017-18&quot;</span>, </a>
+<a class="sourceLine" id="cb22-5" title="5">                     <span class="dt">sapto_lower_threshold =</span> <span class="fl">27e3</span>,</a>
+<a class="sourceLine" id="cb22-6" title="6">                     <span class="dt">sapto_lower_threshold_married =</span> <span class="fl">42e3</span>,</a>
+<a class="sourceLine" id="cb22-7" title="7">                     <span class="dt">sapto_max_offset =</span> <span class="dv">1160</span>,</a>
+<a class="sourceLine" id="cb22-8" title="8">                     <span class="dt">sapto_max_offset_married =</span> <span class="dv">390</span>,</a>
+<a class="sourceLine" id="cb22-9" title="9">                     <span class="dt">medicare_levy_lower_sapto_threshold =</span> <span class="dv">27000</span>,</a>
+<a class="sourceLine" id="cb22-10" title="10">                     <span class="dt">medicare_levy_upper_sapto_threshold =</span> <span class="dv">33750</span>,</a>
+<a class="sourceLine" id="cb22-11" title="11">                     <span class="dt">medicare_levy_upper_family_threshold =</span> <span class="dv">46361</span>,</a>
+<a class="sourceLine" id="cb22-12" title="12">                     <span class="dt">medicare_levy_lower_family_sapto_threshold =</span> <span class="dv">42000</span>,</a>
+<a class="sourceLine" id="cb22-13" title="13">                     <span class="dt">medicare_levy_upper_family_sapto_threshold =</span> <span class="dv">52500</span>)</a>
+<a class="sourceLine" id="cb22-14" title="14"><span class="kw">revenue_foregone</span>(s1718_AgeOfEntitlement)</a></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

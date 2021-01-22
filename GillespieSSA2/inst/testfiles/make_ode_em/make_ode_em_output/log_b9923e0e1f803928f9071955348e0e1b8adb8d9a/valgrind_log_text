@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (GillespieSSA2_deepstate_test_make_ode_em_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/GillespieSSA2/inst/testfiles/make_ode_em/make_ode_em_output/b9923e0e1f803928f9071955348e0e1b8adb8d9a.pass`
+TRACE: Running: GillespieSSA2_deepstate_test_make_ode_em_test from /home/akhila/fuzzer_packages/fuzzedpackages/GillespieSSA2/inst/testfiles/make_ode_em/make_ode_em_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+tau values: -1.5615e-299
+noise_strength values: -1.20777e+13
+input ends
+TRACE: Passed: GillespieSSA2_deepstate_test_make_ode_em_test

@@ -1,0 +1,11 @@
+0be40f498914bb48c7b7a34d115882af *DESCRIPTION
+ddaefdf13286d59afb95f464f64a6235 *NAMESPACE
+1355c52435c2762d5d5ac293a2ef66b7 *R/RcppExports.R
+8249ff053a38a65ab58c026187ef32cb *man/GGClassification-package.Rd
+b22f05f2c1f5389e56ee294f3bb16a9b *man/GabrielGraph.Rd
+88c51f90bb361cdcdc44a173767e2dd7 *man/model.Rd
+b0d006b0844766abe6aa22f395232f3d *man/predict.Rd
+ddfa896291d5e78d0866e81a5685a497 *src/GGClassification_gabriel_graph.cpp
+e829a329e9125cf46d34edf7ababaf40 *src/GGClassification_model.cpp
+13508553f2b7dd49b8a7e3984c108d64 *src/GGClassification_predict.cpp
+0c50a8795bb880f87b812ba4ecf1890c *src/RcppExports.cpp
