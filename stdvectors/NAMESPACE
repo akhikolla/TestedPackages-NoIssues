@@ -1,0 +1,20 @@
+useDynLib(stdvectors, .registration = TRUE)
+importFrom(Rcpp, evalCpp)
+
+
+
+export(stdvectorCreate,
+       stdvectorPushBack,
+       stdvectorSize,
+       stdvectorClear,
+       stdvectorToVector,
+       stdvectorSubset,
+       stdvectorReplace,
+       stdvectorErase,
+       stdvectorClone,
+       is.stdvector)
+
+
+
+S3method(print, stdvector)
+S3method(toString, stdvector)

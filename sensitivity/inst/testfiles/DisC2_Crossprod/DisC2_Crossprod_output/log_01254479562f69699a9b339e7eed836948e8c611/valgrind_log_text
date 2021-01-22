@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (sensitivity_deepstate_test_DisC2_Crossprod_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/DisC2_Crossprod/DisC2_Crossprod_output/01254479562f69699a9b339e7eed836948e8c611.crash`
+TRACE: Running: sensitivity_deepstate_test_DisC2_Crossprod_test from /home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/DisC2_Crossprod/DisC2_Crossprod_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+X values: -2.01582e-33 -2.91717e+95 2.66339e+219 -1.69492e+25 3.33843e-104 -4.15857e-177 4.19129e-96 3.28679e-270 3.29213e+200 -8.47145e-104 -2.57359e-185 2.78244e-147 1.51197e-61 1.63624e-123 -2.12086e-297 -6.0203e-46 -3.34285e+233 -1.05302e-06 nan 1.06237e-305 8.31387e+14 -1.72194e+161 -2.5952e-91 1.77176e-87 -3.26638e+23 -3.44735e+170 nan 3.07644e+63 1.51535e-50 -6.89225e-211 4.63298e+139 -7.40957e+168 -4.71154e+104 -2.10836e+71 -3.56074e-82 -3.36197e-288 -1.73822e-233 5.5943e+159 -9.93852e+215 -1.67747e+32 2.16271e-66 -8.47145e-104 1.89983e+37 1.94939e-308 -9.51731e+14 1.52044e+276 1.03961e+188 -7.34108e+295 5.49826e-30 -6.60542e+38 -1.26681e+266 -1.20497e+237 4.40631e+39 1.30392e-141 1.23303e+150 -2.37765e+171 7.34791e+148 3.61999e+265 2.68722e-231 -3.3216e+270 -3.72604e+113 -4.29344e+139 1.30988e+82 3.43393e+267 1.1507e+151 0
+d values: 1604317710
+input ends
+ERROR: Crashed: sensitivity_deepstate_test_DisC2_Crossprod_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/DisC2_Crossprod/DisC2_Crossprod_output/01254479562f69699a9b339e7eed836948e8c611.crash crashed

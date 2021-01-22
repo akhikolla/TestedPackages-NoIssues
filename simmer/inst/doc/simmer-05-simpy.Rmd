@@ -1,0 +1,419 @@
+---
+title: "Other SimPy Examples"
+author: "Iñaki Ucar"
+date: "`r Sys.Date()`"
+output: 
+  rmarkdown::html_vignette:
+    toc: yes
+vignette: >
+  %\VignetteIndexEntry{05. Other SimPy Examples}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, cache = FALSE, include=FALSE}
+knitr::opts_chunk$set(collapse = T, comment = "#>",
+                      fig.width = 6, fig.height = 4, fig.align = "center")
+```
+
+## Introduction
+
+These examples are adapted from the Python package 'SimPy', [here](https://simpy.readthedocs.io/en/latest/examples). Users familiar with SimPy may find these examples helpful for transitioning to `simmer`. Some very basic material is not covered. Beginners should first read _[The Bank Tutorial: Part I](simmer-04-bank-1.html) & [Part II](simmer-04-bank-2.html)_.
+
+## Carwash
+
+Covers:
+
+* Standard resources.
+* Waiting for other processes.
+* Logging messages into the console.
+
+From [here](https://simpy.readthedocs.io/en/latest/examples/carwash.html):
+
+> A carwash has a limited number of washing machines and defines a washing process that takes some time. Cars arrive at the carwash at a random time. If one washing  machine is available, they start the washing process and wait for it to finish. If not, they wait until they an use one.
+
+Parameters and setup:
+
+```{r, message=FALSE, warning=FALSE}
+library(simmer)
+
+NUM_MACHINES <- 2  # Number of machines in the carwash
+WASHTIME <- 5      # Minutes it takes to clean a car
+T_INTER <- 7       # Create a car every ~7 minutes
+SIM_TIME <- 20     # Simulation time in minutes
+
+# setup
+set.seed(42)
+env <- simmer()
+```
+
+The implementation with `simmer` is as simple as defining the trajectory each arriving `car` will share and follow. This trajectory comprises seizing a wash machine, spending some time and releasing it. The process takes `WASHTIME` and removes some random percentage of dirt between 50 and 90%. The `log_()` messages are merely illustrative.
+
+```{r, message=FALSE, warning=FALSE}
+car <- trajectory() %>%
+  log_("arrives at the carwash") %>%
+  seize("wash", 1) %>%
+  log_("enters the carwash") %>%
+  timeout(WASHTIME) %>%
+  set_attribute("dirt_removed", function() sample(50:99, 1)) %>%
+  log_(function() 
+    paste0(get_attribute(env, "dirt_removed"), "% of dirt was removed")) %>%
+  release("wash", 1) %>%
+  log_("leaves the carwash")
+```
+
+Finally, we setup the resources and feed the trajectory with a couple of generators. The result is shown below:
+
+```{r, message=FALSE, warning=FALSE}
+env %>%
+  add_resource("wash", NUM_MACHINES) %>%
+  # feed the trajectory with 4 initial cars
+  add_generator("car_initial", car, at(rep(0, 4))) %>%
+  # new cars approx. every T_INTER minutes
+  add_generator("car", car, function() sample((T_INTER-2):(T_INTER+2), 1)) %>%
+  # start the simulation
+  run(SIM_TIME)
+```
+
+## Machine Shop
+
+Covers:
+
+* Preemptive resources.
+* Interruptions.
+* Loops.
+* Attributes.
+
+From [here](https://simpy.readthedocs.io/en/latest/examples/machine_shop.html):
+
+> This example comprises a workshop with `n` identical machines. A stream of jobs (enough to keep the machines busy) arrives. Each machine breaks down periodically. Repairs are carried out by one repairman. The repairman has other, less important tasks to perform, too. Broken machines preempt theses tasks. The repairman continues them when he is done with the machine repair. The workshop works continuously.
+
+First of all, we load the libraries and prepare the environment.
+
+```{r, message=FALSE, warning=FALSE}
+library(simmer)
+
+PT_MEAN <- 10.0         # Avg. processing time in minutes
+PT_SIGMA <- 2.0         # Sigma of processing time
+MTTF <- 300.0           # Mean time to failure in minutes
+BREAK_MEAN <- 1 / MTTF  # Param. for exponential distribution
+REPAIR_TIME <- 30.0     # Time it takes to repair a machine in minutes
+JOB_DURATION <- 30.0    # Duration of other jobs in minutes
+NUM_MACHINES <- 10      # Number of machines in the machine shop
+WEEKS <- 4              # Simulation time in weeks
+SIM_TIME <- WEEKS * 7 * 24 * 60  # Simulation time in minutes
+
+# setup
+set.seed(42)
+env <- simmer()
+```
+
+The `make_parts` trajectory defines a machine's operating loop. A worker seizes the machine and starts manufacturing and counting parts in an infinite loop. Provided we want more than one machine, we parametrise the trajectory as a function of the machine:
+
+```{r, message=FALSE, warning=FALSE}
+make_parts <- function(machine)
+  trajectory() %>%
+    seize(machine, 1) %>%
+    timeout(function() rnorm(1, PT_MEAN, PT_SIGMA)) %>%
+    set_attribute("parts", 1, mod="+") %>%
+    rollback(2, Inf) # go to 'timeout' over and over
+```
+
+Repairman's _unimportant_ jobs may be modelled in the same way (without the accounting part):
+
+```{r, message=FALSE, warning=FALSE}
+other_jobs <- trajectory() %>%
+  seize("repairman", 1) %>%
+  timeout(JOB_DURATION) %>%
+  rollback(1, Inf)
+```
+
+Failures are high-priority arrivals, both for the machines and for the repairman. Each random generated failure will randomly select and seize (break) a machine, and will seize (call) the repairman. After the machine is repaired, both resources are released and the corresponding workers begin where they left.
+
+```{r, message=FALSE, warning=FALSE}
+machines <- paste0("machine", 1:NUM_MACHINES-1)
+
+failure <- trajectory() %>%
+  select(machines, policy = "random") %>%
+  seize_selected(1) %>%
+  seize("repairman", 1) %>%
+  timeout(REPAIR_TIME) %>%
+  release("repairman", 1) %>%
+  release_selected(1)
+```
+
+The machines and their workers are appended to the simulation environment. Note that each machine, which is defined as preemptive, has space for one worker (or a failure) and no space in queue.
+
+```{r, message=FALSE, warning=FALSE}
+for (i in machines) env %>%
+  add_resource(i, 1, 0, preemptive = TRUE) %>%
+  add_generator(paste0(i, "_worker"), make_parts(i), at(0), mon = 2)
+```
+
+The same for the repairman, but this time the queue is infinite, since there could be any number of machines at any time waiting for repairments.
+
+```{r, message=FALSE, warning=FALSE}
+env %>%
+  add_resource("repairman", 1, Inf, preemptive = TRUE) %>%
+  add_generator("repairman_worker", other_jobs, at(0)) %>%
+  invisible
+```
+
+Finally, the failure generator is defined with `priority=1` (default: 0), and the simulation begins:
+
+```{r, message=FALSE, warning=FALSE}
+env %>%
+  add_generator("failure", failure, 
+                function() rexp(1, BREAK_MEAN * NUM_MACHINES), 
+                priority = 1) %>%
+  run(SIM_TIME) %>% invisible
+```
+
+The last value per worker from the attributes table reports the number of parts made:
+
+```{r, message=FALSE, warning=FALSE}
+aggregate(value ~ name, get_mon_attributes(env), max)
+```
+
+## Movie Renege
+
+Covers:
+
+* Standard resources.
+* Condition events.
+* Shared events.
+* Attributes.
+
+From [here](https://simpy.readthedocs.io/en/latest/examples/movie_renege.html):
+
+> This example models a movie theater with one ticket counter selling tickets for three movies (next show only). People arrive at random times and try to buy a random number (1-6) of tickets for a random movie. When a movie is sold out, all people waiting to buy a ticket for that movie renege (leave the queue).
+
+First of all, we load the libraries and prepare the environment.
+
+```{r, message=FALSE, warning=FALSE}
+library(simmer)
+
+TICKETS <- 50     # Number of tickets per movie
+SIM_TIME <- 120   # Simulate until
+movies <- c("R Unchained", "Kill Process", "Pulp Implementation")
+
+# setup
+set.seed(42)
+env <- simmer()
+```
+
+The main actor of this simulation is the _moviegoer_, a process that will try to buy a number of tickets for a certain movie. The logic is as follows:
+
+1. __Select__ a movie and go to the theater.
+2. At any moment, the _moviegoer_ __reneges if__ the movie becomes sold out (the "sold out" event is received).
+3. In particular, __leave__ immediately if the movie already became sold out.
+4. Reach the ticket counter and stay in the queue. When the turn comes (counter is __seized__),
+    1. Try to buy (__seize__ the resource) tickets (randomly chosen between 1 and 6).
+        * If there are not enough tickets, the _moviegoer_ is __rejected__ after some discussion.
+    2. Provided the _moviegoer_ has tickets, the reneging condition is __aborted__.
+    3. Check the tickets available and, if at most one ticket is left...
+        * __Set__ instant rejection for future customers (at point 3.).
+        * __Send__ the "sold out" event (subscribed at point 2.) for current customers (waiting at point 4.).
+5. __Release__ the ticket counter after the duration of the purchase.
+6. Enjoy the movie!
+
+This recipe is directly translated into a `simmer` trajectory as follows:
+
+```{r, message=FALSE, warning=FALSE}
+get_movie <- function() movies[get_attribute(env, "movie")]
+soldout_signal <- function() paste0(get_movie(), " sold out")
+check_soldout <- function() get_capacity(env, get_movie()) == 0
+check_tickets_available <- function()
+  get_server_count(env, get_movie()) > (TICKETS - 2)
+
+moviegoer <- trajectory() %>%
+  # select a movie
+  set_attribute("movie", function() sample(3, 1)) %>%
+  select(get_movie) %>%
+  # set reneging condition
+  renege_if(soldout_signal) %>%
+  # leave immediately if the movie was already sold out
+  leave(check_soldout) %>%
+  # wait for my turn
+  seize("counter", 1) %>%
+  # buy tickets
+  seize_selected(
+    function() sample(6, 1), continue = FALSE,
+    reject = trajectory() %>%
+      timeout(0.5) %>%
+      release("counter", 1)
+  ) %>%
+  # abort reneging condition
+  renege_abort() %>%
+  # check the tickets available
+  branch(
+    check_tickets_available, continue = TRUE,
+    trajectory() %>%
+      set_capacity_selected(0) %>%
+      send(soldout_signal)
+  ) %>%
+  timeout(1) %>%
+  release("counter", 1) %>%
+  # watch the movie
+  wait()
+```
+
+which actually constitutes a quite interesting subset of `simmer`'s capabilities. The next step is to add the required resources to the environment `env`: the three movies and the ticket counter.
+
+```{r, message=FALSE, warning=FALSE}
+# add movies as resources with capacity TICKETS and no queue
+for (i in movies) env %>%
+  add_resource(i, TICKETS, 0)
+
+# add ticket counter with capacity 1 and infinite queue
+env %>% add_resource("counter", 1, Inf)
+```
+
+And finally, we attach an exponential _moviegoer_ generator to the `moviegoer` trajectory and the simulation starts:
+
+```{r, message=FALSE, warning=FALSE}
+# add a moviegoer generator and start simulation
+env %>%
+  add_generator("moviegoer", moviegoer, function() rexp(1, 1 / 0.5), mon=2) %>%
+  run(SIM_TIME)
+```
+
+The analysis is performed with standard R tools:
+
+```{r, message=FALSE, warning=FALSE}
+# get the three rows with the sold out instants
+sold_time <- get_mon_resources(env) %>%
+  subset(resource != "counter" & capacity == 0)
+
+# get the arrivals that left at the sold out instants
+# count the number of arrivals per movie
+n_reneges <- get_mon_arrivals(env) %>%
+  subset(finished == FALSE & end_time %in% sold_time$time) %>%
+  merge(get_mon_attributes(env)) %>%
+  transform(resource = movies[value]) %>%
+  aggregate(value ~ resource, data=., length)
+
+# merge the info  and print
+invisible(apply(merge(sold_time, n_reneges), 1, function(i) {
+  cat("Movie '", i["resource"], "' was sold out in ", i["time"], " minutes.\n", 
+      "  Number of people that left the queue: ", i["value"], "\n", sep="")
+}))
+```
+
+## Gas Station Refuelling
+
+Covers:
+
+* Standard resources.
+* Waiting for other processes.
+* Condition events.
+* Shared events.
+* Concatenating trajectories.
+* Loops.
+* Logging messages into the console.
+
+From [here](https://simpy.readthedocs.io/en/latest/examples/gas_station_refuel.html):
+
+> This example models a gas station and cars that arrive for refuelling. The gas station has a limited number of fuel pumps and a fuel tank that is shared between the fuel pumps. 
+> 
+> Vehicles arriving at the gas station first request a fuel pump from the station. Once they acquire one, they try to take the desired amount of fuel from the fuel pump. They leave when they are done.
+> 
+> The fuel level is reqularly monitored by a controller. When the level drops below a certain threshold, a tank truck is called for refilling the tank.
+
+Parameters and setup:
+
+```{r, message=FALSE, warning=FALSE}
+library(simmer)
+
+GAS_STATION_SIZE <- 200     # liters
+THRESHOLD <- 10             # Threshold for calling the tank truck (in %)
+FUEL_TANK_SIZE <- 50        # liters
+FUEL_TANK_LEVEL <- c(5, 25) # Min/max levels of fuel tanks (in liters)
+REFUELING_SPEED <- 2        # liters / second
+TANK_TRUCK_TIME <- 300      # Seconds it takes the tank truck to arrive
+T_INTER <- c(30, 100)       # Create a car every [min, max] seconds
+SIM_TIME <- 1000            # Simulation time in seconds
+
+# setup
+set.seed(42)
+env <- simmer()
+```
+
+SimPy solves this problem using a special kind of resource called _container_, which is not present in `simmer` so far. However, a container is nothing more than an embellished counter. Therefore, we can implement this in `simmer` with a global counter (`GAS_STATION_LEVEL` here), some signaling and some care checking the counter bounds.
+
+Let us consider just the refuelling process in the first place. A car needs to check whether there is enough fuel available to fill its tank. If not, it needs to block until the gas station is refilled.
+
+```{r, message=FALSE, warning=FALSE}
+GAS_STATION_LEVEL <- GAS_STATION_SIZE
+signal <- "gas station refilled"
+
+refuelling <- trajectory() %>%
+  # check if there is enough fuel available
+  branch(function() FUEL_TANK_SIZE - get_attribute(env, "level") > GAS_STATION_LEVEL, 
+         continue = TRUE,
+         # if not, block until the signal "gas station refilled" is received
+         trajectory() %>%
+           trap(signal) %>%
+           wait() %>%
+           untrap(signal)
+  ) %>%
+  # refuel
+  timeout(function() {
+    liters_required <- FUEL_TANK_SIZE - get_attribute(env, "level")
+    GAS_STATION_LEVEL <<- GAS_STATION_LEVEL - liters_required
+    return(liters_required / REFUELING_SPEED)
+  })
+```
+
+Now a car's trajectory is straightforward. First, the starting time is saved as well as the tank level. Then, the car seizes a pump, refuels and leaves.
+
+```{r, message=FALSE, warning=FALSE}
+car <- trajectory() %>%
+  set_attribute(c("start", "level"), function() 
+    c(now(env), sample(FUEL_TANK_LEVEL[1]:FUEL_TANK_LEVEL[2], 1))) %>%
+  log_("arriving at gas station") %>%
+  seize("pump", 1) %>%
+  # 'join()' concatenates the refuelling trajectory here
+  join(refuelling) %>%
+  release("pump", 1) %>%
+  log_(function() 
+    paste0("finished refuelling in ", now(env) - get_attribute(env, "start"), " seconds"))
+```
+
+The tank truck takes some time to arrive. Then, the gas station is completely refilled and the signal "gas station refilled" is sent to the blocked cars.
+
+```{r, message=FALSE, warning=FALSE}
+tank_truck <- trajectory() %>%
+  timeout(TANK_TRUCK_TIME) %>%
+  log_("tank truck arriving at gas station") %>%
+  log_(function() {
+    refill <- GAS_STATION_SIZE - GAS_STATION_LEVEL
+    GAS_STATION_LEVEL <<- GAS_STATION_SIZE
+    paste0("tank truck refilling ", refill, " liters")
+  }) %>%
+  send(signal)
+```
+
+The controller periodically checks the `GAS_STATION_LEVEL` and calls the tank truck when needed.
+
+```{r, message=FALSE, warning=FALSE}
+controller <- trajectory() %>%
+  branch(function() GAS_STATION_LEVEL / GAS_STATION_SIZE * 100 < THRESHOLD, 
+         continue = TRUE,
+         trajectory() %>%
+           log_("calling the tank truck") %>%
+           join(tank_truck)
+  ) %>%
+  timeout(10) %>%
+  rollback(2, Inf)
+```
+
+Finally, we need to add a couple of pumps, a controller worker and a car generator.
+
+```{r, message=FALSE, warning=FALSE}
+env %>%
+  add_resource("pump", 2) %>%
+  add_generator("controller", controller, at(0)) %>%
+  add_generator("car", car, function() sample(T_INTER[1]:T_INTER[2], 1)) %>%
+  run(SIM_TIME)
+```

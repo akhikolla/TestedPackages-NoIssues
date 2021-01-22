@@ -1,0 +1,89 @@
+---
+title: "Using `simcdm` in R packages"
+author: "James Joseph Balamuta"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Using simcdm in R Packages}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Package usage
+
+The design of `simcdm` allows the package to be included in other _R_ packages
+using either the _R_ or _C++_ functions.  The next section details provides
+with how to incorporate either the _R_ or _C++_ functions into a new _R_
+package or standalone _C++_ file. 
+
+Note, if you are not familiar with compiled code in _R_ please 
+feel free to use the traditional way to import the _R_ functions.
+
+## _R_ Package Usage
+
+To use `simcdm`'s _R_ functions **only** in your own _R_ package, modify
+the package's `DESCRIPTION` file by adding an imports declaration.
+
+```bash
+Imports: simcdm
+```
+
+Inside of the package's `NAMESPACE` file, make sure to use:
+
+```bash
+import(simcdm)
+```
+
+If you are using `roxygen2` to manage the packages `NAMESPACE` file, add
+the following tag and re-run the `roxygenize()` function.
+
+```bash
+#' @import simcdm
+```
+
+## _C++_ Usage
+
+
+### _C++_ Standalone Usage
+
+Within a _C++_ file  in `src/`, then add:
+
+```cpp
+#include <RcppArmadillo.h>
+#include <simcdm.h>
+
+// [[Rcpp::depends(simcdm, RcppArmadillo)]]
+
+// [[Rcpp::export]]
+arma::mat example_dina_sim(const arma::mat &alphas, const arma::mat &Q,
+                           const arma::vec &ss, const arma::vec &gs) { 
+                           
+   arma::mat dina_items = simcdm::sim_dina_items(alphas, Q, ss, gs);
+   
+   return dina_items;
+}
+```
+
+### _C++_ Package
+
+To use _C++_ functions available in `simcdm` within your R package, 
+modify your package's `DESCRIPTION` file by adding:
+
+    LinkingTo: Rcpp, RcppArmadillo (>= 0.9.200), simcdm
+    Imports:
+        Rcpp (>= 1.0.0)
+
+Reference the simulation functions using `simcdm` namespace like so: 
+
+```cpp
+#include <simcdm.h>
+
+// [[Rcpp::export]]
+arma::mat example_rrum_sim(const arma::mat &Q, const arma::mat &rstar,
+                           const arma::vec &pistar, const arma::mat &alpha) { 
+                           
+   arma::mat rrum_items = simcdm::sim_rrum_items(Q, rstar, pistar, alpha);
+   
+   return rrum_items;
+}
+```

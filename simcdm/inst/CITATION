@@ -1,0 +1,14 @@
+citHeader("To cite the 'simcdm' package in publications use:")
+
+citEntry(entry = "Manual",
+         title        = "{simcdm: Simulate Cognitive Diagnostic Model (CDM) Data}",
+         author       = personList(
+                                   as.person("James Joseph Balamuta"),
+                                   as.person("Steven Andrew Culpepper"),
+                                   as.person("Aaron Hudson")
+                                  ),
+         year         = 2019,
+         textVersion  = paste("Balamuta, J. J., Culpepper, S. A., and Hudson A. (2019)",
+                              "simcdm: Simulate Cognitive Diagnostic Model (CDM) Data.",
+                              "URL https://cran.r-project.org/package=simcdm.")
+)

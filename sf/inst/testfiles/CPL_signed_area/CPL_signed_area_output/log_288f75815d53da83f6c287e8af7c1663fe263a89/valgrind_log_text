@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (sf_deepstate_test_CPL_signed_area_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/sf/inst/testfiles/CPL_signed_area/CPL_signed_area_output/288f75815d53da83f6c287e8af7c1663fe263a89.pass`
+TRACE: Running: sf_deepstate_test_CPL_signed_area_test from /home/akhila/fuzzer_packages/fuzzedpackages/sf/inst/testfiles/CPL_signed_area/CPL_signed_area_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+pts values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: sf_deepstate_test_CPL_signed_area_test

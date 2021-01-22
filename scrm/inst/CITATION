@@ -1,0 +1,14 @@
+bibentry(
+  bibtype = 'Article',
+  title = '{scrm}: efficiently simulating long sequences using the approximated coalescent with recombination',
+  author = c(person('Paul R. Staab'),
+             person('Sha Zhu'),
+             person('Dirk Metzler'),
+             person('Gerton Lunter')),
+  year = 2015,
+  journal = 'Bioinformatics',
+  volume = 31,
+  number = 10,
+  pages = '1680-1682',
+  url = 'http://bioinformatics.oxfordjournals.org/content/31/10/1680'
+)

@@ -1,0 +1,22 @@
+
+citation(auto = meta)
+
+bibentry(bibtype = "Article",
+  title        = "Introduction to {stream}: An Extensible Framework for Data Stream Clustering Research with {R}",
+  author       = c(person(given = "Michael",
+                          family = "Hahsler",
+                          email = "mhahsler@lyle.smu.edu"),
+                   person(given = "Matthew",
+                          family = "Bola{\\~n}os",
+                          email = "mbolanos@curiouscrane.com"),
+                   person(given = "John",
+                          family = "Forrest",
+                          email = "jforrest@microsoft.com")),
+  journal      = "Journal of Statistical Software",
+  year         = "2017",
+  volume       = "76",
+  number       = "14",
+  pages        = "1--50",
+  doi          = "10.18637/jss.v076.i14"
+  )
+

@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (simmer_deepstate_test_Rollback__new_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/simmer/inst/testfiles/Rollback__new/Rollback__new_output/56d096ab6b6d47076e0a8c0505b48fcd59ef08a6.pass`
+TRACE: Running: simmer_deepstate_test_Rollback__new_test from /home/akhila/fuzzer_packages/fuzzedpackages/simmer/inst/testfiles/Rollback__new/Rollback__new_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+amount values: -293123844
+times values: -555281357
+input ends
+TRACE: Passed: simmer_deepstate_test_Rollback__new_test

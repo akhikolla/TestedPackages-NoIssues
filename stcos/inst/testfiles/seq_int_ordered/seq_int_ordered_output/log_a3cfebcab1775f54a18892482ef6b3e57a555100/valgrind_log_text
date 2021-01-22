@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (stcos_deepstate_test_seq_int_ordered_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/stcos/inst/testfiles/seq_int_ordered/seq_int_ordered_output/a3cfebcab1775f54a18892482ef6b3e57a555100.pass`
+TRACE: Running: stcos_deepstate_test_seq_int_ordered_test from /home/akhila/fuzzer_packages/fuzzedpackages/stcos/inst/testfiles/seq_int_ordered/seq_int_ordered_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+from values: 1.27048e-62
+to values: -2.88162e-134
+input ends
+TRACE: Passed: stcos_deepstate_test_seq_int_ordered_test

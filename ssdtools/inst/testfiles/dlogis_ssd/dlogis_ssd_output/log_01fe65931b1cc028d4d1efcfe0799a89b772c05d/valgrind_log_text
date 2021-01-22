@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (ssdtools_deepstate_test_dlogis_ssd_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/dlogis_ssd/dlogis_ssd_output/01fe65931b1cc028d4d1efcfe0799a89b772c05d.pass`
+TRACE: Running: ssdtools_deepstate_test_dlogis_ssd_test from /home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/dlogis_ssd/dlogis_ssd_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -2.43318e-187
+location values: -1.64581e+174
+scale values: -1.66668e-49
+input ends
+TRACE: Passed: ssdtools_deepstate_test_dlogis_ssd_test

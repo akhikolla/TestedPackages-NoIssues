@@ -1,0 +1,24 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (staTools_deepstate_test_fastsum_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+i values: 467495432
+xmin values: 1827680409
+alpha values: -1.64581e+174
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+i values: -498905818
+xmin values: 569042049
+alpha values: -1.20777e+13
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+i values: -293123844
+xmin values: -555281357
+alpha values: -2.88162e-134
+input ends
+INFO: Done fuzzing! Ran 3 tests (0 tests/second) with 0 failed/3 passed/0 abandoned tests

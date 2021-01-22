@@ -1,0 +1,169 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./nested_permu_cplus_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_output/035b5f3ff2df1547d1e20f5756acb79bae60dafd.crash</line>
+</preamble>
+
+<pid>67932</pid>
+<ppid>67931</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_output/log_035b5f3ff2df1547d1e20f5756acb79bae60dafd/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./nested_permu_cplus_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_output/035b5f3ff2df1547d1e20f5756acb79bae60dafd.crash</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.363 </time>
+</status>
+
+<fatal_signal>
+  <tid>1</tid>
+  <signo>8</signo>
+  <signame>SIGFPE</signame>
+  <sicode>1</sicode>
+  <event>Integer divide by zero</event>
+  <siaddr>0x1003C02FD7</siaddr>
+  <stack>
+    <frame>
+      <ip>0x437BF7</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>operator()</fn>
+      <dir>/usr/include/c++/9/bits</dir>
+      <file>stl_function.h</file>
+      <line>202</line>
+    </frame>
+    <frame>
+      <ip>0x437BF7</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>__invoke_impl&lt;int, std::divides&lt;int&gt;&amp;, int&amp;, int&amp;&gt;</fn>
+      <dir>/usr/include/c++/9/bits</dir>
+      <file>invoke.h</file>
+      <line>60</line>
+    </frame>
+    <frame>
+      <ip>0x437BF7</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>__invoke&lt;std::divides&lt;int&gt;&amp;, int&amp;, int&amp;&gt;</fn>
+      <dir>/usr/include/c++/9/bits</dir>
+      <file>invoke.h</file>
+      <line>95</line>
+    </frame>
+    <frame>
+      <ip>0x437BF7</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>__call&lt;int, int&amp;, 0, 1&gt;</fn>
+      <dir>/usr/include/c++/9</dir>
+      <file>functional</file>
+      <line>400</line>
+    </frame>
+    <frame>
+      <ip>0x437BF7</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>operator()&lt;int&amp;&gt;</fn>
+      <dir>/usr/include/c++/9</dir>
+      <file>functional</file>
+      <line>484</line>
+    </frame>
+    <frame>
+      <ip>0x437BF7</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>transform&lt;int*, int*, std::_Bind&lt;std::divides&lt;int&gt;(int, std::_Placeholder&lt;1&gt;)&gt; &gt;</fn>
+      <dir>/usr/include/c++/9/bits</dir>
+      <file>stl_algo.h</file>
+      <line>4337</line>
+    </frame>
+    <frame>
+      <ip>0x437BF7</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>nested_permu_cplus(Rcpp::Vector&lt;13, Rcpp::PreserveStorage&gt;)</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/src</dir>
+      <file>nested.cpp</file>
+      <line>26</line>
+    </frame>
+    <frame>
+      <ip>0x411D31</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>DeepState_Test_sensitivity_deepstate_test_nested_permu_cplus_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus</dir>
+      <file>nested_permu_cplus_DeepState_TestHarness.cpp</file>
+      <line>22</line>
+    </frame>
+    <frame>
+      <ip>0x411B08</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>DeepState_Run_sensitivity_deepstate_test_nested_permu_cplus_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus</dir>
+      <file>nested_permu_cplus_DeepState_TestHarness.cpp</file>
+      <line>13</line>
+    </frame>
+    <frame>
+      <ip>0x424A28</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>DeepState_RunTest.isra.0</fn>
+    </frame>
+    <frame>
+      <ip>0x424CC9</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>DeepState_ForkAndRunTest</fn>
+    </frame>
+    <frame>
+      <ip>0x424DA4</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>DeepState_RunSavedTestCase</fn>
+    </frame>
+    <frame>
+      <ip>0x40D835</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/nested_permu_cplus/nested_permu_cplus_DeepState_TestHarness</obj>
+      <fn>main</fn>
+    </frame>
+  </stack>
+</fatal_signal>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:07.861 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.463 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

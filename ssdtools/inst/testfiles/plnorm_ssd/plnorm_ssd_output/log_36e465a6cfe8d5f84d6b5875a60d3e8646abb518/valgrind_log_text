@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (ssdtools_deepstate_test_plnorm_ssd_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/plnorm_ssd/plnorm_ssd_output/36e465a6cfe8d5f84d6b5875a60d3e8646abb518.pass`
+TRACE: Running: ssdtools_deepstate_test_plnorm_ssd_test from /home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/plnorm_ssd/plnorm_ssd_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+q values: 1.27048e-62
+meanlog values: -2.88162e-134
+sdlog values: 8.18711e+299
+input ends
+TRACE: Passed: ssdtools_deepstate_test_plnorm_ssd_test

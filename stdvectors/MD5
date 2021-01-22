@@ -1,0 +1,11 @@
+1e792d9768bb364362ef4b0453f1488d *DESCRIPTION
+d9956eff67fd50663159679890d05ecc *NAMESPACE
+111f055001e0420cc98f50954072cdf1 *R/RcppExports.R
+8d6089ee696b81ba273d9acaf85520ff *R/stdvectors.R
+e06fbd90df1384cded155ad47db462dd *README.md
+1c32c47d5d9bd4a770dea62674a32294 *man/stdvectorClass.Rd
+6b59887e4290c29f78f3fb5c54f9621a *man/stdvectors-package.Rd
+5d34ec23d7264af691f4187bbc1e1eb6 *src/RcppExports.cpp
+ac6d06e979227212c49190405cf6be14 *src/stdvectors.cpp
+69d2fd2810a892dea210c9d1d8672936 *src/stdvectors_init.c
+5ad92e6e01415f6565b7415e0093055a *tests/alltests.R

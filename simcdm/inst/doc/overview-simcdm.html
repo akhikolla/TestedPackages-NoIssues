@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="author" content="James Joseph Balamuta" />
+
+<meta name="date" content="2019-03-09" />
+
+<title>Overview of simcdm</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' || rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Overview of <code>simcdm</code></h1>
+<h4 class="author"><em>James Joseph Balamuta</em></h4>
+<h4 class="date"><em>2019-03-09</em></h4>
+
+
+
+<div id="overview" class="section level1">
+<h1>Overview</h1>
+<p>Within this document, we highlight the different features of the <code>simcdm</code> package as it relates to simulating cognitive diagnostic modeling data.</p>
+<div id="notation" class="section level2">
+<h2>Notation</h2>
+<p>For consistency, we aim to use the following notation.</p>
+<p>Denoting individuals:</p>
+<ul>
+<li><span class="math inline">\(N\)</span> is the total number of individuals taking the assessment.</li>
+<li><span class="math inline">\(i\)</span> is the current individual.</li>
+</ul>
+<p>Denoting items:</p>
+<ul>
+<li><span class="math inline">\(J\)</span> is the total number of items on the assessment.</li>
+<li><span class="math inline">\(j\)</span> is the current item</li>
+<li><span class="math inline">\(Y_{ij}\)</span> is the observed binary response for individual <span class="math inline">\(i\)</span> (<span class="math inline">\(1\leq i \leq N\)</span>) to item <span class="math inline">\(j\)</span> (<span class="math inline">\(1\leq j\leq J\)</span>).</li>
+<li><span class="math inline">\(s_j\)</span> is the probability of slipping on item <span class="math inline">\(j\)</span>.</li>
+<li><span class="math inline">\(g_j\)</span> is the probability of guessing on item <span class="math inline">\(j\)</span>.</li>
+</ul>
+<p>Denoting attributes:</p>
+<ul>
+<li><span class="math inline">\(K\)</span> is the total number of attributes for the assessment item.</li>
+<li><span class="math inline">\(k\)</span> is the current attribute.</li>
+<li><span class="math inline">\(\boldsymbol\alpha_i=\left(\alpha_{i1},\dots,\alpha_{iK}\right)^\prime\)</span> where <span class="math inline">\(\boldsymbol\alpha_i\in \left\{0,1\right\}^K\)</span> and <span class="math inline">\(\alpha_{ik}\)</span> is the latent binary attribute for individual <span class="math inline">\(i\)</span> on attribute <span class="math inline">\(k\)</span> (<span class="math inline">\(1\leq k\leq K\)</span>).</li>
+</ul>
+<p>Denoting the skill/attribute “Q” matrix:</p>
+<ul>
+<li><span class="math inline">\(\boldsymbol q_{j}=\left(q_{j1},\dots,q_{jK}\right)^\prime\)</span> be the <span class="math inline">\(j\)</span>th row of <span class="math inline">\(\boldsymbol Q\)</span> such that <span class="math inline">\(q_{jk}=1\)</span> if attribute <span class="math inline">\(k\)</span> is required for item <span class="math inline">\(j\)</span> and zero otherwise.</li>
+</ul>
+</div>
+</div>
+<div id="usage" class="section level1">
+<h1>Usage</h1>
+<p>To use <code>simcdm</code>, please load the package.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">library</span>(simcdm)</a></code></pre></div>
+<div id="matrix-simulation" class="section level2">
+<h2>Matrix Simulation</h2>
+<p>Simulations within this section are done underneath the following settings.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">set.seed</span>(<span class="dv">888</span>)</a>
+<a class="sourceLine" id="cb2-3" title="3"></a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="co"># Setup Parameters</span></a>
+<a class="sourceLine" id="cb2-5" title="5">N =<span class="st"> </span><span class="dv">15</span>   <span class="co"># Number of Examinees / Subjects</span></a>
+<a class="sourceLine" id="cb2-6" title="6">J =<span class="st"> </span><span class="dv">10</span>   <span class="co"># Number of Items</span></a>
+<a class="sourceLine" id="cb2-7" title="7">K =<span class="st"> </span><span class="dv">2</span>    <span class="co"># Number of Skills / Attributes</span></a></code></pre></div>
+<div id="identifiable-q-matrix-simulation" class="section level3">
+<h3>Identifiable Q Matrix Simulation</h3>
+<p>Simulate an identifiable <span class="math inline">\(Q\)</span> matrix (<span class="math inline">\(J\)</span> items by <span class="math inline">\(K\)</span> skills).</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb3-2" title="2"><span class="kw">set.seed</span>(<span class="dv">1512</span>)</a>
+<a class="sourceLine" id="cb3-3" title="3"></a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="co"># Simulate an identifiable Q matrix</span></a>
+<a class="sourceLine" id="cb3-5" title="5">Q =<span class="st"> </span><span class="kw">sim_q_matrix</span>(J, K)</a>
+<a class="sourceLine" id="cb3-6" title="6">Q</a></code></pre></div>
+<pre><code>##       [,1] [,2]
+##  [1,]    1    0
+##  [2,]    1    0
+##  [3,]    0    1
+##  [4,]    0    1
+##  [5,]    0    1
+##  [6,]    0    1
+##  [7,]    1    1
+##  [8,]    1    0
+##  [9,]    1    0
+## [10,]    0    1</code></pre>
+</div>
+<div id="eta-matrix-simulation" class="section level3">
+<h3><span class="math inline">\(\eta\)</span> Matrix Simulation</h3>
+<p>Create the ideal response matrix for each trait (<span class="math inline">\(J\)</span> items by <span class="math inline">\(2^K\)</span> latent classes).</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="kw">set.seed</span>(<span class="dv">4421</span>)</a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co"># Simulate an eta matrix</span></a>
+<a class="sourceLine" id="cb5-5" title="5">eta =<span class="st"> </span><span class="kw">sim_eta_matrix</span>(K, J, Q)</a>
+<a class="sourceLine" id="cb5-6" title="6">eta</a></code></pre></div>
+<pre><code>##       [,1] [,2] [,3] [,4]
+##  [1,]    0    0    1    1
+##  [2,]    0    0    1    1
+##  [3,]    0    1    0    1
+##  [4,]    0    1    0    1
+##  [5,]    0    1    0    1
+##  [6,]    0    1    0    1
+##  [7,]    0    0    0    1
+##  [8,]    0    0    1    1
+##  [9,]    0    0    1    1
+## [10,]    0    1    0    1</code></pre>
+</div>
+<div id="attribute-profile-simulation" class="section level3">
+<h3>Attribute profile simulation</h3>
+<p>Generate latent attribute profile classes (<span class="math inline">\(2^K\)</span> latent classes by <span class="math inline">\(K\)</span> skills).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="co"># Create a listing of all attribute classes </span></a>
+<a class="sourceLine" id="cb7-2" title="2">class_alphas =<span class="st"> </span><span class="kw">attribute_classes</span>(K)</a>
+<a class="sourceLine" id="cb7-3" title="3">class_alphas</a></code></pre></div>
+<pre><code>##      [,1] [,2]
+## [1,]    0    0
+## [2,]    0    1
+## [3,]    1    0
+## [4,]    1    1</code></pre>
+<p>Generate latent attribute profile class for each subject (<span class="math inline">\(N\)</span> subjects by <span class="math inline">\(K\)</span> skills).</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb9-2" title="2"><span class="kw">set.seed</span>(<span class="dv">5126</span>)</a>
+<a class="sourceLine" id="cb9-3" title="3"></a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="co"># Create attributes for a subject </span></a>
+<a class="sourceLine" id="cb9-5" title="5">subject_alphas =<span class="st"> </span><span class="kw">sim_subject_attributes</span>(N, K)</a>
+<a class="sourceLine" id="cb9-6" title="6">subject_alphas</a></code></pre></div>
+<pre><code>##       [,1] [,2]
+##  [1,]    0    0
+##  [2,]    1    1
+##  [3,]    1    0
+##  [4,]    1    1
+##  [5,]    0    0
+##  [6,]    0    1
+##  [7,]    0    1
+##  [8,]    1    0
+##  [9,]    0    1
+## [10,]    0    1
+## [11,]    0    1
+## [12,]    0    1
+## [13,]    1    0
+## [14,]    0    0
+## [15,]    1    0</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1"><span class="co"># Equivalent to:</span></a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="co"># subject_alphas = class_alphas[sample(2 ^ K, N, replace = TRUE),]</span></a></code></pre></div>
+</div>
+<div id="dina-simulation" class="section level3">
+<h3>DINA Simulation</h3>
+<p>Simulations within this section are done underneath the following settings.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="kw">set.seed</span>(<span class="dv">888</span>)</a>
+<a class="sourceLine" id="cb12-3" title="3"></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co"># Setup Parameters</span></a>
+<a class="sourceLine" id="cb12-5" title="5">N =<span class="st"> </span><span class="dv">15</span>   <span class="co"># Number of Examinees / Subjects</span></a>
+<a class="sourceLine" id="cb12-6" title="6">J =<span class="st"> </span><span class="dv">10</span>   <span class="co"># Number of Items</span></a>
+<a class="sourceLine" id="cb12-7" title="7">K =<span class="st"> </span><span class="dv">2</span>    <span class="co"># Number of Skills / Attributes</span></a>
+<a class="sourceLine" id="cb12-8" title="8"></a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="co"># Assign slipping and guessing values for each item</span></a>
+<a class="sourceLine" id="cb12-10" title="10">ss =<span class="st"> </span>gs =<span class="st"> </span><span class="kw">rep</span>(.<span class="dv">2</span>, J)</a>
+<a class="sourceLine" id="cb12-11" title="11"></a>
+<a class="sourceLine" id="cb12-12" title="12"><span class="co"># Simulate identifiable Q matrix</span></a>
+<a class="sourceLine" id="cb12-13" title="13">Q =<span class="st"> </span><span class="kw">sim_q_matrix</span>(J, K)</a>
+<a class="sourceLine" id="cb12-14" title="14"></a>
+<a class="sourceLine" id="cb12-15" title="15"><span class="co"># Simulate subject attributes</span></a>
+<a class="sourceLine" id="cb12-16" title="16">subject_alphas =<span class="st"> </span><span class="kw">sim_subject_attributes</span>(N, K)</a></code></pre></div>
+</div>
+<div id="dina-item-simulation" class="section level3">
+<h3>DINA Item Simulation</h3>
+<p>Simulate item data, <span class="math inline">\(Y\)</span>, under DINA model (<span class="math inline">\(N\)</span> by <span class="math inline">\(J\)</span>)</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb13-2" title="2"><span class="kw">set.seed</span>(<span class="dv">2019</span>)</a>
+<a class="sourceLine" id="cb13-3" title="3"></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co"># Simulate items under the DINA model</span></a>
+<a class="sourceLine" id="cb13-5" title="5">items_dina =<span class="st"> </span><span class="kw">sim_dina_items</span>(subject_alphas, Q, ss, gs)</a>
+<a class="sourceLine" id="cb13-6" title="6">items_dina</a></code></pre></div>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+##  [1,]    0    0    0    1    1    0    0    0    1     1
+##  [2,]    1    1    1    0    1    1    1    1    0     1
+##  [3,]    0    0    0    0    1    0    0    0    1     1
+##  [4,]    1    1    1    0    0    0    1    1    1     0
+##  [5,]    1    1    1    1    1    1    1    1    1     1
+##  [6,]    1    1    1    1    0    1    0    1    0     1
+##  [7,]    0    0    0    1    1    0    0    0    0     1
+##  [8,]    1    0    1    1    1    0    0    1    0     1
+##  [9,]    1    1    1    1    0    1    1    1    1     1
+## [10,]    0    1    0    1    1    0    0    0    1     1
+## [11,]    1    1    1    1    1    1    1    0    1     1
+## [12,]    0    0    0    0    1    0    0    0    1     0
+## [13,]    0    0    0    0    1    0    0    0    1     1
+## [14,]    1    0    0    1    1    0    0    0    0     0
+## [15,]    1    1    0    1    0    0    1    1    0     0</code></pre>
+</div>
+<div id="dina-attribute-simulation" class="section level3">
+<h3>DINA Attribute Simulation</h3>
+<p>Simulate attribute data under DINA model (<span class="math inline">\(N\)</span> by <span class="math inline">\(J\)</span>)</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">set.seed</span>(<span class="dv">51823</span>)</a>
+<a class="sourceLine" id="cb15-3" title="3"></a>
+<a class="sourceLine" id="cb15-4" title="4"><span class="co"># Simulate attributes under the DINA model</span></a>
+<a class="sourceLine" id="cb15-5" title="5">attributes =<span class="st"> </span><span class="kw">sim_dina_attributes</span>(subject_alphas, Q)</a>
+<a class="sourceLine" id="cb15-6" title="6">attributes</a></code></pre></div>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+##  [1,]    0    0    0    1    1    0    0    0    1     1
+##  [2,]    1    1    1    1    1    1    1    1    1     1
+##  [3,]    0    0    0    1    1    0    0    0    1     1
+##  [4,]    1    1    1    0    0    0    1    1    0     0
+##  [5,]    1    1    1    1    1    1    1    1    1     1
+##  [6,]    1    1    1    1    1    1    1    1    1     1
+##  [7,]    0    0    0    1    1    0    0    0    1     1
+##  [8,]    1    1    1    1    1    1    1    1    1     1
+##  [9,]    1    1    1    1    1    1    1    1    1     1
+## [10,]    0    0    0    1    1    0    0    0    1     1
+## [11,]    1    1    1    1    1    1    1    1    1     1
+## [12,]    0    0    0    1    1    0    0    0    1     1
+## [13,]    0    0    0    1    1    0    0    0    1     1
+## [14,]    0    0    0    0    0    0    0    0    0     0
+## [15,]    1    1    1    0    0    0    1    1    0     0</code></pre>
+</div>
+</div>
+<div id="rrum-simulation" class="section level2">
+<h2>rRUM Simulation</h2>
+<p>The rRUM simulations are done using the following settings.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="kw">set.seed</span>(<span class="dv">888</span>)</a>
+<a class="sourceLine" id="cb17-3" title="3"></a>
+<a class="sourceLine" id="cb17-4" title="4"><span class="co"># Setup Parameters</span></a>
+<a class="sourceLine" id="cb17-5" title="5">N =<span class="st"> </span><span class="dv">15</span>   <span class="co"># Number of Examinees / Subjects</span></a>
+<a class="sourceLine" id="cb17-6" title="6">J =<span class="st"> </span><span class="dv">10</span>   <span class="co"># Number of Items</span></a>
+<a class="sourceLine" id="cb17-7" title="7">K =<span class="st"> </span><span class="dv">2</span>    <span class="co"># Number of Skills / Attributes</span></a>
+<a class="sourceLine" id="cb17-8" title="8"></a>
+<a class="sourceLine" id="cb17-9" title="9"><span class="co"># The probabilities of answering each item correctly for individuals </span></a>
+<a class="sourceLine" id="cb17-10" title="10"><span class="co"># who do not lack any required attribute</span></a>
+<a class="sourceLine" id="cb17-11" title="11">pistar =<span class="st"> </span><span class="kw">rep</span>(.<span class="dv">9</span>, J)</a>
+<a class="sourceLine" id="cb17-12" title="12"></a>
+<a class="sourceLine" id="cb17-13" title="13"><span class="co"># Simulate an identifiable Q matrix</span></a>
+<a class="sourceLine" id="cb17-14" title="14">Q =<span class="st"> </span><span class="kw">sim_q_matrix</span>(J, K)</a>
+<a class="sourceLine" id="cb17-15" title="15"></a>
+<a class="sourceLine" id="cb17-16" title="16"><span class="co"># Penalties for failing to have each of the required attributes</span></a>
+<a class="sourceLine" id="cb17-17" title="17">rstar  =<span class="st"> </span><span class="fl">.5</span> <span class="op">*</span><span class="st"> </span>Q</a>
+<a class="sourceLine" id="cb17-18" title="18"></a>
+<a class="sourceLine" id="cb17-19" title="19"><span class="co"># Latent Class Probabilities</span></a>
+<a class="sourceLine" id="cb17-20" title="20">pis =<span class="st"> </span><span class="kw">c</span>(.<span class="dv">1</span>, <span class="fl">.2</span>, <span class="fl">.3</span>, <span class="fl">.4</span>)</a>
+<a class="sourceLine" id="cb17-21" title="21"></a>
+<a class="sourceLine" id="cb17-22" title="22"><span class="co"># Generate latent attribute profile with custom probability (N subjects by K skills)</span></a>
+<a class="sourceLine" id="cb17-23" title="23">subject_alphas =<span class="st"> </span><span class="kw">sim_subject_attributes</span>(N, K, <span class="dt">prob =</span> pis)</a>
+<a class="sourceLine" id="cb17-24" title="24"></a>
+<a class="sourceLine" id="cb17-25" title="25"><span class="co"># Equivalent to:</span></a>
+<a class="sourceLine" id="cb17-26" title="26"><span class="co"># class_alphas = attribute_classes(K)</span></a>
+<a class="sourceLine" id="cb17-27" title="27"><span class="co"># subject_alphas = class_alphas[sample(2 ^ K, N, replace = TRUE, prob = pis),]</span></a></code></pre></div>
+<div id="simulate-rrum-items" class="section level3">
+<h3>Simulate rRUM items</h3>
+<p>Simulate rRUM item data <span class="math inline">\(Y\)</span> (<span class="math inline">\(N\)</span> by <span class="math inline">\(J\)</span>)</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb18-1" title="1"><span class="co"># Set a seed for reproducibility</span></a>
+<a class="sourceLine" id="cb18-2" title="2"><span class="kw">set.seed</span>(<span class="dv">912</span>)</a>
+<a class="sourceLine" id="cb18-3" title="3"></a>
+<a class="sourceLine" id="cb18-4" title="4"><span class="co"># Generate rRUM items</span></a>
+<a class="sourceLine" id="cb18-5" title="5">rrum_items =<span class="st"> </span><span class="kw">sim_rrum_items</span>(Q, rstar, pistar, subject_alphas)</a>
+<a class="sourceLine" id="cb18-6" title="6">rrum_items</a></code></pre></div>
+<pre><code>##       [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+##  [1,]    1    1    1    0    1    0    1    1    1     0
+##  [2,]    1    1    0    1    1    0    1    0    0     0
+##  [3,]    0    1    1    1    0    1    1    1    0     0
+##  [4,]    0    1    1    1    0    1    1    1    1     0
+##  [5,]    1    1    0    0    1    0    1    1    1     0
+##  [6,]    1    1    1    1    0    0    1    1    0     1
+##  [7,]    1    0    1    0    1    0    0    0    0     1
+##  [8,]    0    0    1    0    0    0    1    0    0     1
+##  [9,]    0    1    0    1    1    1    0    1    1     0
+## [10,]    1    1    1    1    0    0    0    1    1     0
+## [11,]    1    1    1    0    0    0    1    1    0     1
+## [12,]    0    1    0    1    1    0    1    1    1     1
+## [13,]    1    0    1    1    1    0    1    1    1     1
+## [14,]    1    0    1    1    1    1    1    1    1     1
+## [15,]    0    0    1    0    1    1    1    1    1     1</code></pre>
+</div>
+</div>
+</div>
+
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

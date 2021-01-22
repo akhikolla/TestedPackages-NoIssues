@@ -1,0 +1,51 @@
+---
+title: "SymEngine R package"
+output:
+  rmarkdown::html_vignette
+params:
+  doc_list
+  man_list
+---
+
+<!-- Custom styles -->
+<style>
+body {
+  margin-left: 0px;
+}
+</style>
+
+Welcome to the documentation site of symengine R package.
+Currently it contains the built vignettes and helps from the package.
+
+### Package repository
+
+- [symengine.R](https://github.com/symengine/symengine.R)
+
+### Vignettes
+
+```{r echo=FALSE, results='asis'}
+vignettes <- list.files("../../vignettes", pattern = "\\.Rmd$", full.names = TRUE)
+for (vignette in vignettes) {
+    title <- rmarkdown::yaml_front_matter(vignette)$title
+    link <- file.path("doc", gsub("\\.Rmd$", "\\.html", basename(vignette)))
+    cat(sprintf("- [%s](%s)\n", title, link))
+}
+```
+
+### Manual entries
+
+```{r echo=FALSE, results='asis'}
+rdfiles <- list.files("../../man", pattern = "\\.Rd$", full.names = TRUE)
+
+for (rdfile in rdfiles) {
+    rd <- tools::parse_Rd(rdfile)
+    title <- NULL
+    for (rd_tag in rd) {
+        if (attr(rd_tag, "Rd_tag", exact = TRUE) == "\\title")
+            title <- as.character(rd_tag)
+    }
+    link <- file.path("man", gsub("\\.Rd$", "\\.html", basename(rdfile)))
+    cat(sprintf("- [%s](%s)\n", title, link))
+}
+```
+

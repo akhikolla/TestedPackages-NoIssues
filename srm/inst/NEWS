@@ -1,0 +1,55 @@
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+------------------------ srm NEWS ---------------------------
+
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+
+
+Questions or suggestions about srm should be sent to
+robitzsch@ipn.uni-kiel.de
+
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CHANGELOG srm
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+
+
+
+
+--------------------------------------------------------------------------
+VERSIONS srm 0.3  |  2019-12-15  |  Last: srm 0.3-6
+--------------------------------------------------------------------------
+ 
+FIXED * changed internal function SRM_PINV() which relied on class
+        request. Since R 4.0, matrix is of class "matrix" and "array"
+        which caused the problem.
+
+DATA  * ---
+EXAMP * ---
+
+--------------------------------------------------------------------------
+VERSIONS srm 0.2  |  2019-08-30  |  Last: srm 0.2-10
+--------------------------------------------------------------------------
+ 
+NOTE  * changed default layout of summary function and included
+        argument 'layout' in summary()
+ADDED * included datasets downloaded from homepage of David Kenny
+        (thanks to David Kenny)
+
+DATA  * HallmarkKenny, Kenzer, Malzer, Warner, Zero
+EXAMP * ---
+
+--------------------------------------------------------------------------
+VERSIONS srm 0.1  |  2019-06-18  |  Last: srm 0.1-166
+--------------------------------------------------------------------------
+ 
+ADDED * added ML estimation function srm()
+ADDED * included least squares estimation ARBSRM routine 
+        (Bond & Malloy, 2018) in srm_arbsrm()
+
+DATA  * data.bm1, data.bm2, data.srm01, data.back
+EXAMP * srm (1,2,3), srm_arbsrm (1)
+

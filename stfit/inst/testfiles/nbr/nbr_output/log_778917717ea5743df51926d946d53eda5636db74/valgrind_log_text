@@ -1,0 +1,13 @@
+WARNING: No test specified, defaulting to first test defined (stfit_deepstate_test_nbr_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/stfit/inst/testfiles/nbr/nbr_output/778917717ea5743df51926d946d53eda5636db74.pass`
+TRACE: Running: stfit_deepstate_test_nbr_test from /home/akhila/fuzzer_packages/fuzzedpackages/stfit/inst/testfiles/nbr/nbr_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+ii values: 954479852
+nRow values: -194229631
+nCol values: -1020009618
+dRow values: 1482512518
+dCol values: 1767585227
+input ends
+TRACE: Passed: stfit_deepstate_test_nbr_test

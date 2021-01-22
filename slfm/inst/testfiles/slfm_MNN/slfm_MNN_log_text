@@ -1,0 +1,20 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (slfm_deepstate_test_slfm_MNN_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: 1.05415e-68 1.86447e-211 4.49059e+17 2.72551e-214 6.53679e-70 2.42643e+241 1.65687e+24
+
+a values: -2.10159e+110
+b values: -6.65583e-306
+gamma_a values: -3.48837e-09
+gamma_b values: -1.50153e+251
+omega_0 values: 1.57867e-307
+omega_1 values: -7.00762e-50
+burnin values: -423997720
+lag values: -1317296461
+npost values: -1145752183
+input ends
+ERROR: Crashed: slfm_deepstate_test_slfm_MNN_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/slfm/inst/testfiles/slfm_MNN/slfm_MNN_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+INFO: Done fuzzing! Ran 1 tests (0 tests/second) with 1 failed/0 passed/0 abandoned tests

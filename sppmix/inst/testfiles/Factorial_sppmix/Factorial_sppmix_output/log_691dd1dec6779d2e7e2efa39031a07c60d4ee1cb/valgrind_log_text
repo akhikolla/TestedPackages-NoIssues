@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (sppmix_deepstate_test_Factorial_sppmix_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/sppmix/inst/testfiles/Factorial_sppmix/Factorial_sppmix_output/691dd1dec6779d2e7e2efa39031a07c60d4ee1cb.pass`
+TRACE: Running: sppmix_deepstate_test_Factorial_sppmix_test from /home/akhila/fuzzer_packages/fuzzedpackages/sppmix/inst/testfiles/Factorial_sppmix/Factorial_sppmix_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -1105761949
+input ends
+TRACE: Passed: sppmix_deepstate_test_Factorial_sppmix_test

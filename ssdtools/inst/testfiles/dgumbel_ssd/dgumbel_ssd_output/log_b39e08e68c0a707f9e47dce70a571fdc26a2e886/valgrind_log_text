@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (ssdtools_deepstate_test_dgumbel_ssd_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/dgumbel_ssd/dgumbel_ssd_output/b39e08e68c0a707f9e47dce70a571fdc26a2e886.pass`
+TRACE: Running: ssdtools_deepstate_test_dgumbel_ssd_test from /home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/dgumbel_ssd/dgumbel_ssd_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: 3.16522e+06
+location values: 3.72126e-82
+scale values: 5.29799e-243
+input ends
+TRACE: Passed: ssdtools_deepstate_test_dgumbel_ssd_test

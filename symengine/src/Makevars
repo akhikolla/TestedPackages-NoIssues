@@ -1,0 +1,15 @@
+
+CXX_STD = CXX11
+
+PKG_LIBS = -Wl,-rpath,/usr/lib/x86_64-linux-gnu  upstream/symengine/libsymengine.a  /usr/lib/x86_64-linux-gnu/libgmp.so  /usr/lib/x86_64-linux-gnu/libmpfr.so 
+
+PKG_CPPFLAGS = -I/home/akhila/fuzzer_packages/fuzzedpackages/symengine/src/upstream -I/usr/include/x86_64-linux-gnu -I/usr/include  
+
+.PHONY: all do_upstream
+
+all: $(SHLIB)
+
+$(OBJECTS): do_upstream
+
+do_upstream:
+	@(cd upstream && $(MAKE))

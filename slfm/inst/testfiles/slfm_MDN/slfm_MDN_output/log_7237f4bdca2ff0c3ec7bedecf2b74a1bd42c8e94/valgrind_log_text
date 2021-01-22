@@ -1,0 +1,28 @@
+WARNING: No test specified, defaulting to first test defined (slfm_deepstate_test_slfm_MDN_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/slfm/inst/testfiles/slfm_MDN/slfm_MDN_output/7237f4bdca2ff0c3ec7bedecf2b74a1bd42c8e94.fail`
+TRACE: Running: slfm_deepstate_test_slfm_MDN_test from /home/akhila/fuzzer_packages/fuzzedpackages/slfm/inst/testfiles/slfm_MDN/slfm_MDN_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: 1.02532e+261 1.12756e-57     nan
+1.46340e+288     inf 4.12846e-51
+5.67165e-306 4.85713e-272     inf
+    nan     inf 61.3403
+5.43908e-105 3.30698e+94 6.30847e-13
+
+a values: -1.016e-235
+b values: -8.95918e-135
+gamma_a values: -6.0625e-109
+gamma_b values: 2.12439e-244
+omega_1 values: 2.70876e-266
+burnin values: 102100271
+lag values: 554226723
+npost values: -2118182298
+input ends
+
+error: Mat::init(): requested size is too large; suggest to enable ARMA_64BIT_WORD
+terminate called after throwing an instance of 'std::logic_error'
+  what():  Mat::init(): requested size is too large; suggest to enable ARMA_64BIT_WORD
+ERROR: Failed: slfm_deepstate_test_slfm_MDN_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/slfm/inst/testfiles/slfm_MDN/slfm_MDN_output/7237f4bdca2ff0c3ec7bedecf2b74a1bd42c8e94.fail failed

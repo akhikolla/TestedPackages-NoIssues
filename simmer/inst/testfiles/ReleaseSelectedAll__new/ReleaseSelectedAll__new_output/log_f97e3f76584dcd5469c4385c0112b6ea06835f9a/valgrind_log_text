@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (simmer_deepstate_test_ReleaseSelectedAll__new_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/simmer/inst/testfiles/ReleaseSelectedAll__new/ReleaseSelectedAll__new_output/f97e3f76584dcd5469c4385c0112b6ea06835f9a.pass`
+TRACE: Running: simmer_deepstate_test_ReleaseSelectedAll__new_test from /home/akhila/fuzzer_packages/fuzzedpackages/simmer/inst/testfiles/ReleaseSelectedAll__new/ReleaseSelectedAll__new_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+id values: -498905818
+input ends
+TRACE: Passed: simmer_deepstate_test_ReleaseSelectedAll__new_test

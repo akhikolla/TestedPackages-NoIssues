@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (sensitivity_deepstate_test_DisC2_Crossprod_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/DisC2_Crossprod/DisC2_Crossprod_output/5fef0eee46a04f7c08af631f7c209baea8db6b9b.pass`
+TRACE: Running: sensitivity_deepstate_test_DisC2_Crossprod_test from /home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/DisC2_Crossprod/DisC2_Crossprod_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+X values: 2.33013e-162 3.93853e+06 1.83153e+15 -2.35504e+106 inf -1.63611e-211 2.33893e-84 -1.04033e+141 1.35469e+242 1.73746e-28 4.76488e+189 1.18513e+80 -1.96304e+93 -2.27313e-295 2.07775e-257 1.5396e+31 -2.61099e+287 1.26152e+216 -1.11782e-279 1.4909e+209 1.62899e-266 6.81676e-165 2.5599e+301 3.17264e+300 1.18262e-123 nan 5.47839e-298 2.01623e-64 3.38357e+25 5.08856e-116 inf 1.62931e-150 2.78712e-166 -1.7944e+32 6.79032e+283 2.2112e-150 -7.62521e-06 5.7865e+135 -3.52837e-56 -4.55411e+111 2.92424e-108 4.1349e-291 1.06333e+86 -4.2837e+179 1.29635e+90 -1.27488e-275 1.06692e-206 -1.98812e+140 2.96273e+145 -2.07807e-75 8.45217e-207 -2.57836e+96 1.85515e+196 -1.08117e+136 -2.92273e-172 1.1467e-280 -6.02766e-36 3.25913e+278 1.47755e+232 2.22599e+224 -9.09733e+65 9.54998e+83 -2.70139e-37 -1.72494e-59 -1.01375e+146 -1.15996e-228 -inf -4.38131e-235 9.20186e-72 2.0947e+78 nan -5.7924e-22 2.81491e-308 6.13285e-65 -2.95038e+231 7.62785e+09 3.6813e+273 -1.25738e-69 9.15246e+180 -5.03701e+14 1.5647e-152 1.39336e-142 6.82873e-277 -1.29044e-259 9.31727e+290 1.33476e-213 4830.65 1.84668e-219 -1.88841e+279 -2.4097e+114 -6.12946e+229 -4.40434e-44 5.4581e+160 -5.17697e+231 6.35376e+223 1.04417e-100 0
+d values: 1060237720
+input ends
+ERROR: Crashed: sensitivity_deepstate_test_DisC2_Crossprod_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/sensitivity/inst/testfiles/DisC2_Crossprod/DisC2_Crossprod_output/5fef0eee46a04f7c08af631f7c209baea8db6b9b.pass crashed

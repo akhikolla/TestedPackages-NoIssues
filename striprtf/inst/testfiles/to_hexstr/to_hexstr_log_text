@@ -1,0 +1,43 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (striprtf_deepstate_test_to_hexstr_test)
+input starts
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 5 failed/0 passed/0 abandoned tests

@@ -1,0 +1,56 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (supc_deepstate_test_test_dgemm_test)
+input starts
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+Missing value
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+Missing value
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+Missing value
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+Missing value
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+input starts
+Missing value
+EXTERNAL: Error: package or namespace load failed for ‘qs’ in loadNamespace(i, c(lib.loc, .libPaths()), versionCheck = vI[[i]]):
+ there is no package called ‘stringfish’
+
+EXTERNAL: Error: function '_qs_RcppExport_validate' not provided by package 'qs'
+
+EXTERNAL: Execution halted
+
+INFO: Done fuzzing! Ran 6 tests (3 tests/second) with 6 failed/0 passed/0 abandoned tests

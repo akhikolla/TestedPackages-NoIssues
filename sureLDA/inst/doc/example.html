@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>Simulated Example</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Simulated Example</h1>
+
+
+
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true"></a><span class="kw">library</span>(sureLDA)</span></code></pre></div>
+<pre><code>## Loading required package: Matrix</code></pre>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true"></a><span class="kw">library</span>(pROC)</span></code></pre></div>
+<pre><code>## Type &#39;citation(&quot;pROC&quot;)&#39; for a citation.</code></pre>
+<pre><code>## 
+## Attaching package: &#39;pROC&#39;</code></pre>
+<pre><code>## The following objects are masked from &#39;package:stats&#39;:
+## 
+##     cov, smooth, var</code></pre>
+<p>Let N denote the number of patients, W the number of EHR features, and K the number of target phenotypes to be predicted. Our input data consists of 1) X, an NxW matrix of EHR feature counts, 2) ICD, an NxK matrix of key ICD code counts for each target phenotype, 3) NLP, an NxK matrix of key NLP feature counts for each target phenotype, 4) HU, an N-dimensional vector of healthcare utilization measurements (i.e. total patient encounters in a patient’s chart), and 5) an NxK matrix of filter indicators for each target phenotype (we assume P(phenotype | filter=0) = 0).</p>
+<p>First, we evaluate sureLDA with a PheNorm-generated prior (default) for prediction of 10 target phenotypes using a simulated dataset. We employ 10 ‘empty’ topics (this should generally be set in the range of 10-100).</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true"></a>surelda_run_phenorm &lt;-<span class="st"> </span><span class="kw">with</span>(</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true"></a>  simdata, <span class="kw">sureLDA</span>(X, ICD, NLP, HU, filter, <span class="dt">nEmpty =</span> <span class="dv">10</span>))</span></code></pre></div>
+<pre><code>## Starting PheNorm</code></pre>
+<pre><code>## Starting Guided LDA</code></pre>
+<pre><code>## Starting final clustering</code></pre>
+<p>Evaluating AUCs of sureLDA scores across 10 phenotypes</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true"></a>surelda_scores_phenorm_aucs &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(simdata<span class="op">$</span>filter),<span class="cf">function</span>(k){</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true"></a>  pROC<span class="op">::</span><span class="kw">auc</span>(simdata<span class="op">$</span>Y[,k],surelda_run_phenorm<span class="op">$</span>scores[,k])</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true"></a>})</span></code></pre></div>
+<p>Evaluating AUCs of predicted probabilities across 10 phenotypes</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true"></a>surelda_ensemble_phenorm_aucs &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(simdata<span class="op">$</span>filter),<span class="cf">function</span>(k){</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true"></a>  <span class="kw">auc</span>(simdata<span class="op">$</span>Y[,k],surelda_run_phenorm<span class="op">$</span>ensemble[,k])</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true"></a>})</span></code></pre></div>
+<p>AUCs:</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true"></a>surelda_result_combined &lt;-<span class="st"> </span><span class="kw">rbind</span>(surelda_scores_phenorm_aucs,surelda_ensemble_phenorm_aucs)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true"></a><span class="kw">rownames</span>(surelda_result_combined) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sureLDA Scores&#39;</span>,<span class="st">&#39;sureLDA Probs&#39;</span>)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true"></a><span class="kw">print</span>(surelda_result_combined)</span></code></pre></div>
+<pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
+## sureLDA Scores 0.9106220 0.8673095 0.8748029 0.9114881 0.8786685 0.8759985
+## sureLDA Probs  0.9110456 0.8637459 0.8726527 0.9097024 0.8771739 0.8645873
+##                     [,7]      [,8]      [,9]     [,10]
+## sureLDA Scores 0.9959016 0.7775945 0.8735303 0.8731959
+## sureLDA Probs  0.9873634 0.7690034 0.8666961 0.8962199</code></pre>
+<p>Next, we evaluate sureLDA’s predictions of the same 10 target phenotypes using the same data but given the prior and phi estimators from the previous run.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true"></a>surelda_prediction &lt;-<span class="st"> </span><span class="kw">with</span>(simdata,</span>
+<span id="cb15-2"><a href="#cb15-2" aria-hidden="true"></a>                        <span class="kw">sureLDA</span>(X, ICD, NLP, HU, filter, <span class="dt">prior =</span> surelda_run_phenorm<span class="op">$</span>prior, <span class="dt">nEmpty =</span> <span class="dv">10</span>,</span>
+<span id="cb15-3"><a href="#cb15-3" aria-hidden="true"></a>                              <span class="dt">weight =</span> surelda_run_phenorm<span class="op">$</span>weight, <span class="dt">phi =</span> surelda_run_phenorm<span class="op">$</span>phi))</span></code></pre></div>
+<pre><code>## Inferring theta given provided phi</code></pre>
+<pre><code>## Starting final clustering</code></pre>
+<p>Evaluating AUCs of sureLDA scores across 10 phenotypes</p>
+<div class="sourceCode" id="cb18"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true"></a>surelda_scores_prediction_aucs &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(simdata<span class="op">$</span>filter),<span class="cf">function</span>(k){</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true"></a>  <span class="kw">auc</span>(simdata<span class="op">$</span>Y[,k],surelda_prediction<span class="op">$</span>scores[,k])</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true"></a>})</span></code></pre></div>
+<p>Evaluating AUCs of predicted probabilities across 10 phenotypes</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true"></a>surelda_ensemble_prediction_aucs &lt;-<span class="st"> </span><span class="kw">sapply</span>(<span class="dv">1</span><span class="op">:</span><span class="kw">ncol</span>(simdata<span class="op">$</span>filter),<span class="cf">function</span>(k){</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true"></a>  <span class="kw">auc</span>(simdata<span class="op">$</span>Y[,k],surelda_prediction<span class="op">$</span>ensemble[,k])</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true"></a>})</span></code></pre></div>
+<p>AUCs:</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true"></a>surelda_prediction_result_combined &lt;-<span class="st"> </span><span class="kw">rbind</span>(surelda_scores_prediction_aucs,surelda_ensemble_prediction_aucs)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true"></a><span class="kw">rownames</span>(surelda_prediction_result_combined) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&#39;sureLDA Scores&#39;</span>,<span class="st">&#39;sureLDA Probs&#39;</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true"></a><span class="kw">print</span>(surelda_prediction_result_combined)</span></code></pre></div>
+<pre><code>##                     [,1]      [,2]      [,3]      [,4]      [,5]      [,6]
+## sureLDA Scores 0.9112489 0.8667855 0.8717209 0.9122321 0.8727717 0.8697223
+## sureLDA Probs  0.9128416 0.8655277 0.8731902 0.9132143 0.8772283 0.8689616
+##                     [,7]      [,8]      [,9]     [,10]
+## sureLDA Scores 0.9953893 0.7754639 0.8683128 0.9025430
+## sureLDA Probs  0.9889003 0.7758763 0.8668430 0.8988316</code></pre>
+<p>Total time spent:</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true"></a><span class="kw">proc.time</span>()</span></code></pre></div>
+<pre><code>##    user  system elapsed 
+##  77.285   4.192  82.224</code></pre>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

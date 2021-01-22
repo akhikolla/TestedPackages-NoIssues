@@ -1,0 +1,121 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./seqC_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash</line>
+</preamble>
+
+<pid>446770</pid>
+<ppid>446769</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/log_d54768b7cb0aa48ca59c3cb777a9613367bd064c/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./seqC_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.024 </time>
+</status>
+
+<fatal_signal>
+  <tid>1</tid>
+  <signo>8</signo>
+  <signame>SIGFPE</signame>
+  <sicode>1</sicode>
+  <event>Integer divide by zero</event>
+  <siaddr>0x1003A34695</siaddr>
+  <stack>
+    <frame>
+      <ip>0x4D27E6D</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/src/satellite.so</obj>
+      <fn>seqC(double, double, double)</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/src</dir>
+      <file>SatelliteCppFun.cpp</file>
+      <line>79</line>
+    </frame>
+    <frame>
+      <ip>0x40A21C</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_DeepState_TestHarness</obj>
+      <fn>DeepState_Test_satellite_deepstate_test_seqC_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC</dir>
+      <file>seqC_DeepState_TestHarness.cpp</file>
+      <line>33</line>
+    </frame>
+    <frame>
+      <ip>0x409B58</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_DeepState_TestHarness</obj>
+      <fn>DeepState_Run_satellite_deepstate_test_seqC_test()</fn>
+      <dir>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC</dir>
+      <file>seqC_DeepState_TestHarness.cpp</file>
+      <line>13</line>
+    </frame>
+    <frame>
+      <ip>0x41CF68</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_DeepState_TestHarness</obj>
+      <fn>DeepState_RunTest.isra.0</fn>
+    </frame>
+    <frame>
+      <ip>0x41D209</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_DeepState_TestHarness</obj>
+      <fn>DeepState_ForkAndRunTest</fn>
+    </frame>
+    <frame>
+      <ip>0x41D2E4</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_DeepState_TestHarness</obj>
+      <fn>DeepState_RunSavedTestCase</fn>
+    </frame>
+    <frame>
+      <ip>0x407665</ip>
+      <obj>/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_DeepState_TestHarness</obj>
+      <fn>main</fn>
+    </frame>
+  </stack>
+</fatal_signal>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:07.555 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:08.168 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

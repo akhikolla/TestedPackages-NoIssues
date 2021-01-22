@@ -1,0 +1,14 @@
+bibentry(bibtype = "Article",
+  title        = "{slfm}: An {R} Package to Evaluate Coherent Patterns in Microarray Data via Factor Analysis",
+  author       = c(person(given = c("Joao", "Daniel", "N."), family = "Duarte", email = "jdanielnd@gmail.com"),
+                   person(given = c("Vinicius", "D."), family = "Mayrink", email = "vdm@est.ufmg.br")),
+  journal      = "Journal of Statistical Software",
+  year         = "2019",
+  volume       = "90",
+  number       = "9",
+  pages        = "1--22",
+  doi          = "10.18637/jss.v090.i09",
+
+  header       = "To cite slfm in publications use:"
+)
+

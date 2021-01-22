@@ -1,0 +1,22 @@
+
+year <- "2020"
+doi <- "10.2139/ssrn.3067734"
+
+citHeader("To cite the R package 'sentometrics' in publications use:")
+
+citEntry(key = "ArdiaBluteauBormsBoudt2020",
+         entry = "article",
+         title = "The R Package sentometrics to Compute, Aggregate and Predict with Textual Sentiment",
+         author = personList(person("David","Ardia"),
+                             person("Keven","Bluteau"),
+                             person("Samuel","Borms"),
+                             person("Kris","Boudt")),
+         journal = "Forthcoming in Journal of Statistical Software",
+         doi = doi,
+         year = year,
+         textVersion =
+           paste0("David Ardia, Keven Bluteau, Samuel Borms and Kris Boudt (", year,"). ",
+                  "The R Package sentometrics to Compute, Aggregate and Predict with Textual Sentiment. ",
+                  paste0("Forthcoming in Journal of Statistical Software. ", "doi: ", doi), ".")
+)
+

@@ -1,0 +1,46 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (satellite_deepstate_test_seqC_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+from_ values: -2.43318e-187
+to_ values: -1.64581e+174
+by_ values: -1.66668e-49
+input ends
+ERROR: Crashed: satellite_deepstate_test_seqC_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+from_ values: 2.58036e-206
+to_ values: 3.02006e-260
+by_ values: -9.91228e-57
+input ends
+ERROR: Crashed: satellite_deepstate_test_seqC_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/d54768b7cb0aa48ca59c3cb777a9613367bd064c.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+from_ values: 1.38348e-136
+to_ values: 6.24605e+181
+by_ values: -4.11368e+80
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+from_ values: -4.36409e-38
+to_ values: -4.27191e+09
+by_ values: 7.90884e+272
+input ends
+ERROR: Crashed: satellite_deepstate_test_seqC_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/f496d81e149496561855eb4a68ad77d6b6d9ee7f.crash`
+input starts
+EXTERNAL: qs v0.23.4.
+
+from_ values: 7.86532e-108
+to_ values: 1.77776e+279
+by_ values: 1.92513e-122
+input ends
+ERROR: Crashed: satellite_deepstate_test_seqC_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/d6ab488e957fb664b978d0f2c73352f389ec16ab.crash`
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 4 failed/1 passed/0 abandoned tests

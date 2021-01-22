@@ -1,0 +1,28 @@
+WARNING: No test specified, defaulting to first test defined (stfit_deepstate_test_mean_est_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/stfit/inst/testfiles/mean_est/mean_est_output/e83ad6f01900be65e7da6872735809ee118e77e8.pass`
+TRACE: Running: stfit_deepstate_test_mean_est_test from /home/akhila/fuzzer_packages/fuzzedpackages/stfit/inst/testfiles/mean_est/mean_est_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+X values: 1.02532e+261 1.12756e-57     nan
+1.46340e+288     inf 4.12846e-51
+5.67165e-306 4.85713e-272     inf
+    nan     inf 61.3403
+5.43908e-105 3.30698e+94 6.30847e-13
+
+nRow values: -1622927679
+nCol values: -1028905841
+W values: 7.71387e+222 1.31853e-92
+7.63196e-179 3.87495e-252
+1.51700e-149 4.06346e-59
+8.84503e+276 3.52963e-120
+8.24884e+80 3.25836e+189
+6.98712e-223 2.55974e-54
+3.06215e-53 5.13410e-200
+1.47931e-54 3.78577e-20
+5.23903e+92 1.67916e+53
+3.77279e+117 1.94040e+23
+
+input ends
+TRACE: Passed: stfit_deepstate_test_mean_est_test

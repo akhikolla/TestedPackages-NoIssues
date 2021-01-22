@@ -1,0 +1,15 @@
+
+CXX_STD = CXX11
+
+PKG_LIBS = @@@PKG_LIBS@@@
+
+PKG_CPPFLAGS = @@@PKG_CPPFLAGS@@@
+
+.PHONY: all @@@DO_UPSTREAM@@@
+
+all: $(SHLIB)
+
+$(OBJECTS): @@@DO_UPSTREAM@@@
+
+do_upstream:
+	@(cd upstream && $(MAKE))

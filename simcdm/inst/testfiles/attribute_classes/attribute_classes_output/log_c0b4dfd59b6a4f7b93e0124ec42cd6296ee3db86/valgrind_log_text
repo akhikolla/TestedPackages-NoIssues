@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (simcdm_deepstate_test_attribute_classes_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/simcdm/inst/testfiles/attribute_classes/attribute_classes_output/c0b4dfd59b6a4f7b93e0124ec42cd6296ee3db86.pass`
+TRACE: Running: simcdm_deepstate_test_attribute_classes_test from /home/akhila/fuzzer_packages/fuzzedpackages/simcdm/inst/testfiles/attribute_classes/attribute_classes_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+K values: -498905818
+input ends
+TRACE: Passed: simcdm_deepstate_test_attribute_classes_test

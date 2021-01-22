@@ -1,0 +1,75 @@
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Example: Hierarchical Models}
+-->
+An example using the fitness model
+==================================
+
+This document describe a toy example for the use of the package systemicrisk.
+
+```{r}
+library(systemicrisk)
+```
+Suppose we observe the following vector of total liabilities and todal assets.
+```{r}
+l <- c(714,745,246, 51,847)
+a <- c(872, 412, 65, 46,1208)
+```
+
+The following sets up a model for 5 banks:
+```{r}
+mod <- Model.additivelink.exponential.fitness(n=5,alpha=-2.5,beta=0.3,gamma=1.0,
+                 lambdaprior=Model.fitness.genlambdaparprior(ratescale=500))
+```
+
+Choosing thinning to ensure sample is equivalent to number of 
+```{r}
+thin <- choosethin(l=l,a=a,model=mod,silent=TRUE)
+thin
+```
+Running the sampler to produce 1000 samples.
+```{r}
+res <- sample_HierarchicalModel(l=l,a=a,model=mod,nsamples=1e3,thin=thin,silent=TRUE)
+```
+Some examples of the matrics generated are below.
+```{r}
+res$L[[1]]
+res$L[[2]]
+```
+
+The sampler produces samples from the conditional distribution of
+matrix and parameter values given the observed data.
+To see the posterior distribution of the liabilities of Bank 1 towards Bank 2:
+```{r fig.width=7,fig.height=4}
+plot(ecdf(sapply(res$L,function(x)x[1,2])))
+```
+
+
+
+Diagnostic of the R-output
+--------------------------
+
+All the caveats of MCMC algorithms apply. In particular the samples are dependent. 
+
+Some automatic diagnostic can be generated via the function diagnose.
+```{r}
+diagnose(res)
+```
+Trace plots  of individual liabilities also shoud show rapid mixing - as seems to be the case for the  liabilities of Bank 1 towards Bank 2.
+
+```{r fig.width=7,fig.height=4}
+plot(sapply(res$L,function(x)x[1,2]),type="b")
+```
+Trace plot of the fitness of bank 1.
+```{r fig.width=7,fig.height=4}
+plot(res$theta[1,],type="b")
+```
+
+Also, the autocorrelation function should decline quickly. Again, considering the liabilities between bank 1 and bank 2:
+```{r fig.width=7,fig.height=4}
+acf(sapply(res$L,function(x)x[1,2]))
+```
+
+In this case it decays quickly below the white-noise threshold (the
+horizontal dashed lines).
+

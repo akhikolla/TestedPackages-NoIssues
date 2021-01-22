@@ -1,0 +1,14 @@
+citHeader("To cite the 'specs' package in publications use:")
+
+year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
+vers <- paste("R package version", meta$Version)
+
+bibentry(
+ bibtype="TechReport",
+ title="An automated approach towards sparse single-equation cointegration modelling",
+ author=c(person("Stephan","Smeekes"),
+          person("Etienne","Wijler")),
+ year= "2020",
+ institution = "arXiv",
+ type = "arXiv e-print",
+ number = "1809.08889")

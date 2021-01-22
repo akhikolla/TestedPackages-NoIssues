@@ -1,0 +1,100 @@
+striprtf v0.5.2 (Under development as of: 2018-12-22)
+==============
+
+* Add `looks_rtf` function, which checks if a file is an RTF
+* Add `check_file` option to `read_rtf` function, which allows users if input files should be validated before being parsed.
+
+
+striprtf v0.5.1 (Release date: 2017-12-05)
+==============
+
+* Minor documentation update
+
+
+striprtf v0.5.0 (Release date: 2017-12-04)
+==============
+
+* Support RTF files in code pages for Mac
+
+
+
+striprtf v0.4.6 (Release date: 2017-12-04)
+==============
+
+* fixed bugs for parsing lower quote (`\u2018`)
+
+
+
+striprtf v0.4.5 (Release date: 2017-07-04)
+==============
+
+* fixed bugs in table parser for files written by MS word
+
+
+
+striprtf v0.4.4 (Release date: 2017-05-15)
+==============
+
+* fixed ambiguity in `pow` function in C++ code
+
+
+
+striprtf v0.4.3 (Release date: 2017-05-14)
+==============
+
+* fixed hexmode errors on OS X
+
+
+
+striprtf v0.4.2 (Release date: 2017-05-14)
+==============
+
+* added an example file
+
+  - shakespeare.rtf
+
+
+
+striprtf v0.4.1 (Release date: 2017-05-14)
+==============
+
+* Special treatment for tables
+
+  `read_rtf` (and `strip_rtf`) has new options `row_start`, `row_end`, and `cell_end`,
+  which specify strings to put at the correponding parts of tables.
+  For example, suppose there is a table like below in a RTF document:
+
+  | A  | B | C |
+  | ------------- | ------------- | ------------- |
+  | 1.01 | 2.02 | 3. 03|
+
+  In this version, `read_rtf("table.rtf", row_start="**", row_end="**", cell_end="\t")` would return:
+  `"**A\tB\tC\t**"          "**1.01\t2.02\t3.03\t**" ""`
+
+  Note that `\t` is put at the end of each cell, not only between cells.
+
+  Supports line breaks within cells.
+  No support for merged cells.
+  No support for nested tables (i.e. tables within tables).
+
+
+
+  For backward compatibility, there is an option `ignore_tables`; Set it `TRUE` to obtain the same behavior as the previous version.
+
+
+
+striprtf v0.3.2 (Release date: 2017-04-01)
+==============
+
+* Bug fix in `strip_rtf`
+
+
+
+striprtf v0.3.1 (Release date: 2017-03-30)
+==============
+
+* The functions are renamed as follows:
+
+  - `striprtf` --> `read_rtf`
+  - `rtf2text` --> `strip_rtf`
+

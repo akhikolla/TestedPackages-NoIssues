@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content="Duncan Garmonsway" />
+
+<meta name="date" content="2020-06-06" />
+
+<title>The Bank Tutorial: Part II</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">The Bank Tutorial: Part II</h1>
+<h4 class="author">Duncan Garmonsway</h4>
+<h4 class="date">2020-06-06</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#priority-customers">Priority customers</a><ul>
+<li><a href="#priority-customers-without-preemption">Priority customers without preemption</a></li>
+<li><a href="#priority-customers-with-preemption">Priority customers with preemption</a></li>
+</ul></li>
+<li><a href="#balking-and-reneging-customers">Balking and reneging customers</a><ul>
+<li><a href="#balking-customers">Balking customers</a></li>
+<li><a href="#reneging-or-abandoning-customers">Reneging (or abandoning) customers</a></li>
+</ul></li>
+<li><a href="#interrupting-a-process">Interrupting a process</a></li>
+<li><a href="#wait-until-the-bank-door-opens">Wait until the bank door opens</a></li>
+<li><a href="#wait-for-the-doorman-to-give-a-signal">Wait for the doorman to give a signal</a><ul>
+<li><a href="#monitors">Monitors</a><ul>
+<li><a href="#plotting-a-histogram-of-monitor-results">Plotting a histogram of monitor results</a></li>
+<li><a href="#monitoring-a-resource">Monitoring a resource</a></li>
+<li><a href="#plotting-from-resource-monitors">Plotting from resource monitors</a></li>
+</ul></li>
+</ul></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>This tutorial is adapted from a tutorial for the Python 2 package ‘SimPy’, <a href="https://pythonhosted.org/SimPy/Tutorials/TheBank2.html">here</a>. Users familiar with SimPy may find this tutorial helpful for transitioning to <code>simmer</code>. Some very basic material is not covered. Beginners should first read <a href="simmer-04-bank-1.html"><em>The Bank Tutorial: Part I</em></a>.</p>
+</div>
+<div id="priority-customers" class="section level2">
+<h2>Priority customers</h2>
+<p>In many situations there is a system of priority service. Those customers with high priority are served first, those with low priority must wait. In some cases, preemptive priority will even allow a high-priority customer to interrupt the service of one with a lower priority.</p>
+<p>Simmer implements priority requests with an extra integer priority argument to <code>add_generator()</code>. By default, priority is zero; higher integers have higher priority. For this to operate, the resource must have been created with <code>preemptive = TRUE</code>.</p>
+<div id="priority-customers-without-preemption" class="section level3">
+<h3>Priority customers without preemption</h3>
+<p>In the first example, we modify the program with random arrivals, one counter, and a fixed service time (like <em>One Service counter</em> in <em>The Bank Tutorial: Part I</em>) to process a high priority customer.</p>
+<p>Here, we give each customer a priority. Since the default is <code>priority = 0</code> this is easy for most of them.</p>
+<p>To observe the priority in action, while all other customers have the default priority of 0, we create and activate one special customer, Guido, with priority 1 who arrives at time 23. This is to ensure that he arrives after Customer2.</p>
+<p>Since the activity trace does not produce the waiting time by default, this is calculated and appended using the <code>transform</code> function.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb1-2"><a href="#cb1-2"></a></span>
+<span id="cb1-3"><a href="#cb1-3"></a><span class="kw">set.seed</span>(<span class="dv">1933</span>)</span>
+<span id="cb1-4"><a href="#cb1-4"></a></span>
+<span id="cb1-5"><a href="#cb1-5"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb1-6"><a href="#cb1-6"></a></span>
+<span id="cb1-7"><a href="#cb1-7"></a>customer &lt;-</span>
+<span id="cb1-8"><a href="#cb1-8"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-9"><a href="#cb1-9"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb1-10"><a href="#cb1-10"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {</span>
+<span id="cb1-11"><a href="#cb1-11"></a>         <span class="kw">paste</span>(<span class="st">&quot;Queue is&quot;</span>, <span class="kw">get_queue_count</span>(bank, <span class="st">&quot;counter&quot;</span>), <span class="st">&quot;on arrival&quot;</span>)</span>
+<span id="cb1-12"><a href="#cb1-12"></a>         }) <span class="op">%&gt;%</span></span>
+<span id="cb1-13"><a href="#cb1-13"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-14"><a href="#cb1-14"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb1-15"><a href="#cb1-15"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="dv">12</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-16"><a href="#cb1-16"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-17"><a href="#cb1-17"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Completed&quot;</span>)</span>
+<span id="cb1-18"><a href="#cb1-18"></a></span>
+<span id="cb1-19"><a href="#cb1-19"></a>bank &lt;-</span>
+<span id="cb1-20"><a href="#cb1-20"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-21"><a href="#cb1-21"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb1-22"><a href="#cb1-22"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>, customer, <span class="cf">function</span>() {<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">rexp</span>(<span class="dv">4</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>), <span class="dv">-1</span>)}) <span class="op">%&gt;%</span></span>
+<span id="cb1-23"><a href="#cb1-23"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Guido&quot;</span>, customer, <span class="kw">at</span>(<span class="dv">23</span>), <span class="dt">priority =</span> <span class="dv">1</span>)</span>
+<span id="cb1-24"><a href="#cb1-24"></a></span>
+<span id="cb1-25"><a href="#cb1-25"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> <span class="dv">400</span>)</span>
+<span id="cb1-26"><a href="#cb1-26"></a><span class="co">#&gt; 0: Customer0: Queue is 0 on arrival</span></span>
+<span id="cb1-27"><a href="#cb1-27"></a><span class="co">#&gt; 0: Customer0: Waited 0</span></span>
+<span id="cb1-28"><a href="#cb1-28"></a><span class="co">#&gt; 0.177365: Customer1: Queue is 0 on arrival</span></span>
+<span id="cb1-29"><a href="#cb1-29"></a><span class="co">#&gt; 8.64106: Customer2: Queue is 1 on arrival</span></span>
+<span id="cb1-30"><a href="#cb1-30"></a><span class="co">#&gt; 12: Customer0: Completed</span></span>
+<span id="cb1-31"><a href="#cb1-31"></a><span class="co">#&gt; 12: Customer1: Waited 11.8226352687925</span></span>
+<span id="cb1-32"><a href="#cb1-32"></a><span class="co">#&gt; 21.1346: Customer3: Queue is 1 on arrival</span></span>
+<span id="cb1-33"><a href="#cb1-33"></a><span class="co">#&gt; 23: Guido0: Queue is 2 on arrival</span></span>
+<span id="cb1-34"><a href="#cb1-34"></a><span class="co">#&gt; 24: Customer1: Completed</span></span>
+<span id="cb1-35"><a href="#cb1-35"></a><span class="co">#&gt; 24: Guido0: Waited 1</span></span>
+<span id="cb1-36"><a href="#cb1-36"></a><span class="co">#&gt; 28.0923: Customer4: Queue is 2 on arrival</span></span>
+<span id="cb1-37"><a href="#cb1-37"></a><span class="co">#&gt; 36: Guido0: Completed</span></span>
+<span id="cb1-38"><a href="#cb1-38"></a><span class="co">#&gt; 36: Customer2: Waited 27.3589401547341</span></span>
+<span id="cb1-39"><a href="#cb1-39"></a><span class="co">#&gt; 48: Customer2: Completed</span></span>
+<span id="cb1-40"><a href="#cb1-40"></a><span class="co">#&gt; 48: Customer3: Waited 26.8654149797765</span></span>
+<span id="cb1-41"><a href="#cb1-41"></a><span class="co">#&gt; 60: Customer3: Completed</span></span>
+<span id="cb1-42"><a href="#cb1-42"></a><span class="co">#&gt; 60: Customer4: Waited 31.9076510670601</span></span>
+<span id="cb1-43"><a href="#cb1-43"></a><span class="co">#&gt; 72: Customer4: Completed</span></span>
+<span id="cb1-44"><a href="#cb1-44"></a><span class="co">#&gt; simmer environment: bank | now: 72 | next: </span></span>
+<span id="cb1-45"><a href="#cb1-45"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb1-46"><a href="#cb1-46"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb1-47"><a href="#cb1-47"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 5 }</span></span>
+<span id="cb1-48"><a href="#cb1-48"></a><span class="co">#&gt; { Source: Guido | monitored: 1 | n_generated: 1 }</span></span>
+<span id="cb1-49"><a href="#cb1-49"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb1-50"><a href="#cb1-50"></a><span class="st">  </span><span class="kw">get_mon_arrivals</span>() <span class="op">%&gt;%</span></span>
+<span id="cb1-51"><a href="#cb1-51"></a><span class="st">  </span><span class="kw">transform</span>(<span class="dt">waiting_time =</span> end_time <span class="op">-</span><span class="st"> </span>start_time <span class="op">-</span><span class="st"> </span>activity_time)</span>
+<span id="cb1-52"><a href="#cb1-52"></a><span class="co">#&gt;        name start_time end_time activity_time finished replication waiting_time</span></span>
+<span id="cb1-53"><a href="#cb1-53"></a><span class="co">#&gt; 1 Customer0  0.0000000       12            12     TRUE           1      0.00000</span></span>
+<span id="cb1-54"><a href="#cb1-54"></a><span class="co">#&gt; 2 Customer1  0.1773647       24            12     TRUE           1     11.82264</span></span>
+<span id="cb1-55"><a href="#cb1-55"></a><span class="co">#&gt; 3    Guido0 23.0000000       36            12     TRUE           1      1.00000</span></span>
+<span id="cb1-56"><a href="#cb1-56"></a><span class="co">#&gt; 4 Customer2  8.6410598       48            12     TRUE           1     27.35894</span></span>
+<span id="cb1-57"><a href="#cb1-57"></a><span class="co">#&gt; 5 Customer3 21.1345850       60            12     TRUE           1     26.86541</span></span>
+<span id="cb1-58"><a href="#cb1-58"></a><span class="co">#&gt; 6 Customer4 28.0923489       72            12     TRUE           1     31.90765</span></span></code></pre></div>
+<p>The output above displays the number of customers in the queue just as each one arrives. That count does not include any customer in service.</p>
+<p>Reading carefully one can see that when Guido arrives Customer0 has been served and left at 12, Customer1 is in service and two (customers 2 and 3) are queueing. Guido has priority over those waiting and is served before them at 24. When Guido leaves at 36, Customer2 starts service.</p>
+</div>
+<div id="priority-customers-with-preemption" class="section level3">
+<h3>Priority customers with preemption</h3>
+<p>Now we allow Guido to have preemptive priority. He will displace any customer in service when he arrives. That customer will resume when Guido finishes (unless higher priority customers intervene). It requires only a change to one line of the program, adding the argument, <code>preemptive = TRUE</code> to the <code>add_resource</code> function call.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb2-2"><a href="#cb2-2"></a></span>
+<span id="cb2-3"><a href="#cb2-3"></a><span class="kw">set.seed</span>(<span class="dv">1933</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a></span>
+<span id="cb2-5"><a href="#cb2-5"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb2-6"><a href="#cb2-6"></a></span>
+<span id="cb2-7"><a href="#cb2-7"></a>customer &lt;-</span>
+<span id="cb2-8"><a href="#cb2-8"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-9"><a href="#cb2-9"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb2-10"><a href="#cb2-10"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {</span>
+<span id="cb2-11"><a href="#cb2-11"></a>         <span class="kw">paste</span>(<span class="st">&quot;Queue is&quot;</span>, <span class="kw">get_queue_count</span>(bank, <span class="st">&quot;counter&quot;</span>), <span class="st">&quot;on arrival&quot;</span>)</span>
+<span id="cb2-12"><a href="#cb2-12"></a>         }) <span class="op">%&gt;%</span></span>
+<span id="cb2-13"><a href="#cb2-13"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-14"><a href="#cb2-14"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb2-15"><a href="#cb2-15"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="dv">12</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-16"><a href="#cb2-16"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-17"><a href="#cb2-17"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Completed&quot;</span>)</span>
+<span id="cb2-18"><a href="#cb2-18"></a></span>
+<span id="cb2-19"><a href="#cb2-19"></a>bank &lt;-</span>
+<span id="cb2-20"><a href="#cb2-20"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-21"><a href="#cb2-21"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>, <span class="dt">preemptive =</span> <span class="ot">TRUE</span>) <span class="op">%&gt;%</span></span>
+<span id="cb2-22"><a href="#cb2-22"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>, customer, <span class="cf">function</span>() {<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">rexp</span>(<span class="dv">4</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>), <span class="dv">-1</span>)}) <span class="op">%&gt;%</span></span>
+<span id="cb2-23"><a href="#cb2-23"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Guido&quot;</span>, customer, <span class="kw">at</span>(<span class="dv">23</span>), <span class="dt">priority =</span> <span class="dv">1</span>)</span>
+<span id="cb2-24"><a href="#cb2-24"></a></span>
+<span id="cb2-25"><a href="#cb2-25"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> <span class="dv">400</span>)</span>
+<span id="cb2-26"><a href="#cb2-26"></a><span class="co">#&gt; 0: Customer0: Queue is 0 on arrival</span></span>
+<span id="cb2-27"><a href="#cb2-27"></a><span class="co">#&gt; 0: Customer0: Waited 0</span></span>
+<span id="cb2-28"><a href="#cb2-28"></a><span class="co">#&gt; 0.177365: Customer1: Queue is 0 on arrival</span></span>
+<span id="cb2-29"><a href="#cb2-29"></a><span class="co">#&gt; 8.64106: Customer2: Queue is 1 on arrival</span></span>
+<span id="cb2-30"><a href="#cb2-30"></a><span class="co">#&gt; 12: Customer0: Completed</span></span>
+<span id="cb2-31"><a href="#cb2-31"></a><span class="co">#&gt; 12: Customer1: Waited 11.8226352687925</span></span>
+<span id="cb2-32"><a href="#cb2-32"></a><span class="co">#&gt; 21.1346: Customer3: Queue is 1 on arrival</span></span>
+<span id="cb2-33"><a href="#cb2-33"></a><span class="co">#&gt; 23: Guido0: Queue is 2 on arrival</span></span>
+<span id="cb2-34"><a href="#cb2-34"></a><span class="co">#&gt; 23: Guido0: Waited 0</span></span>
+<span id="cb2-35"><a href="#cb2-35"></a><span class="co">#&gt; 28.0923: Customer4: Queue is 3 on arrival</span></span>
+<span id="cb2-36"><a href="#cb2-36"></a><span class="co">#&gt; 35: Guido0: Completed</span></span>
+<span id="cb2-37"><a href="#cb2-37"></a><span class="co">#&gt; 36: Customer1: Completed</span></span>
+<span id="cb2-38"><a href="#cb2-38"></a><span class="co">#&gt; 36: Customer2: Waited 27.3589401547341</span></span>
+<span id="cb2-39"><a href="#cb2-39"></a><span class="co">#&gt; 48: Customer2: Completed</span></span>
+<span id="cb2-40"><a href="#cb2-40"></a><span class="co">#&gt; 48: Customer3: Waited 26.8654149797765</span></span>
+<span id="cb2-41"><a href="#cb2-41"></a><span class="co">#&gt; 60: Customer3: Completed</span></span>
+<span id="cb2-42"><a href="#cb2-42"></a><span class="co">#&gt; 60: Customer4: Waited 31.9076510670601</span></span>
+<span id="cb2-43"><a href="#cb2-43"></a><span class="co">#&gt; 72: Customer4: Completed</span></span>
+<span id="cb2-44"><a href="#cb2-44"></a><span class="co">#&gt; simmer environment: bank | now: 72 | next: </span></span>
+<span id="cb2-45"><a href="#cb2-45"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb2-46"><a href="#cb2-46"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb2-47"><a href="#cb2-47"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 5 }</span></span>
+<span id="cb2-48"><a href="#cb2-48"></a><span class="co">#&gt; { Source: Guido | monitored: 1 | n_generated: 1 }</span></span>
+<span id="cb2-49"><a href="#cb2-49"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb2-50"><a href="#cb2-50"></a><span class="st">  </span><span class="kw">get_mon_arrivals</span>() <span class="op">%&gt;%</span></span>
+<span id="cb2-51"><a href="#cb2-51"></a><span class="st">  </span><span class="kw">transform</span>(<span class="dt">waiting_time =</span> end_time <span class="op">-</span><span class="st"> </span>start_time <span class="op">-</span><span class="st"> </span>activity_time)</span>
+<span id="cb2-52"><a href="#cb2-52"></a><span class="co">#&gt;        name start_time end_time activity_time finished replication waiting_time</span></span>
+<span id="cb2-53"><a href="#cb2-53"></a><span class="co">#&gt; 1 Customer0  0.0000000       12            12     TRUE           1      0.00000</span></span>
+<span id="cb2-54"><a href="#cb2-54"></a><span class="co">#&gt; 2    Guido0 23.0000000       35            12     TRUE           1      0.00000</span></span>
+<span id="cb2-55"><a href="#cb2-55"></a><span class="co">#&gt; 3 Customer1  0.1773647       36            12     TRUE           1     23.82264</span></span>
+<span id="cb2-56"><a href="#cb2-56"></a><span class="co">#&gt; 4 Customer2  8.6410598       48            12     TRUE           1     27.35894</span></span>
+<span id="cb2-57"><a href="#cb2-57"></a><span class="co">#&gt; 5 Customer3 21.1345850       60            12     TRUE           1     26.86541</span></span>
+<span id="cb2-58"><a href="#cb2-58"></a><span class="co">#&gt; 6 Customer4 28.0923489       72            12     TRUE           1     31.90765</span></span></code></pre></div>
+<p>Though Guido arrives at the same time, 23, he no longer has to wait and immediately goes into service, displacing the incumbent, Customer1. That customer had already completed 23 - 12 = 11 minutes of his service. When Guido finishes at 35, Customer1 resumes service and takes 36 - 35 = 1 minutes to finish. His total service time is the same as before (12 minutes).</p>
+</div>
+</div>
+<div id="balking-and-reneging-customers" class="section level2">
+<h2>Balking and reneging customers</h2>
+<p>Balking occurs when a customer refuses to join a queue if it is too long. Reneging (or, better, abandonment) occurs if an impatient customer gives up while still waiting and before being served.</p>
+<div id="balking-customers" class="section level3">
+<h3>Balking customers</h3>
+<p>Another term for a system with balking customers is one where “blocked customers” are “cleared”, termed by engineers a BCC system. This is very convenient analytically in queueing theory and formulae developed using this assumption are used extensively for planning communication systems. The easiest case is when no queueing is allowed.</p>
+<p>As an example let us investigate a BCC system with a single server but the waiting space is limited. We will estimate the rate of balking when the maximum number in the queue is set to 1. On arrival into the system the customer must first check to see if there is room. If there is not enough room, the customer balks.</p>
+<p>To get the balking rate, we first count the number of arrivals that didn’t finish, using the data given by <code>get_mon_arrivals()</code>. Then we divide it by the current model time from <code>now(bank)</code>.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb3-2"><a href="#cb3-2"></a></span>
+<span id="cb3-3"><a href="#cb3-3"></a>timeInBank &lt;-<span class="st"> </span><span class="dv">12</span> <span class="co"># mean, minutes</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>ARRint &lt;-<span class="st"> </span><span class="dv">10</span>     <span class="co"># mean, minutes</span></span>
+<span id="cb3-5"><a href="#cb3-5"></a>numServers &lt;-<span class="st"> </span><span class="dv">1</span>  <span class="co"># servers</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a>maxInSystem &lt;-<span class="st"> </span><span class="dv">2</span> <span class="co"># customers</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a>maxInQueue &lt;-<span class="st"> </span>maxInSystem <span class="op">-</span><span class="st"> </span>numServers</span>
+<span id="cb3-8"><a href="#cb3-8"></a></span>
+<span id="cb3-9"><a href="#cb3-9"></a>maxNumber &lt;-<span class="st"> </span><span class="dv">8</span></span>
+<span id="cb3-10"><a href="#cb3-10"></a>maxTime &lt;-<span class="st"> </span><span class="dv">400</span>  <span class="co"># minutes</span></span>
+<span id="cb3-11"><a href="#cb3-11"></a><span class="kw">set.seed</span>(<span class="dv">59098</span>)</span>
+<span id="cb3-12"><a href="#cb3-12"></a></span>
+<span id="cb3-13"><a href="#cb3-13"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb3-14"><a href="#cb3-14"></a></span>
+<span id="cb3-15"><a href="#cb3-15"></a>customer &lt;-</span>
+<span id="cb3-16"><a href="#cb3-16"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb3-17"><a href="#cb3-17"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Here I am&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb3-18"><a href="#cb3-18"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb3-19"><a href="#cb3-19"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>,</span>
+<span id="cb3-20"><a href="#cb3-20"></a>        <span class="dt">continue =</span> <span class="ot">FALSE</span>,</span>
+<span id="cb3-21"><a href="#cb3-21"></a>        <span class="dt">reject =</span></span>
+<span id="cb3-22"><a href="#cb3-22"></a>          <span class="kw">trajectory</span>(<span class="st">&quot;Balked customer&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb3-23"><a href="#cb3-23"></a><span class="st">          </span><span class="kw">log_</span>(<span class="st">&quot;BALKING&quot;</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb3-24"><a href="#cb3-24"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb3-25"><a href="#cb3-25"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="cf">function</span>() {<span class="kw">rexp</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span>timeInBank)}) <span class="op">%&gt;%</span></span>
+<span id="cb3-26"><a href="#cb3-26"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb3-27"><a href="#cb3-27"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Finished&quot;</span>)</span>
+<span id="cb3-28"><a href="#cb3-28"></a></span>
+<span id="cb3-29"><a href="#cb3-29"></a>bank &lt;-</span>
+<span id="cb3-30"><a href="#cb3-30"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb3-31"><a href="#cb3-31"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>,</span>
+<span id="cb3-32"><a href="#cb3-32"></a>               <span class="dt">capacity =</span> numServers,</span>
+<span id="cb3-33"><a href="#cb3-33"></a>               <span class="dt">queue_size =</span> maxInQueue) <span class="op">%&gt;%</span></span>
+<span id="cb3-34"><a href="#cb3-34"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>,</span>
+<span id="cb3-35"><a href="#cb3-35"></a>                customer,</span>
+<span id="cb3-36"><a href="#cb3-36"></a>                <span class="kw">at</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(<span class="kw">rexp</span>(maxNumber <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>ARRint)))))</span>
+<span id="cb3-37"><a href="#cb3-37"></a></span>
+<span id="cb3-38"><a href="#cb3-38"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> maxTime)</span>
+<span id="cb3-39"><a href="#cb3-39"></a><span class="co">#&gt; 0: Customer0: Here I am</span></span>
+<span id="cb3-40"><a href="#cb3-40"></a><span class="co">#&gt; 0: Customer0: Waited 0</span></span>
+<span id="cb3-41"><a href="#cb3-41"></a><span class="co">#&gt; 0.822239: Customer1: Here I am</span></span>
+<span id="cb3-42"><a href="#cb3-42"></a><span class="co">#&gt; 1.01227: Customer2: Here I am</span></span>
+<span id="cb3-43"><a href="#cb3-43"></a><span class="co">#&gt; 1.01227: Customer2: BALKING</span></span>
+<span id="cb3-44"><a href="#cb3-44"></a><span class="co">#&gt; 4.7448: Customer3: Here I am</span></span>
+<span id="cb3-45"><a href="#cb3-45"></a><span class="co">#&gt; 4.7448: Customer3: BALKING</span></span>
+<span id="cb3-46"><a href="#cb3-46"></a><span class="co">#&gt; 20.5472: Customer4: Here I am</span></span>
+<span id="cb3-47"><a href="#cb3-47"></a><span class="co">#&gt; 20.5472: Customer4: BALKING</span></span>
+<span id="cb3-48"><a href="#cb3-48"></a><span class="co">#&gt; 21.6132: Customer5: Here I am</span></span>
+<span id="cb3-49"><a href="#cb3-49"></a><span class="co">#&gt; 21.6132: Customer5: BALKING</span></span>
+<span id="cb3-50"><a href="#cb3-50"></a><span class="co">#&gt; 22.7358: Customer0: Finished</span></span>
+<span id="cb3-51"><a href="#cb3-51"></a><span class="co">#&gt; 22.7358: Customer1: Waited 21.9136007670654</span></span>
+<span id="cb3-52"><a href="#cb3-52"></a><span class="co">#&gt; 23.5339: Customer6: Here I am</span></span>
+<span id="cb3-53"><a href="#cb3-53"></a><span class="co">#&gt; 32.1107: Customer7: Here I am</span></span>
+<span id="cb3-54"><a href="#cb3-54"></a><span class="co">#&gt; 32.1107: Customer7: BALKING</span></span>
+<span id="cb3-55"><a href="#cb3-55"></a><span class="co">#&gt; 52.5108: Customer1: Finished</span></span>
+<span id="cb3-56"><a href="#cb3-56"></a><span class="co">#&gt; 52.5108: Customer6: Waited 28.9769820388615</span></span>
+<span id="cb3-57"><a href="#cb3-57"></a><span class="co">#&gt; 55.8923: Customer6: Finished</span></span>
+<span id="cb3-58"><a href="#cb3-58"></a><span class="co">#&gt; simmer environment: bank | now: 55.8923309646971 | next: </span></span>
+<span id="cb3-59"><a href="#cb3-59"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb3-60"><a href="#cb3-60"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(1) }</span></span>
+<span id="cb3-61"><a href="#cb3-61"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 8 }</span></span>
+<span id="cb3-62"><a href="#cb3-62"></a></span>
+<span id="cb3-63"><a href="#cb3-63"></a>number_balked &lt;-<span class="st"> </span><span class="kw">sum</span>(<span class="op">!</span><span class="kw">get_mon_arrivals</span>(bank)<span class="op">$</span>finished)</span>
+<span id="cb3-64"><a href="#cb3-64"></a><span class="kw">paste</span>(<span class="st">&quot;Balking rate is&quot;</span>, number_balked <span class="op">/</span><span class="st"> </span><span class="kw">now</span>(bank), <span class="st">&quot;customers per minute.&quot;</span>)</span>
+<span id="cb3-65"><a href="#cb3-65"></a><span class="co">#&gt; [1] &quot;Balking rate is 0 customers per minute.&quot;</span></span></code></pre></div>
+<p>When Customer2 arrives, Customer0 is already in service and Customer1 is waiting. There is no room, so Customer2 balks. By the vagaries of exponential random numbers, Customer0 takes a very long time to serve (22.7358 minutes) so the first one to find room is number Customer6 at 25.5339.</p>
+</div>
+<div id="reneging-or-abandoning-customers" class="section level3">
+<h3>Reneging (or abandoning) customers</h3>
+<p>Often in practice an impatient customer will leave the queue before being served. Simmer can model this reneging behaviour using the <code>renege_in()</code> function in a trajectory. This defines the maximum time that a customer will wait before reneging, as well as an ‘out’ trajectory for them to follow when they renege.</p>
+<p>If the customer reaches the server before reneging, then their impatience must be cancelled with the <code>renege_abort()</code> function.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb4-2"><a href="#cb4-2"></a></span>
+<span id="cb4-3"><a href="#cb4-3"></a>timeInBank &lt;-<span class="st"> </span><span class="dv">15</span> <span class="co"># mean, minutes</span></span>
+<span id="cb4-4"><a href="#cb4-4"></a>ARRint &lt;-<span class="st"> </span><span class="dv">10</span>     <span class="co"># mean, minutes</span></span>
+<span id="cb4-5"><a href="#cb4-5"></a>numServers &lt;-<span class="st"> </span><span class="dv">1</span>  <span class="co"># servers</span></span>
+<span id="cb4-6"><a href="#cb4-6"></a></span>
+<span id="cb4-7"><a href="#cb4-7"></a>maxNumber &lt;-<span class="st"> </span><span class="dv">5</span></span>
+<span id="cb4-8"><a href="#cb4-8"></a>maxTime &lt;-<span class="st"> </span><span class="dv">400</span>   <span class="co"># minutes</span></span>
+<span id="cb4-9"><a href="#cb4-9"></a>maxWaitTime &lt;-<span class="st"> </span><span class="dv">12</span> <span class="co"># minutes, maximum time to wait before reneging</span></span>
+<span id="cb4-10"><a href="#cb4-10"></a><span class="kw">set.seed</span>(<span class="dv">59030</span>)</span>
+<span id="cb4-11"><a href="#cb4-11"></a></span>
+<span id="cb4-12"><a href="#cb4-12"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb4-13"><a href="#cb4-13"></a></span>
+<span id="cb4-14"><a href="#cb4-14"></a>customer &lt;-</span>
+<span id="cb4-15"><a href="#cb4-15"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb4-16"><a href="#cb4-16"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Here I am&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb4-17"><a href="#cb4-17"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb4-18"><a href="#cb4-18"></a><span class="st">  </span><span class="kw">renege_in</span>(maxWaitTime,</span>
+<span id="cb4-19"><a href="#cb4-19"></a>            <span class="dt">out =</span> <span class="kw">trajectory</span>(<span class="st">&quot;Reneging customer&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb4-20"><a href="#cb4-20"></a><span class="st">              </span><span class="kw">log_</span>(<span class="cf">function</span>() {</span>
+<span id="cb4-21"><a href="#cb4-21"></a>                     <span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>), <span class="st">&quot;I am off&quot;</span>)</span>
+<span id="cb4-22"><a href="#cb4-22"></a>                   })) <span class="op">%&gt;%</span></span>
+<span id="cb4-23"><a href="#cb4-23"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb4-24"><a href="#cb4-24"></a><span class="st">  </span><span class="kw">renege_abort</span>() <span class="op">%&gt;%</span><span class="st"> </span><span class="co"># Stay if I&#39;m being attended within maxWaitTime</span></span>
+<span id="cb4-25"><a href="#cb4-25"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb4-26"><a href="#cb4-26"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="cf">function</span>() {<span class="kw">rexp</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span>timeInBank)}) <span class="op">%&gt;%</span></span>
+<span id="cb4-27"><a href="#cb4-27"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb4-28"><a href="#cb4-28"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Completed&quot;</span>)</span>
+<span id="cb4-29"><a href="#cb4-29"></a></span>
+<span id="cb4-30"><a href="#cb4-30"></a>bank &lt;-</span>
+<span id="cb4-31"><a href="#cb4-31"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb4-32"><a href="#cb4-32"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>,</span>
+<span id="cb4-33"><a href="#cb4-33"></a>               <span class="dt">capacity =</span> numServers) <span class="op">%&gt;%</span></span>
+<span id="cb4-34"><a href="#cb4-34"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>,</span>
+<span id="cb4-35"><a href="#cb4-35"></a>                customer,</span>
+<span id="cb4-36"><a href="#cb4-36"></a>                <span class="kw">at</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(<span class="kw">rexp</span>(maxNumber <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="dv">1</span> <span class="op">/</span><span class="st"> </span>ARRint)))))</span>
+<span id="cb4-37"><a href="#cb4-37"></a></span>
+<span id="cb4-38"><a href="#cb4-38"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> maxTime)</span>
+<span id="cb4-39"><a href="#cb4-39"></a><span class="co">#&gt; 0: Customer0: Here I am</span></span>
+<span id="cb4-40"><a href="#cb4-40"></a><span class="co">#&gt; 0: Customer0: Waited 0</span></span>
+<span id="cb4-41"><a href="#cb4-41"></a><span class="co">#&gt; 16.5058: Customer1: Here I am</span></span>
+<span id="cb4-42"><a href="#cb4-42"></a><span class="co">#&gt; 28.5058: Customer1: Waited 12 I am off</span></span>
+<span id="cb4-43"><a href="#cb4-43"></a><span class="co">#&gt; 34.339: Customer2: Here I am</span></span>
+<span id="cb4-44"><a href="#cb4-44"></a><span class="co">#&gt; 41.8687: Customer3: Here I am</span></span>
+<span id="cb4-45"><a href="#cb4-45"></a><span class="co">#&gt; 46.339: Customer2: Waited 12 I am off</span></span>
+<span id="cb4-46"><a href="#cb4-46"></a><span class="co">#&gt; 49.3671: Customer4: Here I am</span></span>
+<span id="cb4-47"><a href="#cb4-47"></a><span class="co">#&gt; 53.8687: Customer3: Waited 12 I am off</span></span>
+<span id="cb4-48"><a href="#cb4-48"></a><span class="co">#&gt; 54.7374: Customer0: Completed</span></span>
+<span id="cb4-49"><a href="#cb4-49"></a><span class="co">#&gt; 54.7374: Customer4: Waited 5.37030150208617</span></span>
+<span id="cb4-50"><a href="#cb4-50"></a><span class="co">#&gt; 64.6857: Customer4: Completed</span></span>
+<span id="cb4-51"><a href="#cb4-51"></a><span class="co">#&gt; simmer environment: bank | now: 64.6856688172597 | next: </span></span>
+<span id="cb4-52"><a href="#cb4-52"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb4-53"><a href="#cb4-53"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb4-54"><a href="#cb4-54"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 5 }</span></span></code></pre></div>
+<p>Customer1 arrives after Customer0 but has only 12 minutes patience. After that time in the queue (at time 28.5058) he abandons the queue to leave Customer2 to take his place. Customer2 and Customer3 also renege. Customer4 is served within 12 minutes.</p>
+</div>
+</div>
+<div id="interrupting-a-process" class="section level2">
+<h2>Interrupting a process</h2>
+<p>Klaus goes into the bank to talk to the manager. For clarity we ignore the counters and other customers. During his conversation his cellphone rings. When he finishes the call he continues the conversation.</p>
+<p>In this example, the call is another trajectory, whose only activities are to send a signal (the ringing of the phone), and to write that event to the log.</p>
+<p>In Klaus’ trajectory, the <code>trap</code> activity causes him to listen for the phone to ring. Supposing the phone doesn’t ring, then his trajectory would continue to the <code>timeout</code> activity, where he would do his banking business for 20 minutes, and then finish.</p>
+<p>Supposing the phone <em>does</em> ring, then Klaus would enter the sub-trajectory defined within the <code>trap</code> function as a ‘handler’. In that trajectory, he makes his excuses, answers the phone, then returns to business. At the end of the trajectory, he continues the original trajectory at the next step <em>following</em> the original <code>timeout</code>, without spending the rest of the 20 minutes on his banking.</p>
+<p>To make Klaus spend a full 20 minutes banking, we add a <code>timeout</code> activity to the end of the ‘handler’, but first we have to calculate how much time remains after the interruption. This is done by storing the ‘start’ time in an attribute, and calculating how much time is left when the phone rings.</p>
+<p>By default, interruptions can themselves be interrupted, as illustrated in this example by the phone ringing twice. This could be avoided by setting <code>interruptible = FALSE</code> in the <code>trap</code> activity.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb5-2"><a href="#cb5-2"></a></span>
+<span id="cb5-3"><a href="#cb5-3"></a>timeInBank &lt;-<span class="st">  </span><span class="dv">20</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a>timeOfCall &lt;-<span class="st">   </span><span class="dv">9</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a>onphone    &lt;-<span class="st">   </span><span class="dv">3</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a>maxTime    &lt;-<span class="st"> </span><span class="dv">100</span></span>
+<span id="cb5-7"><a href="#cb5-7"></a></span>
+<span id="cb5-8"><a href="#cb5-8"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb5-9"><a href="#cb5-9"></a></span>
+<span id="cb5-10"><a href="#cb5-10"></a>customer &lt;-</span>
+<span id="cb5-11"><a href="#cb5-11"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-12"><a href="#cb5-12"></a><span class="st">  </span><span class="kw">trap</span>(<span class="st">&quot;phonecall&quot;</span>,</span>
+<span id="cb5-13"><a href="#cb5-13"></a>       <span class="dt">handler =</span> <span class="kw">trajectory</span>() <span class="op">%&gt;%</span></span>
+<span id="cb5-14"><a href="#cb5-14"></a><span class="st">         </span><span class="kw">log_</span>(<span class="st">&quot;Excuse me&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-15"><a href="#cb5-15"></a><span class="st">         </span><span class="kw">set_attribute</span>(</span>
+<span id="cb5-16"><a href="#cb5-16"></a>           <span class="st">&quot;timeleft&quot;</span>, <span class="cf">function</span>() {</span>
+<span id="cb5-17"><a href="#cb5-17"></a>             <span class="kw">sum</span>(<span class="kw">get_attribute</span>(bank, <span class="kw">c</span>(<span class="st">&quot;timeleft&quot;</span>, <span class="st">&quot;start&quot;</span>))) <span class="op">-</span><span class="st"> </span><span class="kw">now</span>(bank)</span>
+<span id="cb5-18"><a href="#cb5-18"></a>         }) <span class="op">%&gt;%</span></span>
+<span id="cb5-19"><a href="#cb5-19"></a><span class="st">         </span><span class="kw">log_</span>(<span class="st">&quot;Hello! I&#39;ll call back&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-20"><a href="#cb5-20"></a><span class="st">         </span><span class="kw">timeout</span>(onphone) <span class="op">%&gt;%</span></span>
+<span id="cb5-21"><a href="#cb5-21"></a><span class="st">         </span><span class="kw">log_</span>(<span class="st">&quot;Sorry, where were we?&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-22"><a href="#cb5-22"></a><span class="st">         </span><span class="kw">set_attribute</span>(<span class="st">&quot;start&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb5-23"><a href="#cb5-23"></a><span class="st">         </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Time left:&quot;</span>, <span class="kw">get_attribute</span>(bank, <span class="st">&quot;timeleft&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb5-24"><a href="#cb5-24"></a><span class="st">         </span><span class="kw">timeout_from_attribute</span>(<span class="st">&quot;timeleft&quot;</span>)</span>
+<span id="cb5-25"><a href="#cb5-25"></a>       ) <span class="op">%&gt;%</span></span>
+<span id="cb5-26"><a href="#cb5-26"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Here I am&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-27"><a href="#cb5-27"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;timeleft&quot;</span>, timeInBank) <span class="op">%&gt;%</span></span>
+<span id="cb5-28"><a href="#cb5-28"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb5-29"><a href="#cb5-29"></a><span class="st">  </span><span class="kw">timeout</span>(timeInBank) <span class="op">%&gt;%</span></span>
+<span id="cb5-30"><a href="#cb5-30"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Completed&quot;</span>)</span>
+<span id="cb5-31"><a href="#cb5-31"></a></span>
+<span id="cb5-32"><a href="#cb5-32"></a>phone &lt;-</span>
+<span id="cb5-33"><a href="#cb5-33"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Phone&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-34"><a href="#cb5-34"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Ringgg!&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-35"><a href="#cb5-35"></a><span class="st">  </span><span class="kw">send</span>(<span class="st">&quot;phonecall&quot;</span>)</span>
+<span id="cb5-36"><a href="#cb5-36"></a></span>
+<span id="cb5-37"><a href="#cb5-37"></a>bank &lt;-</span>
+<span id="cb5-38"><a href="#cb5-38"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb5-39"><a href="#cb5-39"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Klaus&quot;</span>, customer, <span class="kw">at</span>(<span class="dv">0</span>)) <span class="op">%&gt;%</span></span>
+<span id="cb5-40"><a href="#cb5-40"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Phone&quot;</span>, phone, <span class="kw">at</span>(timeOfCall, timeOfCall <span class="op">+</span><span class="st"> </span><span class="dv">7</span>))</span>
+<span id="cb5-41"><a href="#cb5-41"></a></span>
+<span id="cb5-42"><a href="#cb5-42"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> maxTime)</span>
+<span id="cb5-43"><a href="#cb5-43"></a><span class="co">#&gt; 0: Klaus0: Here I am</span></span>
+<span id="cb5-44"><a href="#cb5-44"></a><span class="co">#&gt; 9: Phone0: Ringgg!</span></span>
+<span id="cb5-45"><a href="#cb5-45"></a><span class="co">#&gt; 9: Klaus0: Excuse me</span></span>
+<span id="cb5-46"><a href="#cb5-46"></a><span class="co">#&gt; 9: Klaus0: Hello! I&#39;ll call back</span></span>
+<span id="cb5-47"><a href="#cb5-47"></a><span class="co">#&gt; 12: Klaus0: Sorry, where were we?</span></span>
+<span id="cb5-48"><a href="#cb5-48"></a><span class="co">#&gt; 12: Klaus0: Time left: 11</span></span>
+<span id="cb5-49"><a href="#cb5-49"></a><span class="co">#&gt; 16: Phone1: Ringgg!</span></span>
+<span id="cb5-50"><a href="#cb5-50"></a><span class="co">#&gt; 16: Klaus0: Excuse me</span></span>
+<span id="cb5-51"><a href="#cb5-51"></a><span class="co">#&gt; 16: Klaus0: Hello! I&#39;ll call back</span></span>
+<span id="cb5-52"><a href="#cb5-52"></a><span class="co">#&gt; 19: Klaus0: Sorry, where were we?</span></span>
+<span id="cb5-53"><a href="#cb5-53"></a><span class="co">#&gt; 19: Klaus0: Time left: 7</span></span>
+<span id="cb5-54"><a href="#cb5-54"></a><span class="co">#&gt; 26: Klaus0: Completed</span></span>
+<span id="cb5-55"><a href="#cb5-55"></a><span class="co">#&gt; simmer environment: bank | now: 26 | next: </span></span>
+<span id="cb5-56"><a href="#cb5-56"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb5-57"><a href="#cb5-57"></a><span class="co">#&gt; { Source: Klaus | monitored: 1 | n_generated: 1 }</span></span>
+<span id="cb5-58"><a href="#cb5-58"></a><span class="co">#&gt; { Source: Phone | monitored: 1 | n_generated: 2 }</span></span></code></pre></div>
+<p>As this has no random numbers the results are reasonably clear: the first interrupting call occurs at 9. It takes Klaus 3 minutes to listen to the message and he resumes the conversation with the bank manager at 12. The phone rings again at 16, he listens for three more minutes, and resumes the conversation at 19, finally finishing at 26. The total time of conversation is 9 + 4 + 7 = 20 minutes, the same as it would have been if the interrupt had not occurred.</p>
+</div>
+<div id="wait-until-the-bank-door-opens" class="section level2">
+<h2>Wait until the bank door opens</h2>
+<p>Customers arrive at random, some of them getting to the bank before the door is opened by a doorman. They wait for the door to be opened and then rush in and queue to be served.</p>
+<p>This model defines the door as a resource, just like the counter. The capacity of the door is defined according to the <code>schedule</code> function, so that it has zero capacity when it is shut, and infinite capacity when it is open. Customers ‘seize’ the door and must then wait until it has capacity to ‘serve’ them. Once it is available, all waiting customers are ‘served’ immediately (i.e. they pass through the door). There is no <code>timeout</code> between ‘seizing’ and ‘releasing’ the door.</p>
+<p>For the sake of announcing in the log that the door has been opened, a doorman trajectory is defined.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb6-2"><a href="#cb6-2"></a></span>
+<span id="cb6-3"><a href="#cb6-3"></a>maxTime =<span class="st"> </span><span class="dv">400</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="kw">set.seed</span>(<span class="dv">393937</span>)</span>
+<span id="cb6-5"><a href="#cb6-5"></a></span>
+<span id="cb6-6"><a href="#cb6-6"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb6-7"><a href="#cb6-7"></a></span>
+<span id="cb6-8"><a href="#cb6-8"></a>customer &lt;-</span>
+<span id="cb6-9"><a href="#cb6-9"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-10"><a href="#cb6-10"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>()</span>
+<span id="cb6-11"><a href="#cb6-11"></a>    <span class="cf">if</span> (<span class="kw">get_capacity</span>(bank, <span class="st">&quot;door&quot;</span>) <span class="op">==</span><span class="st"> </span><span class="dv">0</span>)</span>
+<span id="cb6-12"><a href="#cb6-12"></a>      <span class="st">&quot;Here I am but the door is shut.&quot;</span></span>
+<span id="cb6-13"><a href="#cb6-13"></a>    <span class="cf">else</span> <span class="st">&quot;Here I am and the door is open.&quot;</span></span>
+<span id="cb6-14"><a href="#cb6-14"></a>  ) <span class="op">%&gt;%</span></span>
+<span id="cb6-15"><a href="#cb6-15"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;door&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-16"><a href="#cb6-16"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;I can go in!&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-17"><a href="#cb6-17"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;door&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-18"><a href="#cb6-18"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-19"><a href="#cb6-19"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="cf">function</span>() {<span class="kw">rexp</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>)}) <span class="op">%&gt;%</span></span>
+<span id="cb6-20"><a href="#cb6-20"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>)</span>
+<span id="cb6-21"><a href="#cb6-21"></a></span>
+<span id="cb6-22"><a href="#cb6-22"></a>openTime &lt;-<span class="st"> </span><span class="kw">rexp</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>)</span>
+<span id="cb6-23"><a href="#cb6-23"></a></span>
+<span id="cb6-24"><a href="#cb6-24"></a>door_schedule &lt;-<span class="st"> </span><span class="kw">schedule</span>(<span class="kw">c</span>(<span class="dv">0</span>, openTime), <span class="kw">c</span>(<span class="dv">0</span>, <span class="ot">Inf</span>))</span>
+<span id="cb6-25"><a href="#cb6-25"></a></span>
+<span id="cb6-26"><a href="#cb6-26"></a>doorman &lt;-</span>
+<span id="cb6-27"><a href="#cb6-27"></a><span class="st">  </span><span class="kw">trajectory</span>() <span class="op">%&gt;%</span></span>
+<span id="cb6-28"><a href="#cb6-28"></a><span class="st">  </span><span class="kw">timeout</span>(openTime) <span class="op">%&gt;%</span></span>
+<span id="cb6-29"><a href="#cb6-29"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Ladies and Gentlemen! You may all enter.&quot;</span>)</span>
+<span id="cb6-30"><a href="#cb6-30"></a></span>
+<span id="cb6-31"><a href="#cb6-31"></a>bank &lt;-</span>
+<span id="cb6-32"><a href="#cb6-32"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-33"><a href="#cb6-33"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;door&quot;</span>, <span class="dt">capacity =</span> door_schedule) <span class="op">%&gt;%</span></span>
+<span id="cb6-34"><a href="#cb6-34"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb6-35"><a href="#cb6-35"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>,</span>
+<span id="cb6-36"><a href="#cb6-36"></a>                customer,</span>
+<span id="cb6-37"><a href="#cb6-37"></a>                <span class="kw">at</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(<span class="kw">rexp</span>(<span class="dv">5</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="fl">0.1</span>))))) <span class="op">%&gt;%</span></span>
+<span id="cb6-38"><a href="#cb6-38"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Doorman&quot;</span>, doorman, <span class="kw">at</span>(<span class="dv">0</span>))</span>
+<span id="cb6-39"><a href="#cb6-39"></a></span>
+<span id="cb6-40"><a href="#cb6-40"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> maxTime)</span>
+<span id="cb6-41"><a href="#cb6-41"></a><span class="co">#&gt; 0: Customer0: Here I am but the door is shut.</span></span>
+<span id="cb6-42"><a href="#cb6-42"></a><span class="co">#&gt; 6.44076: Customer1: Here I am but the door is shut.</span></span>
+<span id="cb6-43"><a href="#cb6-43"></a><span class="co">#&gt; 8.77564: Customer2: Here I am but the door is shut.</span></span>
+<span id="cb6-44"><a href="#cb6-44"></a><span class="co">#&gt; 19.7241: Doorman0: Ladies and Gentlemen! You may all enter.</span></span>
+<span id="cb6-45"><a href="#cb6-45"></a><span class="co">#&gt; 19.7241: Customer0: I can go in!</span></span>
+<span id="cb6-46"><a href="#cb6-46"></a><span class="co">#&gt; 19.7241: Customer1: I can go in!</span></span>
+<span id="cb6-47"><a href="#cb6-47"></a><span class="co">#&gt; 19.7241: Customer2: I can go in!</span></span>
+<span id="cb6-48"><a href="#cb6-48"></a><span class="co">#&gt; 24.2037: Customer3: Here I am and the door is open.</span></span>
+<span id="cb6-49"><a href="#cb6-49"></a><span class="co">#&gt; 24.2037: Customer3: I can go in!</span></span>
+<span id="cb6-50"><a href="#cb6-50"></a><span class="co">#&gt; 33.3576: Customer4: Here I am and the door is open.</span></span>
+<span id="cb6-51"><a href="#cb6-51"></a><span class="co">#&gt; 33.3576: Customer4: I can go in!</span></span>
+<span id="cb6-52"><a href="#cb6-52"></a><span class="co">#&gt; simmer environment: bank | now: 79.2542060826083 | next: </span></span>
+<span id="cb6-53"><a href="#cb6-53"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb6-54"><a href="#cb6-54"></a><span class="co">#&gt; { Resource: door | monitored: TRUE | server status: 0(Inf) | queue status: 0(Inf) }</span></span>
+<span id="cb6-55"><a href="#cb6-55"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb6-56"><a href="#cb6-56"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 5 }</span></span>
+<span id="cb6-57"><a href="#cb6-57"></a><span class="co">#&gt; { Source: Doorman | monitored: 1 | n_generated: 1 }</span></span>
+<span id="cb6-58"><a href="#cb6-58"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb6-59"><a href="#cb6-59"></a><span class="st">  </span><span class="kw">get_mon_arrivals</span>() <span class="op">%&gt;%</span></span>
+<span id="cb6-60"><a href="#cb6-60"></a><span class="st">  </span><span class="kw">transform</span>(<span class="dt">waiting_time =</span> end_time <span class="op">-</span><span class="st"> </span>start_time <span class="op">-</span><span class="st"> </span>activity_time)</span>
+<span id="cb6-61"><a href="#cb6-61"></a><span class="co">#&gt;        name start_time end_time activity_time finished replication waiting_time</span></span>
+<span id="cb6-62"><a href="#cb6-62"></a><span class="co">#&gt; 1  Doorman0   0.000000 19.72408     19.724085     TRUE           1      0.00000</span></span>
+<span id="cb6-63"><a href="#cb6-63"></a><span class="co">#&gt; 2 Customer0   0.000000 46.61084     26.886751     TRUE           1     19.72408</span></span>
+<span id="cb6-64"><a href="#cb6-64"></a><span class="co">#&gt; 3 Customer1   6.440758 64.20811     17.597279     TRUE           1     40.17008</span></span>
+<span id="cb6-65"><a href="#cb6-65"></a><span class="co">#&gt; 4 Customer2   8.775635 71.50006      7.291950     TRUE           1     55.43248</span></span>
+<span id="cb6-66"><a href="#cb6-66"></a><span class="co">#&gt; 5 Customer3  24.203687 73.96270      2.462632     TRUE           1     47.29638</span></span>
+<span id="cb6-67"><a href="#cb6-67"></a><span class="co">#&gt; 6 Customer4  33.357600 79.25421      5.291510     TRUE           1     40.60510</span></span></code></pre></div>
+<p>The output above programs shows how the first two customers have to wait until the door is opened.</p>
+</div>
+<div id="wait-for-the-doorman-to-give-a-signal" class="section level1">
+<h1>Wait for the doorman to give a signal</h1>
+<p>Customers arrive at random, some of them getting to the bank before the door is open. This is controlled by an automatic machine called the doorman which opens the door only at intervals of 30 minutes (it is a very secure bank). The customers wait for the door to be opened and all those waiting enter and proceed to the counter. The door is closed behind them.</p>
+<p>There are at least two ways to implement this model. The first example uses a schedule, and the second uses batching.</p>
+<p>The principle behind the schedule is that the door is modelled as a server with zero capacity for 30 minutes, then infinite capacity for zero minutes, then repeat the 30-minute cycle. In the moment that it has infinite capacity, all the customers will pass through the door (i.e. they will be ‘served’).</p>
+<p>For the sake of announcing in the log that the door has been opened, a doorman trajectory is defined. The doorman has a <code>rollback</code> step so that it keeps opening and shutting the door every 30 minutes for ever.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb7-2"><a href="#cb7-2"></a></span>
+<span id="cb7-3"><a href="#cb7-3"></a>maxTime =<span class="st"> </span><span class="dv">150</span></span>
+<span id="cb7-4"><a href="#cb7-4"></a></span>
+<span id="cb7-5"><a href="#cb7-5"></a>customer &lt;-</span>
+<span id="cb7-6"><a href="#cb7-6"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-7"><a href="#cb7-7"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Here I am, but the door is shut.&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-8"><a href="#cb7-8"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb7-9"><a href="#cb7-9"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;door&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-10"><a href="#cb7-10"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;The door is open!&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-11"><a href="#cb7-11"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb7-12"><a href="#cb7-12"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;door&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-13"><a href="#cb7-13"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-14"><a href="#cb7-14"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="cf">function</span>() {<span class="kw">rexp</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>)}) <span class="op">%&gt;%</span></span>
+<span id="cb7-15"><a href="#cb7-15"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-16"><a href="#cb7-16"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Finished.&quot;</span>)</span>
+<span id="cb7-17"><a href="#cb7-17"></a></span>
+<span id="cb7-18"><a href="#cb7-18"></a>door_schedule &lt;-<span class="st"> </span><span class="kw">schedule</span>(<span class="kw">c</span>(<span class="dv">30</span>, <span class="dv">30</span>), <span class="kw">c</span>(<span class="ot">Inf</span>, <span class="dv">0</span>), <span class="dt">period =</span> <span class="dv">30</span>)</span>
+<span id="cb7-19"><a href="#cb7-19"></a></span>
+<span id="cb7-20"><a href="#cb7-20"></a>doorman &lt;-</span>
+<span id="cb7-21"><a href="#cb7-21"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Doorman&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-22"><a href="#cb7-22"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="dv">30</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-23"><a href="#cb7-23"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;You may enter.&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-24"><a href="#cb7-24"></a><span class="st">  </span><span class="kw">rollback</span>(<span class="dv">2</span>, <span class="dt">times =</span> <span class="ot">Inf</span>)</span>
+<span id="cb7-25"><a href="#cb7-25"></a></span>
+<span id="cb7-26"><a href="#cb7-26"></a><span class="kw">set.seed</span>(<span class="dv">393939</span>)</span>
+<span id="cb7-27"><a href="#cb7-27"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>)</span>
+<span id="cb7-28"><a href="#cb7-28"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb7-29"><a href="#cb7-29"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;door&quot;</span>, <span class="dt">capacity =</span> door_schedule) <span class="op">%&gt;%</span></span>
+<span id="cb7-30"><a href="#cb7-30"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb7-31"><a href="#cb7-31"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>,</span>
+<span id="cb7-32"><a href="#cb7-32"></a>                customer,</span>
+<span id="cb7-33"><a href="#cb7-33"></a>                <span class="kw">at</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(<span class="kw">rexp</span>(<span class="dv">5</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="fl">0.1</span>))))) <span class="op">%&gt;%</span></span>
+<span id="cb7-34"><a href="#cb7-34"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Doorman&quot;</span>, doorman, <span class="kw">at</span>(<span class="dv">0</span>))</span>
+<span id="cb7-35"><a href="#cb7-35"></a><span class="co">#&gt; simmer environment: bank | now: 0 | next: 0</span></span>
+<span id="cb7-36"><a href="#cb7-36"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb7-37"><a href="#cb7-37"></a><span class="co">#&gt; { Resource: door | monitored: TRUE | server status: 0(0) | queue status: 0(Inf) }</span></span>
+<span id="cb7-38"><a href="#cb7-38"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb7-39"><a href="#cb7-39"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 0 }</span></span>
+<span id="cb7-40"><a href="#cb7-40"></a><span class="co">#&gt; { Source: Doorman | monitored: 1 | n_generated: 0 }</span></span>
+<span id="cb7-41"><a href="#cb7-41"></a></span>
+<span id="cb7-42"><a href="#cb7-42"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> maxTime)</span>
+<span id="cb7-43"><a href="#cb7-43"></a><span class="co">#&gt; 0: Customer0: Here I am, but the door is shut.</span></span>
+<span id="cb7-44"><a href="#cb7-44"></a><span class="co">#&gt; 25.4605: Customer1: Here I am, but the door is shut.</span></span>
+<span id="cb7-45"><a href="#cb7-45"></a><span class="co">#&gt; 30: Doorman0: You may enter.</span></span>
+<span id="cb7-46"><a href="#cb7-46"></a><span class="co">#&gt; 30: Customer0: The door is open!</span></span>
+<span id="cb7-47"><a href="#cb7-47"></a><span class="co">#&gt; 30: Customer0: Waited 30</span></span>
+<span id="cb7-48"><a href="#cb7-48"></a><span class="co">#&gt; 30: Customer1: The door is open!</span></span>
+<span id="cb7-49"><a href="#cb7-49"></a><span class="co">#&gt; 30: Customer1: Waited 4.53951782839885</span></span>
+<span id="cb7-50"><a href="#cb7-50"></a><span class="co">#&gt; 35.4334: Customer2: Here I am, but the door is shut.</span></span>
+<span id="cb7-51"><a href="#cb7-51"></a><span class="co">#&gt; 36.0565: Customer0: Finished.</span></span>
+<span id="cb7-52"><a href="#cb7-52"></a><span class="co">#&gt; 40.6413: Customer3: Here I am, but the door is shut.</span></span>
+<span id="cb7-53"><a href="#cb7-53"></a><span class="co">#&gt; 48.7442: Customer1: Finished.</span></span>
+<span id="cb7-54"><a href="#cb7-54"></a><span class="co">#&gt; 49.063: Customer4: Here I am, but the door is shut.</span></span>
+<span id="cb7-55"><a href="#cb7-55"></a><span class="co">#&gt; 60: Doorman0: You may enter.</span></span>
+<span id="cb7-56"><a href="#cb7-56"></a><span class="co">#&gt; 60: Customer2: The door is open!</span></span>
+<span id="cb7-57"><a href="#cb7-57"></a><span class="co">#&gt; 60: Customer2: Waited 24.566617201638</span></span>
+<span id="cb7-58"><a href="#cb7-58"></a><span class="co">#&gt; 60: Customer3: The door is open!</span></span>
+<span id="cb7-59"><a href="#cb7-59"></a><span class="co">#&gt; 60: Customer3: Waited 19.3586741095377</span></span>
+<span id="cb7-60"><a href="#cb7-60"></a><span class="co">#&gt; 60: Customer4: The door is open!</span></span>
+<span id="cb7-61"><a href="#cb7-61"></a><span class="co">#&gt; 60: Customer4: Waited 10.9369934153668</span></span>
+<span id="cb7-62"><a href="#cb7-62"></a><span class="co">#&gt; 66.7763: Customer2: Finished.</span></span>
+<span id="cb7-63"><a href="#cb7-63"></a><span class="co">#&gt; 71.3982: Customer3: Finished.</span></span>
+<span id="cb7-64"><a href="#cb7-64"></a><span class="co">#&gt; 79.5795: Customer4: Finished.</span></span>
+<span id="cb7-65"><a href="#cb7-65"></a><span class="co">#&gt; 90: Doorman0: You may enter.</span></span>
+<span id="cb7-66"><a href="#cb7-66"></a><span class="co">#&gt; 120: Doorman0: You may enter.</span></span>
+<span id="cb7-67"><a href="#cb7-67"></a><span class="co">#&gt; simmer environment: bank | now: 150 | next: 150</span></span>
+<span id="cb7-68"><a href="#cb7-68"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb7-69"><a href="#cb7-69"></a><span class="co">#&gt; { Resource: door | monitored: TRUE | server status: 0(0) | queue status: 0(Inf) }</span></span>
+<span id="cb7-70"><a href="#cb7-70"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb7-71"><a href="#cb7-71"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 5 }</span></span>
+<span id="cb7-72"><a href="#cb7-72"></a><span class="co">#&gt; { Source: Doorman | monitored: 1 | n_generated: 1 }</span></span>
+<span id="cb7-73"><a href="#cb7-73"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb7-74"><a href="#cb7-74"></a><span class="st">  </span><span class="kw">get_mon_arrivals</span>() <span class="op">%&gt;%</span></span>
+<span id="cb7-75"><a href="#cb7-75"></a><span class="st">  </span><span class="kw">transform</span>(<span class="dt">waiting_time =</span> end_time <span class="op">-</span><span class="st"> </span>start_time <span class="op">-</span><span class="st"> </span>activity_time)</span>
+<span id="cb7-76"><a href="#cb7-76"></a><span class="co">#&gt;        name start_time end_time activity_time finished replication waiting_time</span></span>
+<span id="cb7-77"><a href="#cb7-77"></a><span class="co">#&gt; 1 Customer0    0.00000 36.05646      6.056458     TRUE           1     30.00000</span></span>
+<span id="cb7-78"><a href="#cb7-78"></a><span class="co">#&gt; 2 Customer1   25.46048 48.74417     12.687713     TRUE           1     10.59598</span></span>
+<span id="cb7-79"><a href="#cb7-79"></a><span class="co">#&gt; 3 Customer2   35.43338 66.77625      6.776253     TRUE           1     24.56662</span></span>
+<span id="cb7-80"><a href="#cb7-80"></a><span class="co">#&gt; 4 Customer3   40.64133 71.39816      4.621910     TRUE           1     26.13493</span></span>
+<span id="cb7-81"><a href="#cb7-81"></a><span class="co">#&gt; 5 Customer4   49.06301 79.57954      8.181380     TRUE           1     22.33516</span></span></code></pre></div>
+<p>The output run for this program shows how the first two customers have to wait until the door is opened, and then the next three have to wait.</p>
+<p>The second method is batching. Customers can be collected into batches of a given size, or for a given time, or whichever occurs first. Here, they are collected for periods of 30, and the number of customers in each batch is unrestricted.</p>
+<p>After the batch is created with <code>batch</code>, usually the customers will all be processed together by a server, before separating with <code>separate</code>. In this example, there is no need for a server – the door is modelled by the batch itself – so the customers are separated immediately after the batch.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb8-2"><a href="#cb8-2"></a></span>
+<span id="cb8-3"><a href="#cb8-3"></a>maxTime =<span class="st"> </span><span class="dv">150</span></span>
+<span id="cb8-4"><a href="#cb8-4"></a></span>
+<span id="cb8-5"><a href="#cb8-5"></a>customer &lt;-</span>
+<span id="cb8-6"><a href="#cb8-6"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-7"><a href="#cb8-7"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Here I am, but the door is shut.&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-8"><a href="#cb8-8"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb8-9"><a href="#cb8-9"></a><span class="st">  </span><span class="kw">batch</span>(<span class="dt">n =</span> <span class="ot">Inf</span>, <span class="dt">timeout =</span> <span class="dv">30</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10"></a><span class="st">  </span><span class="kw">separate</span>() <span class="op">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;The door is open!&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-12"><a href="#cb8-12"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb8-13"><a href="#cb8-13"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-14"><a href="#cb8-14"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="cf">function</span>() {<span class="kw">rexp</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>)}) <span class="op">%&gt;%</span></span>
+<span id="cb8-15"><a href="#cb8-15"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-16"><a href="#cb8-16"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Finished.&quot;</span>)</span>
+<span id="cb8-17"><a href="#cb8-17"></a></span>
+<span id="cb8-18"><a href="#cb8-18"></a>doorman &lt;-</span>
+<span id="cb8-19"><a href="#cb8-19"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Doorman&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-20"><a href="#cb8-20"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="dv">30</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-21"><a href="#cb8-21"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;You may enter.&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-22"><a href="#cb8-22"></a><span class="st">  </span><span class="kw">rollback</span>(<span class="dv">2</span>, <span class="dt">times =</span> <span class="ot">Inf</span>)</span>
+<span id="cb8-23"><a href="#cb8-23"></a></span>
+<span id="cb8-24"><a href="#cb8-24"></a><span class="kw">set.seed</span>(<span class="dv">393939</span>)</span>
+<span id="cb8-25"><a href="#cb8-25"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>)</span>
+<span id="cb8-26"><a href="#cb8-26"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb8-27"><a href="#cb8-27"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;door&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-28"><a href="#cb8-28"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb8-29"><a href="#cb8-29"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>,</span>
+<span id="cb8-30"><a href="#cb8-30"></a>                customer,</span>
+<span id="cb8-31"><a href="#cb8-31"></a>                <span class="kw">at</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(<span class="kw">rexp</span>(<span class="dv">5</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="fl">0.1</span>))))) <span class="op">%&gt;%</span></span>
+<span id="cb8-32"><a href="#cb8-32"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Doorman&quot;</span>, doorman, <span class="kw">at</span>(<span class="dv">0</span>))</span>
+<span id="cb8-33"><a href="#cb8-33"></a><span class="co">#&gt; simmer environment: bank | now: 0 | next: 0</span></span>
+<span id="cb8-34"><a href="#cb8-34"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb8-35"><a href="#cb8-35"></a><span class="co">#&gt; { Resource: door | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb8-36"><a href="#cb8-36"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb8-37"><a href="#cb8-37"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 0 }</span></span>
+<span id="cb8-38"><a href="#cb8-38"></a><span class="co">#&gt; { Source: Doorman | monitored: 1 | n_generated: 0 }</span></span>
+<span id="cb8-39"><a href="#cb8-39"></a></span>
+<span id="cb8-40"><a href="#cb8-40"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> maxTime)</span>
+<span id="cb8-41"><a href="#cb8-41"></a><span class="co">#&gt; 0: Customer0: Here I am, but the door is shut.</span></span>
+<span id="cb8-42"><a href="#cb8-42"></a><span class="co">#&gt; 25.4605: Customer1: Here I am, but the door is shut.</span></span>
+<span id="cb8-43"><a href="#cb8-43"></a><span class="co">#&gt; 30: Doorman0: You may enter.</span></span>
+<span id="cb8-44"><a href="#cb8-44"></a><span class="co">#&gt; 30: Customer0: The door is open!</span></span>
+<span id="cb8-45"><a href="#cb8-45"></a><span class="co">#&gt; 30: Customer0: Waited 30</span></span>
+<span id="cb8-46"><a href="#cb8-46"></a><span class="co">#&gt; 30: Customer1: The door is open!</span></span>
+<span id="cb8-47"><a href="#cb8-47"></a><span class="co">#&gt; 30: Customer1: Waited 4.53951782839885</span></span>
+<span id="cb8-48"><a href="#cb8-48"></a><span class="co">#&gt; 35.4334: Customer2: Here I am, but the door is shut.</span></span>
+<span id="cb8-49"><a href="#cb8-49"></a><span class="co">#&gt; 36.0565: Customer0: Finished.</span></span>
+<span id="cb8-50"><a href="#cb8-50"></a><span class="co">#&gt; 40.6413: Customer3: Here I am, but the door is shut.</span></span>
+<span id="cb8-51"><a href="#cb8-51"></a><span class="co">#&gt; 48.7442: Customer1: Finished.</span></span>
+<span id="cb8-52"><a href="#cb8-52"></a><span class="co">#&gt; 49.063: Customer4: Here I am, but the door is shut.</span></span>
+<span id="cb8-53"><a href="#cb8-53"></a><span class="co">#&gt; 60: Doorman0: You may enter.</span></span>
+<span id="cb8-54"><a href="#cb8-54"></a><span class="co">#&gt; 65.4334: Customer2: The door is open!</span></span>
+<span id="cb8-55"><a href="#cb8-55"></a><span class="co">#&gt; 65.4334: Customer2: Waited 30</span></span>
+<span id="cb8-56"><a href="#cb8-56"></a><span class="co">#&gt; 65.4334: Customer3: The door is open!</span></span>
+<span id="cb8-57"><a href="#cb8-57"></a><span class="co">#&gt; 65.4334: Customer3: Waited 24.7920569078997</span></span>
+<span id="cb8-58"><a href="#cb8-58"></a><span class="co">#&gt; 65.4334: Customer4: The door is open!</span></span>
+<span id="cb8-59"><a href="#cb8-59"></a><span class="co">#&gt; 65.4334: Customer4: Waited 16.3703762137288</span></span>
+<span id="cb8-60"><a href="#cb8-60"></a><span class="co">#&gt; 72.2096: Customer2: Finished.</span></span>
+<span id="cb8-61"><a href="#cb8-61"></a><span class="co">#&gt; 76.8315: Customer3: Finished.</span></span>
+<span id="cb8-62"><a href="#cb8-62"></a><span class="co">#&gt; 85.0129: Customer4: Finished.</span></span>
+<span id="cb8-63"><a href="#cb8-63"></a><span class="co">#&gt; 90: Doorman0: You may enter.</span></span>
+<span id="cb8-64"><a href="#cb8-64"></a><span class="co">#&gt; 120: Doorman0: You may enter.</span></span>
+<span id="cb8-65"><a href="#cb8-65"></a><span class="co">#&gt; simmer environment: bank | now: 150 | next: 150</span></span>
+<span id="cb8-66"><a href="#cb8-66"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb8-67"><a href="#cb8-67"></a><span class="co">#&gt; { Resource: door | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb8-68"><a href="#cb8-68"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb8-69"><a href="#cb8-69"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 5 }</span></span>
+<span id="cb8-70"><a href="#cb8-70"></a><span class="co">#&gt; { Source: Doorman | monitored: 1 | n_generated: 1 }</span></span>
+<span id="cb8-71"><a href="#cb8-71"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb8-72"><a href="#cb8-72"></a><span class="st">  </span><span class="kw">get_mon_arrivals</span>() <span class="op">%&gt;%</span></span>
+<span id="cb8-73"><a href="#cb8-73"></a><span class="st">  </span><span class="kw">transform</span>(<span class="dt">waiting_time =</span> end_time <span class="op">-</span><span class="st"> </span>start_time <span class="op">-</span><span class="st"> </span>activity_time)</span>
+<span id="cb8-74"><a href="#cb8-74"></a><span class="co">#&gt;        name start_time end_time activity_time finished replication waiting_time</span></span>
+<span id="cb8-75"><a href="#cb8-75"></a><span class="co">#&gt; 1 Customer0    0.00000 36.05646      6.056458     TRUE           1     30.00000</span></span>
+<span id="cb8-76"><a href="#cb8-76"></a><span class="co">#&gt; 2 Customer1   25.46048 48.74417     12.687713     TRUE           1     10.59598</span></span>
+<span id="cb8-77"><a href="#cb8-77"></a><span class="co">#&gt; 3 Customer2   35.43338 72.20964      6.776253     TRUE           1     30.00000</span></span>
+<span id="cb8-78"><a href="#cb8-78"></a><span class="co">#&gt; 4 Customer3   40.64133 76.83155      4.621910     TRUE           1     31.56831</span></span>
+<span id="cb8-79"><a href="#cb8-79"></a><span class="co">#&gt; 5 Customer4   49.06301 85.01293      8.181380     TRUE           1     27.76854</span></span></code></pre></div>
+<p>This second method gives the same output as the first.</p>
+<div id="monitors" class="section level2">
+<h2>Monitors</h2>
+<p>Monitors record events in a simulation. Unlike SimPy, Simmer does this by default, so the records are available after – in fact, even during – a simulation. Data that is collected by monitors is available from the following functions:</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>get_capacity</span>
+<span id="cb9-2"><a href="#cb9-2"></a>get_mon_arrivals</span>
+<span id="cb9-3"><a href="#cb9-3"></a>get_mon_attributes</span>
+<span id="cb9-4"><a href="#cb9-4"></a>get_mon_resources</span>
+<span id="cb9-5"><a href="#cb9-5"></a>get_n_activities</span>
+<span id="cb9-6"><a href="#cb9-6"></a>get_n_generated</span>
+<span id="cb9-7"><a href="#cb9-7"></a>get_queue_count</span>
+<span id="cb9-8"><a href="#cb9-8"></a>get_queue_size</span>
+<span id="cb9-9"><a href="#cb9-9"></a>get_server_count</span></code></pre></div>
+<p>The <code>get_mon_*()</code> functions return a data frame (which is growing during the simulation, so that, although possible, it is computationally expensive to call them from inside a trajectory). The others return a numeric value.</p>
+<div id="plotting-a-histogram-of-monitor-results" class="section level3">
+<h3>Plotting a histogram of monitor results</h3>
+<p>A histogram of the amount of time that customers spend in the bank can be plotted by taking some basic information – start and end time of each customer – from the <code>get_mon_arrivals()</code> function, and then calculating the elapsed time. This example draws the plot with the <code>ggplot2</code> package, but other plotting packages, and base R graphics, could do something similar.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="kw">library</span>(simmer.plot)</span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co"># library(ggplot2) # (automatically loaded with simmer.plot)</span></span>
+<span id="cb10-4"><a href="#cb10-4"></a></span>
+<span id="cb10-5"><a href="#cb10-5"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb10-6"><a href="#cb10-6"></a></span>
+<span id="cb10-7"><a href="#cb10-7"></a>customer &lt;-</span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="dv">12</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>)</span>
+<span id="cb10-12"><a href="#cb10-12"></a></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="kw">set.seed</span>(<span class="dv">393939</span>)</span>
+<span id="cb10-14"><a href="#cb10-14"></a>bank &lt;-</span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-16"><a href="#cb10-16"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb10-17"><a href="#cb10-17"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>,</span>
+<span id="cb10-18"><a href="#cb10-18"></a>                customer,</span>
+<span id="cb10-19"><a href="#cb10-19"></a>                <span class="kw">at</span>(<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">cumsum</span>(<span class="kw">rexp</span>(<span class="dv">20</span> <span class="op">-</span><span class="st"> </span><span class="dv">1</span>, <span class="fl">0.1</span>)))))</span>
+<span id="cb10-20"><a href="#cb10-20"></a></span>
+<span id="cb10-21"><a href="#cb10-21"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dv">400</span>)</span>
+<span id="cb10-22"><a href="#cb10-22"></a><span class="co">#&gt; simmer environment: bank | now: 253.460482171601 | next: </span></span>
+<span id="cb10-23"><a href="#cb10-23"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb10-24"><a href="#cb10-24"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb10-25"><a href="#cb10-25"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 20 }</span></span>
+<span id="cb10-26"><a href="#cb10-26"></a>bank <span class="op">%&gt;%</span></span>
+<span id="cb10-27"><a href="#cb10-27"></a><span class="st">  </span>get_mon_arrivals <span class="op">%&gt;%</span></span>
+<span id="cb10-28"><a href="#cb10-28"></a><span class="st">  </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(end_time <span class="op">-</span><span class="st"> </span>start_time)) <span class="op">+</span></span>
+<span id="cb10-29"><a href="#cb10-29"></a><span class="st">  </span><span class="kw">geom_histogram</span>() <span class="op">+</span></span>
+<span id="cb10-30"><a href="#cb10-30"></a><span class="st">  </span><span class="kw">xlab</span>(<span class="st">&quot;Time spent in the system&quot;</span>) <span class="op">+</span></span>
+<span id="cb10-31"><a href="#cb10-31"></a><span class="st">  </span><span class="kw">ylab</span>(<span class="st">&quot;Number of customers&quot;</span>)</span>
+<span id="cb10-32"><a href="#cb10-32"></a><span class="co">#&gt; `stat_bin()` using `bins = 30`. Pick better value with `binwidth`.</span></span></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="monitoring-a-resource" class="section level3">
+<h3>Monitoring a resource</h3>
+<p>Now consider observing the number of customers waiting or active in a Resource.</p>
+<p><code>get_mon_resources()</code> returns a table of states and times for the counter. Whenever a customer enters/leaves a queue/counter, a new row is created recording the number of customers in the queue, the counter and the system as a whole. We call this the ‘state’. The amount of time that the state lasts is the difference in time between one state and the next, which we calculate with the <code>diff()</code> function. Finally, we multiply the number of customers in each state by the duration of the state, and divide by the duration of the simulation (the time at the end) to get the average.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb11-2"><a href="#cb11-2"></a></span>
+<span id="cb11-3"><a href="#cb11-3"></a><span class="kw">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb11-4"><a href="#cb11-4"></a></span>
+<span id="cb11-5"><a href="#cb11-5"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb11-6"><a href="#cb11-6"></a></span>
+<span id="cb11-7"><a href="#cb11-7"></a>customer &lt;-</span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-9"><a href="#cb11-9"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Arrived&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-10"><a href="#cb11-10"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb11-11"><a href="#cb11-11"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-12"><a href="#cb11-12"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Got counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-13"><a href="#cb11-13"></a><span class="st">  </span><span class="kw">log_</span>(<span class="cf">function</span>() {<span class="kw">paste</span>(<span class="st">&quot;Waited&quot;</span>, <span class="kw">now</span>(bank) <span class="op">-</span><span class="st"> </span><span class="kw">get_attribute</span>(bank, <span class="st">&quot;start_time&quot;</span>))}) <span class="op">%&gt;%</span></span>
+<span id="cb11-14"><a href="#cb11-14"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="dv">12</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-15"><a href="#cb11-15"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-16"><a href="#cb11-16"></a><span class="st">  </span><span class="kw">log_</span>(<span class="st">&quot;Finished&quot;</span>)</span>
+<span id="cb11-17"><a href="#cb11-17"></a></span>
+<span id="cb11-18"><a href="#cb11-18"></a>bank &lt;-</span>
+<span id="cb11-19"><a href="#cb11-19"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-20"><a href="#cb11-20"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb11-21"><a href="#cb11-21"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>, customer, <span class="cf">function</span>() {<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">rexp</span>(<span class="dv">4</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>), <span class="dv">-1</span>)})</span>
+<span id="cb11-22"><a href="#cb11-22"></a></span>
+<span id="cb11-23"><a href="#cb11-23"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> <span class="dv">400</span>)</span>
+<span id="cb11-24"><a href="#cb11-24"></a><span class="co">#&gt; 0: Customer0: Arrived</span></span>
+<span id="cb11-25"><a href="#cb11-25"></a><span class="co">#&gt; 0: Customer0: Got counter</span></span>
+<span id="cb11-26"><a href="#cb11-26"></a><span class="co">#&gt; 0: Customer0: Waited 0</span></span>
+<span id="cb11-27"><a href="#cb11-27"></a><span class="co">#&gt; 12: Customer0: Finished</span></span>
+<span id="cb11-28"><a href="#cb11-28"></a><span class="co">#&gt; 25.0176: Customer1: Arrived</span></span>
+<span id="cb11-29"><a href="#cb11-29"></a><span class="co">#&gt; 25.0176: Customer1: Got counter</span></span>
+<span id="cb11-30"><a href="#cb11-30"></a><span class="co">#&gt; 25.0176: Customer1: Waited 0</span></span>
+<span id="cb11-31"><a href="#cb11-31"></a><span class="co">#&gt; 27.4852: Customer2: Arrived</span></span>
+<span id="cb11-32"><a href="#cb11-32"></a><span class="co">#&gt; 27.551: Customer3: Arrived</span></span>
+<span id="cb11-33"><a href="#cb11-33"></a><span class="co">#&gt; 37.0176: Customer1: Finished</span></span>
+<span id="cb11-34"><a href="#cb11-34"></a><span class="co">#&gt; 37.0176: Customer2: Got counter</span></span>
+<span id="cb11-35"><a href="#cb11-35"></a><span class="co">#&gt; 37.0176: Customer2: Waited 9.53241116646677</span></span>
+<span id="cb11-36"><a href="#cb11-36"></a><span class="co">#&gt; 44.9785: Customer4: Arrived</span></span>
+<span id="cb11-37"><a href="#cb11-37"></a><span class="co">#&gt; 49.0176: Customer2: Finished</span></span>
+<span id="cb11-38"><a href="#cb11-38"></a><span class="co">#&gt; 49.0176: Customer3: Got counter</span></span>
+<span id="cb11-39"><a href="#cb11-39"></a><span class="co">#&gt; 49.0176: Customer3: Waited 21.466591599012</span></span>
+<span id="cb11-40"><a href="#cb11-40"></a><span class="co">#&gt; 61.0176: Customer3: Finished</span></span>
+<span id="cb11-41"><a href="#cb11-41"></a><span class="co">#&gt; 61.0176: Customer4: Got counter</span></span>
+<span id="cb11-42"><a href="#cb11-42"></a><span class="co">#&gt; 61.0176: Customer4: Waited 16.0391307005949</span></span>
+<span id="cb11-43"><a href="#cb11-43"></a><span class="co">#&gt; 73.0176: Customer4: Finished</span></span>
+<span id="cb11-44"><a href="#cb11-44"></a><span class="co">#&gt; simmer environment: bank | now: 73.0175860496223 | next: </span></span>
+<span id="cb11-45"><a href="#cb11-45"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb11-46"><a href="#cb11-46"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb11-47"><a href="#cb11-47"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 5 }</span></span>
+<span id="cb11-48"><a href="#cb11-48"></a>customer_monitor &lt;-</span>
+<span id="cb11-49"><a href="#cb11-49"></a><span class="st">  </span><span class="kw">get_mon_arrivals</span>(bank) <span class="op">%&gt;%</span></span>
+<span id="cb11-50"><a href="#cb11-50"></a><span class="st">  </span><span class="kw">transform</span>(<span class="dt">wait =</span> end_time <span class="op">-</span><span class="st"> </span>start_time <span class="op">-</span><span class="st"> </span>activity_time)</span>
+<span id="cb11-51"><a href="#cb11-51"></a>mean_waiting_time &lt;-<span class="st"> </span><span class="kw">mean</span>(customer_monitor<span class="op">$</span>wait)</span>
+<span id="cb11-52"><a href="#cb11-52"></a></span>
+<span id="cb11-53"><a href="#cb11-53"></a>resource_monitor &lt;-<span class="st"> </span><span class="kw">get_mon_resources</span>(bank)</span>
+<span id="cb11-54"><a href="#cb11-54"></a></span>
+<span id="cb11-55"><a href="#cb11-55"></a>queue_state &lt;-<span class="st"> </span><span class="kw">head</span>(resource_monitor<span class="op">$</span>queue, <span class="dv">-1</span>)</span>
+<span id="cb11-56"><a href="#cb11-56"></a>server_state &lt;-<span class="st"> </span><span class="kw">head</span>(resource_monitor<span class="op">$</span>server, <span class="dv">-1</span>)</span>
+<span id="cb11-57"><a href="#cb11-57"></a></span>
+<span id="cb11-58"><a href="#cb11-58"></a>time_state_lasted &lt;-<span class="st"> </span><span class="kw">diff</span>(resource_monitor<span class="op">$</span>time)</span>
+<span id="cb11-59"><a href="#cb11-59"></a>time_at_end &lt;-<span class="st"> </span><span class="kw">max</span>(resource_monitor<span class="op">$</span>time)</span>
+<span id="cb11-60"><a href="#cb11-60"></a></span>
+<span id="cb11-61"><a href="#cb11-61"></a>mean_active_customers &lt;-<span class="st"> </span><span class="kw">sum</span>(server_state <span class="op">*</span><span class="st"> </span>time_state_lasted) <span class="op">/</span><span class="st"> </span>time_at_end</span>
+<span id="cb11-62"><a href="#cb11-62"></a>mean_waiting_customers &lt;-<span class="st"> </span><span class="kw">sum</span>(queue_state <span class="op">*</span><span class="st"> </span>time_state_lasted) <span class="op">/</span><span class="st"> </span>time_at_end</span>
+<span id="cb11-63"><a href="#cb11-63"></a></span>
+<span id="cb11-64"><a href="#cb11-64"></a><span class="kw">cat</span>(<span class="st">&quot; Average waiting = &quot;</span>, mean_waiting_customers, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb11-65"><a href="#cb11-65"></a>    <span class="st">&quot;Average active  = &quot;</span>, mean_active_customers, <span class="st">&quot;</span><span class="ch">\n</span><span class="st">&quot;</span>)</span>
+<span id="cb11-66"><a href="#cb11-66"></a><span class="co">#&gt;  Average waiting =  0.6442028 </span></span>
+<span id="cb11-67"><a href="#cb11-67"></a><span class="co">#&gt;  Average active  =  0.8217199</span></span></code></pre></div>
+</div>
+<div id="plotting-from-resource-monitors" class="section level3">
+<h3>Plotting from resource monitors</h3>
+<p>All the <code>get_mon_*()</code> return information that enables us to graph the output. Alternative plotting packages can be used; here we use the <code>simmer.plot</code> package just to graph the number of customers waiting for the counter.</p>
+<p>The <code>simmer.plot</code> package is imported at line 2. The function <code>get_mon_resources()</code> is not called because the function <code>plot()</code> calles <code>get_mon_resources()</code> itself. The <code>plot()</code> function has arguments to specifiy what to plot.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a><span class="kw">library</span>(simmer)</span>
+<span id="cb12-2"><a href="#cb12-2"></a><span class="kw">library</span>(simmer.plot)</span>
+<span id="cb12-3"><a href="#cb12-3"></a></span>
+<span id="cb12-4"><a href="#cb12-4"></a>timeInBank &lt;-<span class="st"> </span><span class="dv">12</span> <span class="co"># mean, minutes</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a></span>
+<span id="cb12-6"><a href="#cb12-6"></a><span class="kw">set.seed</span>(<span class="dv">1234</span>)</span>
+<span id="cb12-7"><a href="#cb12-7"></a></span>
+<span id="cb12-8"><a href="#cb12-8"></a>bank &lt;-<span class="st"> </span><span class="kw">simmer</span>()</span>
+<span id="cb12-9"><a href="#cb12-9"></a></span>
+<span id="cb12-10"><a href="#cb12-10"></a>customer &lt;-</span>
+<span id="cb12-11"><a href="#cb12-11"></a><span class="st">  </span><span class="kw">trajectory</span>(<span class="st">&quot;Customer&#39;s path&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-12"><a href="#cb12-12"></a><span class="st">  </span><span class="kw">set_attribute</span>(<span class="st">&quot;start_time&quot;</span>, <span class="cf">function</span>() {<span class="kw">now</span>(bank)}) <span class="op">%&gt;%</span></span>
+<span id="cb12-13"><a href="#cb12-13"></a><span class="st">  </span><span class="kw">seize</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-14"><a href="#cb12-14"></a><span class="st">  </span><span class="kw">timeout</span>(<span class="cf">function</span>() {<span class="kw">rexp</span>(<span class="dv">1</span>, <span class="dv">1</span><span class="op">/</span>timeInBank)}) <span class="op">%&gt;%</span></span>
+<span id="cb12-15"><a href="#cb12-15"></a><span class="st">  </span><span class="kw">release</span>(<span class="st">&quot;counter&quot;</span>)</span>
+<span id="cb12-16"><a href="#cb12-16"></a></span>
+<span id="cb12-17"><a href="#cb12-17"></a>bank &lt;-</span>
+<span id="cb12-18"><a href="#cb12-18"></a><span class="st">  </span><span class="kw">simmer</span>(<span class="st">&quot;bank&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-19"><a href="#cb12-19"></a><span class="st">  </span><span class="kw">add_resource</span>(<span class="st">&quot;counter&quot;</span>) <span class="op">%&gt;%</span></span>
+<span id="cb12-20"><a href="#cb12-20"></a><span class="st">  </span><span class="kw">add_generator</span>(<span class="st">&quot;Customer&quot;</span>, customer, <span class="cf">function</span>() {<span class="kw">c</span>(<span class="dv">0</span>, <span class="kw">rexp</span>(<span class="dv">19</span>, <span class="dv">1</span><span class="op">/</span><span class="dv">10</span>), <span class="dv">-1</span>)})</span>
+<span id="cb12-21"><a href="#cb12-21"></a></span>
+<span id="cb12-22"><a href="#cb12-22"></a>bank <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">run</span>(<span class="dt">until =</span> <span class="dv">400</span>)</span>
+<span id="cb12-23"><a href="#cb12-23"></a><span class="co">#&gt; simmer environment: bank | now: 248.706140163915 | next: </span></span>
+<span id="cb12-24"><a href="#cb12-24"></a><span class="co">#&gt; { Monitor: in memory }</span></span>
+<span id="cb12-25"><a href="#cb12-25"></a><span class="co">#&gt; { Resource: counter | monitored: TRUE | server status: 0(1) | queue status: 0(Inf) }</span></span>
+<span id="cb12-26"><a href="#cb12-26"></a><span class="co">#&gt; { Source: Customer | monitored: 1 | n_generated: 20 }</span></span>
+<span id="cb12-27"><a href="#cb12-27"></a></span>
+<span id="cb12-28"><a href="#cb12-28"></a><span class="kw">plot</span>(bank,</span>
+<span id="cb12-29"><a href="#cb12-29"></a>     <span class="dt">what =</span> <span class="st">&quot;resources&quot;</span>,</span>
+<span id="cb12-30"><a href="#cb12-30"></a>     <span class="dt">metric =</span> <span class="st">&quot;usage&quot;</span>,</span>
+<span id="cb12-31"><a href="#cb12-31"></a>     <span class="dt">names =</span> <span class="st">&quot;counter&quot;</span>,</span>
+<span id="cb12-32"><a href="#cb12-32"></a>     <span class="dt">items =</span> <span class="st">&quot;system&quot;</span>,</span>
+<span id="cb12-33"><a href="#cb12-33"></a>     <span class="dt">steps =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb12-34"><a href="#cb12-34"></a><span class="co">#&gt; Warning: &#39;plot.simmer&#39; is deprecated.</span></span>
+<span id="cb12-35"><a href="#cb12-35"></a><span class="co">#&gt; Use &#39;plot(get_mon_resources(x))&#39; instead.</span></span>
+<span id="cb12-36"><a href="#cb12-36"></a><span class="co">#&gt; See help(&quot;Deprecated&quot;)</span></span></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAkAAAAGACAIAAADK+EpIAAAACXBIWXMAAA7DAAAOwwHHb6hkAAAgAElEQVR4nO3daXwT1d4H8HNmsjZt0nSHUoosZSmbhRaUHVQ2AQsqil6VXVQUebgXL4oCV0UEVFBZ7lWQ7QoKXkU2FSqbLOLSKlvLpkhb6N40bfbM82I0pNA2TZqlJ/y+L/hMZjnnfzJpfsxkMqGCIBAAAADWcIEuAAAAwBMIMAAAYBICDAAAmIQAAwAAJiHAAACASQgwAABgUiADbN26dbQ6iUTSsmXLSZMm5ebmBrAwAABo/CSBLoBMmTIlKSlJnDYYDD///POaNWuOHTv2448/yuXywNYGAACNVuAD7MEHHxw0aJDznKeffnrFihX79+8fPHhwoKpyptPp1Gp1oKsAAIBqGuNnYHfffTch5MKFC445mZmZw4cPj4mJiY6OfuCBB3JychyLCgsLp02b1qJFi5CQkOTk5FWrVjk39c033/Tv31+r1bZu3XrChAklJSWORW3atJk2bZrzylKpdNGiReJ0amrq888///XXX6elpT399NPizB07dvTr10+j0XTp0mXevHk2m60+Fd6g7n7rHs7atWvT0tI0Gk1UVNRdd9115MgR56Wff/75HXfcodVq77rrrszMzCZNmixdutSDCgEAmNAYA6ywsJAQ0qxZM/HhwYMHe/bsWVhYOGfOnJkzZx47dqxnz57nz58Xl953332bN28eMWLEa6+9FhUVNW3atE8//VRc9Omnnw4ZMsRoNM6bN2/s2LFbt25NSUnR6/X1LOP06dPjxo3r06fP448/TgjZsGHDyJEjQ0JCFi5c2K9fv9dee23cuHH1qdAtdQznjTfemDBhQosWLRYvXjxp0qSLFy8OHTrUEclbt24dM2ZMVFTUq6++GhUV1bt379LSUkezXqwQAKCxEALno48+IoTs3bvXMcdgMBw6dOi2225LSUkxm83izJSUlLS0NKvVKj7Mz88PDw8fN26cIAh//PEHIeTtt98WF5WVlXXo0GH27NmCIFgslpYtW3bv3t1kMolLDx8+TAh5/fXXxYetW7d+8sknneuRSCRvvPGGON29e3dCyLfffusorGnTpsOHD7fb7eKc8ePHE0L++OOPuiu8WR391jEcQRB69OjRpk0bRy/fffed49mz2WxJSUn33HOPo7xH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" style="display: block; margin: auto;" /></p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

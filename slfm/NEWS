@@ -1,0 +1,47 @@
+slfm 1.0.1
+===========
+
+* improvements in terms of examples and description throughout the package functions. 
+
+slfm 1.0.0
+===========
+
+* including a reference for a publication related to the package in the Journal of Statistical Software. 
+
+
+slfm 0.2.3
+===========
+
+* fixing a bug related to the calculation of the % significant loadings in the function slfm_fit. 
+
+slfm 0.2.2
+===========
+
+* changing chain indicator used in alpha estimator
+
+slfm 0.2.1
+===========
+
+* adding % significant column to slfm_list output
+
+* using S/N/I notation to slfm output
+
+slfm 0.2.0
+===========
+
+* alpha inference now uses just the interested part of the chain
+
+* user can now choose which type of mixture to use (degenerate TRUE or FALSE)
+
+* user can now select a lag for MCMC chain
+
+* new `plot_matrix` function
+
+slfm 0.1.0
+===========
+
+* new `slfm` function which fits a model to a matrix of microarray data
+
+* new `slfm_list` function which fits models to a set of matrices contained in a folder
+
+* new `process_matrix` function which pre-process a set of matrices contained in a folder

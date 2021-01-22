@@ -1,0 +1,16 @@
+WARNING: No test specified, defaulting to first test defined (stfit_deepstate_test_sparse_emp_cov_est1_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/stfit/inst/testfiles/sparse_emp_cov_est1/sparse_emp_cov_est1_output/17fc2d8379e06f74ea94062ca9324545c31e1928.pass`
+TRACE: Running: stfit_deepstate_test_sparse_emp_cov_est1_test from /home/akhila/fuzzer_packages/fuzzedpackages/stfit/inst/testfiles/sparse_emp_cov_est1/sparse_emp_cov_est1_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+X values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+nRow values: 1649522050
+nCol values: -879953637
+nnr values: 1076286280
+Missing value
+pidx values: 4.38983e+276 -2.83919e+230 nan -1.5601e+246 inf
+input ends
+TRACE: Passed: stfit_deepstate_test_sparse_emp_cov_est1_test

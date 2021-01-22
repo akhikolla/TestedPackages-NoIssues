@@ -1,0 +1,11 @@
+# Version 0.2.0
+- CRAN release
+- Avoid using rBind and cBind in source code 
+
+# Version 0.1.1
+- Warning when there are sampling variances equal to zero
+- Error when there are missing sampling variances
+- Progress bar for bootstrap implementation using 'pbapply'
+
+# Version 0.1.0
+- CRAN release

@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (ssdtools_deepstate_test_rgamma_ssd_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/rgamma_ssd/rgamma_ssd_output/f911d83fb638377f823ec46058249698faad2dcd.pass`
+TRACE: Running: ssdtools_deepstate_test_rgamma_ssd_test from /home/akhila/fuzzer_packages/fuzzedpackages/ssdtools/inst/testfiles/rgamma_ssd/rgamma_ssd_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+n values: 467495432
+shape values: 8.08981e-307
+scale values: 3.76873e+222
+input ends
+TRACE: Passed: ssdtools_deepstate_test_rgamma_ssd_test

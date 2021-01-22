@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (satellite_deepstate_test_seqC_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+TRACE: Running: satellite_deepstate_test_seqC_test from /home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+from_ values: -2.43318e-187
+to_ values: -1.64581e+174
+by_ values: -1.66668e-49
+input ends
+ERROR: Crashed: satellite_deepstate_test_seqC_test
+ERROR: Test case /home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/seqC/seqC_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash crashed

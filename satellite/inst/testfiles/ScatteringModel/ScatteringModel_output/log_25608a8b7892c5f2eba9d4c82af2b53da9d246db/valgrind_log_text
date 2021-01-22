@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (satellite_deepstate_test_ScatteringModel_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/ScatteringModel/ScatteringModel_output/25608a8b7892c5f2eba9d4c82af2b53da9d246db.pass`
+TRACE: Running: satellite_deepstate_test_ScatteringModel_test from /home/akhila/fuzzer_packages/fuzzedpackages/satellite/inst/testfiles/ScatteringModel/ScatteringModel_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+mnBandWls values: 9.72613e-288 2.18915e-247 8.80179e-174 1.96466e-246 6.20977e+120 7.18190e-28 2.49408e+292 1.57546e-262 5.22103e+290 1.31150e+91
+
+dScatCoef values: 8.18719e+241
+input ends
+TRACE: Passed: satellite_deepstate_test_ScatteringModel_test

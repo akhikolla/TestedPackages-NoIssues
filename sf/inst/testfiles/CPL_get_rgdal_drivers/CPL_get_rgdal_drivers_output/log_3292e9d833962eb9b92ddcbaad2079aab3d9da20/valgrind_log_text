@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (sf_deepstate_test_CPL_get_rgdal_drivers_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/sf/inst/testfiles/CPL_get_rgdal_drivers/CPL_get_rgdal_drivers_output/3292e9d833962eb9b92ddcbaad2079aab3d9da20.pass`
+TRACE: Running: sf_deepstate_test_CPL_get_rgdal_drivers_test from /home/akhila/fuzzer_packages/fuzzedpackages/sf/inst/testfiles/CPL_get_rgdal_drivers/CPL_get_rgdal_drivers_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+dummy values: -469638059
+input ends
+TRACE: Passed: sf_deepstate_test_CPL_get_rgdal_drivers_test

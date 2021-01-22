@@ -1,0 +1,214 @@
+---
+title: "Overview of `simcdm`"
+author: "James Joseph Balamuta"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Overview of simcdm}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+# Overview
+
+Within this document, we highlight the different features of the `simcdm` package
+as it relates to simulating cognitive diagnostic modeling data. 
+
+## Notation
+
+For consistency, we aim to use the following notation.
+
+Denoting individuals:
+
+- $N$ is the total number of individuals taking the assessment.
+- $i$ is the current individual.
+
+Denoting items:
+
+- $J$ is the total number of items on the assessment.
+- $j$ is the current item
+- $Y_{ij}$ is the observed binary response for individual $i$ ($1\leq i \leq N$) to item $j$ ($1\leq j\leq J$).
+- $s_j$ is the probability of slipping on item $j$. 
+- $g_j$ is the probability of guessing on item $j$.
+
+Denoting attributes:
+
+- $K$ is the total number of attributes for the assessment item.
+- $k$ is the current attribute.
+- $\boldsymbol\alpha_i=\left(\alpha_{i1},\dots,\alpha_{iK}\right)^\prime$ 
+  where $\boldsymbol\alpha_i\in \left\{0,1\right\}^K$ and $\alpha_{ik}$ is 
+  the latent binary attribute for individual $i$ on attribute $k$ ($1\leq k\leq K$).
+
+Denoting the skill/attribute "Q" matrix: 
+
+- $\boldsymbol q_{j}=\left(q_{j1},\dots,q_{jK}\right)^\prime$ be the
+  $j$th row of $\boldsymbol Q$ such that $q_{jk}=1$ if 
+  attribute $k$ is required for item $j$ and zero otherwise.
+
+# Usage
+
+To use `simcdm`, please load the package.
+
+```{r load-r-pkg}
+library(simcdm)
+```
+
+## Matrix Simulation
+
+Simulations within this section are done underneath the following settings.
+
+```{r setup-matrix-sims}
+# Set a seed for reproducibility
+set.seed(888)
+
+# Setup Parameters
+N = 15   # Number of Examinees / Subjects
+J = 10   # Number of Items
+K = 2    # Number of Skills / Attributes
+```
+
+### Identifiable Q Matrix Simulation
+
+Simulate an identifiable $Q$ matrix  ($J$ items by $K$ skills).
+
+```{r sim-q-matrix}
+# Set a seed for reproducibility
+set.seed(1512)
+
+# Simulate an identifiable Q matrix
+Q = sim_q_matrix(J, K)
+Q
+```
+
+### $\eta$ Matrix Simulation
+
+Create the ideal response matrix for each trait ($J$ items by $2^K$ latent classes).
+
+```{r sim-eta-matrix}
+# Set a seed for reproducibility
+set.seed(4421)
+
+# Simulate an eta matrix
+eta = sim_eta_matrix(K, J, Q)
+eta
+```
+
+### Attribute profile simulation
+
+Generate latent attribute profile classes ($2^K$ latent classes by $K$ skills).
+
+```{r attribute-classes-gen}
+# Create a listing of all attribute classes 
+class_alphas = attribute_classes(K)
+class_alphas
+```
+
+Generate latent attribute profile class for each subject ($N$ subjects by $K$ skills).
+
+```{r sim-subject-attributes}
+# Set a seed for reproducibility
+set.seed(5126)
+
+# Create attributes for a subject 
+subject_alphas = sim_subject_attributes(N, K)
+subject_alphas
+
+# Equivalent to:
+# subject_alphas = class_alphas[sample(2 ^ K, N, replace = TRUE),]
+```
+
+### DINA Simulation
+
+Simulations within this section are done underneath the following settings.
+
+```{r setup-sim-dina}
+# Set a seed for reproducibility
+set.seed(888)
+
+# Setup Parameters
+N = 15   # Number of Examinees / Subjects
+J = 10   # Number of Items
+K = 2    # Number of Skills / Attributes
+
+# Assign slipping and guessing values for each item
+ss = gs = rep(.2, J)
+
+# Simulate identifiable Q matrix
+Q = sim_q_matrix(J, K)
+
+# Simulate subject attributes
+subject_alphas = sim_subject_attributes(N, K)
+```
+
+### DINA Item Simulation
+
+Simulate item data, $Y$, under DINA model ($N$ by $J$)
+
+```{r sim-dina-items}
+# Set a seed for reproducibility
+set.seed(2019)
+
+# Simulate items under the DINA model
+items_dina = sim_dina_items(subject_alphas, Q, ss, gs)
+items_dina
+```
+
+### DINA Attribute Simulation
+
+Simulate attribute data under DINA model ($N$ by $J$)
+
+```{r sim-dina-attributes}
+# Set a seed for reproducibility
+set.seed(51823)
+
+# Simulate attributes under the DINA model
+attributes = sim_dina_attributes(subject_alphas, Q)
+attributes
+```
+
+## rRUM Simulation
+
+The rRUM simulations are done using the following settings.
+
+```{r rrum-sim-setup}
+# Set a seed for reproducibility
+set.seed(888)
+
+# Setup Parameters
+N = 15   # Number of Examinees / Subjects
+J = 10   # Number of Items
+K = 2    # Number of Skills / Attributes
+
+# The probabilities of answering each item correctly for individuals 
+# who do not lack any required attribute
+pistar = rep(.9, J)
+
+# Simulate an identifiable Q matrix
+Q = sim_q_matrix(J, K)
+
+# Penalties for failing to have each of the required attributes
+rstar  = .5 * Q
+
+# Latent Class Probabilities
+pis = c(.1, .2, .3, .4)
+
+# Generate latent attribute profile with custom probability (N subjects by K skills)
+subject_alphas = sim_subject_attributes(N, K, prob = pis)
+
+# Equivalent to:
+# class_alphas = attribute_classes(K)
+# subject_alphas = class_alphas[sample(2 ^ K, N, replace = TRUE, prob = pis),]
+```
+
+### Simulate rRUM items
+
+Simulate rRUM item data $Y$ ($N$ by $J$)
+
+```{r sim-rrum}
+# Set a seed for reproducibility
+set.seed(912)
+
+# Generate rRUM items
+rrum_items = sim_rrum_items(Q, rstar, pistar, subject_alphas)
+rrum_items
+```

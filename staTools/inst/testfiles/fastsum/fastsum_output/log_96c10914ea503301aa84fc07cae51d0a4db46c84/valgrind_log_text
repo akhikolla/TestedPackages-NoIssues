@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (staTools_deepstate_test_fastsum_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/staTools/inst/testfiles/fastsum/fastsum_output/96c10914ea503301aa84fc07cae51d0a4db46c84.pass`
+TRACE: Running: staTools_deepstate_test_fastsum_test from /home/akhila/fuzzer_packages/fuzzedpackages/staTools/inst/testfiles/fastsum/fastsum_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+i values: -498905818
+xmin values: 569042049
+alpha values: -1.20777e+13
+input ends
+TRACE: Passed: staTools_deepstate_test_fastsum_test

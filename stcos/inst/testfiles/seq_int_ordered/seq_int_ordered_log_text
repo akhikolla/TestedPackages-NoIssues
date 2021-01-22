@@ -1,0 +1,33 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (stcos_deepstate_test_seq_int_ordered_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+from values: -2.43318e-187
+to values: -1.64581e+174
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+from values: -1.5615e-299
+to values: -1.20777e+13
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+from values: 1.27048e-62
+to values: -2.88162e-134
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+from values: 3.16522e+06
+to values: 3.72126e-82
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+from values: -1.92672e-302
+to values: -4.2952e-278
+input ends
+INFO: Done fuzzing! Ran 5 tests (2 tests/second) with 0 failed/5 passed/0 abandoned tests
