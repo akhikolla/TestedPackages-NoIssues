@@ -1,0 +1,14 @@
+3c4df96e208c55203f49e8fab32bc1e4 *DESCRIPTION
+64ae1212d55e613813797cb87210600b *NAMESPACE
+aa8bfe9935a9ac5bc5629f8c52085101 *NEWS.md
+28dec2a853d2aa81e99191bb7007dfbf *R/RcppExports.R
+e1477351e277011c2ba6da62ed00a306 *R/RcppRoll-package.R
+8ecb3c5b4d07ea0bf873ab2f9a91c12d *R/RcppRoll.R
+fc515078e31059a855f50c1aee54741c *README.md
+c6164170410695a001115eb1bc742404 *man/RcppRoll-exports.Rd
+754aa156488afe89c1bbe37594b336c2 *man/RcppRoll.Rd
+c027b136240f63206edeafc2d6f6629d *src/RcppExports.cpp
+6603d7f6dfecf6213d9578146f96d49a *src/RcppRoll.cpp
+87b45a6ab1228dd20d570591244e44f5 *tests/testthat.R
+7ec0ea81c7747a5def02bf90e5927422 *tests/testthat/test-weights.R
+3e4582ecb2c256ad08fe7a89cece1a82 *tests/testthat/test-zoo.R

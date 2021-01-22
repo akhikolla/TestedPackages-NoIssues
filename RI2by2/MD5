@@ -1,0 +1,12 @@
+e50d4011cc5c8644c21231c28b1ca0cc *DESCRIPTION
+9fb49c65b941b958b1254e249850ce76 *NAMESPACE
+c463f2a4a5e8e90444da4b36d72aa2fc *R/RI2by2.R
+ab8880ec2ffea66eafd8df8074a2bafa *R/RcppExports.R
+8ee9ad923254585536811dbf3513d4e6 *man/AE.CI.Rd
+6271aa33bc893ec1678ddd0a6ccdd161 *man/Perm.CI.RLH.Rd
+aca1bc3c1b13f184ed0fa7d194228054 *man/Perm.CI.Rd
+f956f94e00d4ee688675cbda2c85110e *man/Robins.CI.Rd
+d8ee3273b667e549a1af6fe692862e4b *src/Rcpp-RI2by2-chiba.cpp
+dc6ccac2bad5c4a9d4499c56a4ae98dd *src/RcppExports.cpp
+12d04633d1859a314e1acb78782eef02 *tests/testthat.R
+008f8d0a445d8ddc9ce472c94ad83369 *tests/testthat/testCIs.R

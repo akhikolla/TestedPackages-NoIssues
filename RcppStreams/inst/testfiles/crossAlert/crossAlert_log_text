@@ -1,0 +1,51 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (RcppStreams_deepstate_test_crossAlert_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+f1 values: 467495432
+f2 values: 1827680409
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: RcppStreams_deepstate_test_crossAlert_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+f1 values: -498905818
+f2 values: 569042049
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: RcppStreams_deepstate_test_crossAlert_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+f1 values: -293123844
+f2 values: -555281357
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: RcppStreams_deepstate_test_crossAlert_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+f1 values: -1105761949
+f2 values: 304498753
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: RcppStreams_deepstate_test_crossAlert_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+f1 values: 954479852
+f2 values: -194229631
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: RcppStreams_deepstate_test_crossAlert_test
+input starts
+EXTERNAL: qs v0.23.4.
+
+f1 values: 1344097580
+f2 values: -1433424706
+input ends
+ERROR: Variable precision printing not supported.
+ERROR: Abandoned: RcppStreams_deepstate_test_crossAlert_test
+INFO: Done fuzzing! Ran 6 tests (3 tests/second) with 0 failed/0 passed/6 abandoned tests

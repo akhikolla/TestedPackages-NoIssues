@@ -1,0 +1,31 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (RI2by2_deepstate_test_CI_2by2_chiba_tau_v7_approx_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+a values: 467495432
+b values: 1827680409
+c values: -1053990400
+d values: 77470436
+level values: -1.66668e-49
+total_tests values: 1668042617
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+input starts
+EXTERNAL: qs v0.23.4.
+
+a values: -498905818
+b values: 569042049
+c values: 1273656994
+d values: 603497922
+level values: 2.79236e-196
+total_tests values: 900590154
+input ends
+EXTERNAL: Error: vector is too large
+
+EXTERNAL: Execution halted
+
+INFO: Done fuzzing! Ran 2 tests (1 tests/second) with 2 failed/0 passed/0 abandoned tests

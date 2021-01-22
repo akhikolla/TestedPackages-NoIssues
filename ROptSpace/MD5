@@ -1,0 +1,15 @@
+f773176168892575117055d945fec74e *DESCRIPTION
+039f78dc583f4949328becdebb84b425 *NAMESPACE
+bdb9b21585dd4460b0127b359fd32e14 *R/OptSpace.R
+60bef77ce90a46c3af05c5da4d79f04d *R/RcppExports.R
+bc3d072f402a8eb247894428af4aac8a *R/auxiliary.R
+27fbeac037690f789b9d0d43fbc8814a *R/package-ROptSpace.R
+bcbc358952356eacca7528a183eecda7 *R/zzz.R
+d52d7e61353110e5a3be383dd23d1435 *build/partial.rdb
+01b0fd9123bbfbfbfa6523e2f06960f4 *inst/REFERENCES.bib
+7461e74b3a0d0d3c0b5ec35b236d0723 *man/OptSpace.Rd
+9fd1029109369129505bb0baf5d1227c *man/ROptSpace.Rd
+61059660eb073d93e00e8ee054237071 *src/Makevars
+61059660eb073d93e00e8ee054237071 *src/Makevars.win
+17f96be9e1d721962be4eb3830071539 *src/RcppExports.cpp
+9afaa0942eb640aacbca0e48aa395380 *src/toy_codes.cpp

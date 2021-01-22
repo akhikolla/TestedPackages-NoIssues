@@ -1,0 +1,67 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_PB_GLASO_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -2.43318e-187
+api values: -1.64581e+174
+spgr values: -1.66668e-49
+rsi values: 1.91698e-80
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -1.5615e-299
+api values: -1.20777e+13
+spgr values: 2.79236e-196
+rsi values: 1.26379e+187
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 1.27048e-62
+api values: -2.88162e-134
+spgr values: 8.18711e+299
+rsi values: 0.00468189
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 3.16522e+06
+api values: 3.72126e-82
+spgr values: 5.29799e-243
+rsi values: 7.52749e+12
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -1.92672e-302
+api values: -4.2952e-278
+spgr values: 4.24195e+22
+rsi values: -1.34847e-218
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -8.5119e-07
+api values: -5.48117e-145
+spgr values: 4.79212e-250
+rsi values: 9.60637e+283
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -5.84486e+130
+api values: 7.96752e+95
+spgr values: -4.40542e-65
+rsi values: 9.93765e+292
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -3.59873e+296
+api values: 9.11343e-239
+spgr values: -2.94034e-89
+rsi values: -1.10766e+218
+input ends
+INFO: Done fuzzing! Ran 8 tests (4 tests/second) with 0 failed/8 passed/0 abandoned tests

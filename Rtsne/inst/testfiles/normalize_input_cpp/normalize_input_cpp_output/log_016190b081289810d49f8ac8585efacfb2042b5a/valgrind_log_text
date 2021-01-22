@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (Rtsne_deepstate_test_normalize_input_cpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/Rtsne/inst/testfiles/normalize_input_cpp/normalize_input_cpp_output/016190b081289810d49f8ac8585efacfb2042b5a.pass`
+TRACE: Running: Rtsne_deepstate_test_normalize_input_cpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/Rtsne/inst/testfiles/normalize_input_cpp/normalize_input_cpp_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+input values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: Rtsne_deepstate_test_normalize_input_cpp_test

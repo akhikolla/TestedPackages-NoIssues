@@ -1,0 +1,84 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_RS_FARSHAD_PETROSKY_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -2.43318e-187
+p values: -1.64581e+174
+api values: -1.66668e-49
+spgr values: 1.91698e-80
+rsi values: 2.93871e+294
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -1.5615e-299
+p values: -1.20777e+13
+api values: 2.79236e-196
+spgr values: 1.26379e+187
+rsi values: 1.42068e+49
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 1.27048e-62
+p values: -2.88162e-134
+api values: 8.18711e+299
+spgr values: 0.00468189
+rsi values: 9.28697e-257
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 3.16522e+06
+p values: 3.72126e-82
+api values: 5.29799e-243
+spgr values: 7.52749e+12
+rsi values: -2.14488e+105
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -1.92672e-302
+p values: -4.2952e-278
+api values: 4.24195e+22
+spgr values: -1.34847e-218
+rsi values: 8.07634e-201
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -8.5119e-07
+p values: -5.48117e-145
+api values: 4.79212e-250
+spgr values: 9.60637e+283
+rsi values: 5.00463e-274
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -5.84486e+130
+p values: 7.96752e+95
+api values: -4.40542e-65
+spgr values: 9.93765e+292
+rsi values: 2.32003e+83
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -3.59873e+296
+p values: 9.11343e-239
+api values: -2.94034e-89
+spgr values: -1.10766e+218
+rsi values: -5.77261e+206
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 7.56776e+303
+p values: 1.22772e-177
+api values: 4.0547e-74
+spgr values: -9.15958e-292
+rsi values: -1.32519e-180
+input ends
+INFO: Done fuzzing! Ran 9 tests (4 tests/second) with 0 failed/9 passed/0 abandoned tests

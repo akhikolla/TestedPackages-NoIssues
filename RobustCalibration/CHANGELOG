@@ -1,0 +1,5 @@
+## change / RobustCalibration 0.5.1
+  * fixed the bug (appearing on line line 147 in rcalibration()) with an emulator.
+  * created rcalibration_MS() and rcalibration_MS class for calibrating mathematical models for multiple sources.
+  * created predict_MS() for prediction after calibrating mathematical models
+  * created predictobj.rcalibration and predictobj.rcalibration_MS classes for the output for the predict() and predict_MS() function

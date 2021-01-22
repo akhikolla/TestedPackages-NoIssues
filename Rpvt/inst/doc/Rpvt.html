@@ -1,0 +1,973 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2020-05-15" />
+
+<title>Rpvt Package</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Rpvt Package</h1>
+<h4 class="date">2020-05-15</h4>
+
+
+
+<div id="rpvt" class="section level2">
+<h2><code>Rpvt</code></h2>
+<p><code>Rpvt</code> is a correlation-based PVT (Pressure-Volume-Temperature) package for dry gas, wet gas, black oil, and water samples. It generates PVT properties of hydrocarbons and water samples in a tabular format at a constant temperature from atmospheric pressure up to the pressure of interest. Predictions for gas, oil, and water samples are generated by <strong><code>pvt_gas()</code></strong>, <strong><code>pvt_oil()</code></strong>, and <strong><code>pvt_water()</code></strong> functions, respectively.<br></p>
+</div>
+<div id="pvt_gas-arguments" class="section level2">
+<h2><code>pvt_gas() arguments</code></h2>
+<ul>
+<li><code>input_unit</code>: input unit system for parameters, a character string either ‘SI’ or ‘Field’.</li>
+<li><code>output_unit</code>: output unit system for properties, a character string either ‘SI’ or ‘Field’.</li>
+<li><code>fluid</code>: fluid type, a character string either ‘dry_gas’ or ‘wet_gas’.</li>
+<li><code>pvt_model</code>: PVT model, the character string ‘DAK’.</li>
+<li><code>visc_model</code>: viscosity model, the character string ‘Sutton’.</li>
+<li><code>t</code>: Reservoir temperature, a numeric value either in ‘C’ or ‘F’ depending on the ‘input_unit’.</li>
+<li><code>p</code>: Reservoir pressure, a numeric value either in ‘kPag’ or ‘Psig’ depending on the ‘input_unit’.</li>
+<li><code>gas_spgr</code>: gas specific gravity (Air = 1.0).</li>
+<li><code>nhc_composition</code>: a vector of mole fractions for nitrogen, hydrogen sulfide, and carbon dioxide, respectively.</li>
+<li><code>cgr</code>: condensate to gas ratio, a numeric value in ‘m3/m3’ or ‘STB/MMSCF’ depending on the ‘input_unit’.</li>
+<li><code>cond_api</code>: condensate API gravity used for wet gas samples. It must be <code>NULL</code> for dry gas mixtures.</li>
+<li><code>warning</code>: a charater string either ‘yes’ or ‘no’. It shows warning messages for input parameters outside the range of correlations.</li>
+</ul>
+</div>
+<div id="pvt_oil-arguments" class="section level2">
+<h2><code>pvt_oil() arguments</code></h2>
+<ul>
+<li><code>input_unit</code>: input_unit input unit system for parameters, a character string either ‘SI’ or ‘Field’.</li>
+<li><code>output_unit</code>: output_unit output unit system for properties, a character string either ‘SI’ or ‘Field’.</li>
+<li><code>fluid</code>: fluid type, the character string ‘black_oil’.</li>
+<li><code>pvt_model</code>: PVT model, a character string. ‘Standing’, ‘Vasquez_Beggs’, ‘Farshad_Petrosky’, ‘Al_Marhoun’, and ‘Glaso’ models are currently available.</li>
+<li><code>visc_model</code>: viscosity model, a character string. ‘Beggs_Robinson’, and ‘Al_Marhoun’ models are currently available.</li>
+<li><code>t</code>: Reservoir temperature, a numeric value either in ‘C’ or ‘F’ depending on the ‘input_unit’.</li>
+<li><code>p</code>: Reservoir pressure, a numeric value either in ‘kPag’ or ‘Psig’ depending on the ‘input_unit’.</li>
+<li><code>oil_api</code>: API gravity of oil.</li>
+<li><code>gas_spgr</code>: gas specific gravity (Air = 1.0).</li>
+<li><code>nhc_composition</code>: a vector of mole fractions for nitrogen, hydrogen sulfide, and carbon dioxide, respectively.</li>
+<li><code>rsi</code>: initial solution gas oil ratio in ‘m3/m3’ or ‘SCF/STB’ depending on the ‘input_unit’. It is either NULL or a numeric value. If ‘rsi’ is NULL, then a numeric value must be assigned to ‘pb’.</li>
+<li><code>pb</code>: bubble point pressure, a numeric value either in ‘kPag’ or ‘Psig’ depending on the ‘input_unit’. it is either NULL or a numeric value. If ‘pb’ is NULL, then a numeric value must be assigned to ‘rsi’.</li>
+<li><code>warning</code>: a charater string either ‘yes’ or ‘no’. It shows warning messages for input parameters outside the range of correlations.</li>
+</ul>
+</div>
+<div id="pvt_water-arguments" class="section level2">
+<h2><code>pvt_water() arguments</code></h2>
+<ul>
+<li><code>input_unit</code>: input_unit input unit system for parameters, a character string either ‘SI’ or ‘Field’.</li>
+<li><code>output_unit</code>: output unit system for properties, a character string either ‘SI’ or ‘Field’.</li>
+<li><code>fluid</code>: fluid type, the character string ‘water’.</li>
+<li><code>pvt_model</code>: PVT model, a character string. ‘Spivey’, ‘Meehan’, and ‘McCain’ models are currently available.</li>
+<li><code>visc_model</code>: viscosity model, a character string. ‘Spivey’, ‘Meehan’, and ‘McCain’ models are currently available.</li>
+<li><code>t</code>: Reservoir temperature, a numeric value either in ‘C’ or ‘F’ depending on the ‘input_unit’.</li>
+<li><code>p</code>: Reservoir pressure, a numeric value either in ‘kPag’ or ‘Psig’ depending on the ‘input_unit’.</li>
+<li><code>gas_saturated</code>: a charater string either ‘yes’ or ‘no’.</li>
+<li><code>salinity</code>: water salinity in weight percent TDS.</li>
+<li><code>warning</code>: a charater string either ‘yes’ or ‘no’. It shows warning messages for input parameters outside the range of correlations.</li>
+</ul>
+</div>
+<div id="units-for-input-parameters" class="section level2">
+<h2><code>Units</code> for input parameters</h2>
+<p>The <code>input_unit</code> is either <code>SI</code> or <code>Field</code>. Depending on the <code>input_unit</code> system, the following units are used for the input parameters:</p>
+<ul>
+<li><code>t</code>: “F” in “Field” or “C” in “SI”.</li>
+<li><code>p</code>: “Psig” in “Field” or “kPag” in “SI”.</li>
+<li><code>cgr</code>: “STB/MMSCF” in “Field” or “m3/m3” in “SI”.</li>
+<li><code>rsi</code>: “SCF/STB” in “Field” or “m3/m3” in “SI”.</li>
+<li><code>pb</code>: “Psig” in “Field” or “kPag” in “SI”.</li>
+</ul>
+</div>
+<div id="gas-correlations" class="section level2">
+<h2><code>Gas Correlations</code></h2>
+<ul>
+<li><code>pvt_model</code>: “DAK” correlation (Dranchuk and Abou-Kassem) <span class="citation">(Sutton, 2007)</span>.</li>
+<li><code>visc_model</code>: “Sutton” correlation <span class="citation">(Sutton, 2007)</span>.</li>
+</ul>
+</div>
+<div id="oil-correlations" class="section level2">
+<h2><code>Oil Correlations</code></h2>
+<ul>
+<li><code>pvt_model</code>: “Standing”, “Vasquez_Beggs”, “Farshad_Petrosky”, “Al_Marhoun”, or “Glaso” correlations <span class="citation">(Al-Marhoun, 1988; Glaso, 1980; Petrosky Jr. &amp; Farshad, 1998; Standing, 1947; Vasquez &amp; Beggs, 1980)</span>. “Spivey” correlation is used for estimating the oil compressibility above the bubble point <span class="citation">(Spivey, Valko, &amp; McCain, 2007)</span>.</li>
+<li><code>visc_model</code>: “Beggs_Robinson”, or “Al_Marhoun” correlations <span class="citation">(Al-Marhoun, 2004; Beggs &amp; Robinson, 1975)</span>.</li>
+</ul>
+</div>
+<div id="water-correlations" class="section level2">
+<h2><code>Water Correlations</code></h2>
+<ul>
+<li><code>pvt_model</code>: “Spivey”, “McCain” or “Meehan” correlations <span class="citation">(McCain, Jr., Spivey, &amp; Lenn, 2011; McCain Jr., 1991; Meehan, 1980b, 1980a; Spivey, McCain, &amp; North, 2004)</span>.</li>
+<li><code>visc_model</code>: “Spivey”, “McCain” or “Meehan” correlations <span class="citation">(McCain, Jr. et al., 2011; McCain Jr., 1991; Meehan, 1980b, 1980a; Spivey et al., 2004)</span>.</li>
+</ul>
+</div>
+<div id="installation" class="section level2">
+<h2><code>Installation</code></h2>
+<p>The <code>Rpvt</code> can be installed from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" title="1"><span class="kw">install.packages</span>(<span class="st">&quot;Rpvt&quot;</span>)</a></code></pre></div>
+</div>
+<div id="gas-pvt-examples" class="section level2">
+<h2><code>Gas PVT Examples</code></h2>
+<div id="example-1" class="section level4">
+<h4>Example 1:</h4>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb2-1" title="1"><span class="kw">library</span>(Rpvt)</a>
+<a class="sourceLine" id="cb2-2" title="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb2-3" title="3"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb2-4" title="4"><span class="kw">library</span>(ggpubr)</a>
+<a class="sourceLine" id="cb2-5" title="5"></a>
+<a class="sourceLine" id="cb2-6" title="6">pvt_gas_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">pvt_gas</span>(<span class="dt">input_unit =</span> <span class="st">&quot;Field&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;Field&quot;</span>, </a>
+<a class="sourceLine" id="cb2-7" title="7"><span class="dt">fluid =</span> <span class="st">&quot;dry_gas&quot;</span>, <span class="dt">pvt_model =</span> <span class="st">&quot;DAK&quot;</span>, <span class="dt">visc_model =</span> <span class="st">&quot;Sutton&quot;</span>, </a>
+<a class="sourceLine" id="cb2-8" title="8"><span class="dt">t =</span> <span class="dv">400</span>, <span class="dt">p =</span> <span class="dv">30000</span>, <span class="dt">gas_spgr =</span> <span class="fl">0.65</span>, <span class="dt">nhc_composition =</span> <span class="kw">c</span>(<span class="fl">0.03</span>,<span class="fl">0.012</span>,<span class="fl">0.018</span>),</a>
+<a class="sourceLine" id="cb2-9" title="9"><span class="dt">cgr =</span> <span class="dv">0</span>, <span class="dt">cond_api =</span> <span class="ot">NULL</span>, <span class="dt">warning =</span> <span class="st">&quot;yes&quot;</span>)</a>
+<a class="sourceLine" id="cb2-10" title="10"><span class="co">#&gt; Warning in pvt_gas(input_unit = &quot;Field&quot;, output_unit = &quot;Field&quot;, fluid =</span></a>
+<a class="sourceLine" id="cb2-11" title="11"><span class="co">#&gt; &quot;dry_gas&quot;, : pressure is greater than dry gas PVT correlation upper limit: 10000</span></a>
+<a class="sourceLine" id="cb2-12" title="12"><span class="co">#&gt; psig</span></a>
+<a class="sourceLine" id="cb2-13" title="13"><span class="co">#&gt; Warning in pvt_gas(input_unit = &quot;Field&quot;, output_unit = &quot;Field&quot;, fluid =</span></a>
+<a class="sourceLine" id="cb2-14" title="14"><span class="co">#&gt; &quot;dry_gas&quot;, : pressure is greater than gas viscosity correlation upper limit:</span></a>
+<a class="sourceLine" id="cb2-15" title="15"><span class="co">#&gt; 20000 psig</span></a>
+<a class="sourceLine" id="cb2-16" title="16"></a>
+<a class="sourceLine" id="cb2-17" title="17"><span class="kw">attributes</span>(pvt_gas_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-18" title="18"><span class="co">#&gt; $dim</span></a>
+<a class="sourceLine" id="cb2-19" title="19"><span class="co">#&gt; [1] 3001    8</span></a>
+<a class="sourceLine" id="cb2-20" title="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-21" title="21"><span class="co">#&gt; $dimnames</span></a>
+<a class="sourceLine" id="cb2-22" title="22"><span class="co">#&gt; $dimnames[[1]]</span></a>
+<a class="sourceLine" id="cb2-23" title="23"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb2-24" title="24"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-25" title="25"><span class="co">#&gt; $dimnames[[2]]</span></a>
+<a class="sourceLine" id="cb2-26" title="26"><span class="co">#&gt; [1] &quot;T_(F)&quot;             &quot;P_(Psig)&quot;          &quot;Z-Factor&quot;         </span></a>
+<a class="sourceLine" id="cb2-27" title="27"><span class="co">#&gt; [4] &quot;Bg_(rb/scf)&quot;       &quot;Density_(lb/cuft)&quot; &quot;Cg_(1/Psia)&quot;      </span></a>
+<a class="sourceLine" id="cb2-28" title="28"><span class="co">#&gt; [7] &quot;Viscosity_(cp)&quot;    &quot;m(p)_(Psia^2/cp)&quot; </span></a>
+<a class="sourceLine" id="cb2-29" title="29"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-30" title="30"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-31" title="31"><span class="co">#&gt; $`gas pseudocritical temperature (F)`</span></a>
+<a class="sourceLine" id="cb2-32" title="32"><span class="co">#&gt; [1] -102.2183</span></a>
+<a class="sourceLine" id="cb2-33" title="33"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb2-34" title="34"><span class="co">#&gt; $`gas pseudocritical pressure (Psia)`</span></a>
+<a class="sourceLine" id="cb2-35" title="35"><span class="co">#&gt; [1] 648.5108</span></a>
+<a class="sourceLine" id="cb2-36" title="36"></a>
+<a class="sourceLine" id="cb2-37" title="37">pvt_gas_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(pvt_gas_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb2-38" title="38"></a>
+<a class="sourceLine" id="cb2-39" title="39"><span class="kw">head</span>(pvt_gas_<span class="dv">1</span>,<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb2-40" title="40"><span class="co">#&gt;    T_(F) P_(Psig)  Z-Factor Bg_(rb/scf) Density_(lb/cuft) Cg_(1/Psia)</span></a>
+<a class="sourceLine" id="cb2-41" title="41"><span class="co">#&gt; 1    400        0 0.9996026  0.29449758        0.03000184 0.068072651</span></a>
+<a class="sourceLine" id="cb2-42" title="42"><span class="co">#&gt; 2    400       10 0.9993343  0.17520145        0.05043034 0.040519143</span></a>
+<a class="sourceLine" id="cb2-43" title="43"><span class="co">#&gt; 3    400       20 0.9990678  0.12467204        0.07086968 0.028848352</span></a>
+<a class="sourceLine" id="cb2-44" title="44"><span class="co">#&gt; 4    400       30 0.9988031  0.09675307        0.09131977 0.022399782</span></a>
+<a class="sourceLine" id="cb2-45" title="45"><span class="co">#&gt; 5    400       40 0.9985402  0.07904301        0.11178051 0.018309117</span></a>
+<a class="sourceLine" id="cb2-46" title="46"><span class="co">#&gt; 6    400       50 0.9982790  0.06680793        0.13225179 0.015482979</span></a>
+<a class="sourceLine" id="cb2-47" title="47"><span class="co">#&gt; 7    400       60 0.9980196  0.05784892        0.15273351 0.013413498</span></a>
+<a class="sourceLine" id="cb2-48" title="48"><span class="co">#&gt; 8    400       70 0.9977620  0.05100557        0.17322557 0.011832661</span></a>
+<a class="sourceLine" id="cb2-49" title="49"><span class="co">#&gt; 9    400       80 0.9975062  0.04560763        0.19372786 0.010585663</span></a>
+<a class="sourceLine" id="cb2-50" title="50"><span class="co">#&gt; 10   400       90 0.9972522  0.04124093        0.21424029 0.009576844</span></a>
+<a class="sourceLine" id="cb2-51" title="51"><span class="co">#&gt;    Viscosity_(cp) m(p)_(Psia^2/cp)</span></a>
+<a class="sourceLine" id="cb2-52" title="52"><span class="co">#&gt; 1      0.01652119             0.00</span></a>
+<a class="sourceLine" id="cb2-53" title="53"><span class="co">#&gt; 2      0.01652162         23856.42</span></a>
+<a class="sourceLine" id="cb2-54" title="54"><span class="co">#&gt; 3      0.01652218         59833.30</span></a>
+<a class="sourceLine" id="cb2-55" title="55"><span class="co">#&gt; 4      0.01652286        107935.97</span></a>
+<a class="sourceLine" id="cb2-56" title="56"><span class="co">#&gt; 5      0.01652364        168169.44</span></a>
+<a class="sourceLine" id="cb2-57" title="57"><span class="co">#&gt; 6      0.01652452        240538.49</span></a>
+<a class="sourceLine" id="cb2-58" title="58"><span class="co">#&gt; 7      0.01652550        325047.64</span></a>
+<a class="sourceLine" id="cb2-59" title="59"><span class="co">#&gt; 8      0.01652656        421701.16</span></a>
+<a class="sourceLine" id="cb2-60" title="60"><span class="co">#&gt; 9      0.01652770        530503.09</span></a>
+<a class="sourceLine" id="cb2-61" title="61"><span class="co">#&gt; 10     0.01652893        651457.25</span></a>
+<a class="sourceLine" id="cb2-62" title="62"></a>
+<a class="sourceLine" id="cb2-63" title="63"><span class="kw">colnames</span>(pvt_gas_<span class="dv">1</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;T(F)&quot;</span>, <span class="st">&quot;P(Psig)&quot;</span>, <span class="st">&quot;Z-FACTOR&quot;</span>, <span class="st">&quot;Bg(rb/scf)&quot;</span>, </a>
+<a class="sourceLine" id="cb2-64" title="64">                         <span class="st">&quot;Density(lb/ft3)&quot;</span>, <span class="st">&quot;Cg(1/Psi)&quot;</span>, <span class="st">&quot;MUg(cp)&quot;</span>, </a>
+<a class="sourceLine" id="cb2-65" title="65">                         <span class="st">&quot;m(p)(Psia^2/cp)&quot;</span>)</a>
+<a class="sourceLine" id="cb2-66" title="66">Z_plot &lt;-<span class="st"> </span>pvt_gas_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Z-FACTOR</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-67" title="67"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-68" title="68"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-69" title="69"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Z-Factor&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-70" title="70"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb2-71" title="71">Density_plot &lt;-<span class="st"> </span>pvt_gas_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Density(lb/ft3)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-72" title="72"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-73" title="73"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-74" title="74"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Density (lb/ft3)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-75" title="75"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb2-76" title="76">Bg_plot &lt;-<span class="st"> </span>pvt_gas_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Bg(rb/scf)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-77" title="77"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-78" title="78"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-79" title="79"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-80" title="80"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Gas FVF (rb/scf)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-81" title="81"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb2-82" title="82">Cg_plot &lt;-<span class="st"> </span>pvt_gas_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Cg(1/Psi)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-83" title="83"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-84" title="84"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-85" title="85"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-86" title="86"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Compressibility (1/Psi)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-87" title="87"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb2-88" title="88">MUg_plot &lt;-<span class="st"> </span>pvt_gas_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">MUg(cp)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-89" title="89"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-90" title="90"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-91" title="91"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Viscosity (cp)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-92" title="92"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb2-93" title="93">mp_plot &lt;-<span class="st"> </span>pvt_gas_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">m(p)(Psia^2/cp)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-94" title="94"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-95" title="95"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-96" title="96"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Pseudopressure (Psia^2/cp)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb2-97" title="97"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb2-98" title="98"></a>
+<a class="sourceLine" id="cb2-99" title="99">gas_pvt_plots &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(Z_plot, Density_plot, Bg_plot, Cg_plot, MUg_plot, mp_plot,</a>
+<a class="sourceLine" id="cb2-100" title="100">                      <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">nrow =</span> <span class="dv">3</span>, <span class="dt">align =</span> <span class="st">&quot;v&quot;</span>)</a>
+<a class="sourceLine" id="cb2-101" title="101"></a>
+<a class="sourceLine" id="cb2-102" title="102"></a>
+<a class="sourceLine" id="cb2-103" title="103">gas_pvt_plots </a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="example-2" class="section level4">
+<h4>Example 2:</h4>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1"></a>
+<a class="sourceLine" id="cb3-2" title="2">pvt_gas_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">pvt_gas</span>(<span class="dt">input_unit =</span> <span class="st">&quot;Field&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;SI&quot;</span>, </a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="dt">fluid =</span> <span class="st">&quot;wet_gas&quot;</span>, <span class="dt">pvt_model =</span> <span class="st">&quot;DAK&quot;</span>, <span class="dt">visc_model =</span> <span class="st">&quot;Sutton&quot;</span>, </a>
+<a class="sourceLine" id="cb3-4" title="4"><span class="dt">t =</span> <span class="dv">300</span>, <span class="dt">p =</span> <span class="dv">5000</span>, <span class="dt">gas_spgr =</span> <span class="fl">0.75</span>, <span class="dt">nhc_composition =</span> <span class="kw">c</span>(<span class="fl">0.05</span>,<span class="fl">0.01</span>,<span class="fl">0.04</span>),</a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="dt">cgr =</span> <span class="dv">5</span>, <span class="dt">cond_api =</span> <span class="fl">42.3</span>, <span class="dt">warning =</span> <span class="st">&quot;no&quot;</span>)</a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7"><span class="kw">tail</span>(<span class="kw">as.data.frame</span>(pvt_gas_<span class="dv">2</span>), <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt;        T_(C) P_(kPag) Z-Factor Bg_(rm3/sm3) Density_(kg/m3)  Cg_(1/kPaa)</span></a>
+<a class="sourceLine" id="cb3-9" title="9"><span class="co">#&gt; 492 148.8889 33853.26 1.038327   0.01292178        72.48579 2.130071e-05</span></a>
+<a class="sourceLine" id="cb3-10" title="10"><span class="co">#&gt; 493 148.8889 33922.21 1.038911   0.01290285        72.59215 2.123161e-05</span></a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt; 494 148.8889 33991.15 1.039496   0.01288400        72.69832 2.116284e-05</span></a>
+<a class="sourceLine" id="cb3-12" title="12"><span class="co">#&gt; 495 148.8889 34060.10 1.040082   0.01286525        72.80430 2.109439e-05</span></a>
+<a class="sourceLine" id="cb3-13" title="13"><span class="co">#&gt; 496 148.8889 34129.05 1.040669   0.01284658        72.91010 2.102627e-05</span></a>
+<a class="sourceLine" id="cb3-14" title="14"><span class="co">#&gt; 497 148.8889 34198.00 1.041257   0.01282800        73.01570 2.095847e-05</span></a>
+<a class="sourceLine" id="cb3-15" title="15"><span class="co">#&gt; 498 148.8889 34266.94 1.041846   0.01280951        73.12112 2.089099e-05</span></a>
+<a class="sourceLine" id="cb3-16" title="16"><span class="co">#&gt; 499 148.8889 34335.89 1.042436   0.01279110        73.22635 2.082383e-05</span></a>
+<a class="sourceLine" id="cb3-17" title="17"><span class="co">#&gt; 500 148.8889 34404.84 1.043027   0.01277278        73.33139 2.075699e-05</span></a>
+<a class="sourceLine" id="cb3-18" title="18"><span class="co">#&gt; 501 148.8889 34473.79 1.043619   0.01275454        73.43624 2.069046e-05</span></a>
+<a class="sourceLine" id="cb3-19" title="19"><span class="co">#&gt;     Viscosity_(mPa.s) m(p)_(MPaa^2/mPa.s)</span></a>
+<a class="sourceLine" id="cb3-20" title="20"><span class="co">#&gt; 492        0.02369521            59798.72</span></a>
+<a class="sourceLine" id="cb3-21" title="21"><span class="co">#&gt; 493        0.02371929            59989.07</span></a>
+<a class="sourceLine" id="cb3-22" title="22"><span class="co">#&gt; 494        0.02374337            60179.51</span></a>
+<a class="sourceLine" id="cb3-23" title="23"><span class="co">#&gt; 495        0.02376746            60370.03</span></a>
+<a class="sourceLine" id="cb3-24" title="24"><span class="co">#&gt; 496        0.02379154            60560.63</span></a>
+<a class="sourceLine" id="cb3-25" title="25"><span class="co">#&gt; 497        0.02381564            60751.32</span></a>
+<a class="sourceLine" id="cb3-26" title="26"><span class="co">#&gt; 498        0.02383973            60942.09</span></a>
+<a class="sourceLine" id="cb3-27" title="27"><span class="co">#&gt; 499        0.02386383            61132.94</span></a>
+<a class="sourceLine" id="cb3-28" title="28"><span class="co">#&gt; 500        0.02388794            61323.87</span></a>
+<a class="sourceLine" id="cb3-29" title="29"><span class="co">#&gt; 501        0.02391204            61514.88</span></a></code></pre></div>
+</div>
+</div>
+<div id="oil-pvt-examples" class="section level2">
+<h2><code>Oil PVT Examples</code></h2>
+<div id="example-1-1" class="section level4">
+<h4>Example 1:</h4>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb4-1" title="1"><span class="kw">library</span>(Rpvt)</a>
+<a class="sourceLine" id="cb4-2" title="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb4-3" title="3"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb4-4" title="4"><span class="kw">library</span>(ggpubr)</a>
+<a class="sourceLine" id="cb4-5" title="5"></a>
+<a class="sourceLine" id="cb4-6" title="6">pvt_oil_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">pvt_oil</span>(<span class="dt">input_unit =</span> <span class="st">&quot;Field&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;Field&quot;</span>, </a>
+<a class="sourceLine" id="cb4-7" title="7">                                   <span class="dt">fluid =</span> <span class="st">&quot;black_oil&quot;</span>, <span class="dt">pvt_model =</span> <span class="st">&quot;Standing&quot;</span>,</a>
+<a class="sourceLine" id="cb4-8" title="8">                                   <span class="dt">visc_model =</span> <span class="st">&quot;Beggs_Robinson&quot;</span>, <span class="dt">t =</span> <span class="dv">200</span>, <span class="dt">p =</span> <span class="dv">3000</span>, </a>
+<a class="sourceLine" id="cb4-9" title="9">                                   <span class="dt">oil_api =</span> <span class="dv">35</span>, <span class="dt">gas_spgr =</span> <span class="fl">0.8</span>,</a>
+<a class="sourceLine" id="cb4-10" title="10">                                   <span class="dt">nhc_composition =</span> <span class="kw">c</span>(<span class="fl">0.05</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>), </a>
+<a class="sourceLine" id="cb4-11" title="11">                                   <span class="dt">rsi =</span> <span class="dv">650</span>, <span class="dt">pb =</span> <span class="ot">NULL</span>, <span class="dt">warning =</span> <span class="st">&quot;yes&quot;</span>)</a>
+<a class="sourceLine" id="cb4-12" title="12"><span class="co">#&gt; Warning in pvt_oil(input_unit = &quot;Field&quot;, output_unit = &quot;Field&quot;, fluid =</span></a>
+<a class="sourceLine" id="cb4-13" title="13"><span class="co">#&gt; &quot;black_oil&quot;, : H2S composition is greater than gas viscosity correlation upper</span></a>
+<a class="sourceLine" id="cb4-14" title="14"><span class="co">#&gt; limit: 0.017 mol fraction</span></a>
+<a class="sourceLine" id="cb4-15" title="15"></a>
+<a class="sourceLine" id="cb4-16" title="16"><span class="kw">attributes</span>(pvt_oil_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb4-17" title="17"><span class="co">#&gt; $dim</span></a>
+<a class="sourceLine" id="cb4-18" title="18"><span class="co">#&gt; [1] 301  13</span></a>
+<a class="sourceLine" id="cb4-19" title="19"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-20" title="20"><span class="co">#&gt; $dimnames</span></a>
+<a class="sourceLine" id="cb4-21" title="21"><span class="co">#&gt; $dimnames[[1]]</span></a>
+<a class="sourceLine" id="cb4-22" title="22"><span class="co">#&gt; NULL</span></a>
+<a class="sourceLine" id="cb4-23" title="23"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-24" title="24"><span class="co">#&gt; $dimnames[[2]]</span></a>
+<a class="sourceLine" id="cb4-25" title="25"><span class="co">#&gt;  [1] &quot;T_(F)&quot;                &quot;P_(Psig)&quot;             &quot;Rso_(scf/stb)&quot;       </span></a>
+<a class="sourceLine" id="cb4-26" title="26"><span class="co">#&gt;  [4] &quot;Bo_(rb/stb)&quot;          &quot;Oil_Density_(lb/ft3)&quot; &quot;Co_(1/Psia)&quot;         </span></a>
+<a class="sourceLine" id="cb4-27" title="27"><span class="co">#&gt;  [7] &quot;Oil_Viscosity_(cp)&quot;   &quot;Z-Factor&quot;             &quot;Bg_(rb/scf)&quot;         </span></a>
+<a class="sourceLine" id="cb4-28" title="28"><span class="co">#&gt; [10] &quot;Gas_Density_(lb/ft3)&quot; &quot;Cg_(1/Psia)&quot;          &quot;Gas_Viscosity_(cp)&quot;  </span></a>
+<a class="sourceLine" id="cb4-29" title="29"><span class="co">#&gt; [13] &quot;m(p)_(Psia^2/cp)&quot;    </span></a>
+<a class="sourceLine" id="cb4-30" title="30"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-31" title="31"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-32" title="32"><span class="co">#&gt; $`gas pseudocritical temperature (F)`</span></a>
+<a class="sourceLine" id="cb4-33" title="33"><span class="co">#&gt; [1] -61.59983</span></a>
+<a class="sourceLine" id="cb4-34" title="34"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb4-35" title="35"><span class="co">#&gt; $`gas pseudocritical pressure (Psia)`</span></a>
+<a class="sourceLine" id="cb4-36" title="36"><span class="co">#&gt; [1] 647.0921</span></a>
+<a class="sourceLine" id="cb4-37" title="37"></a>
+<a class="sourceLine" id="cb4-38" title="38">pvt_oil_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(pvt_oil_<span class="dv">1</span>)</a>
+<a class="sourceLine" id="cb4-39" title="39"></a>
+<a class="sourceLine" id="cb4-40" title="40"><span class="kw">tail</span>(pvt_oil_<span class="dv">1</span>, <span class="dv">10</span>) </a>
+<a class="sourceLine" id="cb4-41" title="41"><span class="co">#&gt;     T_(F) P_(Psig) Rso_(scf/stb) Bo_(rb/stb) Oil_Density_(lb/ft3)  Co_(1/Psia)</span></a>
+<a class="sourceLine" id="cb4-42" title="42"><span class="co">#&gt; 292   200     2910           650    1.380185             43.52833 1.319029e-05</span></a>
+<a class="sourceLine" id="cb4-43" title="43"><span class="co">#&gt; 293   200     2920           650    1.380014             43.53371 1.316513e-05</span></a>
+<a class="sourceLine" id="cb4-44" title="44"><span class="co">#&gt; 294   200     2930           650    1.379844             43.53907 1.314019e-05</span></a>
+<a class="sourceLine" id="cb4-45" title="45"><span class="co">#&gt; 295   200     2940           650    1.379675             43.54441 1.311547e-05</span></a>
+<a class="sourceLine" id="cb4-46" title="46"><span class="co">#&gt; 296   200     2950           650    1.379506             43.54974 1.309097e-05</span></a>
+<a class="sourceLine" id="cb4-47" title="47"><span class="co">#&gt; 297   200     2960           650    1.379338             43.55504 1.306667e-05</span></a>
+<a class="sourceLine" id="cb4-48" title="48"><span class="co">#&gt; 298   200     2970           650    1.379171             43.56034 1.304258e-05</span></a>
+<a class="sourceLine" id="cb4-49" title="49"><span class="co">#&gt; 299   200     2980           650    1.379004             43.56561 1.301870e-05</span></a>
+<a class="sourceLine" id="cb4-50" title="50"><span class="co">#&gt; 300   200     2990           650    1.378837             43.57087 1.299502e-05</span></a>
+<a class="sourceLine" id="cb4-51" title="51"><span class="co">#&gt; 301   200     3000           650    1.378671             43.57611 1.297154e-05</span></a>
+<a class="sourceLine" id="cb4-52" title="52"><span class="co">#&gt;     Oil_Viscosity_(cp)  Z-Factor  Bg_(rb/scf) Gas_Density_(lb/ft3)  Cg_(1/Psia)</span></a>
+<a class="sourceLine" id="cb4-53" title="53"><span class="co">#&gt; 292          0.5075536 0.8571989 0.0009737542             11.16752 0.0003017984</span></a>
+<a class="sourceLine" id="cb4-54" title="54"><span class="co">#&gt; 293          0.5080544 0.8575451 0.0009708281             11.20118 0.0003001107</span></a>
+<a class="sourceLine" id="cb4-55" title="55"><span class="co">#&gt; 294          0.5085569 0.8578959 0.0009679270             11.23475 0.0002984348</span></a>
+<a class="sourceLine" id="cb4-56" title="56"><span class="co">#&gt; 295          0.5090612 0.8582513 0.0009650507             11.26824 0.0002967708</span></a>
+<a class="sourceLine" id="cb4-57" title="57"><span class="co">#&gt; 296          0.5095672 0.8586112 0.0009621989             11.30164 0.0002951185</span></a>
+<a class="sourceLine" id="cb4-58" title="58"><span class="co">#&gt; 297          0.5100750 0.8589757 0.0009593714             11.33495 0.0002934779</span></a>
+<a class="sourceLine" id="cb4-59" title="59"><span class="co">#&gt; 298          0.5105844 0.8593446 0.0009565678             11.36817 0.0002918488</span></a>
+<a class="sourceLine" id="cb4-60" title="60"><span class="co">#&gt; 299          0.5110956 0.8597181 0.0009537878             11.40130 0.0002902311</span></a>
+<a class="sourceLine" id="cb4-61" title="61"><span class="co">#&gt; 300          0.5116085 0.8600959 0.0009510313             11.43435 0.0002886249</span></a>
+<a class="sourceLine" id="cb4-62" title="62"><span class="co">#&gt; 301          0.5121231 0.8604782 0.0009482979             11.46731 0.0002870300</span></a>
+<a class="sourceLine" id="cb4-63" title="63"><span class="co">#&gt;     Gas_Viscosity_(cp) m(p)_(Psia^2/cp)</span></a>
+<a class="sourceLine" id="cb4-64" title="64"><span class="co">#&gt; 292         0.01894741        613123202</span></a>
+<a class="sourceLine" id="cb4-65" title="65"><span class="co">#&gt; 293         0.01898046        616726950</span></a>
+<a class="sourceLine" id="cb4-66" title="66"><span class="co">#&gt; 294         0.01901354        620335238</span></a>
+<a class="sourceLine" id="cb4-67" title="67"><span class="co">#&gt; 295         0.01904666        623948017</span></a>
+<a class="sourceLine" id="cb4-68" title="68"><span class="co">#&gt; 296         0.01907980        627565235</span></a>
+<a class="sourceLine" id="cb4-69" title="69"><span class="co">#&gt; 297         0.01911298        631186844</span></a>
+<a class="sourceLine" id="cb4-70" title="70"><span class="co">#&gt; 298         0.01914620        634812793</span></a>
+<a class="sourceLine" id="cb4-71" title="71"><span class="co">#&gt; 299         0.01917944        638443035</span></a>
+<a class="sourceLine" id="cb4-72" title="72"><span class="co">#&gt; 300         0.01921272        642077519</span></a>
+<a class="sourceLine" id="cb4-73" title="73"><span class="co">#&gt; 301         0.01924602        645716199</span></a>
+<a class="sourceLine" id="cb4-74" title="74"></a>
+<a class="sourceLine" id="cb4-75" title="75">Rs_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Rso_(scf/stb)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-76" title="76"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-77" title="77"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-78" title="78"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Rs (SCF/STB)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-79" title="79"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-80" title="80">Bo_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Bo_(rb/stb)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-81" title="81"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-82" title="82"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-83" title="83"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Oil FVF (rb/STB)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-84" title="84"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-85" title="85">RHOo_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Oil_Density_(lb/ft3)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-86" title="86"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-87" title="87"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-88" title="88"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Oil Density (lb/ft3)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-89" title="89"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-90" title="90">Co_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Co_(1/Psia)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-91" title="91"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-92" title="92"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-93" title="93"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-94" title="94"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Oil Compressibility (1/Psi)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-95" title="95"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-96" title="96">MUo_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Oil_Viscosity_(cp)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-97" title="97"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-98" title="98"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-99" title="99"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-100" title="100"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Oil Viscosity (cp)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-101" title="101"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-102" title="102">Bg_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Bg_(rb/scf)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-103" title="103"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-104" title="104"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-105" title="105"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-106" title="106"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Gas FVF (rb/SCF)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-107" title="107"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-108" title="108">Cg_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Cg_(1/Psia)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-109" title="109"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-110" title="110"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-111" title="111"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-112" title="112"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Gas Compressibility (1/Psi)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-113" title="113"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-114" title="114">MUg_plot &lt;-<span class="st"> </span>pvt_oil_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P_(Psig)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Gas_Viscosity_(cp)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-115" title="115"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>, <span class="dt">size =</span> <span class="dv">2</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-116" title="116"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (Psig)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-117" title="117"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Gas Viscosity (cp)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb4-118" title="118"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb4-119" title="119">oil_pvt_plots &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(Rs_plot, RHOo_plot, Bo_plot, Bg_plot, Co_plot, Cg_plot, MUo_plot, MUg_plot,</a>
+<a class="sourceLine" id="cb4-120" title="120">                      <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">nrow =</span> <span class="dv">4</span>, <span class="dt">align =</span> <span class="st">&quot;v&quot;</span>)</a>
+<a class="sourceLine" id="cb4-121" title="121"></a>
+<a class="sourceLine" id="cb4-122" title="122">oil_pvt_plots</a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="example-2-1" class="section level4">
+<h4>Example 2:</h4>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"></a>
+<a class="sourceLine" id="cb5-2" title="2">pvt_oil_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">pvt_oil</span>(<span class="dt">input_unit =</span> <span class="st">&quot;SI&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;SI&quot;</span>, <span class="dt">fluid =</span> <span class="st">&quot;black_oil&quot;</span>,</a>
+<a class="sourceLine" id="cb5-3" title="3">                     <span class="dt">pvt_model =</span> <span class="st">&quot;Vasquez_Beggs&quot;</span>, <span class="dt">visc_model =</span> <span class="st">&quot;Al_Marhoun&quot;</span>, </a>
+<a class="sourceLine" id="cb5-4" title="4">                     <span class="dt">t =</span> <span class="dv">100</span>, <span class="dt">p =</span> <span class="dv">20000</span>, <span class="dt">oil_api =</span> <span class="dv">40</span>, <span class="dt">gas_spgr =</span> <span class="fl">0.75</span>, </a>
+<a class="sourceLine" id="cb5-5" title="5">                     <span class="dt">nhc_composition =</span> <span class="kw">c</span>(<span class="fl">0.05</span>,<span class="fl">0.02</span>,<span class="fl">0.04</span>), </a>
+<a class="sourceLine" id="cb5-6" title="6">                     <span class="dt">rsi =</span> <span class="ot">NULL</span>, <span class="dt">pb =</span> <span class="dv">13000</span>, <span class="dt">warning =</span> <span class="st">&quot;yes&quot;</span>)</a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt; Warning in pvt_oil(input_unit = &quot;SI&quot;, output_unit = &quot;SI&quot;, fluid = &quot;black_oil&quot;, :</span></a>
+<a class="sourceLine" id="cb5-8" title="8"><span class="co">#&gt; H2S composition is greater than gas viscosity correlation upper limit: 0.017 mol</span></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="co">#&gt; fraction</span></a>
+<a class="sourceLine" id="cb5-10" title="10"></a>
+<a class="sourceLine" id="cb5-11" title="11"><span class="kw">head</span>(<span class="kw">as.data.frame</span>(pvt_oil_<span class="dv">2</span>), <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="co">#&gt;    T_(C)  P_(kPag) Rso_(rm3/sm3) Bo_(rm3/sm3) Oil_Density_(kg/m3)  Co_(1/kPaa)</span></a>
+<a class="sourceLine" id="cb5-13" title="13"><span class="co">#&gt; 1    100   0.00000     0.2401985     1.089818            756.5732 0.0033255930</span></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="co">#&gt; 2    100  68.94757     0.4447876     1.090367            756.3642 0.0021745619</span></a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="co">#&gt; 3    100 137.89515     0.6659115     1.090961            756.1386 0.0016446979</span></a>
+<a class="sourceLine" id="cb5-16" title="16"><span class="co">#&gt; 4    100 206.84272     0.8994433     1.091588            755.9005 0.0013347696</span></a>
+<a class="sourceLine" id="cb5-17" title="17"><span class="co">#&gt; 5    100 275.79029     1.1430314     1.092242            755.6525 0.0011293957</span></a>
+<a class="sourceLine" id="cb5-18" title="18"><span class="co">#&gt; 6    100 344.73786     1.3951355     1.092919            755.3962 0.0009823799</span></a>
+<a class="sourceLine" id="cb5-19" title="19"><span class="co">#&gt; 7    100 413.68544     1.6546602     1.093616            755.1326 0.0008714483</span></a>
+<a class="sourceLine" id="cb5-20" title="20"><span class="co">#&gt; 8    100 482.63301     1.9207823     1.094330            754.8627 0.0007844784</span></a>
+<a class="sourceLine" id="cb5-21" title="21"><span class="co">#&gt; 9    100 551.58058     2.1928581     1.095060            754.5871 0.0007142814</span></a>
+<a class="sourceLine" id="cb5-22" title="22"><span class="co">#&gt; 10   100 620.52816     2.4703694     1.095805            754.3064 0.0006563117</span></a>
+<a class="sourceLine" id="cb5-23" title="23"><span class="co">#&gt;    Oil_Viscosity_(mPa.s)  Z-Factor Bg_(rm3/sm3) Gas_Density_(kg/m3) Cg_(1/kPaa)</span></a>
+<a class="sourceLine" id="cb5-24" title="24"><span class="co">#&gt; 1              0.7274220 0.9986855    1.2906979           0.7103805 0.009882170</span></a>
+<a class="sourceLine" id="cb5-25" title="25"><span class="co">#&gt; 2              0.7241780 0.9977932    0.7673772           1.1948317 0.005885882</span></a>
+<a class="sourceLine" id="cb5-26" title="26"><span class="co">#&gt; 3              0.7206860 0.9969027    0.5457181           1.6801470 0.004193186</span></a>
+<a class="sourceLine" id="cb5-27" title="27"><span class="co">#&gt; 4              0.7170347 0.9960140    0.4232449           2.1663262 0.003257910</span></a>
+<a class="sourceLine" id="cb5-28" title="28"><span class="co">#&gt; 5              0.7132757 0.9951271    0.3455557           2.6533689 0.002664619</span></a>
+<a class="sourceLine" id="cb5-29" title="29"><span class="co">#&gt; 6              0.7094434 0.9942421    0.2918836           3.1412746 0.002254731</span></a>
+<a class="sourceLine" id="cb5-30" title="30"><span class="co">#&gt; 7              0.7055623 0.9933590    0.2525829           3.6300428 0.001954588</span></a>
+<a class="sourceLine" id="cb5-31" title="31"><span class="co">#&gt; 8              0.7016509 0.9924778    0.2225630           4.1196731 0.001725315</span></a>
+<a class="sourceLine" id="cb5-32" title="32"><span class="co">#&gt; 9              0.6977233 0.9915984    0.1988837           4.6101647 0.001544462</span></a>
+<a class="sourceLine" id="cb5-33" title="33"><span class="co">#&gt; 10             0.6937909 0.9907210    0.1797282           5.1015171 0.001398153</span></a>
+<a class="sourceLine" id="cb5-34" title="34"><span class="co">#&gt;    Gas_Viscosity_(mPa.s) m(p)_(MPaa^2/mPa.s)</span></a>
+<a class="sourceLine" id="cb5-35" title="35"><span class="co">#&gt; 1             0.01370328            0.000000</span></a>
+<a class="sourceLine" id="cb5-36" title="36"><span class="co">#&gt; 2             0.01370404            1.369056</span></a>
+<a class="sourceLine" id="cb5-37" title="37"><span class="co">#&gt; 3             0.01370503            3.434840</span></a>
+<a class="sourceLine" id="cb5-38" title="38"><span class="co">#&gt; 4             0.01370622            6.198464</span></a>
+<a class="sourceLine" id="cb5-39" title="39"><span class="co">#&gt; 5             0.01370760            9.661007</span></a>
+<a class="sourceLine" id="cb5-40" title="40"><span class="co">#&gt; 6             0.01370915           13.823523</span></a>
+<a class="sourceLine" id="cb5-41" title="41"><span class="co">#&gt; 7             0.01371087           18.687043</span></a>
+<a class="sourceLine" id="cb5-42" title="42"><span class="co">#&gt; 8             0.01371275           24.252573</span></a>
+<a class="sourceLine" id="cb5-43" title="43"><span class="co">#&gt; 9             0.01371478           30.521094</span></a>
+<a class="sourceLine" id="cb5-44" title="44"><span class="co">#&gt; 10            0.01371695           37.493567</span></a></code></pre></div>
+</div>
+<div id="example-3" class="section level4">
+<h4>Example 3:</h4>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" title="1"></a>
+<a class="sourceLine" id="cb6-2" title="2">pvt_oil_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">pvt_oil</span>(<span class="dt">input_unit =</span> <span class="st">&quot;Field&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;SI&quot;</span>, <span class="dt">fluid =</span> <span class="st">&quot;black_oil&quot;</span>,</a>
+<a class="sourceLine" id="cb6-3" title="3">                     <span class="dt">pvt_model =</span> <span class="st">&quot;Farshad_Petrosky&quot;</span>, <span class="dt">visc_model =</span> <span class="st">&quot;Al_Marhoun&quot;</span>, </a>
+<a class="sourceLine" id="cb6-4" title="4">                     <span class="dt">t =</span> <span class="dv">260</span>, <span class="dt">p =</span> <span class="dv">4000</span>, <span class="dt">oil_api =</span> <span class="dv">38</span>, <span class="dt">gas_spgr =</span> <span class="fl">0.68</span>, </a>
+<a class="sourceLine" id="cb6-5" title="5">                     <span class="dt">nhc_composition =</span> <span class="kw">c</span>(<span class="fl">0.03</span>,<span class="fl">0.07</span>,<span class="fl">0.08</span>), </a>
+<a class="sourceLine" id="cb6-6" title="6">                     <span class="dt">rsi =</span> <span class="ot">NULL</span>, <span class="dt">pb =</span> <span class="dv">2500</span>, <span class="dt">warning =</span> <span class="st">&quot;yes&quot;</span>)</a>
+<a class="sourceLine" id="cb6-7" title="7"><span class="co">#&gt; Warning in pvt_oil(input_unit = &quot;Field&quot;, output_unit = &quot;SI&quot;, fluid =</span></a>
+<a class="sourceLine" id="cb6-8" title="8"><span class="co">#&gt; &quot;black_oil&quot;, : H2S composition is greater than gas viscosity correlation upper</span></a>
+<a class="sourceLine" id="cb6-9" title="9"><span class="co">#&gt; limit: 0.017 mol fraction</span></a>
+<a class="sourceLine" id="cb6-10" title="10"></a>
+<a class="sourceLine" id="cb6-11" title="11"><span class="kw">head</span>(<span class="kw">as.data.frame</span>(pvt_oil_<span class="dv">3</span>), <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb6-12" title="12"><span class="co">#&gt;       T_(C)  P_(kPag) Rso_(rm3/sm3) Bo_(rm3/sm3) Oil_Density_(kg/m3)</span></a>
+<a class="sourceLine" id="cb6-13" title="13"><span class="co">#&gt; 1  126.6667   0.00000      12.46911     1.094699            771.3572</span></a>
+<a class="sourceLine" id="cb6-14" title="14"><span class="co">#&gt; 2  126.6667  68.94757      12.62313     1.095295            771.0545</span></a>
+<a class="sourceLine" id="cb6-15" title="15"><span class="co">#&gt; 3  126.6667 137.89515      12.77794     1.095892            770.7519</span></a>
+<a class="sourceLine" id="cb6-16" title="16"><span class="co">#&gt; 4  126.6667 206.84272      12.93355     1.096491            770.4491</span></a>
+<a class="sourceLine" id="cb6-17" title="17"><span class="co">#&gt; 5  126.6667 275.79029      13.08996     1.097091            770.1464</span></a>
+<a class="sourceLine" id="cb6-18" title="18"><span class="co">#&gt; 6  126.6667 344.73786      13.24716     1.097692            769.8436</span></a>
+<a class="sourceLine" id="cb6-19" title="19"><span class="co">#&gt; 7  126.6667 413.68544      13.40515     1.098295            769.5407</span></a>
+<a class="sourceLine" id="cb6-20" title="20"><span class="co">#&gt; 8  126.6667 482.63301      13.56393     1.098899            769.2379</span></a>
+<a class="sourceLine" id="cb6-21" title="21"><span class="co">#&gt; 9  126.6667 551.58058      13.72350     1.099505            768.9350</span></a>
+<a class="sourceLine" id="cb6-22" title="22"><span class="co">#&gt; 10 126.6667 620.52816      13.88386     1.100112            768.6320</span></a>
+<a class="sourceLine" id="cb6-23" title="23"><span class="co">#&gt;     Co_(1/kPaa) Oil_Viscosity_(mPa.s)  Z-Factor Bg_(rm3/sm3)</span></a>
+<a class="sourceLine" id="cb6-24" title="24"><span class="co">#&gt; 1  0.0028083871             0.4838329 0.9992613    1.3837332</span></a>
+<a class="sourceLine" id="cb6-25" title="25"><span class="co">#&gt; 2  0.0016749541             0.4832363 0.9987608    0.8230142</span></a>
+<a class="sourceLine" id="cb6-26" title="26"><span class="co">#&gt; 3  0.0011948412             0.4826397 0.9982621    0.5855144</span></a>
+<a class="sourceLine" id="cb6-27" title="27"><span class="co">#&gt; 4  0.0009295394             0.4820430 0.9977651    0.4542889</span></a>
+<a class="sourceLine" id="cb6-28" title="28"><span class="co">#&gt; 5  0.0007612280             0.4814463 0.9972700    0.3710476</span></a>
+<a class="sourceLine" id="cb6-29" title="29"><span class="co">#&gt; 6  0.0006449318             0.4808496 0.9967766    0.3135399</span></a>
+<a class="sourceLine" id="cb6-30" title="30"><span class="co">#&gt; 7  0.0005597603             0.4802529 0.9962850    0.2714305</span></a>
+<a class="sourceLine" id="cb6-31" title="31"><span class="co">#&gt; 8  0.0004946890             0.4796564 0.9957953    0.2392652</span></a>
+<a class="sourceLine" id="cb6-32" title="32"><span class="co">#&gt; 9  0.0004433500             0.4790600 0.9953074    0.2138937</span></a>
+<a class="sourceLine" id="cb6-33" title="33"><span class="co">#&gt; 10 0.0004018085             0.4784638 0.9948213    0.1933693</span></a>
+<a class="sourceLine" id="cb6-34" title="34"><span class="co">#&gt;    Gas_Density_(kg/m3) Cg_(1/kPaa) Gas_Viscosity_(mPa.s) m(p)_(MPaa^2/mPa.s)</span></a>
+<a class="sourceLine" id="cb6-35" title="35"><span class="co">#&gt; 1            0.6007737 0.009876476            0.01545179            0.000000</span></a>
+<a class="sourceLine" id="cb6-36" title="36"><span class="co">#&gt; 2            1.0100805 0.005880180            0.01545242            1.213147</span></a>
+<a class="sourceLine" id="cb6-37" title="37"><span class="co">#&gt; 3            1.4197951 0.004187477            0.01545324            3.043021</span></a>
+<a class="sourceLine" id="cb6-38" title="38"><span class="co">#&gt; 4            1.8299161 0.003252193            0.01545423            5.490149</span></a>
+<a class="sourceLine" id="cb6-39" title="39"><span class="co">#&gt; 5            2.2404418 0.002658895            0.01545537            8.555038</span></a>
+<a class="sourceLine" id="cb6-40" title="40"><span class="co">#&gt; 6            2.6513706 0.002249000            0.01545665           12.238176</span></a>
+<a class="sourceLine" id="cb6-41" title="41"><span class="co">#&gt; 7            3.0627008 0.001948850            0.01545807           16.540033</span></a>
+<a class="sourceLine" id="cb6-42" title="42"><span class="co">#&gt; 8            3.4744308 0.001719571            0.01545962           21.461063</span></a>
+<a class="sourceLine" id="cb6-43" title="43"><span class="co">#&gt; 9            3.8865588 0.001538711            0.01546129           27.001701</span></a>
+<a class="sourceLine" id="cb6-44" title="44"><span class="co">#&gt; 10           4.2990832 0.001392396            0.01546308           33.162369</span></a></code></pre></div>
+</div>
+</div>
+<div id="water-pvt-examples" class="section level2">
+<h2><code>Water PVT Examples</code></h2>
+<div id="example-1-2" class="section level4">
+<h4>Example 1:</h4>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1"><span class="kw">library</span>(Rpvt)</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="kw">library</span>(ggplot2)</a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="kw">library</span>(magrittr)</a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="kw">library</span>(ggpubr)</a>
+<a class="sourceLine" id="cb7-5" title="5"></a>
+<a class="sourceLine" id="cb7-6" title="6">pvt_water_<span class="dv">1</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">pvt_water</span>(<span class="dt">input_unit =</span> <span class="st">&quot;SI&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;SI&quot;</span>, </a>
+<a class="sourceLine" id="cb7-7" title="7"><span class="dt">fluid =</span> <span class="st">&quot;water&quot;</span>, <span class="dt">pvt_model =</span> <span class="st">&quot;Spivey&quot;</span>, <span class="dt">visc_model =</span> <span class="st">&quot;Spivey&quot;</span>, <span class="dt">t =</span> <span class="dv">150</span>, <span class="dt">p =</span> <span class="dv">200000</span>, </a>
+<a class="sourceLine" id="cb7-8" title="8"><span class="dt">salinity =</span> <span class="dv">5</span>, <span class="dt">gas_saturated =</span> <span class="st">&quot;yes&quot;</span>, <span class="dt">warning =</span> <span class="st">&quot;yes&quot;</span>))</a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt; Warning in pvt_water(input_unit = &quot;SI&quot;, output_unit = &quot;SI&quot;, fluid = &quot;water&quot;, :</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; The pressure lower limit in &#39;Spivey&#39; correlation is 115 psig (790 kPag)</span></a>
+<a class="sourceLine" id="cb7-11" title="11"><span class="co">#&gt; Warning in pvt_water(input_unit = &quot;SI&quot;, output_unit = &quot;SI&quot;, fluid = &quot;water&quot;, :</span></a>
+<a class="sourceLine" id="cb7-12" title="12"><span class="co">#&gt; pressure is greater than PVT correlation upper limit: 29000 psig</span></a>
+<a class="sourceLine" id="cb7-13" title="13"></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="kw">head</span>(pvt_water_<span class="dv">1</span>,<span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb7-15" title="15"><span class="co">#&gt;    T_(C)  P_(kPag) Rsw_(rm3/sm3) Bw_(rm3/sm3) Density_(kg/m3)  Cw_(1/kPaa)</span></a>
+<a class="sourceLine" id="cb7-16" title="16"><span class="co">#&gt; 1    150   0.00000           NaN          NaN             NaN          NaN</span></a>
+<a class="sourceLine" id="cb7-17" title="17"><span class="co">#&gt; 2    150  68.94757           NaN          NaN             NaN          NaN</span></a>
+<a class="sourceLine" id="cb7-18" title="18"><span class="co">#&gt; 3    150 137.89515           NaN          NaN             NaN          NaN</span></a>
+<a class="sourceLine" id="cb7-19" title="19"><span class="co">#&gt; 4    150 206.84272           NaN          NaN             NaN          NaN</span></a>
+<a class="sourceLine" id="cb7-20" title="20"><span class="co">#&gt; 5    150 275.79029           NaN          NaN             NaN          NaN</span></a>
+<a class="sourceLine" id="cb7-21" title="21"><span class="co">#&gt; 6    150 344.73786           NaN          NaN             NaN          NaN</span></a>
+<a class="sourceLine" id="cb7-22" title="22"><span class="co">#&gt; 7    150 413.68544   0.001877106     1.086347        952.9482 2.160339e-05</span></a>
+<a class="sourceLine" id="cb7-23" title="23"><span class="co">#&gt; 8    150 482.63301   0.009433052     1.086319        952.9771 3.105915e-05</span></a>
+<a class="sourceLine" id="cb7-24" title="24"><span class="co">#&gt; 9    150 551.58058   0.019506617     1.086296        953.0035 3.324147e-05</span></a>
+<a class="sourceLine" id="cb7-25" title="25"><span class="co">#&gt; 10   150 620.52816   0.031017232     1.086276        953.0285 3.317271e-05</span></a>
+<a class="sourceLine" id="cb7-26" title="26"><span class="co">#&gt;    Viscosity_(mPa.s)</span></a>
+<a class="sourceLine" id="cb7-27" title="27"><span class="co">#&gt; 1          0.2066466</span></a>
+<a class="sourceLine" id="cb7-28" title="28"><span class="co">#&gt; 2          0.2066671</span></a>
+<a class="sourceLine" id="cb7-29" title="29"><span class="co">#&gt; 3          0.2066877</span></a>
+<a class="sourceLine" id="cb7-30" title="30"><span class="co">#&gt; 4          0.2067082</span></a>
+<a class="sourceLine" id="cb7-31" title="31"><span class="co">#&gt; 5          0.2067288</span></a>
+<a class="sourceLine" id="cb7-32" title="32"><span class="co">#&gt; 6          0.2067493</span></a>
+<a class="sourceLine" id="cb7-33" title="33"><span class="co">#&gt; 7          0.2067698</span></a>
+<a class="sourceLine" id="cb7-34" title="34"><span class="co">#&gt; 8          0.2067904</span></a>
+<a class="sourceLine" id="cb7-35" title="35"><span class="co">#&gt; 9          0.2068109</span></a>
+<a class="sourceLine" id="cb7-36" title="36"><span class="co">#&gt; 10         0.2068314</span></a>
+<a class="sourceLine" id="cb7-37" title="37"></a>
+<a class="sourceLine" id="cb7-38" title="38"><span class="kw">colnames</span>(pvt_water_<span class="dv">1</span>) &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;T(C)&quot;</span>, <span class="st">&quot;P(kPag)&quot;</span>, <span class="st">&quot;Rsw(rm3/sm3)&quot;</span>, <span class="st">&quot;Bw(rm3/sm3)&quot;</span>, </a>
+<a class="sourceLine" id="cb7-39" title="39">                         <span class="st">&quot;Density(kg/m3)&quot;</span>, <span class="st">&quot;Cw(1/kPa)&quot;</span>, <span class="st">&quot;MUw(mPa.s)&quot;</span>)</a>
+<a class="sourceLine" id="cb7-40" title="40">Solubility_plot &lt;-<span class="st"> </span>pvt_water_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(kPag)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Rsw(rm3/sm3)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-41" title="41"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-42" title="42"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (kPag)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-43" title="43"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Gas solubility in water (rm3/sm3)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-44" title="44"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb7-45" title="45">Density_plot &lt;-<span class="st"> </span>pvt_water_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(kPag)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Density(kg/m3)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-46" title="46"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-47" title="47"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (kPag)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-48" title="48"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Density (kg/m3)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-49" title="49"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb7-50" title="50">Bw_plot &lt;-<span class="st"> </span>pvt_water_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(kPag)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Bw(rm3/sm3)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-51" title="51"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-52" title="52"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-53" title="53"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (kPag)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-54" title="54"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Water FVF (rm3/sm3)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-55" title="55"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb7-56" title="56">Cw_plot &lt;-<span class="st"> </span>pvt_water_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(kPag)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">Cw(1/kPa)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-57" title="57"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-58" title="58"><span class="st">  </span><span class="kw">scale_y_log10</span>() <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-59" title="59"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (kPag)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-60" title="60"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Compressibility (1/kPa)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-61" title="61"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb7-62" title="62">MUw_plot &lt;-<span class="st"> </span>pvt_water_<span class="dv">1</span> <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">ggplot</span>(<span class="kw">aes</span>(<span class="dt">x =</span> <span class="st">`</span><span class="dt">P(kPag)</span><span class="st">`</span>, <span class="dt">y =</span> <span class="st">`</span><span class="dt">MUw(mPa.s)</span><span class="st">`</span>)) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-63" title="63"><span class="st">  </span><span class="kw">geom_point</span>(<span class="dt">color =</span> <span class="st">&quot;blue&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-64" title="64"><span class="st">  </span><span class="kw">xlab</span>(<span class="dt">label =</span> <span class="st">&quot;P (kPag)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-65" title="65"><span class="st">  </span><span class="kw">ylab</span>(<span class="dt">label =</span> <span class="st">&quot;Viscosity (mPa.s)&quot;</span>) <span class="op">+</span></a>
+<a class="sourceLine" id="cb7-66" title="66"><span class="st">  </span><span class="kw">theme_bw</span>()</a>
+<a class="sourceLine" id="cb7-67" title="67">water_pvt_plots &lt;-<span class="st"> </span><span class="kw">ggarrange</span>(Solubility_plot, Density_plot, Bw_plot, Cw_plot, MUw_plot,</a>
+<a class="sourceLine" id="cb7-68" title="68">                      <span class="dt">ncol =</span> <span class="dv">2</span>, <span class="dt">nrow =</span> <span class="dv">3</span>, <span class="dt">align =</span> <span class="st">&quot;v&quot;</span>)</a>
+<a class="sourceLine" id="cb7-69" title="69"><span class="co">#&gt; Warning: Removed 6 rows containing missing values (geom_point).</span></a>
+<a class="sourceLine" id="cb7-70" title="70"><span class="co">#&gt; Warning: Removed 6 rows containing missing values (geom_point).</span></a>
+<a class="sourceLine" id="cb7-71" title="71"></a>
+<a class="sourceLine" id="cb7-72" title="72"><span class="co">#&gt; Warning: Removed 6 rows containing missing values (geom_point).</span></a>
+<a class="sourceLine" id="cb7-73" title="73"></a>
+<a class="sourceLine" id="cb7-74" title="74"><span class="co">#&gt; Warning: Removed 6 rows containing missing values (geom_point).</span></a>
+<a class="sourceLine" id="cb7-75" title="75"></a>
+<a class="sourceLine" id="cb7-76" title="76">water_pvt_plots </a></code></pre></div>
+<p><img src="data:image/png;base64,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" style="display: block; margin: auto;" /></p>
+</div>
+<div id="example-2-2" class="section level4">
+<h4>Example 2:</h4>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" title="1"></a>
+<a class="sourceLine" id="cb8-2" title="2">pvt_water_<span class="dv">2</span> &lt;-<span class="st"> </span><span class="kw">as.data.frame</span>(<span class="kw">pvt_water</span>(<span class="dt">input_unit =</span> <span class="st">&quot;Field&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;SI&quot;</span>, </a>
+<a class="sourceLine" id="cb8-3" title="3"><span class="dt">fluid =</span> <span class="st">&quot;water&quot;</span>, <span class="dt">pvt_model =</span> <span class="st">&quot;McCain&quot;</span>, <span class="dt">visc_model =</span> <span class="st">&quot;McCain&quot;</span>, <span class="dt">t =</span> <span class="dv">200</span>, <span class="dt">p =</span> <span class="dv">4000</span>, </a>
+<a class="sourceLine" id="cb8-4" title="4"><span class="dt">salinity =</span> <span class="dv">15</span>, <span class="dt">gas_saturated =</span> <span class="st">&quot;yes&quot;</span>, <span class="dt">warning =</span> <span class="st">&quot;yes&quot;</span>))</a>
+<a class="sourceLine" id="cb8-5" title="5"></a>
+<a class="sourceLine" id="cb8-6" title="6"><span class="kw">head</span>(pvt_water_<span class="dv">2</span>, <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb8-7" title="7"><span class="co">#&gt;       T_(C)  P_(kPag) Rsw_(rm3/sm3) Bw_(rm3/sm3) Density_(kg/m3)  Cw_(1/kPaa)</span></a>
+<a class="sourceLine" id="cb8-8" title="8"><span class="co">#&gt; 1  93.33333   0.00000     0.1807648     1.038692        1068.840 8.485921e-05</span></a>
+<a class="sourceLine" id="cb8-9" title="9"><span class="co">#&gt; 2  93.33333  68.94757     0.1855351     1.038684        1068.848 5.056644e-05</span></a>
+<a class="sourceLine" id="cb8-10" title="10"><span class="co">#&gt; 3  93.33333 137.89515     0.1903012     1.038676        1068.856 3.604131e-05</span></a>
+<a class="sourceLine" id="cb8-11" title="11"><span class="co">#&gt; 4  93.33333 206.84272     0.1950633     1.038668        1068.864 2.801577e-05</span></a>
+<a class="sourceLine" id="cb8-12" title="12"><span class="co">#&gt; 5  93.33333 275.79029     0.1998212     1.038660        1068.872 2.292487e-05</span></a>
+<a class="sourceLine" id="cb8-13" title="13"><span class="co">#&gt; 6  93.33333 344.73786     0.2045751     1.038652        1068.881 1.940781e-05</span></a>
+<a class="sourceLine" id="cb8-14" title="14"><span class="co">#&gt; 7  93.33333 413.68544     0.2093249     1.038644        1068.889 1.683249e-05</span></a>
+<a class="sourceLine" id="cb8-15" title="15"><span class="co">#&gt; 8  93.33333 482.63301     0.2140705     1.038635        1068.898 1.486533e-05</span></a>
+<a class="sourceLine" id="cb8-16" title="16"><span class="co">#&gt; 9  93.33333 551.58058     0.2188121     1.038627        1068.906 1.331367e-05</span></a>
+<a class="sourceLine" id="cb8-17" title="17"><span class="co">#&gt; 10 93.33333 620.52816     0.2235496     1.038619        1068.915 1.205845e-05</span></a>
+<a class="sourceLine" id="cb8-18" title="18"><span class="co">#&gt;    Viscosity_(mPa.s)</span></a>
+<a class="sourceLine" id="cb8-19" title="19"><span class="co">#&gt; 1          0.4528099</span></a>
+<a class="sourceLine" id="cb8-20" title="20"><span class="co">#&gt; 2          0.4529929</span></a>
+<a class="sourceLine" id="cb8-21" title="21"><span class="co">#&gt; 3          0.4531762</span></a>
+<a class="sourceLine" id="cb8-22" title="22"><span class="co">#&gt; 4          0.4533598</span></a>
+<a class="sourceLine" id="cb8-23" title="23"><span class="co">#&gt; 5          0.4535436</span></a>
+<a class="sourceLine" id="cb8-24" title="24"><span class="co">#&gt; 6          0.4537278</span></a>
+<a class="sourceLine" id="cb8-25" title="25"><span class="co">#&gt; 7          0.4539122</span></a>
+<a class="sourceLine" id="cb8-26" title="26"><span class="co">#&gt; 8          0.4540969</span></a>
+<a class="sourceLine" id="cb8-27" title="27"><span class="co">#&gt; 9          0.4542819</span></a>
+<a class="sourceLine" id="cb8-28" title="28"><span class="co">#&gt; 10         0.4544672</span></a></code></pre></div>
+</div>
+<div id="example-3-1" class="section level4">
+<h4>Example 3:</h4>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1"></a>
+<a class="sourceLine" id="cb9-2" title="2">pvt_water_<span class="dv">3</span> &lt;-<span class="st"> </span><span class="kw">pvt_water</span>(<span class="dt">input_unit =</span> <span class="st">&quot;Field&quot;</span>, <span class="dt">output_unit =</span> <span class="st">&quot;Field&quot;</span>,</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="dt">fluid =</span> <span class="st">&quot;water&quot;</span>, <span class="dt">pvt_model =</span> <span class="st">&quot;Meehan&quot;</span>, <span class="dt">visc_model =</span> <span class="st">&quot;Meehan&quot;</span>,</a>
+<a class="sourceLine" id="cb9-4" title="4"><span class="dt">t =</span> <span class="dv">300</span>, <span class="dt">p =</span> <span class="dv">3000</span>,  <span class="dt">salinity =</span> <span class="dv">10</span>, <span class="dt">gas_saturated =</span> <span class="st">&quot;no&quot;</span>, <span class="dt">warning =</span> <span class="st">&quot;yes&quot;</span>)</a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="co">#&gt; Warning in pvt_water(input_unit = &quot;Field&quot;, output_unit = &quot;Field&quot;, fluid =</span></a>
+<a class="sourceLine" id="cb9-6" title="6"><span class="co">#&gt; &quot;water&quot;, : temperature is greater than PVT correlation upper limit: 250 F</span></a>
+<a class="sourceLine" id="cb9-7" title="7"></a>
+<a class="sourceLine" id="cb9-8" title="8"><span class="kw">tail</span>(<span class="kw">as.data.frame</span>(pvt_water_<span class="dv">3</span>), <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb9-9" title="9"><span class="co">#&gt;     T_(F) P_(Psig) Rsw_(scf/stb) Bw_(rb/stb) Density_(lb/ft3)  Cw_(1/Psia)</span></a>
+<a class="sourceLine" id="cb9-10" title="10"><span class="co">#&gt; 292   300     2910             0    1.072288         62.40311 3.152895e-06</span></a>
+<a class="sourceLine" id="cb9-11" title="11"><span class="co">#&gt; 293   300     2920             0    1.072257         62.40493 3.152346e-06</span></a>
+<a class="sourceLine" id="cb9-12" title="12"><span class="co">#&gt; 294   300     2930             0    1.072225         62.40676 3.151797e-06</span></a>
+<a class="sourceLine" id="cb9-13" title="13"><span class="co">#&gt; 295   300     2940             0    1.072194         62.40858 3.151249e-06</span></a>
+<a class="sourceLine" id="cb9-14" title="14"><span class="co">#&gt; 296   300     2950             0    1.072163         62.41040 3.150700e-06</span></a>
+<a class="sourceLine" id="cb9-15" title="15"><span class="co">#&gt; 297   300     2960             0    1.072131         62.41223 3.150151e-06</span></a>
+<a class="sourceLine" id="cb9-16" title="16"><span class="co">#&gt; 298   300     2970             0    1.072100         62.41405 3.149602e-06</span></a>
+<a class="sourceLine" id="cb9-17" title="17"><span class="co">#&gt; 299   300     2980             0    1.072069         62.41587 3.149054e-06</span></a>
+<a class="sourceLine" id="cb9-18" title="18"><span class="co">#&gt; 300   300     2990             0    1.072038         62.41768 3.148505e-06</span></a>
+<a class="sourceLine" id="cb9-19" title="19"><span class="co">#&gt; 301   300     3000             0    1.072006         62.41950 3.147956e-06</span></a>
+<a class="sourceLine" id="cb9-20" title="20"><span class="co">#&gt;     Viscosity_(cp)</span></a>
+<a class="sourceLine" id="cb9-21" title="21"><span class="co">#&gt; 292      0.2781652</span></a>
+<a class="sourceLine" id="cb9-22" title="22"><span class="co">#&gt; 293      0.2781799</span></a>
+<a class="sourceLine" id="cb9-23" title="23"><span class="co">#&gt; 294      0.2781947</span></a>
+<a class="sourceLine" id="cb9-24" title="24"><span class="co">#&gt; 295      0.2782095</span></a>
+<a class="sourceLine" id="cb9-25" title="25"><span class="co">#&gt; 296      0.2782244</span></a>
+<a class="sourceLine" id="cb9-26" title="26"><span class="co">#&gt; 297      0.2782393</span></a>
+<a class="sourceLine" id="cb9-27" title="27"><span class="co">#&gt; 298      0.2782542</span></a>
+<a class="sourceLine" id="cb9-28" title="28"><span class="co">#&gt; 299      0.2782693</span></a>
+<a class="sourceLine" id="cb9-29" title="29"><span class="co">#&gt; 300      0.2782843</span></a>
+<a class="sourceLine" id="cb9-30" title="30"><span class="co">#&gt; 301      0.2782994</span></a></code></pre></div>
+</div>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2><code>References</code></h2>
+<div id="refs" class="references">
+<div id="ref-Al-Marhoun1988">
+<p>Al-Marhoun, M. A. (1988). PVT Correlations for Middle East Crude Oils. <em>Journal of Petroleum Technology</em>, <em>40</em>(05), 650–666. <a href="https://doi.org/10.2118/13718-PA">https://doi.org/10.2118/13718-PA</a></p>
+</div>
+<div id="ref-Al-Marhoun2004">
+<p>Al-Marhoun, M. A. (2004). Evaluation of empirically derived PVT properties for Middle East crude oils. <em>Journal of Petroleum Science and Engineering</em>, <em>42</em>(2), 209–221.</p>
+</div>
+<div id="ref-Beggs1975">
+<p>Beggs, H. D., &amp; Robinson, J. R. (1975). Estimating the Viscosity of Crude Oil Systems. <em>Journal of Petroleum Technology</em>, <em>27</em>(09), 1140–1141. <a href="https://doi.org/10.2118/5434-PA">https://doi.org/10.2118/5434-PA</a></p>
+</div>
+<div id="ref-Glaso1980">
+<p>Glaso, O. (1980). Generalized Pressure-Volume-Temperature Correlations. <em>Journal of Petroleum Technology</em>, <em>32</em>(05), 785–795. <a href="https://doi.org/10.2118/8016-PA">https://doi.org/10.2118/8016-PA</a></p>
+</div>
+<div id="ref-McCainJr.2011">
+<p>McCain, Jr., W. D., Spivey, J. P., &amp; Lenn, C. P. (2011). <em>Petroleum Reservoir Fluid Property Correlations</em> (p. 219). PennWell Corporation.</p>
+</div>
+<div id="ref-McCainJr.1991">
+<p>McCain Jr., W. D. (1991). Reservoir-Fluid Property Correlations-State of the Art (includes associated papers 23583 and 23594 ). <em>SPE Reservoir Engineering</em>, <em>6</em>(02), 266–272. <a href="https://doi.org/10.2118/18571-PA">https://doi.org/10.2118/18571-PA</a></p>
+</div>
+<div id="ref-Meehan1980b">
+<p>Meehan, D. N. (1980a). A correlation for water compressibility. <em>Petroleum Engineer</em>, <em>56</em>, 125–126.</p>
+</div>
+<div id="ref-Meehan1980a">
+<p>Meehan, D. N. (1980b). Estimating water viscosity at reservoir conditions. <em>Petroleum Engineer</em>, <em>35</em>, 117–118.</p>
+</div>
+<div id="ref-PetroskyJr.1998">
+<p>Petrosky Jr., G. E., &amp; Farshad, F. (1998). Pressure-Volume-Temperature Correlations for Gulf of Mexico Crude Oils. <em>SPE Reservoir Evaluation &amp; Engineering</em>, <em>1</em>(05), 416–420. <a href="https://doi.org/10.2118/51395-PA">https://doi.org/10.2118/51395-PA</a></p>
+</div>
+<div id="ref-Spivey2004">
+<p>Spivey, J. P., McCain, W. D., &amp; North, R. (2004). Estimating density, formation volume factor, compressibility, methane solubility, and viscosity for oilfield brines at temperatures from 0 to 275° C, pressures to 200 MPa, and salinities to 5.7 mole/kg. <em>Journal of Canadian Petroleum Technology</em>, <em>43</em>(7), 52–61. <a href="https://doi.org/10.2118/04-07-05">https://doi.org/10.2118/04-07-05</a></p>
+</div>
+<div id="ref-Spivey2007">
+<p>Spivey, J. P., Valko, P. P., &amp; McCain, W. D. (2007). Applications of the Coefficient of Isothermal Compressibility to Various Reservoir Situations With New Correlations for Each Situation. <em>SPE Reservoir Evaluation &amp; Engineering</em>, <em>10</em>(01), 43–49. <a href="https://doi.org/10.2118/96415-PA">https://doi.org/10.2118/96415-PA</a></p>
+</div>
+<div id="ref-Standing1947">
+<p>Standing, M. B. (1947). <em>A Pressure-Volume-Temperature Correlation For Mixtures Of California Oils And Gases</em>. New York, New York: American Petroleum Institute.</p>
+</div>
+<div id="ref-Sutton2007">
+<p>Sutton, R. P. (2007). Fundamental PVT Calculations for Associated and Gas/Condensate Natural-Gas Systems. <em>SPE Reservoir Evaluation &amp; Engineering</em>, <em>10</em>(03), 270–284. <a href="https://doi.org/10.2118/97099-PA">https://doi.org/10.2118/97099-PA</a></p>
+</div>
+<div id="ref-Vasquez1980">
+<p>Vasquez, M., &amp; Beggs, H. D. (1980). Correlations for Fluid Physical Property Prediction. <em>Journal of Petroleum Technology</em>, <em>32</em>(06), 968–970. <a href="https://doi.org/10.2118/6719-PA">https://doi.org/10.2118/6719-PA</a></p>
+</div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

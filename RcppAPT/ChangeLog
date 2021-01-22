@@ -1,0 +1,267 @@
+2020-03-14  Dirk Eddelbuettel  <edd@debian.org>
+
+	* inst/scripts/configure.bash: Generalize existing configure script
+	and also check package version of 'apt-pkg' via pkg-config
+	* configure: Turned into wrapper / caller of additional script
+	* src/Makevars.in (PKG_CXXFLAGS): Set compiler define for Apt 2.0 (or
+	rather, 1.9.0 or later) if found by configure script
+
+	* src/buildDepends.cpp: Use additional includes for Apt 2.0
+        * src/getPackages.cpp: Ditto
+        * src/hasPackage.cpp: Ditto
+        * src/reverseDepends.cpp: Ditto
+
+	* tests/simpleTests.R: Make tests a little less aggressive as src-deb
+	entries are optional so we cannot assume they are present
+
+2018-09-29  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.0.5
+
+2018-09-28  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Description): Rewritten clearly stating need for
+	libapt-pkg-dev for proper functionality
+	* DESCRIPTION (SystemRequirements, OS_type): Removed
+
+	* R/init.R: Show warning for wrong system if in interactive mode
+
+	* src/Makevars.win (PKG_CXXFLAGS): Added, with 'wrong' system default
+
+	* src/buildDepends.cpp: Updated copyright, removed Emacs settings
+	* src/getPackages.cpp: Idem
+	* src/hasPackage.cpp: Idem
+	* src/reverseDepends.cpp: Idem
+
+	* .editorconfig: Added
+
+2018-09-27  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): New minor version
+
+	* configure: Detect if apt and libapt-pkg-dev can be available and
+	set corresponding true or false -D definition in src/Makevars
+	* src/Makevars.in: Allow for configure to set -D definition
+
+	* src/utils.cpp (suitable): New helper function 'suitable()' to
+	return boolean reflecting the cponfiguration check
+	* man/suitable.Rd: Documentation
+
+	* src/buildDepends.cpp: Condition #include and behaviour on #define
+	* src/getPackages.cpp: Idem
+	* src/hasPackage.cpp: Idem
+	* src/reverseDepends.cpp: Idem
+
+	* tests/simpleTests.R: Only run tests if suitable() returns true
+
+	* src/RcppExports.cpp: Regenerated
+	* R/RcppExports.R: Idem
+
+	* vignettes/binnmuAfterR340.Rmd: Add missing VignetteIndexEntry
+
+	* .Rbuildignore: Do not include top-level *.tar.gz files
+	* .travis.yml: Cosmetic edit
+
+2017-08-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml (before_install): Switch to https download
+
+2017-08-06  Dirk Eddelbuettel  <edd@debian.org>
+
+	* vignettes/binnmuAfterR340.Rmd: Updated and expanded analysis
+	* inst/scripts/debian-packages/*: Ditto
+
+2017-07-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* NAMESPACE: Use .registration=TRUE
+	* src/RcppExport.R: Updated
+
+2017-07-18  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/buildDepends.cpp (buildDepends): Removed one unused variable
+
+2017-07-16  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.0.4
+
+	* vignettes/binnmuAfterR340.Rmd: New vignette
+	* DESCRIPTION: Added knitr as Suggests: and VignetteBuilder:
+	* .travis.yml: Added to package list too
+
+	* docs/binnmuAfterR340.html: Rendered copy of vignette
+
+	* inst/scripts/debian-packages/*: Updated script and data
+
+	* src/RcppExports.cpp: Updated under Rcpp 0.12.12
+	* src/RcppExport.R: Idem
+
+	* README.md: Use alternate for img.shields.io GPL-2+ badge
+
+2017-06-27  Dirk Eddelbuettel  <edd@debian.org>
+
+	* .travis.yml (group): Added as required by Travis CI
+
+2017-06-18  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Roll minor version and date
+
+	* inst/scripts/debian-packages: Added usage example
+	* inst/scripts/local-packages: Idem
+
+2017-05-31  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/getPackages.cpp: Set stringsAsFactor=false
+	* src/reverseDepends.cpp: Idem
+
+2017-05-30  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/reverseDepends.cpp (getDepends): Corrected package filter
+
+2017-05-27  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/getPackages.cpp (getPackages): Now returns name and version
+
+2017-05-26  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/reverseDepends.cpp (getDepends): New function to return a
+	data frame with dependency information
+	* man/getDepends.Rd: Documentation
+
+	* src/RcppExports.cpp: Added package registration code
+
+2017-05-12  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/getPackages.cpp (getPackages): Suppress one compiler
+	warning; still needs finalizing
+
+	* src/buildDepends.cpp (showSrc): Added two diagnostics messages
+
+2016-12-08  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/buildDepends.cpp): Additional #nocov tags
+
+2016-12-07  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Release 0.0.3
+
+2016-12-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Rolled minor version
+
+	* src/Makevars (CXX_STD): Turn on C++11 as g++-6 and (default) C++98
+	create compilation issue
+
+	* src/getPackages.cpp (getPackages): Beginning of fix towards
+	replacing CandVersion() call; not finalized. Inverted foo vs foo:i386
+	test
+
+	* src/buildDepends.cpp: Add dumpPackages() example
+	* man/dumpPackages.Rd: Ditto
+
+	* src/reverseDepends.cpp: Add reverseDepends() example
+	* man/reverseDepends.Rd: Ditto
+
+	* tests/simpleTests.R: Added a few simple tests
+
+	* .travis.yml: Switch to run.sh from our r-travis, added coverage
+	* .codecov.yml (comment): Added
+	* .Rbuildignore: Added .codecov.yml
+
+	* README.md: Added badge, use canonical URLs
+
+2016-04-10  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION (Version, Date): Rolled minor version
+
+	* src/reverseDepends.cpp (reverseDepends): New function
+
+2016-04-04  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Relase 0.0.2
+
+2016-04-03  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Roll minor Version and Date
+
+	* src/buildDepends.cpp (buildDepends): Renamed from reverseDepends as
+	it actually returns buildDepends as planned.
+	* man/buildDepends.Rd: Ditto
+
+	* README.md: Mention buildDepends()
+
+2016-03-27  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Roll minor Version and Date
+
+	* src/getPackages.cpp (getPackages): Add note to roxygen2 for Details
+	section that package name is a regular expression; test package for
+	possible architecture suffix and only process plain name; also report
+	available candidate version (though often NA)
+	* src/reverseDepends.cpp (reverseDepends): Add note to roxygen2 for Details
+	section that package name is a regular expression
+	(showSrc): Idem
+	(dumpPackages): Idem
+	* man/dumpPackages.Rd: Expanded Details section regarding regular expression
+	* man/getPackages.Rd: Idem
+	* man/reverseDepends.Rd: Idem
+	* man/showSrc.Rd: Idem
+
+2016-03-21  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/reverseDepends.cpp (reverseDepends): New function
+	* man/reverseDepends.Rd: New documentation
+
+2016-03-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/reverseDepends.cpp (showSrc): Added preliminary versions of
+	dumpPackages() and showSrc() with a nod to apt-cache.cc
+	(localDeNull): define as DeNull not in older versions
+	(dumpPackages): use localDeNull()
+
+	* man/dumpPackages.Rd: New (roxygen2-based) manual page
+	* man/showSrc.Rd: Idem
+
+	* src/getPackages.cpp (getPackages): Update accessor to Section of a
+	package using preferred iterator approach; also updated help text
+
+2015-02-20  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Release 0.0.1
+
+	* src/hasPackages.cpp: Now searches by regular expression for
+	packages, with a default to a general wildcard
+
+	* configure: Added simple sanity checker to ensure we are on a
+	system such as Debian, Ubuntu or one of the derivatives -- and that
+	the libapt-pkg-dev package is installed
+
+	* DESCRIPTION: Added SystemRequirements: and OS_type:
+
+	* src/hasPackages.cpp: Example added to roxygen2 documentation
+	* src/hasPackages.cpp: Idem
+
+	* .travis.yml: Added for Travis CI testing
+
+	* src/getPackages.cpp: Added #include <apt-pkg/init.h> for Ubuntu 12.04
+	* src/hasPackages.cpp: Idem
+
+2015-02-19  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/hasPackages.cpp: New function to check if packages available
+	* man/hasPackages.Rd: Generated via roxygen header
+
+	* src/getPackages.cpp: Also return Section as third column
+
+2015-02-18  Dirk Eddelbuettel  <edd@debian.org>
+
+	* src/getPackages.cpp: Added proper copyright header; changed to
+	return two-column data.frame with name and (if installed) version
+	* man/getPackages.Rd: Generated via roxygen header
+
+	* cleanup: Added helper script
+
+2015-02-17  Dirk Eddelbuettel  <edd@debian.org>
+
+	* DESCRIPTION: Very first version and commit
+
+	* src/getPackages.cpp: Simple accessor for known packages

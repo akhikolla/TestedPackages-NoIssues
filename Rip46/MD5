@@ -1,0 +1,15 @@
+92b4fa27972756053879a48e279d4c13 *DESCRIPTION
+93dff6fb2dd8416790b69a78a01011a3 *NAMESPACE
+9123c3aa52a970d18dc2f70328774910 *R/RcppExports.R
+d21656f160af4b4be08a7f281b5d76d0 *R/rip4.R
+21baabd46c93881f9e0dae23deec4a34 *R/rip46-package.R
+d5ba31c1c219c91579b4a5ee6d9157fd *R/rip6.R
+87b8127159545dfa0567356b46ed66ee *man/Rip46.Rd
+c90f3d4d01a3fd5e2dc11b5632f1b059 *man/ip4.Rd
+3f15f78ab199241f31b76a8f441cafc0 *man/ip6.Rd
+8250e3fb6f33d5cc9e4909b4cb3da4bd *man/mySqlToIp4.Rd
+6cd9bb8a07db1943bd783114f8767225 *man/network-mask.Rd
+ef31cb9b2eae07d49f89f1a9080c5260 *src/RcppExports.cpp
+d7ecdc2b823845f346d59047bb8717fd *src/rcpp_rip4.cpp
+34e88f6292dd11cd22a7f8c6112b7723 *src/rcpp_rip6.cpp
+aa78f9230d0f7cbdaacebccf92daa65a *tests/test_na.R

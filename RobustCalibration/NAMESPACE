@@ -1,0 +1,15 @@
+useDynLib(RobustCalibration)
+#exportPattern("^[[:alpha:]]+")
+import(Rcpp, RobustGaSP, methods)
+importFrom(Rcpp, evalCpp)
+importFrom(stats,qt)
+importFrom(stats,optimize)
+importFrom("stats",  "rchisq", "rnorm","qnorm","quantile","sd")
+
+
+## S4
+exportClasses(rcalibration, rcalibration_MS, predictobj.rcalibration)
+exportMethods(show,predict,predict_MS)
+export(rcalibration,rcalibration_MS,predict_discrepancy_separable_2dim)
+#S3method(predict,rcalibration)
+#S3method(predict,rcalibration_MS)

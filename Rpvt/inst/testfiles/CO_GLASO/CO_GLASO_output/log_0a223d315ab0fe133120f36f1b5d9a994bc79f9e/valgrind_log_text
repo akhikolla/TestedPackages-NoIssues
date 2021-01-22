@@ -1,0 +1,17 @@
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_CO_GLASO_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/CO_GLASO/CO_GLASO_output/0a223d315ab0fe133120f36f1b5d9a994bc79f9e.pass`
+TRACE: Running: Rpvt_deepstate_test_CO_GLASO_test from /home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/CO_GLASO/CO_GLASO_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -8.5119e-07
+p values: -5.48117e-145
+api values: 4.79212e-250
+spgr values: 9.60637e+283
+rsi values: 5.00463e-274
+tsc values: 7.52379e-133
+psca values: -2.04487e-51
+tpc values: 10.9345
+ppc values: 4.13144e+182
+input ends
+TRACE: Passed: Rpvt_deepstate_test_CO_GLASO_test

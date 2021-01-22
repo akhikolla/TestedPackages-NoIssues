@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_RSi_STANDING_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/RSi_STANDING/RSi_STANDING_output/5f91315fbe00b55de5878ac2c161bef0e8119604.pass`
+TRACE: Running: Rpvt_deepstate_test_RSi_STANDING_test from /home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/RSi_STANDING/RSi_STANDING_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -2.43318e-187
+pb values: -1.64581e+174
+api values: -1.66668e-49
+spgr values: 1.91698e-80
+input ends
+TRACE: Passed: Rpvt_deepstate_test_RSi_STANDING_test

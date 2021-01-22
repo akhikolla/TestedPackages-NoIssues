@@ -1,0 +1,17 @@
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_CO_AL_MARHOUN_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/CO_AL_MARHOUN/CO_AL_MARHOUN_output/826c14da1d5c53cac7ec42ec13fc59cdb29d6678.pass`
+TRACE: Running: Rpvt_deepstate_test_CO_AL_MARHOUN_test from /home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/CO_AL_MARHOUN/CO_AL_MARHOUN_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -5.84486e+130
+p values: 7.96752e+95
+api values: -4.40542e-65
+spgr values: 9.93765e+292
+rsi values: 2.32003e+83
+tsc values: -3.79864e-121
+psca values: 1.88831e-213
+tpc values: 2.454e-127
+ppc values: -5.16834e+138
+input ends
+TRACE: Passed: Rpvt_deepstate_test_CO_AL_MARHOUN_test

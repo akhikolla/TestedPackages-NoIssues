@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Middleware</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+<style type="text/css">
+a.anchor-section {margin-left: 10px; visibility: hidden; color: inherit;}
+a.anchor-section::before {content: '#';}
+.hasAnchor:hover a.anchor-section {visibility: visible;}
+</style>
+<script>// Anchor sections v1.0 written by Atsushi Yasumoto on Oct 3rd, 2020.
+document.addEventListener('DOMContentLoaded', function() {
+  // Do nothing if AnchorJS is used
+  if (typeof window.anchors === 'object' && anchors.hasOwnProperty('hasAnchorJSLink')) {
+    return;
+  }
+
+  const h = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
+
+  // Do nothing if sections are already anchored
+  if (Array.from(h).some(x => x.classList.contains('hasAnchor'))) {
+    return null;
+  }
+
+  // Use section id when pandoc runs with --section-divs
+  const section_id = function(x) {
+    return ((x.classList.contains('section') || (x.tagName === 'SECTION'))
+            ? x.id : '');
+  };
+
+  // Add anchors
+  h.forEach(function(x) {
+    const id = x.id || section_id(x.parentElement);
+    if (id === '') {
+      return null;
+    }
+    let anchor = document.createElement('a');
+    anchor.href = '#' + id;
+    anchor.classList = ['anchor-section'];
+    x.classList.add('hasAnchor');
+    x.appendChild(anchor);
+  });
+});
+</script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Middleware</h1>
+
+
+
+<div id="middleware" class="section level2">
+<h2>Middleware</h2>
+<p>Many web API frameworks contain a concept called “middleware” (but every language/framework calls it differently - filters, middleware, etc). Essentially, the middleware performs some specific function on the HTTP request or response before or after the handler. Common tasks to offload to a middleware would be logging, authorization, body compression, etc.</p>
+<p><code>RestRserve</code> comes with several build-in middlewares (<code>AuthMiddleware</code>, <code>CORSMiddleware</code>) and generic <code>Middleware</code> class which facilitates user to create a custom middleware.</p>
+<p>Let’s see it in action in example below.</p>
+</div>
+<div id="logging" class="section level2">
+<h2>Logging</h2>
+<p>Let’s say you have a simple app which has only a single endpoint - it simply convert query string parameters into a JSON format and sends it back:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(RestRserve)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>app <span class="ot">=</span> Application<span class="sc">$</span><span class="fu">new</span>(<span class="at">content_type =</span> <span class="st">&quot;application/json&quot;</span>)</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>backend <span class="ot">=</span> BackendRserve<span class="sc">$</span><span class="fu">new</span>()</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">add_get</span>(<span class="st">&quot;/foo&quot;</span>, <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  body <span class="ot">=</span> RestRserve<span class="sc">::</span><span class="fu">to_json</span>(.req<span class="sc">$</span>parameters_query)</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span><span class="fu">set_body</span>(body)</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co"># specify that there is no need to specially encode the body as</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  <span class="co"># we&#39;ve already set it to a JSON</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  .res<span class="sc">$</span>encode <span class="ot">=</span> identity</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>})</span></code></pre></div>
+<p>See it in action:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>req <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/foo&quot;</span>, <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">key1 =</span> <span class="st">&quot;value1&quot;</span>, <span class="at">key2 =</span> <span class="st">&quot;value2&quot;</span>))</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">=</span> app<span class="sc">$</span><span class="fu">process_request</span>(req)</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>resp<span class="sc">$</span>body</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;{\&quot;key1\&quot;:\&quot;value1\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&quot;</span></span></code></pre></div>
+<p>Assume you would like to analyze how your web service works. For that you may need log every request and response in order to see whether service replies with errors and what can cause these errors. This is a perfect task for a middleware and here is how you can achieve this with <code>RestRserve</code>:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>logging_middleware <span class="ot">=</span> Middleware<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">process_request =</span> <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">middleware =</span> <span class="st">&quot;logging_middleware&quot;</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">request_id =</span> .req<span class="sc">$</span>id,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">request =</span> <span class="fu">list</span>(<span class="at">headers =</span> .req<span class="sc">$</span>headers, <span class="at">method =</span> .req<span class="sc">$</span>method, <span class="at">path =</span> .req<span class="sc">$</span>path), </span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp =</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> RestRserve<span class="sc">::</span><span class="fu">to_json</span>(msg)</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(msg, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">process_response =</span> <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">middleware =</span> <span class="st">&quot;logging_middleware&quot;</span>,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>      <span class="co"># we would like to have a request_id for each response in order to correlate</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>      <span class="co"># request and response</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>      <span class="at">request_id =</span> .req<span class="sc">$</span>id,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">response =</span> <span class="fu">list</span>(<span class="at">headers =</span> .res<span class="sc">$</span>headers, <span class="at">status_code =</span> .res<span class="sc">$</span>status_code, <span class="at">body =</span> .res<span class="sc">$</span>body),</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp =</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> <span class="fu">to_json</span>(msg)</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(msg, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;logging&quot;</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">append_middleware</span>(logging_middleware)</span></code></pre></div>
+<p>Let’s test again:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>req <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/foo&quot;</span>, <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">key1 =</span> <span class="st">&quot;value1&quot;</span>, <span class="at">key2 =</span> <span class="st">&quot;value2&quot;</span>))</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">=</span> app<span class="sc">$</span><span class="fu">process_request</span>(req)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;logging_middleware&quot;,&quot;request_id&quot;:&quot;09bdc42c-2400-11eb-b219-acde48001122&quot;,&quot;request&quot;:{&quot;headers&quot;:{},&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/foo&quot;},&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;logging_middleware&quot;,&quot;request_id&quot;:&quot;09bdc42c-2400-11eb-b219-acde48001122&quot;,&quot;response&quot;:{&quot;headers&quot;:{&quot;Server&quot;:&quot;RestRserve/0.4.0&quot;},&quot;status_code&quot;:200,&quot;body&quot;:&quot;{\&quot;key1\&quot;:\&quot;value1\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&quot;},&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span></code></pre></div>
+<p>Let’s see what will happen if we will send request to nonexistent endpoint:</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>req <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/foo2&quot;</span>, <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">key1 =</span> <span class="st">&quot;value1&quot;</span>, <span class="at">key2 =</span> <span class="st">&quot;value2&quot;</span>))</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">=</span> app<span class="sc">$</span><span class="fu">process_request</span>(req)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;logging_middleware&quot;,&quot;request_id&quot;:&quot;09bed588-2400-11eb-b219-acde48001122&quot;,&quot;request&quot;:{&quot;headers&quot;:{},&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/foo2&quot;},&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;logging_middleware&quot;,&quot;request_id&quot;:&quot;09bed588-2400-11eb-b219-acde48001122&quot;,&quot;response&quot;:{&quot;headers&quot;:{&quot;Server&quot;:&quot;RestRserve/0.4.0&quot;},&quot;status_code&quot;:404,&quot;body&quot;:&quot;404 Not Found&quot;},&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span></code></pre></div>
+<p>Later you will see all the responses with errors in the log (<code>status_code</code> &gt;= 400). Also you will be able to find corresponding requests by inspecting <code>request_id</code> field.</p>
+</div>
+<div id="middleware-order" class="section level2">
+<h2>Middleware order</h2>
+<p>It is important to understand that middlewares are executed in order you’ve added them (that’s why it is called <code>append_middleware</code>). Flow is shown on the diagram below.</p>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAX0AAAHNCAYAAADys6skAAAGC3RFWHRteGZpbGUAJTNDbXhmaWxlJTIwaG9zdCUzRCUyMnd3dy5kcmF3LmlvJTIyJTIwbW9kaWZpZWQlM0QlMjIyMDE5LTEwLTMxVDExJTNBNTglM0E1Mi40NjZaJTIyJTIwYWdlbnQlM0QlMjJNb3ppbGxhJTJGNS4wJTIwKE1hY2ludG9zaCUzQiUyMEludGVsJTIwTWFjJTIwT1MlMjBYJTIwMTBfMTRfNiklMjBBcHBsZVdlYktpdCUyRjUzNy4zNiUyMChLSFRNTCUyQyUyMGxpa2UlMjBHZWNrbyklMjBDaHJvbWUlMkY3Ny4wLjM4NjUuMTIwJTIwU2FmYXJpJTJGNTM3LjM2JTIyJTIwdmVyc2lvbiUzRCUyMjEyLjEuOSUyMiUyMGV0YWclM0QlMjJSMjVyZnpLaG9fLUNMVGhwRi10bCUyMiUyMHR5cGUlM0QlMjJnb29nbGUlMjIlMjBwYWdlcyUzRCUyMjElMjIlM0UlM0NkaWFncmFtJTIwaWQlM0QlMjJhX0ZhSnRmSFhtSk9UX0M1VHlpTSUyMiUzRTdWaE5jNXN3RVAwMXZuWUE4ZVZqNjZUdG9aM3BKSWMyUnhrdG9GWkdWSWpZN3ElMkJ2TUFJc2hCczN4WjVNSnllekQybXRmZnQySmJGQXE4M3VnOEJsJTJGcGtUWUF2UElic0Z1bGw0bnVzR252cHBrSDJMaE02eUJUSkJpUjQwQVBmMEYyalEwV2hOQ1ZUR1FNazVrN1Ewd1lRWEJTVFN3TEFRZkdzT1N6a3olMkY3WEVHVmpBZllLWmpYNmxST1l0R252UmdIOEVtdVhkUDd1aGptJTJCRHU4RTZraXJIaEclMkJQSUhTN1FDdkJ1V3lmTnJzVnNJYThqcGQyM3ZzVGIlMkZ1RkNTamtPUk4wSWg0eHEzVnNlbDF5M3dVTFJNV3VUUzVrempOZVlIWTdvTzhFcndzQ2pVZEhXY09ZVDV5WENuUVYlMkJCMmszT3RFNGxweUJlVnl3JTJGUmJ0Vml4JTJGOWJNZnhOMDVvTjJkekJ1ZG9hMTc2d2RsZDg2SCUyQnI1WVhDaHJHRlNZM1J6MnZpYW9BektLbDZMUkVQSVp0SHRjNk5FRFh3RGFobHFpQUNHSlgwMFhXR3RycXdmMTAlMkY5d3FueTZEbTZFdnlsbG9HdUE4OTNUQmNTaXd5a25qV2tVVDBjTFdPQURzbWRUalN5RWkzZ1p3MVZzNW9OSllUQlZvV3JETmNTZ0puZWJVNGwzSmY0UU5aVzFiZVp5cFF5dHVLTWk4TmNSRERFYWFMd1NnciUyQkE0N2VoRWtNNjdSUHlDTUlDYnZGS1JXZjRGOVA4RVk4dXAyOUhhclRSUnJManlwenpQZHh5Z3l5JTJGOENzZnk2emRtbTlmR1o5NzRSQ3I4RnM4TnFjN09hazVkWjJoaGFLenM3cVAlMkZhcklCaXBJUnhsdVYybzFhOHNSNkU3Y3JTOFdPTUxYNWFJWEVOQ2c2S2VFTkVnbkljalNUMWJSSkV0b3ZoYUlvb2NNJTJGZSUyQmM1NklucEg3eU1wOWpndlZrTVdzblRoTlV5JTJCWjdNUWtYSWRCT0U4bnRtcHZhbyUyRnpMdFNKNDRrOXJpcDVVY0dGTjdrQVl1SlBVUnQ3YXhUT1JPMTRrMFBYM09TV3IlMkYzSjdrJTJCeDNaJTJCNkhlUDZwJTJGSmVIdk0zcUM2byUyRjdTd3h1ZHlkTTF6dWVzJTJCWFZucSUyQmwwMmp4VXRNZ1p2bTA4REtuSkNCU1NTOHFKNXclMkJ0bXBVJTJGUk93TlpmZGZwTGpFVFhXaUtxMkFPcnM3NER2Q1N1ZkxSRmJteXI5SjMzWVh2WklXNmYxMmg0S29hamFZcWRCbEdDTTlXb1lGQlpIem1vV0o4OEg4V2tmYk4lMkJhNXZmak15bWFZUW5qaWZSY3UxNDF5R1NmJTJCQ1ZDcHolMkJFVFlianZEaDFaMCUyQnhzJTNEJTNDJTJGZGlhZ3JhbSUzRSUzQyUyRm14ZmlsZSUzRUNg+LEAACAASURBVHhe7Z13XBVHF4ZfVBSNith779hjYmKLvRt7wV7Agl2wF7CiIiqKDQt2jBpj1CSW2Fs0sffeFSt2pcn3m9HLh0q5CPfeLe/+lXBnZ855ztxnZ2cXsYKRh+/A1QXDEqGDdbIkTUNDQvK8Dwu3MfJUNjMzgUSJrd4lsba+HhIUuj7xeyzrNq31JTOHwOFIgAQUSsDKmLjmD1k9D+HonKtwNquMudJbp06bEtZJkxhzKttYgEBIcChePH2Fhzcfh9y8cDccVvDrPrl1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" width="320" /></p>
+</div>
+<div id="compression" class="section level2">
+<h2>Compression</h2>
+<p>To demonstrate the order in which middleware called let’s consider another example.</p>
+<p>Sometimes it it useful to compress response body in order to send less data over the wire. Here we will implement a middleware which will compress response with <code>gzip</code>.</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>gzip_middleware <span class="ot">=</span> Middleware<span class="sc">$</span><span class="fu">new</span>(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="at">process_request =</span> <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>      <span class="at">middleware =</span> <span class="st">&quot;gzip_middleware&quot;</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>      <span class="at">request_id =</span> .req<span class="sc">$</span>id,</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp =</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> <span class="fu">to_json</span>(msg)</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(msg, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">process_response =</span> <span class="cf">function</span>(.req, .res) {</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="co"># compress body</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    .res<span class="sc">$</span><span class="fu">set_header</span>(<span class="st">&quot;Content-encoding&quot;</span>, <span class="st">&quot;gzip&quot;</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    .res<span class="sc">$</span><span class="fu">set_body</span>(<span class="fu">memCompress</span>(.res<span class="sc">$</span>body, <span class="st">&quot;gzip&quot;</span>))</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> <span class="fu">list</span>(</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>      <span class="at">middleware =</span> <span class="st">&quot;gzip_middleware&quot;</span>,</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>      <span class="at">request_id =</span> .req<span class="sc">$</span>id,</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>      <span class="at">timestamp =</span> <span class="fu">Sys.time</span>()</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    msg <span class="ot">=</span> <span class="fu">to_json</span>(msg)</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    <span class="fu">cat</span>(msg, <span class="at">sep =</span> <span class="st">&#39;</span><span class="sc">\n</span><span class="st">&#39;</span>)</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  },</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="at">id =</span> <span class="st">&quot;gzip&quot;</span></span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>)</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>app<span class="sc">$</span><span class="fu">append_middleware</span>(gzip_middleware)</span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>req <span class="ot">=</span> Request<span class="sc">$</span><span class="fu">new</span>(<span class="at">path =</span> <span class="st">&quot;/foo&quot;</span>, <span class="at">method =</span> <span class="st">&quot;GET&quot;</span>, <span class="at">parameters_query =</span> <span class="fu">list</span>(<span class="at">key1 =</span> <span class="st">&quot;value1&quot;</span>, <span class="at">key2 =</span> <span class="st">&quot;value2&quot;</span>))</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>resp <span class="ot">=</span> app<span class="sc">$</span><span class="fu">process_request</span>(req)</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;logging_middleware&quot;,&quot;request_id&quot;:&quot;09c19ce6-2400-11eb-b219-acde48001122&quot;,&quot;request&quot;:{&quot;headers&quot;:{},&quot;method&quot;:&quot;GET&quot;,&quot;path&quot;:&quot;/foo&quot;},&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;gzip_middleware&quot;,&quot;request_id&quot;:&quot;09c19ce6-2400-11eb-b219-acde48001122&quot;,&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;gzip_middleware&quot;,&quot;request_id&quot;:&quot;09c19ce6-2400-11eb-b219-acde48001122&quot;,&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; {&quot;middleware&quot;:&quot;logging_middleware&quot;,&quot;request_id&quot;:&quot;09c19ce6-2400-11eb-b219-acde48001122&quot;,&quot;response&quot;:{&quot;headers&quot;:{&quot;Server&quot;:&quot;RestRserve/0.4.0&quot;,&quot;Content-encoding&quot;:&quot;gzip&quot;},&quot;status_code&quot;:200,&quot;body&quot;:&quot;eJyrVspOrTRUslIqS8wpTTVU0gHxjWB8I6VaAK3KCjs=&quot;},&quot;timestamp&quot;:&quot;2020-11-11 13:26:54&quot;}</span></span></code></pre></div>
+<p>And now check what is actual decoded response body:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="fu">rawToChar</span>(<span class="fu">memDecompress</span>(resp<span class="sc">$</span>body, <span class="st">&quot;gzip&quot;</span>))</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a><span class="co">#&gt; [1] &quot;{\&quot;key1\&quot;:\&quot;value1\&quot;,\&quot;key2\&quot;:\&quot;value2\&quot;}&quot;</span></span></code></pre></div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

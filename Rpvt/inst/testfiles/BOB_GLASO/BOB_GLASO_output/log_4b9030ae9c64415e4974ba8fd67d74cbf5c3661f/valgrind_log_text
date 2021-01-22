@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_BOB_GLASO_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/BOB_GLASO/BOB_GLASO_output/4b9030ae9c64415e4974ba8fd67d74cbf5c3661f.pass`
+TRACE: Running: Rpvt_deepstate_test_BOB_GLASO_test from /home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/BOB_GLASO/BOB_GLASO_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 1.27048e-62
+api values: -2.88162e-134
+spgr values: 8.18711e+299
+rsi values: 0.00468189
+input ends
+TRACE: Passed: Rpvt_deepstate_test_BOB_GLASO_test

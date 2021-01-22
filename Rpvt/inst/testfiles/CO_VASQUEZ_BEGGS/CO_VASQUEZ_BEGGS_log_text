@@ -1,0 +1,94 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_CO_VASQUEZ_BEGGS_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -2.43318e-187
+p values: -1.64581e+174
+api values: -1.66668e-49
+spgr values: 1.91698e-80
+rsi values: 2.93871e+294
+tsc values: 6.2389e-80
+psca values: 4.73594e-68
+tpc values: 1.92375e+304
+ppc values: 5.22278e+77
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -1.5615e-299
+p values: -1.20777e+13
+api values: 2.79236e-196
+spgr values: 1.26379e+187
+rsi values: 1.42068e+49
+tsc values: 2.58036e-206
+psca values: 3.02006e-260
+tpc values: -9.91228e-57
+ppc values: -1.64036e-118
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 1.27048e-62
+p values: -2.88162e-134
+api values: 8.18711e+299
+spgr values: 0.00468189
+rsi values: 9.28697e-257
+tsc values: -4.47314e+269
+psca values: -1.08462e-247
+tpc values: -1.0696e+114
+ppc values: -3.47955e-216
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: 3.16522e+06
+p values: 3.72126e-82
+api values: 5.29799e-243
+spgr values: 7.52749e+12
+rsi values: -2.14488e+105
+tsc values: -3.93045e-68
+psca values: -2.02048e-44
+tpc values: 1.36993e-76
+ppc values: 3.42032e-93
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -1.92672e-302
+p values: -4.2952e-278
+api values: 4.24195e+22
+spgr values: -1.34847e-218
+rsi values: 8.07634e-201
+tsc values: 9.96356e-247
+psca values: 2.90007e+287
+tpc values: -3.62253e+84
+ppc values: -0.000168525
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -8.5119e-07
+p values: -5.48117e-145
+api values: 4.79212e-250
+spgr values: 9.60637e+283
+rsi values: 5.00463e-274
+tsc values: 7.52379e-133
+psca values: -2.04487e-51
+tpc values: 10.9345
+ppc values: 4.13144e+182
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -5.84486e+130
+p values: 7.96752e+95
+api values: -4.40542e-65
+spgr values: 9.93765e+292
+rsi values: 2.32003e+83
+tsc values: -3.79864e-121
+psca values: 1.88831e-213
+tpc values: 2.454e-127
+ppc values: -5.16834e+138
+input ends
+INFO: Done fuzzing! Ran 7 tests (3 tests/second) with 0 failed/7 passed/0 abandoned tests

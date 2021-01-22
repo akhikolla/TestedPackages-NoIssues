@@ -1,0 +1,5 @@
+1 C/C A/A A/A A/A 
+2 ./. A/A C/C C/C 
+3 C/C A/A C/C ./. 
+4 A/A ./. ./. ./. 
+5 ./. A/A A/A A/A 

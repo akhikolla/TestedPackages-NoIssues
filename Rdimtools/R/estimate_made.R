@@ -1,0 +1,72 @@
+#' Manifold-Adaptive Dimension Estimation
+#'
+#' \code{do.made} first aims at finding local dimesion estimates using nearest neighbor techniques based on
+#' the first-order approximation of the probability mass function and then combines them to get a single global estimate. Due to the rate of convergence of such
+#' estimate to be independent of assumed dimensionality, authors claim this method to be
+#' \emph{manifold-adaptive}.
+#'
+#' @param X an \eqn{(n\times p)} matrix or data frame whose rows are observations.
+#' @param k size of neighborhood for analysis.
+#' @param maxdim maximum possible dimension allowed for the algorithm to investigate.
+#' @param combine method to aggregate local estimates for a single global estimate.
+#'
+#' @return a named list containing containing \describe{
+#' \item{estdim}{estimated global intrinsic dimension.}
+#' \item{estloc}{a length-\eqn{n} vector estimated dimension at each point.}
+#' }
+#'
+#' @examples
+#' \donttest{
+#' ## create a data set of intrinsic dimension 2.
+#' X = aux.gensamples(dname="swiss")
+#'
+#' ## compare effect of 3 combining scheme
+#' out1 = est.made(X, combine="mean")
+#' out2 = est.made(X, combine="median")
+#' out3 = est.made(X, combine="vote")
+#'
+#' ## print the results
+#' line1 = paste0("* est.made : 'mean'   estiamte is ",round(out1$estdim,2))
+#' line2 = paste0("* est.made : 'median' estiamte is ",round(out2$estdim,2))
+#' line3 = paste0("* est.made : 'vote'   estiamte is ",round(out3$estdim,2))
+#' cat(paste0(line1,"\n",line2,"\n",line3))
+#' }
+#'
+#' @references
+#' \insertRef{farahmand_manifoldadaptive_2007}{Rdimtools}
+#'
+#' @rdname estimate_made
+#' @author Kisung You
+#' @export
+est.made <- function(X, k=round(sqrt(ncol(X))), maxdim=min(ncol(X),15), combine=c("mean","median","vote")){
+  ##########################################################################
+  ## Preprocessing and Default Parameter
+  aux.typecheck(X)
+  n = nrow(X)
+  D = as.matrix(dist(X))
+  diag(D) = Inf
+
+  ##########################################################################
+  ## Computation
+  #   1. sort D
+  Dsort = apply(D, 2, sort)
+  #   2. Rk and Rk2
+  Rk    = as.vector(Dsort[k,])
+  Rk2   = as.vector(Dsort[ceiling(k/2),])
+  #   3. compute a pointwise estimate
+  dhat  = log(2)/(log(Rk/Rk2))
+  #   4. combine
+  combine = match.arg(combine)
+  estdim  = switch(combine,
+                   mean   = max(round(mean(pmin(dhat,maxdim))),1),
+                   median = max(round(median(pmin(dhat,maxdim))),1),
+                   vote   = max(as.integer(names(which.max(table(round(dhat)))[1])),1)
+                   )
+
+  ##########################################################################
+  ## Report
+  result = list()
+  result$estdim = estdim
+  result$estloc = dhat
+  return(result)
+}

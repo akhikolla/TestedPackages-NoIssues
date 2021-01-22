@@ -1,0 +1,8 @@
+# Version 1.2
+import(gtools,compiler)
+importFrom("stats", "fisher.test", "qnorm")
+export(AE.CI,Perm.CI,Robins.CI) #,pval,comb,nchoosem)
+ # Version 1.3
+importFrom(Rcpp,sourceCpp)
+export(Perm.CI.RLH)
+useDynLib(RI2by2)

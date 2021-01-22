@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (RcppExamples_deepstate_test_RcppRNGs_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/RcppExamples/inst/testfiles/RcppRNGs/RcppRNGs_output/2401f4ffbd8994c6f7e02ecb2165e811c12c51b1.pass`
+TRACE: Running: RcppExamples_deepstate_test_RcppRNGs_test from /home/akhila/fuzzer_packages/fuzzedpackages/RcppExamples/inst/testfiles/RcppRNGs/RcppRNGs_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+n values: 467495432
+input ends
+TRACE: Passed: RcppExamples_deepstate_test_RcppRNGs_test

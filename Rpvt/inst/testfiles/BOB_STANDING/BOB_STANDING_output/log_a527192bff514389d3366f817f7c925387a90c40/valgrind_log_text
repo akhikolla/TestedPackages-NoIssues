@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (Rpvt_deepstate_test_BOB_STANDING_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/BOB_STANDING/BOB_STANDING_output/a527192bff514389d3366f817f7c925387a90c40.pass`
+TRACE: Running: Rpvt_deepstate_test_BOB_STANDING_test from /home/akhila/fuzzer_packages/fuzzedpackages/Rpvt/inst/testfiles/BOB_STANDING/BOB_STANDING_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+t values: -8.5119e-07
+api values: -5.48117e-145
+spgr values: 4.79212e-250
+rsi values: 9.60637e+283
+input ends
+TRACE: Passed: Rpvt_deepstate_test_BOB_STANDING_test
