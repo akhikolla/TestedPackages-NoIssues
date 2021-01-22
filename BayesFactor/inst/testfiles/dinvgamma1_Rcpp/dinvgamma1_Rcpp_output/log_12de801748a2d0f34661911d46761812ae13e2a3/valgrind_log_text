@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (BayesFactor_deepstate_test_dinvgamma1_Rcpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/BayesFactor/inst/testfiles/dinvgamma1_Rcpp/dinvgamma1_Rcpp_output/12de801748a2d0f34661911d46761812ae13e2a3.pass`
+TRACE: Running: BayesFactor_deepstate_test_dinvgamma1_Rcpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/BayesFactor/inst/testfiles/dinvgamma1_Rcpp/dinvgamma1_Rcpp_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: 1.27048e-62
+a values: -2.88162e-134
+b values: 8.18711e+299
+input ends
+TRACE: Passed: BayesFactor_deepstate_test_dinvgamma1_Rcpp_test

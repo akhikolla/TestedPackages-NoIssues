@@ -1,0 +1,9 @@
+import(Rcpp)
+importFrom(stats, mad, runif, ts.plot, var)
+export(sol.not, sol.wbs, sol.tguh, sol.wbs2, sol.idetect, sol.idetect_seq)
+export(model.thresh, model.ic, model.sdll, model.lp)
+export(breakfast)
+S3method(print,breakfast.cpts)
+export(print.breakfast.cpts)
+useDynLib(breakfast, .registration = TRUE)
+

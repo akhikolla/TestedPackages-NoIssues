@@ -1,0 +1,15 @@
+a555868d915f3dfa77cf0e360e5b0f13 *DESCRIPTION
+95564fcf705e10e959d96242fc582779 *NAMESPACE
+018d6918a4307511fd266304f95c255e *NEWS
+78c8d2ba655cc3b6ef22290f402500da *R/RcppExports.R
+f531a8d263d5a8b6a03cbe552a44c094 *R/binseg_normal.R
+74e953da2a89b8d1cb7f5c9191dc57b8 *man/binsegRcpp-package.Rd
+0186689c29564a5ed389ed81931f0977 *man/binseg_normal.Rd
+517745b99d9b8162946a9693e5634b5f *man/coef.binseg_normal.Rd
+565d18d7296dc31d15f5515c8bbaf1a8 *man/plot.binseg_normal.Rd
+f4cacb2a183d39818dc3639b7efe2a36 *src/RcppExports.cpp
+5438162cba9a3eb0d68048f2ad664e41 *src/binseg_normal.cpp
+73bbf904d99f6e116404571a88aca62f *src/binseg_normal.h
+1653c9936f8eaa3b03ac949a62d2379c *src/interface.cpp
+385bab05c07a88ff0b2b2dcd196169de *tests/testthat.R
+0c52dd9ce111dbee315322da01b5cd58 *tests/testthat/test-CRAN-binseg.R

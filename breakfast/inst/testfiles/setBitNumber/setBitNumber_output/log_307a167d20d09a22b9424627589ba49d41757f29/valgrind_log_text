@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (breakfast_deepstate_test_setBitNumber_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/breakfast/inst/testfiles/setBitNumber/setBitNumber_output/307a167d20d09a22b9424627589ba49d41757f29.pass`
+TRACE: Running: breakfast_deepstate_test_setBitNumber_test from /home/akhila/fuzzer_packages/fuzzedpackages/breakfast/inst/testfiles/setBitNumber/setBitNumber_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+n values: -293123844
+input ends
+TRACE: Passed: breakfast_deepstate_test_setBitNumber_test

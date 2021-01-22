@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (BayesFactor_deepstate_test_logExpXplusExpY_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/BayesFactor/inst/testfiles/logExpXplusExpY/logExpXplusExpY_output/5c1eb9b182f96d4c03a3b4c52ccee6e32f1d8de1.pass`
+TRACE: Running: BayesFactor_deepstate_test_logExpXplusExpY_test from /home/akhila/fuzzer_packages/fuzzedpackages/BayesFactor/inst/testfiles/logExpXplusExpY/logExpXplusExpY_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -2.43318e-187
+y values: -1.64581e+174
+input ends
+TRACE: Passed: BayesFactor_deepstate_test_logExpXplusExpY_test

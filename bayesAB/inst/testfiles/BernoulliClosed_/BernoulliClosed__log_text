@@ -1,0 +1,26 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (bayesAB_deepstate_test_BernoulliClosed__test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+alpha_1 values: -2.43318e-187
+beta_1 values: -1.64581e+174
+alpha_2 values: -1.66668e-49
+beta_2 values: 1.91698e-80
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+alpha_1 values: -1.5615e-299
+beta_1 values: -1.20777e+13
+alpha_2 values: 2.79236e-196
+beta_2 values: 1.26379e+187
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+alpha_1 values: 1.27048e-62
+beta_1 values: -2.88162e-134
+alpha_2 values: 8.18711e+299
+beta_2 values: 0.00468189
+input ends

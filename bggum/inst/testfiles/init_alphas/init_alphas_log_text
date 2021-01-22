@@ -1,0 +1,11 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (bggum_deepstate_test_init_alphas_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+m values: 467495432
+shape1 values: 8.08981e-307
+shape2 values: 3.76873e+222
+a values: 2.1759e+276
+b values: 8.23909e+275
+input ends

@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (bravo_deepstate_test_colSumSq_matrix_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/bravo/inst/testfiles/colSumSq_matrix/colSumSq_matrix_output/aa12db63e1de0cb856cf41dcd21c1dfb81e5c48a.pass`
+TRACE: Running: bravo_deepstate_test_colSumSq_matrix_test from /home/akhila/fuzzer_packages/fuzzedpackages/bravo/inst/testfiles/colSumSq_matrix/colSumSq_matrix_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+input ends
+TRACE: Passed: bravo_deepstate_test_colSumSq_matrix_test

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./prior_t_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/BHSBVAR/inst/testfiles/prior_t/prior_t_output/774b468303987e2d127166648b60a401c5c0b53b.pass</line>
+</preamble>
+
+<pid>272110</pid>
+<ppid>272109</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/BHSBVAR/inst/testfiles/prior_t/prior_t_output/log_774b468303987e2d127166648b60a401c5c0b53b/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./prior_t_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/BHSBVAR/inst/testfiles/prior_t/prior_t_output/774b468303987e2d127166648b60a401c5c0b53b.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.038 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:12.511 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:13.279 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

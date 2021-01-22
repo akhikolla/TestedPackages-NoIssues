@@ -1,0 +1,91 @@
+---
+title: "Estimating Population Average Treatment Effects with the borrowr Package"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Estimating Population Average Treatment Effects with the borrowr Package}
+  %\VignetteEngine{knitr::rmarkdown}
+  \usepackage[utf8]{inputenc}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Introduction
+The borrowr package estimates the population average treatment effect (PATE) from a primary data source with borrowing from supplemental sources. 
+
+To adjust for confounding confounding, the estimation is done by fitting a model for the conditional mean given treatment and confounders. Currently, two models are available, a Bayesian linear model with an inverse-gamma prior, and Bayesian Additive Regression Trees (BART). The user must specify a formula for the conditional mean. This requires more thought for the Bayesian linear model as the analyst must carefully consider the functional form of the regression relationship. For BART, the right hand side of the formula need only include the confounders and the treatment variable without specification of the functional form. 
+
+Borrowing between data sources is done with [Multisource Exchangeability Models](https://pubmed.ncbi.nlm.nih.gov/29036300) (MEMs; Kaizer et al., 2018) . MEMs borrow by assuming that each supplementary data source is either "exchangeable", or not, with the primary data source. Two data sources are considered exchangeable if their model parameters are equal. Each data source can be exchangeable with the primary data, or not, so if there are $r$ data sources, there are $2 ^ r$ possible configurations regarding the exchangeability assumptions. Each of these configurations corresponds to a single MEM. The parameters for each MEM are estimated, and we compute a posterior probability for each. The posterior density of the PATE is a weighted posterior across all possible MEMs.
+
+
+## The `adapt` Data
+
+We illustrate usage of the `borrowr` package with the `adapt` data:
+```{r}
+library(borrowr)
+data(adapt)
+head(adapt)
+```
+
+The data include 3 data sources with a univariate confounding variable `x` and the treatment variable `treatment`:
+```{r, fig.height = 3, fig.width = 8}
+library(ggplot2)
+ggplot(data = adapt, mapping = aes(x = x, y = y, color = as.factor(treatment))) +
+  geom_point() +
+  geom_smooth(se = FALSE) +
+  facet_wrap(~ source) +
+  theme_classic()
+```
+We will estimate the PATE while adjusting for the confounding variable `x`. 
+
+## Using the `pate` function to estimate the PATE
+
+`pate` is the primary function of the borrowr package. The following arguments are *required*:
+
+- `formula`: a formula specifying the conditional mean model. It must include the treatment variable and the confounders. It should *not* include a variable indicating the data source.
+- `estimator`: either `"BART"` or `bayesian_lm`. The default is `"BART"`
+- `src_var`: a character variable indicating which column of the data indicates the data source, e.g., source a, b, or c.
+- `primary_source`: a character variable indicating which value of `src_var` is the primary data source.
+- `trt_var`: a character variable indicating which column of the data indicates the treatment variable. This must be included in the formula, and **it must be coded as 1 for treated and 0 for untreated**.
+
+We will estimate the PATE using a quadratic model for `x`, allowing for different quadratic relationships between treated and untreated:
+```{r}
+est <- pate(y ~ treatment*x + treatment*I(x ^ 2), data = adapt, 
+  estimator = "bayesian_lm", src_var = "source", primary_source = "Primary", 
+  trt_var = "treatment")
+```
+
+The `print` method shows some information about the posterior: 
+```{r}
+est
+```
+
+And a summary method that gives more info:
+```{r}
+summary(est)
+```
+
+If treatment is randomly assigned but a causal estimator is needed due to noncompliant, use the `compliance_var` argument, and include the compliance indicator in the formula as appropriate:
+```{r}
+est2 <- pate(y ~ treatment + x*compliant, 
+  data = adapt, estimator = "bayesian_lm", src_var = "source", primary_source = "Primary", trt_var = "treatment", compliance_var = "compliant")
+summary(est2)
+```
+
+To set the prior probability that a source is exchangeable with the primary source, use the `exch_prob` argument:
+```{r}
+est3 <- pate(y ~ treatment*x + treatment*I(x ^ 2), data = adapt, 
+  estimator = "bayesian_lm", src_var = "source", primary_source = "Primary", 
+  trt_var = "treatment", exch_prob = c(1 / 3, 1 / 8))
+summary(est3)
+```
+## References
+
+Chipman, H. & McCulloch, R. (2010) BART: Bayesian additive regression trees. *Annals
+of Applied Statistics*, **4**(1): 266-298.
+
+Kaizer, Alexander M., Koopmeiners, Joseph S., Hobbs, Brian P. (2018) Bayesian hierarchical modeling based on multisource exchangeability. *Biostatistics*, **19**(2): 169-184.

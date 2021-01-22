@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (BHSBVAR_deepstate_test_prior_beta_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/BHSBVAR/inst/testfiles/prior_beta/prior_beta_output/27a4ff39d1e30c2981942d9f3f1450477eb6df0a.pass`
+TRACE: Running: BHSBVAR_deepstate_test_prior_beta_test from /home/akhila/fuzzer_packages/fuzzedpackages/BHSBVAR/inst/testfiles/prior_beta/prior_beta_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+a1 values: 3.16522e+06
+sh1 values: 3.72126e-82
+sh2 values: 5.29799e-243
+input ends
+TRACE: Passed: BHSBVAR_deepstate_test_prior_beta_test

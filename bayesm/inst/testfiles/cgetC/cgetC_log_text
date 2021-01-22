@@ -1,0 +1,11 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (bayesm_deepstate_test_cgetC_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+e values: -2.43318e-187
+k values: -1053990400
+input ends
+ERROR: Crashed: bayesm_deepstate_test_cgetC_test
+INFO: Saved test case in file `/home/akhila/fuzzer_packages/fuzzedpackages/bayesm/inst/testfiles/cgetC/cgetC_output/23d61a41ba6238524b5d9f475daa4c7604c1f03a.crash`
+INFO: Done fuzzing! Ran 1 tests (0 tests/second) with 1 failed/0 passed/0 abandoned tests
