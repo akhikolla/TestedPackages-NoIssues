@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+
+<title>Runner examples</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(data-line-number);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Runner examples</h1>
+
+
+
+<p>The most fundamental function in <code>runner</code> package is <code>runner</code>. With <code>runner::runner</code> one can apply any R function on running windows. This tutorial presents set of examples explaining how to tackle some tasks. Some of the examples are referenced to original topic on <a href="https://stackoverflow.com">stack-overflow</a>.</p>
+<div id="number-of-unique-elements-in-7-days-window" class="section level3">
+<h3>Number of unique elements in 7 days window</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb1-1" data-line-number="1"><span class="kw">library</span>(runner)</a>
+<a class="sourceLine" id="cb1-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb1-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw">sample</span>(letters, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb1-4" data-line-number="4">date &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>() <span class="op">+</span><span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)) <span class="co"># unequaly spaced time series</span></a>
+<a class="sourceLine" id="cb1-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb1-6" data-line-number="6"><span class="kw">runner</span>(</a>
+<a class="sourceLine" id="cb1-7" data-line-number="7">  x, </a>
+<a class="sourceLine" id="cb1-8" data-line-number="8">  <span class="dt">k =</span> <span class="st">&quot;7 days&quot;</span>, </a>
+<a class="sourceLine" id="cb1-9" data-line-number="9">  <span class="dt">idx =</span> date, </a>
+<a class="sourceLine" id="cb1-10" data-line-number="10">  <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x))</a>
+<a class="sourceLine" id="cb1-11" data-line-number="11">)</a></code></pre></div>
+<pre><code>##  [1] 1 2 3 2 2 2 2 3 3 4 4 3 3 3 4 3 2 2 2 2</code></pre>
+</div>
+<div id="weekly-trimmed-mean" class="section level3">
+<h3>weekly trimmed mean</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" data-line-number="1"><span class="kw">library</span>(runner)</a>
+<a class="sourceLine" id="cb3-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb3-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>))</a>
+<a class="sourceLine" id="cb3-4" data-line-number="4">date &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>() <span class="op">+</span><span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)) <span class="co"># unequaly spaced time series</span></a>
+<a class="sourceLine" id="cb3-5" data-line-number="5"></a>
+<a class="sourceLine" id="cb3-6" data-line-number="6"><span class="kw">runner</span>(</a>
+<a class="sourceLine" id="cb3-7" data-line-number="7">  x, </a>
+<a class="sourceLine" id="cb3-8" data-line-number="8">  <span class="dt">k =</span> <span class="st">&quot;week&quot;</span>, </a>
+<a class="sourceLine" id="cb3-9" data-line-number="9">  <span class="dt">idx =</span> date, </a>
+<a class="sourceLine" id="cb3-10" data-line-number="10">  <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw">mean</span>(x, <span class="dt">trim =</span> <span class="fl">0.05</span>)</a>
+<a class="sourceLine" id="cb3-11" data-line-number="11">)</a></code></pre></div>
+<pre><code>##  [1] -1.25749691 -1.64713165 -2.02798213 -2.69369499 -3.18110392 -3.29694938
+##  [7] -4.05063663 -3.85160954 -3.19867633 -2.57709721 -1.65170984 -1.54691603
+## [13] -1.50351450 -1.02189013 -0.70260513 -0.14853595 -0.07376711 -0.54787677
+## [19] -2.51124034 -2.29345682</code></pre>
+</div>
+<div id="prediction-on-current-day-based-on-preceding-2-weeks-regression" class="section level3">
+<h3>Prediction on current day based on preceding 2-weeks regression</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" data-line-number="1"><span class="kw">library</span>(runner)</a>
+<a class="sourceLine" id="cb5-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb5-3" data-line-number="3"><span class="co"># sample data</span></a>
+<a class="sourceLine" id="cb5-4" data-line-number="4">x &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>))</a>
+<a class="sourceLine" id="cb5-5" data-line-number="5">data &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb5-6" data-line-number="6">  <span class="dt">date =</span> <span class="kw">Sys.Date</span>() <span class="op">+</span><span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)), <span class="co"># unequaly spaced time series, </span></a>
+<a class="sourceLine" id="cb5-7" data-line-number="7">  <span class="dt">y =</span> <span class="dv">3</span> <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>), </a>
+<a class="sourceLine" id="cb5-8" data-line-number="8">  <span class="dt">x =</span> <span class="kw">cumsum</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>))</a>
+<a class="sourceLine" id="cb5-9" data-line-number="9">)</a>
+<a class="sourceLine" id="cb5-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb5-11" data-line-number="11"><span class="co"># solution</span></a>
+<a class="sourceLine" id="cb5-12" data-line-number="12">data<span class="op">$</span>pred &lt;-<span class="st"> </span><span class="kw">runner</span>(</a>
+<a class="sourceLine" id="cb5-13" data-line-number="13">  data,</a>
+<a class="sourceLine" id="cb5-14" data-line-number="14">  <span class="dt">lag =</span> <span class="st">&quot;1 days&quot;</span>,</a>
+<a class="sourceLine" id="cb5-15" data-line-number="15">  <span class="dt">k =</span> <span class="st">&quot;2 weeks&quot;</span>,</a>
+<a class="sourceLine" id="cb5-16" data-line-number="16">  <span class="dt">idx =</span> date,</a>
+<a class="sourceLine" id="cb5-17" data-line-number="17">  <span class="dt">f =</span> <span class="cf">function</span>(data) {</a>
+<a class="sourceLine" id="cb5-18" data-line-number="18">    <span class="kw">predict</span>(</a>
+<a class="sourceLine" id="cb5-19" data-line-number="19">      <span class="kw">lm</span>(y <span class="op">~</span><span class="st"> </span>x, <span class="dt">data =</span> data)</a>
+<a class="sourceLine" id="cb5-20" data-line-number="20">    )[<span class="kw">nrow</span>(data)]</a>
+<a class="sourceLine" id="cb5-21" data-line-number="21">  }</a>
+<a class="sourceLine" id="cb5-22" data-line-number="22">)</a>
+<a class="sourceLine" id="cb5-23" data-line-number="23"></a>
+<a class="sourceLine" id="cb5-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb5-25" data-line-number="25"><span class="kw">plot</span>(data<span class="op">$</span>date, data<span class="op">$</span>y, <span class="dt">type =</span> <span class="st">&quot;l&quot;</span>, <span class="dt">col =</span> <span class="st">&quot;red&quot;</span>)</a>
+<a class="sourceLine" id="cb5-26" data-line-number="26"><span class="kw">lines</span>(data<span class="op">$</span>date, data<span class="op">$</span>pred, <span class="dt">col =</span> <span class="st">&quot;blue&quot;</span>)</a></code></pre></div>
+<p><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAASAAAAEgCAYAAAAUg66AAAAEGWlDQ1BrQ0dDb2xvclNwYWNlR2VuZXJpY1JHQgAAOI2NVV1oHFUUPrtzZyMkzlNsNIV0qD8NJQ2TVjShtLp/3d02bpZJNtoi6GT27s6Yyc44M7v9oU9FUHwx6psUxL+3gCAo9Q/bPrQvlQol2tQgKD60+INQ6Ium65k7M5lpurHeZe58853vnnvuuWfvBei5qliWkRQBFpquLRcy4nOHj4g9K5CEh6AXBqFXUR0rXalMAjZPC3e1W99Dwntf2dXd/p+tt0YdFSBxH2Kz5qgLiI8B8KdVy3YBevqRHz/qWh72Yui3MUDEL3q44WPXw3M+fo1pZuQs4tOIBVVTaoiXEI/MxfhGDPsxsNZfoE1q66ro5aJim3XdoLFw72H+n23BaIXzbcOnz5mfPoTvYVz7KzUl5+FRxEuqkp9G/Ajia219thzg25abkRE/BpDc3pqvphHvRFys2weqvp+krbWKIX7nhDbzLOItiM8358pTwdirqpPFnMF2xLc1WvLyOwTAibpbmvHHcvttU57y5+XqNZrLe3lE/Pq8eUj2fXKfOe3pfOjzhJYtB/yll5SDFcSDiH+hRkH25+L+sdxKEAMZahrlSX8ukqMOWy/jXW2m6M9LDBc31B9LFuv6gVKg/0Szi3KAr1kGq1GMjU/aLbnq6/lRxc4XfJ98hTargX++DbMJBSiYMIe9Ck1YAxFkKEAG3xbYaKmDDgYyFK0UGYpfoWYXG+fAPPI6tJnNwb7ClP7IyF+D+bjOtCpkhz6CFrIa/I6sFtNl8auFXGMTP34sNwI/JhkgEtmDz14ySfaRcTIBInmKPE32kxyyE2Tv+thKbEVePDfW/byMM1Kmm0XdObS7oGD/MypMXFPXrCwOtoYjyyn7BV29/MZfsVzpLDdRtuIZnbpXzvlf+ev8MvYr/Gqk4H/kV/G3csdazLuyTMPsbFhzd1UabQbjFvDRmcWJxR3zcfHkVw9GfpbJmeev9F08WW8uDkaslwX6avlWGU6NRKz0g/SHtCy9J30o/ca9zX3Kfc19zn3BXQKRO8ud477hLnAfc1/G9mrzGlrfexZ5GLdn6ZZrrEohI2wVHhZywjbhUWEy8icMCGNCUdiBlq3r+xafL549HQ5jH+an+1y+LlYBifuxAvRN/lVVVOlwlCkdVm9NOL5BE4wkQ2SMlDZU97hX86EilU/lUmkQUztTE6mx1EEPh7OmdqBtAvv8HdWpbrJS6tJj3n0CWdM6busNzRV3S9KTYhqvNiqWmuroiKgYhshMjmhTh9ptWhsF7970j/SbMrsPE1suR5z7DMC+P/Hs+y7ijrQAlhyAgccjbhjPygfeBTjzhNqy28EdkUh8C+DU9+z2v/oyeH791OncxHOs5y2AtTc7nb/f73TWPkD/qwBnjX8BoJ98VQNcC+8AADqySURBVHgB7V0JvEzVH//deSp72SolkX3fsisVQgmhFLIkRbRLRQuRkkokypIlUv6ICGXftwot1kIKpahsyXtvzv/3PeOOO/Nm3sx7b2buLL/f5/Pe3OXcc8793jvf+Z3f+Z3fz1AsJCIICAKCgA0IOGxoU5oUBAQBQUAjIAQkL4IgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAICAEJO+AICAI2IaAEJBt0EvDgoAgIAQk74AgIAjYhoAQkG3QS8OCgCAgBCTvgCAgCNiGgBCQbdBLw4KAIJBNIMgcAqNGjaKxY8fSpZdemrkK5CpBIMwIZM+enebPn0958uQJc0uZr95QLJm/PHGvrFmzJg0ZMkQIKHFfgai/85tvvpk2btxIVapUidq+igaUyUeTLVs2yps3L9WpUyeTNchlgkB4EShdunR4GwhB7WIDCgGIUoUgIAhkDgEhoMzhJlcJAllCQO3cRWrP3izVEQ8XCwHFw1OUe4g5BJwjRlFq/Ztirt+h7rAQUKgRlfoEgWAQSE0l+vMYqV27gykdt2WEgOL20cqNRTUCx46R0fU+cn44Paq7Ge7OCQGFG2GpXxDwgYA6dpyMu9uRmjaDEtkTRgjIx8shhwSBsCPw559kFLuWKC87Ca5dF/bmorUB8QPyejKrVq2i999/3+to2t3t27fTli1bqG7dumlPyhFBIBACrAFRgfzk6NyJnFOnU9INDQJdEZfnhYC8HmvRokXpjjvu8DqadnfOnDmUCkOiiCCQQQT0kOs4CKgAGR3ak7NSDVKj3ybjkksyWFPsFxcC8nqGxYsXJ/wFkgcffJBy584dqJicFwTSIvD338QLtMhISiK6+moyqlUltWAhGW3vTFs2zo+IDSjOH7DcXhQiwNPvVLCgu2PGfR1IJehsmBCQ+zWQDUEgQgjwFDzsP6ZA81ErVpHCsCzBRAgowR643K79CCjWgIyCBdwdMTAca96U1MxZ7mOJsiEElChPWu4zehDQGtAFAkLHjPs6slPiR9HTxwj1RAgoQkBLM4KAGwFtA/IioKZNiHhxqtq/310sETaEgBLhKcs9RhUCCssweAreKgbHlzLubc/G6MTSgoSArG+BbAsCkUDAhwaEZh2d7iXnNCGgSDwCaUMQSFwEfNiAAIZRq6bGRG3ekjDYiAaUMI9abjRaEPCeBbP2y5FgxmghIOvTl21BIBII+NGA0LTBwzD18UxSKSmR6IntbQgB2f4IpAMJh4AfGxBwMLAMqHQpUl8sSQhYhIAS4jHLTUYVAuloQOinI4GWZsQVATmdTvrpp58oJUHU16j6UklngkJA/fMPUc6cZFx0kd/yOlDZoi9InTzpt0y8nIhJAvr++++pZ8+edP/99xPi90DefPNNuvLKK6lkyZKUL18+GjduXLw8I7mPeEIggPaDWzXy5yfjlptIzZoTT3fu815ijoBAPshKOmPGDE0+zZs3p/Hjx9PAgQOpVatW+vitt95KvXr1oiVLEmMc7fPJysHoRCAd+4+1w0YnXiHP4VrjXWIuHtBrr71G1apV0+SSk1XZfv36EWLzvPTSS5qE8MDuueceuv3222nMmDHUpAm7uGdAli9fTsj7Hkj+/fdf+v333wMVk/OCgAcCOha0lxe0R4HzO0aL28jZoxepQ4fI4JhB8SoxR0B79uyhzp07U65cufQzue++++iNN96gu+66y+MZtWvXjt5++22PY8HsYAjXrVu3gEW/+OILCUgWECUpkAYBjgVNlpXwac6fP4DoiEa7NqSmf0xGv6f8FYv54zFHQFdddRVBS+nTp48GH9uQlStXUoUKFfQ2/mGoVqRIEfd+sBsIyYq/QILc8CYJBior5wUBNwLnY0G799PZwNKM1D6Pk0MIKB2UInwKxmfYfWAHKshR5ZYtW0ZPPvkkvfLKK3r2q3HjxrRo0SIaOXIkTZo0KcK9k+YEgfQRUMiGYYmGmG5pBKr/5wSpb78jo3KldIvG6smY04CaNWtGM2fO1ATzD09pYrara9eu2h7zxBNP6BxLhmEQtjE8ExEEogoBaECVKwbVJbzH8IxG8sKk4a8FdU2sFQo4C7ZmzRr9ZUYammgR2HvWrl1L69ev1+SDfk2bNo0OscFuwYIFtJ9jqmBaXkQQ8IeA2rhJG3j9nQ/bcW0DuhAPOlA7WBsGO5BiHzdfsmEDUdOmvs7ExrGABHTZZZcRDK5Vq1bVfzDs/vHHH1F5d4ULF9azX9deywnfRASBdBBIrduQnOMmplMiTKcyYANCD4yyZYiuKkxq+QqfHZrIt8BeJzErAQmoUqVKtGPHDp2E78Ybb9S2lqt5WrB169b06aefUnJycszevHQ8MRFQ3/9AlJtnUbd/G3EAMmQDOt87hx+foP/+I+L0dHTvvRG/jZA1GJCAzJauv/567R9z+PBhvuk5nFOtgB7+YFbq8ccfp127dplF5VMQiGoE1OIvyWh/F6kNmyLfzwxqQOigce/dpOZ+Rop9z6zC1gaqXp0VpKusR2NrO2gCMm/r4MGDtHXrVvrmm2/oxIkTdN1119GmTZuofPny9MILL5jF5FMQiFoEsNLcaNmCKCmJ1IEDke1nBm1A6JxxxRVk1K2jScja2enTiTp2tB6Jve2gCOhPBu3dd9/VedDhqIdtTHfD1wbks4EtYZ988gkNGTJEE1PswSA9ThQE1JkzBAM01loZdWtHVAtSp04R8SLUzKRg1nGCLOFa//qL2B+OqG3b2H5yAafhV69erckGt9miRQv67LPPtB8OHPGsctttt+ldWZ5gRUW2ow0BtXI1GdfXIIPTamutAsMwDgYfEcmE9mP2y7izFTkffpQUTwAZhQrR//7nmv3Km9csEZufnizi4x6w3ur1119nVa8jFeIb9yeXsOv4b7/9RlewuigiCEQrAtr+08w1bWTUqUXOSCYDzIT9x8TRQAiPVneQmjGTjEd7E4ZfT8XBCo2AQzAYn2FktpIPtJyzZ8+a2OhPaERCPh6QyE4UIqC+YAM0cnBBarAFl2fEFKaTIiCZmQGzdks7JfIwjM2w9ANP5DWrfIicH31MzpWukDTWsrGy7ZeAfvnlF3rggQfo9OnT7nuBU2KJEiV03J3crMJ26NCB/sJgVEQQiAEEtMGZlzZQlcq6t0aOHEQVyhN99XVkep8FDQgdNBo3IuJlGR+2+ITaJc8gx/U1Sc3+VMcPiswNhL4Vn0MwzHDVq1eP4O+D5Q5YdHn8+HE2eLUlOPuNHTuWDvDsAdZagaRmz54d+p5JjYJAiBHQwy/WfrDEwRSjDhuiN24mo34981D4PnUsoOC9oL07YjgclPTdN/TRjfnp/XdPULZOh72LxNy+TwL64IMPqGHDhrR48WL3w4LvD0gIq84x5Q4BSSEI2DGO8ga/IBFBIJoRMP1/rH2EHQg+NpEQV0bU/FlqavvpknQmO1GDTlmrJ0udCOHFaQgI2g0ICISCwF+mYJ3VRTyFiGGXt4CIoB0NHTrU+5TsCwJRgYBij33MgDkmvOfRH0zFO58Z4HEs1Dt793Kii9JEJx88QTkrl8hS9SNGxL7vjxWANASEcBfQcvJzXNrRo0frskeOHKGyZcvqFejdu3d3X48FoTfffDN9+eWXdM0117iPx/IG7iWYhayIiAhcRGIEgfUbdLob71AYBjvS8owKKfbwN8LkUvz552zvrkE0fksVeuzmSzIFGOLT46uH6XeElY4XSUNAGB8jjAU0GsxqYS3YO++8Qw4efyLUaRJ7j/7HswaIudO/f3+9QDWeFn9WrFiRpzcDz2/CPwoLdUViAwEnvJ/N2S+vLhv12Mt4/UYdgdDrVEh2Fy4keuQRold63UyPFdyd4TrZ35fatCG65Raic+e0L2OG64jaC5QP4bQ2ir+EiqfWFXdccbYJxV84d8np06fr48WKFVOcBsd9PJE2eBZQcSyisN2y88ABlfracI7C4AxbG4lUcXK1Wsq5dp3PW04dOkylPPm0z3NZPXjqlFK5cil2glaqYva9aul7ezNU5eTJSuXPr9S0aRm6TBeuXLmy2rZtW8YvjOAVPqfhoeUgzvJJ1vsQWwdDjRtuuMFNoliGgVg8yMGFtWAiYUDg0GFyDnmVnH2fCUPliVWlOnqUaP8Botq1fN84DNE8ExYOWbqUeAkT8UwyUc/sU2jMvOBWjsLNrkcPoldfJY59FV92HyvOPgnILJA9e3ZiLcfcdX9efvnlel0YhmXiB+SGJaQb6qd9ZNzWjNQns8i5hN9iG4TNInEhevFpo5vJ8Fo+ZN6cUfN6om3bCYbqUAuGX+dXKVHHsx/QsvU5+Ac9/VZ+/JG5sjYRlo59zS5K5cqlXz6Wz6ZLQOaNLWUav/POO7UWhBkv/NVmhGAfQjJAkdAjoH78iYiDUSVNn0zOzt0JXrSRFCSXhd0hHly8NAH5sf8AU6wLo5I8O8UkFGoxCQiLYHMbp3lJk8FhhP23wiG2tMbEc0Gc486lOfkvHftnAhIQPKJbtmyph1yYhv/222816fz99996Nfyr0BFFQo8AE5DBXwqj4Y1kdL2PnN1YH4+g8LwD8fI+6t2b6MMPI9hwiJticwZpAjq//stf9e6Fqf4K+Dnu/HQepd7NSQS5HW/57juiiy8mKlOGz5zPiPrww0Tvv0+UmupZGoTPuRV42ROx/x1xYk3P8/G6F5CAMNVu5lxHBMRzbIafOnWqDkD20EMP0b59++IVG1vvCxoQCAjiePklUkd+I+dYfnMjIIh7NWwYsRsG0h0RDWA3mfMeGRFoPcRNfLOVqFBBMgK4iWiHRA7TkVFRy1eS+mEHOV8YmOZSU/vRJ85nREXmKI5oQ/PmXSj+66/Eowsi+Ash9Dqm7BNFAhIQDNAYbmHt16WXXqqXYiAGEKbrkY0UaZElLGsYXhcMwc4TkMGaZ9LHH5Lz+YGkdu4KQ2OeVb73HlH9+sRDbB4FliVas4bYB4w43pNnuVjYs65+T6+/WIqRGUO0WriYkqZ+QGriZFKrVns0YSUglxd0AX0eWhAn7dWC7OG83ptDHBOHuiF27fCoIu53AhJQ8eLF9UyYiQQcEtetW6d38+XLpz9/BYWLhAwBxcNbZnUd98Ws1OCfTcfwVyn1nk5hXb1taj8DB5otEyHGP2ZiOBuSDgHhY7RxoXCUbaXn/+PR1RLXEazDsNUEK2ovW4t5usrgVfWOqRMptUMXUrxcCcJLKDk4H7Gj7vnaLDnhEUQMwzNkjerSxYXrMzzZyb/pCScBCaguzyHC3tO1a1c944V9DMFgC0KcIITpKOZjpizhkAzlDVu0H2u1jvu7klGqJDmfe956OKTbVu3HWjHCPLHvJdsCiRcgp7VhWMtGy7bikMG0dZu2owXqExZ6ao1zD4+DzsvGjewEl9a0Y54mtegLMpo31fuOJo3J6NDebavjRDK8npKIJ5Jdct4GhB1WaOnjj5FKirvHI0TO9ZCwEpCAMMs1kXN/YGEqAo71YusYbEJVqlShQYMGEexA1tXFCYtkCG/cav/xrtYxfiyp/80h55esu4dYfGk/1iYwPOBEtMTzEtS+vcsr13o+2rbVshV6lbvhZoH0e2iUKU2pO/fQ3LmuISj8d/r29X+NlYBQyjF0MOcaY/+td8eSdfila7BoQNiHZgRDdKLH7wtIQFjz1KBBAw6CdJAX1JXWyzMQrgPZSb9jPRKpekRCjIAfDQitGDzsTZo2iZxde+jwnMG0rPCmByH+tB/rpRyYj5M/uo7ccQfxshzr2ejaDtb+Y/b6/dMdqVyfRtr5jxPrEjQgxF32JQrrx9asJaNJI/dp01aX+uJgWjg/xe3/gwKKYwEZXhEjoHQlugSEYDk/gTv4TbuY5xPhIQ3BGihkJ0UYjptuukmH6Uh0IEN5/+lpQGgno1PzasXKgBpTIO3Hen+YWuYcBDodTLt2ri9qNBJRIP8f6z1xvk0asbUhjav+HidaIMJ9cS5Onu31TbJqxSodUdHwCsoMW93WRydSgVMH6doreDrRFB0P2mWENg/JJ1E2XyAg3Grnzp3ZE/OUzoL6I7tmmkHnzfLwe0AusLz8AExjtHlOPrOGAAjIcT9bJ9MRTM2n1rmBnGPeI8fDPf2WxKyZ8/bWxFOYpLhOx+CBhF9qbwlG+7Feg98ijkenfVfgK7RzJ3GcKKJavNqhZk3XJzx47fqVV7t2awOOUa6stds+t7dtI3r5ZQ6MOGEfFX0V6l1/XQ5+UPDhYXOnvifrxZj9crCnui9ZbDSn5iUWkfOJtyjpvdGuIlmMhuirnXg45lMDwhKMZs2aaa0HsZ5h44EGZP1DGQzNEA0xWmxACB8Lx8mYF16GQSWuS/c2sKxAT82/+DKpHfzt9yNYS+YYNpSSdvC3jP1VUuveSAq+/haB9sPzCexWYTkY5OZbb7mWC2DyB86L+MLCTsSO88x5im6qfYb6dfhVe1RHcmlHsNoPIg7ffTdxlE+i4rcUY5WHicsiSPyH2Sxv8bb/WM/D/nP76w1JLVlGzjlz9amsxoO21h9X24EWvrLPj3rkkUcCFYuK8zw7pziQWkT6Eq7V8E5eNp2cPW/Q95D6wWSVXKm6cp49m+aa1CVLVXKJcsp57pz7XOq7Y1Vy/isVrjPlrbeUatPG3MvYZ+qn85ReTf7IEyrlrntVcoObVXLJ8io5Vz51NMe1amHh7uplekHdXvRbfjZKFSmiVNu2Sg0frtSaNYqTfWasvWBLpzS7Q6XO/jRg8W7dlMKfKcmFrlbOw4fNXTV6tFI9erh39YZzz16VfFUxz4Pn9/74Q6m8/PgAuXPzFqXrO3hQJV9bSjn37/d5TbgOxsJqeJ9DMCvD1mKdGn/+BItRIzkEwyp9xKP2Jbt379ZB9Pv06aNPV+efr/vvv99X0eg9lo4B2lenHd3Y94SHA85nB1DSiDfcRWB4dj7xNDneHOYx5MJwzbipIaW276inkf8bOYa1n8sI08YZERhhnX2fdRlieSragMZWvy45Cl9JvFaHiD8L5clDzbnSZjxrmlqzHjleeZT21+2gbSww8MKvCP4wGLrVqXPhr1SpjPQkbVltIF63nhzsvJmewI4F/yZMhbuFZ8LU7j1kcOxzCLySOUCoh6Sn/WAZRaNG52P28CJXR98ntH8Q2zKIChb0qEd2/NiAvIHBYlRkQ0WG1NTzMyr4PMNOW3v27NEByryvCdf+17w8+GN2ogDpIWi+VeCvBK/sVavYQMiCXGUZlYWsPwezvg33fjgMY4pABmhf94Op+dRKNcjJ650cTW/VRdTESYTofw7OJeUtRvlylPTVBnL2e47Glh9NdSr1pMqVg/9yYOkBCMyoWIGS1q8iA7Em0hEdTP39dymVbVHX7W1BJTrk5dC+rgtgvMYQB4SE2bXn2cUJ0f9ASPAQhqMeJ2LJkKjVa3TmC4PtXv6EI8kQfqfgiWztvsEERExAxCQNgSF6xw6XywGM7xBNQA90c+14/Uf0w9tvv3DQePpJMjgXvTrzr2vR64VTsgUEAql/PP2ucuTIoTgEh+LwqxxcKZfilfGKp+QVLufwpYGqCOl5Jj7FsacVhkDsCMk/9Knu+kMxBOOcZzw0WBPwD5iMHDnS3XaoNhCELKXvMxmuzrlqtUq+sqhyHj2qnCdOuLa/2ZpuPWfOKHVFvrPq6/xNVMrzLylncnK65XEydcx7riHcpCkBy3oXSHnwYZXCQ7VAcuSIUp/y6GnAAKWHbR07KrVjR6CrLpxHcLHUwUMvHPDa2rhRqZw5lXr7ba8TvJv6+psq5Ym+HicqVVLqq69ch5w8ZsTw0vnPPx5lsMNx/FS+fIqju3qewrA6ddRon9d4lgztXiwMwQIS0EcffaRYk1AcnIxXCPyteEW83kakPnZCVL179w4takHW9hW/EWXKlFHsh8Tpng7oq0JBQEE2rwkwHBERU3r0Uqlj3w+2Gx7lUvq/oFJua6lSnntepXR9wOOcr50RIxT/mLCtgkk3pWkLlVy7gXL6iXDpPHZMpbRqq3Rkwb0Zi+pnto06ki8vopxbg4/Sx1yqXn1V8Q+gy3a0NX1O1REkk6tcr1JXrDSbdX/CLgNSK1RIqSVL3Ic9NlLnzdcYWg927arU++cfSerCxSr5xkbW0+7ttWuVqlrVvWv7RiwQkM9ZMKtuGK2LUWvw4BwOkRV4eTEDTVOmTLF2O3a3M2gDst6oY9CLpA7+QurV4WxvGWQ9lWbb6vdjcIC5pMXzycE50lNr89T+tI88yiPzJoZ4WKqQtImd77CcOxNicKID9Cv1Yc5xnt4aB0vdbEaiZ5/lgIb7ORVNA9fwpkUL0nYkSzH3pvOpfmQUvYYc54dQ5gnYmjCkwydiLHNQT5+CIZjafWE5BgrBDsQjfy0YfjnOL79wHbnwH7NfZvCxC0dlK10EAtE05wNTnPHCXezWW29VvARD77OXtOKpecUhOdzn7dhYsGCBHiJycPyYnwVLvqaEyspsCYZRTh5bBYolbWo/3s/Luf1blVyuskrp0FnXkzLgRT2cS/3Sj8rgXUGAffQruVZ9j1m4AJd4nMZk39ixShUtqlTjxkqttCg6qXM/c802HT/uvgbDImhQBQsqhfjKgQQzhskX5/aYOVy/XqkaNVxXJpeuoJzffuezGmg/0IKiRWJBA8IvUbrCGpDKkyeP6tKlCy/0Pa5eeuklxemZ1fbt2zURsSE44MuebgMhOgnbDWftUI0a+VaPQ9SMu5pwTMNr+8IleZTTYtdyNxjCDdh+OM8AP0PflYLAUno9opIrVFWYzoZdKZSCIZienrYQRUbrh7nqgw+UKllSqQYNlFo85YirTp76NmXPHqXq1FH8TijFpsygJblUeeXcsdNd/vRpxXZQpf7b9ZNKvuLCj7G7AG/A7nPZZWxDumCStJ62ZTsuCAjI8bovxSl62BC4Q/GCVFW8eHFtgOaY0Orll1+2BVy7Gw0LAf2wQyWXqRj2W/On/Xg3nDp9Rth+XFJ6P6ZSevbxbjLD+/jCT5+arMpl36dqXPO7mjfPVcWoUS4DNvx4MppYJKVFawX/JqtUqMCG6Gdm+rWtTZig+AfQeoX927FAQAH9gDB+w7ovpGDGWjD8wfayhOcvYYeRrBjpjnAzdFIHog/gAZ2hCn0UNm0/wfj9ODrc46OG0BzStqDSFUnxdDbi6WRWsNSj/ean6e7mh2n+fZ/QwIGuTBLsvK+n9jNlrjKn4i2d0nagRUepWn+Xm4PllN6E/QdBxUQyhkBAI7RZna/FqEI+Jjoh+syCATrYHiAeMcJMsN3eVoGPjuP1oZTa6xFiFSXTfXHOmkPq80WUNHm8Xv4BnyIkAYSDYabIh3viMkSzL5BFqldJoa935iTj1rTWayTTQPqd5vC6FMkQAj41IITaeA+rE4MUrJgXyToC2gmxLDvChUkyov2EqQse1Tq63EfOcRNJTfiAjAcf8DgXzA7WtDmZwJK+/Jysq9JNJ8dg6vBVBgTknOzpRV3dsY2mXVxHh0PxvgYha7HwVhydvZEJvO9TA8rJQV+Qltn8+4PdyFesWKGnTtn3RseGZj8cfaxIkSKBW5ESwSGgNaCSwZXNRKlo0X6sXcdqceeAlzhezjHr4YDbWG6RelcHDtj/IhnV2F05lOJjCFZ1/1z67r9ShOwV3iLT796IZGA/kKmMlxvoqe1pXrlhOTsGL9LroerXrx+oirg8Hw4jdPJ1ZRUWOoZDAs18haPNYOtMefwpldL9oWCL63Laq/qeThm6JiOFk/MUUE7LLB1mBMsVP6N8OUKWK6fUlguTbxlpJqxlY8EI7VMDsvLXF2ytLMi6ZQcvvRY5wgZwvhYEqEeoVpGsIcB+/EQI7l/s2qxV5OfqaNR+zK5qB0peUKs2bTYPpfvpnPEJIciaY9yYdMtl6SQnhTRDcyg8l99+pxr1s7sdEs26kUoHp2GkFsk4AgEJCAHHsOgSCz29ZSOvIOQ1UXpI5n1O9jOIAFb48+JaX8HCMlIT4rAjpjHS+poC209m4/2YdYTzE/YbxxuvUWrPPgEN0lip7nzkCUqa/QkZcJMOk1gN0Tq0Kxufa9QwPGIDzZpFHKbYlSkEs24iGUcgIAE1adJEr4Dv3r27jgGNaIkIwcHex/QM5xJpwX7xICGRrCGQmVXw3i2uXOnK5cWBC3Sw84oVicOREL3yimt1OecRiFrRU/6I2phO8kUOHkSpbdtzgLVXyKjENxdGSUNAHGnAXJKB6KoIyo+V+wjfmplAbmHsekxVHZCA2AuapzTXat8fHlNqssnPa3oQJxpxguJmDZbdjy0LU/D8m0AIot6xI+m84wgxgbxUSKmMUE4YIiDPeLRL0phR5Bw4hNTRoz676uz9GBnVq5Gjezef50N68LwhGnGVENnQYAKqVs1FOCD2okU5lfw2F74hbTfBKssWzP1WY+QR7AtZMJAPDEHpr+eVfUXxFERCgkBmNSAskgTx4MuBRZbnc0VSNn6yOIa/nj1D0sWwV4I4RUa3zuR8+jlKmjLRoz3nlA9JbdhISV9z4KAIiJ6KR1yg9Rv0Ilws2M3N7ULb4UGBzhwbgW7EfRNBERBQQHAvkA7+REKLgFq7jp3pFpPB0QuDFdisMbTCcAt52xHXOB7E8eIASi1bmRRHNES6ZIjOvc7RF5NWLSUDeYEiIaU5LCNrpU4kH2Ttx5QXXiBeDWDuyWdWEQiagLLaUKxcP3/+fBo4cGDA7iIiYlZTUusvFodSVd/9QI7nn3Vn2QzUOFLFIK0vHN+2b+fop4UDXRE7543cuckxYrg2SCdt26JTH6e2u8cVWpY1pEiJTmbIwKq5n1ESR3M0RcjHRCI0n0JAXjjWq1ePxo8f73U07S4ygnCUyLQngjiCaV3nC4P0EgLHgGfJgRmdiy8OeCVC6IwaRTR4sEv74aS0cSmOu9qSgof0O2NIffW11oQcnTtF/F6N4sVIrVxNVI/XroiEBQEhIC9YOasG4S+QYFEu1sdlRBTPHjqHDiM1cTIZvXtS0k87g55K5sS01LWrK0neZnaXue66jLQce2Ud746k1DKVOM9PKUraGpx/UMjvshCrmLWuJ0PUnpBDa1YYcBbMLCifmUcAywacw96g1FIV2EHntM7RlTSYEwRa/FjSCxCIYI+YAm7alAjrjuKdfDTSHBUg6befKWkL24JscvNwfDKdkjYy4CJhQ0A0oLBBe6Hi1ByXkXFnS0rasJqMUiUvnLBsDRlChIwKt7K9E6FHeSSoBbaefftcOcorsUKQKKK1Dl6PaKdES8JNOzEId9uiAYUZYYVgxixJc2b6JR/2cNC2nRdfJHb6dNl38N3DFHrZskRb2BabSOQT5kci1UcRAqIBhflhqE1byGjTKt1WkNK4Vy9XQHMzqPm5c65A6IjdIyIIxCsCQkBhfrJYYGnUZndkPwKP5enTiXbu9CwA+7aQjycmshd/CMgQLMzPVGtAtWv6bQVpf6H1IJuxiCCQaAiIBhTGJ64Qq3P7t5yQynesBkQixfCLM02LCAIJiYBoQOF87CAfTubnL3c6cqHDlxELRkUEgUREQAgojE9dbdxERp3afluAV/Ojj/o9LScEgbhHQAgojI84PfvPjh1EP/yAlEdh7IBULQhEOQJCQGF8QOnNgI0cSfTww0Qc2VZEEEhYBMQIHaZHj3VfiCNM5diT0EtwijMfcYwlrxOyKwgkGAIxrwFxWgFC2iDOWx9Vj05rPzV5ISNSd3rJhAlELVu6DNBep2RXEEgoBNJ+O2Lg9g8dOqTjURcrVkyvSEdYDKxgv5RjClfhwMdPPfUUB2U/Ze+dsAc0+fD/wVILTL0//ri93ZPWBYFoQCDmhmA///wzL9ZsQFgoiJz1SA+NGNXYhxa0n9dezeJ0BbNnz6Zly5ZRiRIlbMFZa0AP9UjT9rx5rnjCWOclIggkOgIxR0DDhw8naD5LORk3wsT6kqFDh3Ke7uY0depUGjRokK8ifo99+umnOt+Z3wLnT5w+fTrdiIhq42ZyTEob2Eym3gMhK+cTCYGYI6BtnIqgS5cufskHDw9JE7ty9K53eKyTUQK65ZZbtPYU6CVo27Yth8w4HzPDq7Da+yMR57oyvMJJIHzqTz8RtWnjdYHsCgIJikDMERC+9MjGymmh031ky5cv5zx/V6dbxtdJ2JHwF0hQBkkbfYlr+j3t+i9oP5h6R8YKEUFAEODvQqyBgBTRIKHff/+d09F01DYeGKAdPNsEG9CBAwd4dfl0WrhwoR6m2XF/LgdEz/UVx44Ra1YuDciOPkmbgkA0IhBzBFS1alWdm+whjsiOoZgTKzq9pHHjxvTll19Sw4YNvc5EZhcakOMeTxfnceOIeNTGs3WR6YO0IgjEAgIxR0AAtWTJknqG6xxH7TrI0dqh9STzyvOrrrqKihQpElRQ+XA9HPXff7zGgtdZcAZPU5DDC/m7WCkTEQQEAQsCMUlAZv+RlQJkhL+oka2cr7dsGY9A6nPmgDSJOLO1iCAgCFgQiElHREv/o25TMQEZDW/w6Bc8n5980uOQ7AgCggAjENMaUDQ+QUevh9J0i81RIoKAIOADAdGAfIAihwQBQSAyCAgBRQZnaUUQEAR8ICBDMB+gBHPoP57tWrFiBX399dcexdevX69X5+fLl8/jeKR2sAj35MmTVLhw4Ug16dFOCk/5/frrr3q5jMeJCO5gVhSzodls8vg8cuQI5eGst7lz547gXV9o6i+O91KoUKGoixBxoYcXtoSALmCRoa0xY8bQ5MmT07zkmzlxO0gAL4AdcuLECcIL+Pfff9vRPIGAfvzxR/r3339taR+N7tq1S5OwXQSEBdP4AfLnKR9uYBCeBuT32GOPUcWKFcPdXJbqNziejspSDXKxBwIDBgygXLlyUf/+/T2OR2pn7ty5NIWTyWNRrR1y+PBhqlmzJiFkil2CJThbOJ0s/MLskDvvvFM7ybZu3dqO5unVV1/VBIxF2dEuYgOK9ick/RME4hgBIaA4frhya4JAtCMgBBTtT0j6JwjEMQJCQHH8cOXWBIFoR0AIKNqfkPRPEIhjBISA4vjhyq0JAtGOgBBQtD8h6Z8gEMcICAHF8cOVWxMEoh0BcUQM8RNCqFikCEKuMjvE9IS+9tpr7Whee0Lv3buXypUrZ0v7aHTnzp1UqlSpNF7qkepQNHhCp3ICuiuvvDJSt5zpdoSAMg2dXCgICAJZRUCGYFlFUK4XBASBTCMgBJRp6ORCQUAQyCoCQkBZRVCuFwQEgUwjIASUaejkQkFAEMgqAkJAWUVQrhcEBIFMIyAElGno5EJBQBDIKgJCQFlFUK4XBASBTCMgBJRp6ORCQUAQyCoCQkBZRVCuFwQEgUwjIASUaejkQkFAEMgqAkJAWUUwRNefO3eOsH7HnzidTn+nYvZ4sPkQAmETswCc77idGUTsxi6hCAiLJLFQFH+ff/65T+zfffddfb5OnTo+z4fj4P79+3UGh8WLF3tUD9J5+eWX9bmLLrqIypQpQx999JFHmVDtjB49Wt83FtOGW7Zu3UodO3bUqWuuu+46Gjx4sN8m/WHj94JMnjAXEQOHSMoHH3xABQsWTNPk7NmzqWzZsmn+cDyeJCHzgiUlJdGcOXPo9ttvT/MsZ82aleZYOA/gC9ayZUs6duxYmmbeeOMNGjhwIA0ZMoQaNWpEEydO1F/cAgUKUNOmTdOUj4UDZ86coXbt2lHt2rV1Ysft27dT7969yeFwEFIaWSU9bKzlYnUbKZR69epFeB+9BQkugVXXrl09ThUvXtxjP+Z3kBcsUWTPnj3IgaZuuukmxb86ipPoedz6b7/9pvhlUDVq1FD8BfE4F44dTm6oOIeYYs1G92vBggUezVSrVk01a9bMfQz95ZxX6r777nMfC9XGO++8o/sADMIpL730kuKEfYqHHe5mBg0apJ/H2bNn3ccCYeMuGKIN3DfeDeAQbvnnn38Ua4C6vdKlS6scOXKkaZJ/cBSTT5rj8XYgoYZg5q8FEsf9+eeftHr1avOQ/kQyv+rVq5N3LB2kYX7uueeocuXKOukgvzQ66yR+oTBMaty4MQ0fPtyjLozr69atS5999pnHcevOK6+8Qo888ggtXLjQeti9DU2HX1b3Pr98Ot5OJDJuvvDCC/TAAw+428bG8uXL6frrr9eZV7HfsGFD+uKLL6hPnz50zTXX6L++fftScnIyTvsUlG/evDllz57dfb5Vq1b6eSCZoCmBsDHLhetz1apV+l69NdNatWrR//73P93shg0bCPsY2kMjveyyy6hKlSpau06vX0jnvXbtWoIG1LNnTz309S7/7bffEv8A6cPxaP8z7zchCaho0aL6xfHOHorhF4YH3tK5c2c9/GHNgz788ENiDYpGjRpFw4YN00OHYsWKEWxHVgGpfPXVV5qErMet27CFIIvlxRdfbD3s3oZ6/s0339Czzz6rhyvdu3cnkKG3Wu6+IIQbGP7s3r3bo0ake8aXB+mXIdu2bSP0CV8WEFaLFi3ozTffpBEjRnhcZ91B2mZkLrWKuc9aiPtwIGzcBcO0Yd6rN5ni/pH6GILgb3jGrKVqOx3uO2fOnPod2rdvn9+e4UeOtXEC8foS4IA2kGL6lltu0WSNa9asWeOreEwfS0gCwhNr06aNTl8MrQICjQi/et4EBC0Hv3AwlD799NP6unHjxulfJ4zTIZ06dSJEwdu0aZPex7+PP/6YmjRpkm6O+ED549FH5PcG0eFFnDp1Kr311lv6l9ndkM0bSH8MTfLBBx+ksWPHEoz3S5Ys8dsrfGmh2VkFmgPEagAPhI31eju38f5Ai5k0aRJ169ZNa0c4tnTpUr/duvTSS/3+6OAi2MUg69ato/bt29OLL76oCQnvAMg+niShCejXX3/VOcTxQKENYYiFWRmr4BcNWshDDz2kf/nxqwRywdQwyAly4403UpEiRWjmzJl6/+TJk3qWrUOHDno/s//uv/9+wiwJjNF4Kfv166eHO2ynyGyVIb8O2qBVEAoVJONPMJuHWUirmPve2oa1TDRvWzHAe4DhZXoYBLoXhLPFjxx+EPHePf/881rTMmdFA10fS+cTloDwRalUqZJ7vO5v+IWHiV8i2DvYYEzly5en1157jU6dOkWm9oQZnHvvvdf96zdv3jz9JWvdunWm3wXYHqZMmUJPPvkkPfXUU5ocoQmhTrQfLeI9hXzJJZdou5i//iFO8V9//eVxGsMdSJ48eTyOx8qONwYYUmfFbgMTQY8ePbRNycTgiiuu0D90pnZkHo/1z4QlIDw4cxiGL8SKFSvSDL9Q5tChQ9poCpKB8RHEANsHyMsqGIb98ssvtHnzZl0OU+u5c+e2FsnQ9saNG/VLjHqsArvB4cOHKT0bg7W8r20MN/v376+HjeZ5noHSpGmSALQSb43E2yCLa03txawn0CcIyGrrQfkjR47oy0qUKBHo8pCdx3ARRmBTYFuDWO8f+9B0TQFR+iKWjGJg1ufv8+DBg4Tn7y3QrKBBxpMkNAG1bdtWGwNhOIXaC63IW2D4w5CKp4W1v06+fPn0UOy7777z8FzG8K1ixYoER7Fly5ZRVodf+BWE/PDDDx5dWrlypfYbKVy4sMfxjOzgSwXjt9VmBfKEPQdDTgjI0zS2mnXjnrMqmDGEw6XV6xtOoZjZY/eHrFYf9PXTpk2j6dOnu8vjSw8x3wHzxwNkbcr3339vbob1E8PuevXqaSO02RDID+8VZiHjSRKagKDFlCxZUk+hexufzYdcv359/YXHcOj06dN04MAB6tKli9YesG8VePdiNgzDEMyMZEVAZrAtYJoe2tnx48cJXrr40sA2xL4jma4e5AVXAtgWZsyYoQ2oEyZM0C+9WSnIAFoWhn0wsMMmMXnyZPN0pj9h08CXCcZ1aJ6wc7z++uva49vUPjJdeQYuBLZwkYCT56JFi/RQF8ZwDLEh+EGBtgHnSNj90E8Mi/Bswy348YK28+ijj2rb39GjR/V7AC0cM6JxJWzHSBgxHRHZ4Oy+52eeeUY7hO3YscN9jIdmHo6IPAOmHQCzZcumeHyvmBTU22+/rbeZGNzX8RdVsTqu+EvmPhbMBmsfug/ejog81FI8BNN18kunnSR5tkmxRhZMtemWYT8UxQZT3S6/2IoN6YqJwX0NG9jVPffc426bv5iKtTtdnr8QuhwcCpk83Ndgg32HFP9Kexzz3sF9whEU95Q/f36Fe/J2CjWv8YeNeT6zn0x+6tZbb9V9QD/g4MnapUd148eP146iOM8zV4oJWPHyCMU/Mroca3L6enZZ8LgOuDBxexzzt8Ozmoq1zjSngRFrwe7+8Q+l4lnXNOVi/YDkBeO3KxjhB621H8xy+BuHQ1PALBqGbVChQyUweMMWBX+jUP4Cw56BPmNa3J9zI4af+MPwLJQCPNE28GRiD2XVGaoLQyzMZppDXu+LMVTE8AzOqdBAIinACDO1MGrDCB2PIgQUgqeKFxjOeRguwUAdbzMVIYBIqhAEfCJg30+Pz+7E5kEYDUE+GLfDViAiCAgCwSEgGlBwOKVbCmo8fIVq1qwZ8qFKug3LSUEgxhEQAorxByjdFwRiGYHIWtViGSnpuyAgCIQcASGgkEMqFQoCgkCwCAgBBYuUlBMEBIGQIyAEFHJIpUJBQBAIFgEhoGCRknKCgCAQcgSEgEIOqVQoCAgCwSIgBBQsUlJOEBAEQo6AEFDIIZUKBQFBIFgEhICCRUrKCQKCQMgREAIKOaRSoSAgCASLgBBQsEhJOUFAEAg5AkJAIYdUKhQEBIFgERACChYpKScICAIhR0AIKOSQSoWCgCAQLAJCQMEiJeUEAUEg5AgIAYUcUqlQEBAEgkVACChYpKScICAIhBwBIaCQQyoVCgKCQLAICAEFi5SUEwQEgZAjIAQUckilQkFAEAgWASGgYJGScoKAIBByBISAQg6pVJhRBJDU8bXXXtO51f7999+MXi7lYxgBIaAYfnjh6vqcOXOIc9zTsWPHgm4CaZ7Hjh1LZ8+eDfoaFBw+fDhdeeWVNHjwYJowYYJOQfzOO++kW0ck+5duR+RklhEQAsoyhFIBEJg5cyY9/PDDhFzqwcqWLVvomWeeoccee4zee+89GjBgAD355JPUv39/+uOPP4KtJqhymelfUBVLoSwhIASUJfjkYhMBaEAZldWrV+t01k8//TRly5aNHA4H9e3bl9q3b0/79+/PaHXpls9M/9KtUE6GBAEhoJDAGNuVLFiwgJo2bUoFChSgVq1a0e+//57mhjDsadCgAeXPn18PmZo3b047d+7U5T777DN6/vnn9TbKfPjhh3p737591KZNGypWrBjlyZOHatSoQdOnT3fXXbBgQYLN58iRI+5juXPn1kOxWrVquY+Fq3+nTp3SWhv6h760bt2afv75Z3e7shF+BISAwo9xVLewbds2ateuHV199dU0ZcoU/fn444979HnWrFnUtm1bqlKlCk2cOJF69epFuA7HIOXLl9cEhu3evXtrovnnn3/0J4ZSgwYNohEjRmhtp1OnTvT999+jKDVp0kQTGsgM2pAvCVf/lFLUqFEjmj17NnXp0oXGjx9Pf/31F9WsWZOOHz/uqytyLBwI8IMQSWAE+EuobrzxRg8E7rzzTsXvmvrzzz/18SeeeEK1bNnSo8zQoUN1Gf7S6uOs2eh91ir0/qJFi1Tp0qUVaxTu6/bu3avLjBs3zn1s8+bNijUjfZy1H3X33XerXbt2uc+Hq38zZszQbS5cuNDd1pkzZ1SuXLnUc8895z4mG+FFQDSgcLB6DNUJDQNDD6vABmOVt956i+bNm6cPHT58mJYsWUI7duzQ+/yltRZ1bzdr1ox2795NRYsWpZMnTxITDTEpaTuP9RpoHF999RW9/fbbxIRFGG5Vr16dmIR0XeHq35o1a+jSSy/VQ8P169cT/rZu3aq1PGyLRAaBbJFpRlqJRgQw1MBU+xVXXOHRvauuuspjH2VgKJ47d64epuB8kSJFdBn+ffQoa90ZOXIkYUodtqAcOXJQvXr1COV9XXP55ZfrIV3nzp31kO7111+nN954I2z9O3DgAGGYeMMNN1i7rLdhExKJDAKiAUUG56hsJV++fFoD8LZ5QGOxSseOHbVmMmzYMOJhFB06dEjbelDGF5ngOGxFPHTT2tW6devo77//dmtR5jUwXo8aNQrF3QJigyEb2lM4+weD+7XXXqvdBjBDZv0DYYpEBgEhoMjgHJWtwNkQhuXly5d79A+EYcq5c+do6dKl1KdPH+rRoweVLFlSn/rmm2/0p+n3g7og5nQ321a0JgMtpm7dunTRRRdpwzXIx7xm48aN2g/ISni4HsMuEFE4+1ehQgU947Vp0ybdDtpC3zp06KA1L30z8i/8CDDoIgmMANtcVFJSkho9erQ6ceKEYq1E8ZS5NtCaRuj69esrttUoHrYoHrYoGJFxDb+dim1BGr358+fr/TFjxqiffvpJsU1Hl2FyU0xiiu0qioc2ugzPiulr2BFRl7njjjsUD7lUv379FM/A6TIwYkPC1T8Yz1kLUtWqVVNs31Ks1SkeZur+MLnqtuVf+BEA64skOAJsp1Fs19FffPaHUTzU0tsmAS1btkwTEGsJih0GFQ+R1Nq1a/WXddKkSRo9fKGrVq2qr2OPaIV9Nm4rtv3oa3i5hZo2bZpifyPF0+5uxDEbVahQIX0dCA3lQV5WCUf/UD8bnTUBoV3cGxu/FXtkW5uW7TAjYKD+8OtZ0kK0I4DX4ODBg3rWCsMRX/Lbb79Rzpw5KW/evL5O62Ow9cCZEJ7NEMx4wcZkGq31Qa9/aBt+QnACxNqwiy++2KuEy9YUjv6hIfQZa9iwJk0ksggIAUUWb2nNDwIbNmygo0ePak9sP0XkcBwiIAQUhw9VbkkQiBUEZBYsVp6U9FMQiEMEhIDi8KHKLQkCsYKAEFCsPCnppyAQhwgIAcXhQ5VbEgRiBQEhoFh5UtJPQSAOERACisOHKrckCMQKAkJAsfKkpJ+CQBwiIAQUhw9VbkkQiBUEhIBi5UlJPwWBOERACCgOH6rckiAQKwgIAcXKk5J+CgJxiIAQUBw+VLklQSBWEBACipUnJf0UBOIQASGgOHyockuCQKwgIAQUK09K+ikIxCECQkBx+FDllgSBWEFACChWnpT0UxCIQwSEgOLwocotCQKxgoAQUKw8KemnIBCHCAgBxeFDlVsSBGIFASGgWHlS0k9BIA4R+D/Yl+GN2zT4egAAAABJRU5ErkJggg==" /><!-- --></p>
+</div>
+<div id="rolling-sums-for-groups-with-uneven-time-gaps" class="section level3">
+<h3>Rolling sums for groups with uneven time gaps</h3>
+<p><a href="https://stackoverflow.com/a/58167952/3495076">SO discussion</a></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb6-1" data-line-number="1"><span class="kw">library</span>(runner)</a>
+<a class="sourceLine" id="cb6-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb6-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb6-4" data-line-number="4"><span class="kw">set.seed</span>(<span class="dv">3737</span>)</a>
+<a class="sourceLine" id="cb6-5" data-line-number="5">df &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb6-6" data-line-number="6">  <span class="dt">user_id =</span> <span class="kw">c</span>(<span class="kw">rep</span>(<span class="dv">27</span>, <span class="dv">7</span>), <span class="kw">rep</span>(<span class="dv">11</span>, <span class="dv">7</span>)),</a>
+<a class="sourceLine" id="cb6-7" data-line-number="7">  <span class="dt">date =</span> <span class="kw">as.Date</span>(<span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">'2016-01-01'</span>, <span class="st">'2016-01-03'</span>, <span class="st">'2016-01-05'</span>, <span class="st">'2016-01-07'</span>, </a>
+<a class="sourceLine" id="cb6-8" data-line-number="8">                       <span class="st">'2016-01-10'</span>, <span class="st">'2016-01-14'</span>, <span class="st">'2016-01-16'</span>), <span class="dv">2</span>)),</a>
+<a class="sourceLine" id="cb6-9" data-line-number="9">  <span class="dt">value =</span> <span class="kw">round</span>(<span class="kw">rnorm</span>(<span class="dv">14</span>, <span class="dv">15</span>, <span class="dv">5</span>), <span class="dv">1</span>))</a>
+<a class="sourceLine" id="cb6-10" data-line-number="10"></a>
+<a class="sourceLine" id="cb6-11" data-line-number="11">df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-12" data-line-number="12"><span class="st">  </span><span class="kw">group_by</span>(user_id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb6-13" data-line-number="13"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb6-14" data-line-number="14">    <span class="dt">v_minus7  =</span> <span class="kw">sum_run</span>(value, <span class="dv">7</span>, <span class="dt">idx =</span> date),</a>
+<a class="sourceLine" id="cb6-15" data-line-number="15">    <span class="dt">v_minus14 =</span> <span class="kw">sum_run</span>(value, <span class="dv">14</span>, <span class="dt">idx =</span> date)</a>
+<a class="sourceLine" id="cb6-16" data-line-number="16">  )</a></code></pre></div>
+<pre><code>## # A tibble: 14 x 5
+## # Groups:   user_id [2]
+##    user_id date       value v_minus7 v_minus14
+##      &lt;dbl&gt; &lt;date&gt;     &lt;dbl&gt;    &lt;dbl&gt;     &lt;dbl&gt;
+##  1      27 2016-01-01  15       15        15  
+##  2      27 2016-01-03  22.4     37.4      37.4
+##  3      27 2016-01-05  13.3     50.7      50.7
+##  4      27 2016-01-07  21.9     72.6      72.6
+##  5      27 2016-01-10  20.6     55.8      93.2
+##  6      27 2016-01-14  18.6     39.2     112. 
+##  7      27 2016-01-16  16.4     55.6     113. 
+##  8      11 2016-01-01   6.8      6.8       6.8
+##  9      11 2016-01-03  21.3     28.1      28.1
+## 10      11 2016-01-05  19.8     47.9      47.9
+## 11      11 2016-01-07  22       69.9      69.9
+## 12      11 2016-01-10  19.4     61.2      89.3
+## 13      11 2016-01-14  17.5     36.9     107. 
+## 14      11 2016-01-16  19.3     56.2     119.</code></pre>
+</div>
+<div id="runner-with-dplyr" class="section level1">
+<h1>runner with <code>dplyr</code></h1>
+<div id="unique-for-specified-time-frame" class="section level3">
+<h3>Unique for specified time frame</h3>
+<p><a href="https://stackoverflow.com/questions/41693081/">SO discussion</a></p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb8-1" data-line-number="1"><span class="kw">library</span>(runner)</a>
+<a class="sourceLine" id="cb8-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb8-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb8-4" data-line-number="4">df &lt;-<span class="st"> </span><span class="kw">read.table</span>(<span class="dt">text =</span> <span class="st">&quot;  user_id       date category</span></a>
+<a class="sourceLine" id="cb8-5" data-line-number="5"><span class="st">       27 2016-01-01    apple</span></a>
+<a class="sourceLine" id="cb8-6" data-line-number="6"><span class="st">       27 2016-01-03    apple</span></a>
+<a class="sourceLine" id="cb8-7" data-line-number="7"><span class="st">       27 2016-01-05     pear</span></a>
+<a class="sourceLine" id="cb8-8" data-line-number="8"><span class="st">       27 2016-01-07     plum</span></a>
+<a class="sourceLine" id="cb8-9" data-line-number="9"><span class="st">       27 2016-01-10    apple</span></a>
+<a class="sourceLine" id="cb8-10" data-line-number="10"><span class="st">       27 2016-01-14     pear</span></a>
+<a class="sourceLine" id="cb8-11" data-line-number="11"><span class="st">       27 2016-01-16     plum</span></a>
+<a class="sourceLine" id="cb8-12" data-line-number="12"><span class="st">       11 2016-01-01    apple</span></a>
+<a class="sourceLine" id="cb8-13" data-line-number="13"><span class="st">       11 2016-01-03     pear</span></a>
+<a class="sourceLine" id="cb8-14" data-line-number="14"><span class="st">       11 2016-01-05     pear</span></a>
+<a class="sourceLine" id="cb8-15" data-line-number="15"><span class="st">       11 2016-01-07     pear</span></a>
+<a class="sourceLine" id="cb8-16" data-line-number="16"><span class="st">       11 2016-01-10    apple</span></a>
+<a class="sourceLine" id="cb8-17" data-line-number="17"><span class="st">       11 2016-01-14    apple</span></a>
+<a class="sourceLine" id="cb8-18" data-line-number="18"><span class="st">       11 2016-01-16    apple&quot;</span>, <span class="dt">header =</span> <span class="ot">TRUE</span>)</a>
+<a class="sourceLine" id="cb8-19" data-line-number="19"></a>
+<a class="sourceLine" id="cb8-20" data-line-number="20">df <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-21" data-line-number="21"><span class="st">  </span><span class="kw">group_by</span>(user_id) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb8-22" data-line-number="22"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb8-23" data-line-number="23">    <span class="dt">distinct_7  =</span> <span class="kw">runner</span>(category, </a>
+<a class="sourceLine" id="cb8-24" data-line-number="24">                         <span class="dt">k =</span> <span class="st">&quot;7 days&quot;</span>, </a>
+<a class="sourceLine" id="cb8-25" data-line-number="25">                         <span class="dt">idx =</span> <span class="kw">as.Date</span>(date), </a>
+<a class="sourceLine" id="cb8-26" data-line-number="26">                         <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x))),</a>
+<a class="sourceLine" id="cb8-27" data-line-number="27">    <span class="dt">distinct_14 =</span> <span class="kw">runner</span>(category, </a>
+<a class="sourceLine" id="cb8-28" data-line-number="28">                         <span class="dt">k =</span> <span class="st">&quot;14 days&quot;</span>, </a>
+<a class="sourceLine" id="cb8-29" data-line-number="29">                         <span class="dt">idx =</span> <span class="kw">as.Date</span>(date), </a>
+<a class="sourceLine" id="cb8-30" data-line-number="30">                         <span class="dt">f =</span> <span class="cf">function</span>(x) <span class="kw">length</span>(<span class="kw">unique</span>(x)))</a>
+<a class="sourceLine" id="cb8-31" data-line-number="31">  )</a></code></pre></div>
+<pre><code>## # A tibble: 14 x 5
+## # Groups:   user_id [2]
+##    user_id date       category distinct_7 distinct_14
+##      &lt;int&gt; &lt;fct&gt;      &lt;fct&gt;         &lt;int&gt;       &lt;int&gt;
+##  1      27 2016-01-01 apple             1           1
+##  2      27 2016-01-03 apple             1           1
+##  3      27 2016-01-05 pear              2           2
+##  4      27 2016-01-07 plum              3           3
+##  5      27 2016-01-10 apple             3           3
+##  6      27 2016-01-14 pear              2           3
+##  7      27 2016-01-16 plum              3           3
+##  8      11 2016-01-01 apple             1           1
+##  9      11 2016-01-03 pear              2           2
+## 10      11 2016-01-05 pear              2           2
+## 11      11 2016-01-07 pear              2           2
+## 12      11 2016-01-10 apple             2           2
+## 13      11 2016-01-14 apple             1           2
+## 14      11 2016-01-16 apple             1           2</code></pre>
+</div>
+<div id="runner-with-group_by-mutate" class="section level3">
+<h3>runner with group_by mutate</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" data-line-number="1"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb10-2" data-line-number="2"></a>
+<a class="sourceLine" id="cb10-3" data-line-number="3">x &lt;-<span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">rnorm</span>(<span class="dv">20</span>))</a>
+<a class="sourceLine" id="cb10-4" data-line-number="4">y &lt;-<span class="st"> </span><span class="dv">3</span> <span class="op">*</span><span class="st"> </span>x <span class="op">+</span><span class="st"> </span><span class="kw">rnorm</span>(<span class="dv">20</span>)</a>
+<a class="sourceLine" id="cb10-5" data-line-number="5">date &lt;-<span class="st"> </span><span class="kw">Sys.Date</span>() <span class="op">+</span><span class="st"> </span><span class="kw">cumsum</span>(<span class="kw">sample</span>(<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dv">20</span>, <span class="dt">replace =</span> <span class="ot">TRUE</span>)) <span class="co"># unequaly spaced time series</span></a>
+<a class="sourceLine" id="cb10-6" data-line-number="6">group &lt;-<span class="st">  </span><span class="kw">rep</span>(<span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>), <span class="dt">each =</span> <span class="dv">10</span>)</a>
+<a class="sourceLine" id="cb10-7" data-line-number="7"></a>
+<a class="sourceLine" id="cb10-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb10-9" data-line-number="9"><span class="kw">data.frame</span>(date, group, y, x) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-10" data-line-number="10"><span class="st">  </span><span class="kw">group_by</span>(group) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-11" data-line-number="11"><span class="st">  </span><span class="kw">run_by</span>(<span class="dt">idx =</span> <span class="st">&quot;date&quot;</span>, <span class="dt">k =</span> <span class="st">&quot;5 days&quot;</span>) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb10-12" data-line-number="12"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb10-13" data-line-number="13">    <span class="dt">alpha_5 =</span> <span class="kw">runner</span>(</a>
+<a class="sourceLine" id="cb10-14" data-line-number="14">      <span class="dt">x =</span> ., </a>
+<a class="sourceLine" id="cb10-15" data-line-number="15">      <span class="dt">f =</span> <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb10-16" data-line-number="16">        <span class="kw">coefficients</span>(<span class="kw">lm</span>(x <span class="op">~</span><span class="st"> </span>y, x))[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb10-17" data-line-number="17">      }</a>
+<a class="sourceLine" id="cb10-18" data-line-number="18">    ),</a>
+<a class="sourceLine" id="cb10-19" data-line-number="19">    <span class="dt">beta_5 =</span> <span class="kw">runner</span>(</a>
+<a class="sourceLine" id="cb10-20" data-line-number="20">      <span class="dt">x =</span> ., </a>
+<a class="sourceLine" id="cb10-21" data-line-number="21">      <span class="dt">f =</span> <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb10-22" data-line-number="22">        <span class="kw">coefficients</span>(<span class="kw">lm</span>(x <span class="op">~</span><span class="st"> </span>y, x))[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb10-23" data-line-number="23">      }</a>
+<a class="sourceLine" id="cb10-24" data-line-number="24">    )</a>
+<a class="sourceLine" id="cb10-25" data-line-number="25">  )</a></code></pre></div>
+<pre><code>## # A tibble: 20 x 6
+## # Groups:   group [2]
+##    date       group      y      x alpha_5  beta_5
+##    &lt;date&gt;     &lt;fct&gt;  &lt;dbl&gt;  &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
+##  1 2020-05-17 a      0.368 0.0470  0.0470  0.0470
+##  2 2020-05-20 a      0.457 0.998  -3.91   -3.91  
+##  3 2020-05-23 a      3.73  0.967   1.00    1.00  
+##  4 2020-05-26 a      3.70  1.26   34.5    34.5   
+##  5 2020-05-28 a      4.76  1.98   -1.26   -1.26  
+##  6 2020-05-30 a     10.9   3.52    0.365   0.365 
+##  7 2020-06-02 a      6.13  2.39    0.948   0.948 
+##  8 2020-06-04 a     12.0   4.06    0.659   0.659 
+##  9 2020-06-06 a     11.0   3.58    0.711   0.711 
+## 10 2020-06-08 a     12.6   4.49   -2.38   -2.38  
+## 11 2020-06-09 b     12.9   3.60    3.60    3.60  
+## 12 2020-06-10 b      8.03  2.76    1.39    1.39  
+## 13 2020-06-11 b     15.8   4.68    0.768   0.768 
+## 14 2020-06-14 b     15.8   5.26    0.492   0.492 
+## 15 2020-06-15 b     20.8   6.95   -1.24   -1.24  
+## 16 2020-06-17 b     22.7   7.67   -0.165  -0.165 
+## 17 2020-06-19 b     19.0   6.55    0.862   0.862 
+## 18 2020-06-21 b     20.7   6.48    0.583   0.583 
+## 19 2020-06-24 b     14.6   5.18    2.05    2.05  
+## 20 2020-06-26 b     16.8   5.14    5.46    5.46</code></pre>
+</div>
+<div id="aggregating-values-from-another-data.frame-in-grouped_df" class="section level3">
+<h3>Aggregating values from another data.frame in <code>grouped_df</code></h3>
+<p><a href="https://stackoverflow.com/questions/61024712/do-a-rolling-regression-only-on-specific-dates/61045233#61045233">SO Discussion</a></p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" data-line-number="1"><span class="kw">library</span>(runner)</a>
+<a class="sourceLine" id="cb12-2" data-line-number="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb12-3" data-line-number="3"></a>
+<a class="sourceLine" id="cb12-4" data-line-number="4">Date &lt;-<span class="st"> </span><span class="kw">seq</span>(<span class="dt">from =</span> <span class="kw">as.Date</span>(<span class="st">&quot;2014-01-01&quot;</span>), </a>
+<a class="sourceLine" id="cb12-5" data-line-number="5">            <span class="dt">to =</span> <span class="kw">as.Date</span>(<span class="st">&quot;2019-12-31&quot;</span>), </a>
+<a class="sourceLine" id="cb12-6" data-line-number="6">            <span class="dt">by =</span> <span class="st">'day'</span>)</a>
+<a class="sourceLine" id="cb12-7" data-line-number="7">market_return &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">2191</span>))</a>
+<a class="sourceLine" id="cb12-8" data-line-number="8"></a>
+<a class="sourceLine" id="cb12-9" data-line-number="9">AAPL &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb12-10" data-line-number="10">  <span class="dt">Company.name =</span> <span class="st">&quot;AAPL&quot;</span>, </a>
+<a class="sourceLine" id="cb12-11" data-line-number="11">  <span class="dt">Date =</span>  Date,</a>
+<a class="sourceLine" id="cb12-12" data-line-number="12">  <span class="dt">market_return =</span> market_return</a>
+<a class="sourceLine" id="cb12-13" data-line-number="13">)</a>
+<a class="sourceLine" id="cb12-14" data-line-number="14"></a>
+<a class="sourceLine" id="cb12-15" data-line-number="15">MSFT &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb12-16" data-line-number="16">  <span class="dt">Company.name =</span> <span class="st">&quot;MSFT&quot;</span>, </a>
+<a class="sourceLine" id="cb12-17" data-line-number="17">  <span class="dt">Date =</span> Date,</a>
+<a class="sourceLine" id="cb12-18" data-line-number="18">  <span class="dt">market_return =</span> market_return</a>
+<a class="sourceLine" id="cb12-19" data-line-number="19">)</a>
+<a class="sourceLine" id="cb12-20" data-line-number="20"></a>
+<a class="sourceLine" id="cb12-21" data-line-number="21">df &lt;-<span class="st"> </span><span class="kw">rbind</span>(AAPL, MSFT)</a>
+<a class="sourceLine" id="cb12-22" data-line-number="22">df<span class="op">$</span>stock_return &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="kw">rnorm</span>(<span class="dv">4382</span>))</a>
+<a class="sourceLine" id="cb12-23" data-line-number="23">df &lt;-<span class="st"> </span>df[<span class="kw">order</span>(df<span class="op">$</span>Date),]</a>
+<a class="sourceLine" id="cb12-24" data-line-number="24"></a>
+<a class="sourceLine" id="cb12-25" data-line-number="25">df2 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(</a>
+<a class="sourceLine" id="cb12-26" data-line-number="26">  <span class="dt">Company.name2 =</span> <span class="kw">c</span>(<span class="kw">replicate</span>(<span class="dv">450</span>, <span class="st">&quot;AAPL&quot;</span>), <span class="kw">replicate</span>(<span class="dv">450</span>, <span class="st">&quot;MSFT&quot;</span>)), </a>
+<a class="sourceLine" id="cb12-27" data-line-number="27">  <span class="dt">Event_date =</span> <span class="kw">sample</span>(</a>
+<a class="sourceLine" id="cb12-28" data-line-number="28">    <span class="kw">seq</span>(<span class="kw">as.Date</span>(<span class="st">'2015/01/01'</span>), </a>
+<a class="sourceLine" id="cb12-29" data-line-number="29">        <span class="kw">as.Date</span>(<span class="st">'2019/12/31'</span>), </a>
+<a class="sourceLine" id="cb12-30" data-line-number="30">        <span class="dt">by =</span> <span class="st">&quot;day&quot;</span>),</a>
+<a class="sourceLine" id="cb12-31" data-line-number="31">    <span class="dt">size =</span>  <span class="dv">900</span>)</a>
+<a class="sourceLine" id="cb12-32" data-line-number="32">)</a>
+<a class="sourceLine" id="cb12-33" data-line-number="33"></a>
+<a class="sourceLine" id="cb12-34" data-line-number="34"></a>
+<a class="sourceLine" id="cb12-35" data-line-number="35">df2 <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-36" data-line-number="36"><span class="st">  </span><span class="kw">group_by</span>(Company.name2) <span class="op">%&gt;%</span></a>
+<a class="sourceLine" id="cb12-37" data-line-number="37"><span class="st">  </span><span class="kw">mutate</span>(</a>
+<a class="sourceLine" id="cb12-38" data-line-number="38">    <span class="dt">intercept =</span> <span class="kw">runner</span>(</a>
+<a class="sourceLine" id="cb12-39" data-line-number="39">      <span class="dt">x =</span> df[df<span class="op">$</span>Company.name <span class="op">==</span><span class="st">  </span>Company.name2[<span class="dv">1</span>], ], </a>
+<a class="sourceLine" id="cb12-40" data-line-number="40">      <span class="dt">k =</span> <span class="st">&quot;180 days&quot;</span>, </a>
+<a class="sourceLine" id="cb12-41" data-line-number="41">      <span class="dt">lag =</span> <span class="st">&quot;5 days&quot;</span>,</a>
+<a class="sourceLine" id="cb12-42" data-line-number="42">      <span class="dt">idx =</span> df<span class="op">$</span>Date[df<span class="op">$</span>Company.name <span class="op">==</span><span class="st"> </span>Company.name2[<span class="dv">1</span>]],</a>
+<a class="sourceLine" id="cb12-43" data-line-number="43">      <span class="dt">at =</span> Event_date,</a>
+<a class="sourceLine" id="cb12-44" data-line-number="44">      <span class="dt">f =</span> <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb12-45" data-line-number="45">        <span class="kw">coef</span>(</a>
+<a class="sourceLine" id="cb12-46" data-line-number="46">          <span class="kw">lm</span>(stock_return <span class="op">~</span><span class="st"> </span>market_return, <span class="dt">data =</span> x)</a>
+<a class="sourceLine" id="cb12-47" data-line-number="47">        )[<span class="dv">1</span>]</a>
+<a class="sourceLine" id="cb12-48" data-line-number="48">      }</a>
+<a class="sourceLine" id="cb12-49" data-line-number="49">    ),</a>
+<a class="sourceLine" id="cb12-50" data-line-number="50">    <span class="dt">slope =</span> <span class="kw">runner</span>(</a>
+<a class="sourceLine" id="cb12-51" data-line-number="51">      <span class="dt">x =</span> df[df<span class="op">$</span>Company.name <span class="op">==</span><span class="st"> </span>Company.name2[<span class="dv">1</span>], ],  </a>
+<a class="sourceLine" id="cb12-52" data-line-number="52">      <span class="dt">k =</span> <span class="st">&quot;180 days&quot;</span>, </a>
+<a class="sourceLine" id="cb12-53" data-line-number="53">      <span class="dt">lag =</span> <span class="st">&quot;5 days&quot;</span>,</a>
+<a class="sourceLine" id="cb12-54" data-line-number="54">      <span class="dt">idx =</span> df<span class="op">$</span>Date[df<span class="op">$</span>Company.name <span class="op">==</span><span class="st"> </span>Company.name2[<span class="dv">1</span>]],</a>
+<a class="sourceLine" id="cb12-55" data-line-number="55">      <span class="dt">at =</span> Event_date,</a>
+<a class="sourceLine" id="cb12-56" data-line-number="56">      <span class="dt">f =</span> <span class="cf">function</span>(x) {</a>
+<a class="sourceLine" id="cb12-57" data-line-number="57">        <span class="kw">coef</span>(</a>
+<a class="sourceLine" id="cb12-58" data-line-number="58">          <span class="kw">lm</span>(stock_return <span class="op">~</span><span class="st"> </span>market_return, <span class="dt">data =</span> x)</a>
+<a class="sourceLine" id="cb12-59" data-line-number="59">        )[<span class="dv">2</span>]</a>
+<a class="sourceLine" id="cb12-60" data-line-number="60">      }</a>
+<a class="sourceLine" id="cb12-61" data-line-number="61">    )</a>
+<a class="sourceLine" id="cb12-62" data-line-number="62">  )</a></code></pre></div>
+<pre><code>## # A tibble: 900 x 4
+## # Groups:   Company.name2 [2]
+##    Company.name2 Event_date intercept   slope
+##    &lt;fct&gt;         &lt;date&gt;         &lt;dbl&gt;   &lt;dbl&gt;
+##  1 AAPL          2017-08-24   -0.0441  0.0247
+##  2 AAPL          2019-04-21   -0.103   0.113 
+##  3 AAPL          2016-06-23    0.0669 -0.0500
+##  4 AAPL          2019-07-28   -0.0570  0.138 
+##  5 AAPL          2016-05-27    0.0758 -0.0222
+##  6 AAPL          2019-05-17   -0.0747  0.120 
+##  7 AAPL          2015-11-13    0.0134 -0.0917
+##  8 AAPL          2019-06-12   -0.0503  0.102 
+##  9 AAPL          2017-03-14    0.0327 -0.0526
+## 10 AAPL          2018-03-15    0.0252 -0.0734
+## # … with 890 more rows</code></pre>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

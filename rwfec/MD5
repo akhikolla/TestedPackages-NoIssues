@@ -1,0 +1,12 @@
+3745538ae983fa08de9a34122c62bd78 *DESCRIPTION
+96196dcf51d0179be48513c4a8db9f6a *NAMESPACE
+d306ccec51eb26e2a2e2b49868ca0639 *R/RcppExports.R
+7ee5e9c0d7329976c0321b4531ceb402 *R/rwfec.R
+330c82196707f968aa4beefb28a9ab3e *README.md
+99567271980ebfdb87ea5653e5af0267 *man/hello.Rd
+f1c2c740432a1036c723b4946470f557 *man/rcpp_hello.Rd
+8a11c748ba47f95ea9966d6be38fa322 *man/sinc.Rd
+265e4f5b8d538d13748eb83ddaaa4e23 *src/RcppExports.cpp
+1ef10112ff095407da6202c3c4f93bc8 *src/rcpp_hello.cpp
+70b9d52f470c4db5a7eafed1b82b4cc6 *src/rwfec.cpp
+54354b2ea691c31136d20731ae1dd4bc *tests/testthat/test.R

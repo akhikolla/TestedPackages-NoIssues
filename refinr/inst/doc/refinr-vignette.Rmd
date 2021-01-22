@@ -1,0 +1,116 @@
+---
+title: "Intro to refinr"
+author: "Chris Muir"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Intro to refinr}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+## Package Information
+
+The purpose of this package is to assist in working with strings that are effectively equivalent, yet are not quite identical. The functions take a character vector as input, identify and cluster similar values, and then merge clusters together so their values become identical. The clustering performed by these functions are implementations of the "key collision" and "ngram fingerprint" algorithms from the open source tool [Open Refine](http://openrefine.org/). More info on key collision and ngram fingerprint can be found [here](https://github.com/OpenRefine/OpenRefine/wiki/Clustering-In-Depth).
+
+In addition, there are a few add-on features included, to make the clustering/merging functions more useful. These include approximate string matching to allow for merging despite minor mispellings, the option to pass a dictionary vector to dictate edit values, and the option to pass a vector of strings to ignore during the clustering process.
+
+This package provides two exported functions, `key_collision_merge` and `n_gram_merge`. Below is an explanation of each.
+
+## key_collision_merge
+
+```{r}
+library(refinr)
+x <- c("Acme Pizza, Inc.", "AcMe PiZzA, Inc.", "ACME PIZZA COMPANY", "acme pizza LLC")
+key_collision_merge(x)
+```
+
+Argument `bus_suffix` allows the clustering to be insensitive to common business name suffix strings (i.e. "inc", "llc", "co", etc.). The default value is `TRUE`.
+```{r}
+# Set bus_suffix to FALSE to see the difference (only the first two strings get merged).
+key_collision_merge(x, bus_suffix = FALSE)
+```
+
+A character vector can be passed to argument `dict`, which will dictate merge values when a cluster has a match within the dict vector.
+```{r}
+key_collision_merge(x, dict = c("Acme Pizza, Incorporated"))
+```
+
+To specify strings to ignore during the clustering process, pass a character vector to argument `ignore_strings`.
+```{r}
+x <- c("Bakersfield Highschool", "BAKERSFIELD high", "high school, bakersfield")
+key_collision_merge(x, ignore_strings = c("high", "school", "highschool"))
+```
+
+These args can also be used in combination with each other.
+```{r}
+key_collision_merge(x, ignore_strings = c("high", "school", "highschool"), dict = c("Bakersfield High School"))
+```
+
+## n_gram_merge
+
+Works similarly to `key_collision_merge`, however it features approximate string matching, which allows for merging of strings that contain slight spelling differences. The [stringdist](https://CRAN.R-project.org/package=stringdist) package is used for calculating edit distance between strings. `refinr` links to the stringdist C API to improve the speed of the functions.
+```{r}
+x <- c("Acme Pizza, Inc.", "ACME PIZA COMPANY", "Acme Pizzazza LLC")
+n_gram_merge(x)
+```
+
+The performance of the approximate string matching can be ajusted using parameters `weight` and/or `edit_threshold`.
+```{r}
+n_gram_merge(x, weight = c(d = 1, i = 0.4, s = 0.2, t = 0.2))
+```
+
+`n_gram_merge()` is designed to accept any of the arguments that [stringdist::stringdistmatrix](https://github.com/markvanderloo/stringdist/blob/master/pkg/R/stringdist.R#L207) 
+takes. These args will be passed along to the the `stringdist` functions.
+```{r}
+n_gram_merge(x, method = "soundex", useBytes = TRUE)
+```
+
+`n_gram_merge` also features arguments `bus_suffix` and `ignore_strings`, that operate the same way they do for function `key_collision_merge`.
+```{r}
+x <- c("Bakersfield Highschool", "BAKERSFIELD high", "high school, bakersfield")
+n_gram_merge(x, ignore_strings = c("high", "school", "highschool"))
+```
+
+## Example Workflow
+
+```{r, results='asis', message=FALSE}
+library(dplyr)
+
+x <- c(
+  "Clemsson University", 
+  "university-of-clemson", 
+  "CLEMSON", 
+  "Clem son, U.", 
+  "college, clemson u", 
+  "M.I.T.", 
+  "Technology, Massachusetts' Institute of", 
+  "Massachusetts Inst of Technology", 
+  "UNIVERSITY:  mit"
+)
+
+ignores <- c("university", "college", "u", "of", "institute", "inst")
+x_refin <- x %>% 
+  key_collision_merge(ignore_strings = ignores) %>% 
+  n_gram_merge(ignore_strings = ignores)
+
+# Print results.
+cat(paste(x_refin, collapse = "<br />"))
+# Create df for comparing the original values to the edited values.
+# This is especially useful for larger input vectors.
+inspect_results <- data_frame(original_values = x, edited_values = x_refin) %>% 
+  mutate(equal = original_values == edited_values)
+
+# Display only the values that were edited by refinr.
+knitr::kable(
+  inspect_results[!inspect_results$equal, c("original_values", "edited_values")], 
+  format = "html", 
+  table.attr = "style='width:100%;'"
+)
+```

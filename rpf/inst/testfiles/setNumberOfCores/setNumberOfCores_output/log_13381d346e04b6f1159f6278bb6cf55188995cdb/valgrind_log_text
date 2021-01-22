@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (rpf_deepstate_test_setNumberOfCores_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/rpf/inst/testfiles/setNumberOfCores/setNumberOfCores_output/13381d346e04b6f1159f6278bb6cf55188995cdb.pass`
+TRACE: Running: rpf_deepstate_test_setNumberOfCores_test from /home/akhila/fuzzer_packages/fuzzedpackages/rpf/inst/testfiles/setNumberOfCores/setNumberOfCores_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+num values: -1105761949
+input ends
+TRACE: Passed: rpf_deepstate_test_setNumberOfCores_test

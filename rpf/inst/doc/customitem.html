@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+<title>Overview</title>
+
+<script type="text/javascript">
+window.onload = function() {
+  var imgs = document.getElementsByTagName('img'), i, img;
+  for (i = 0; i < imgs.length; i++) {
+    img = imgs[i];
+    // center an image if it is the only element of its parent
+    if (img.parentElement.childElementCount === 1)
+      img.parentElement.style.textAlign = 'center';
+  }
+};
+</script>
+
+<!-- Styles for R syntax highlighter -->
+<style type="text/css">
+   pre .operator,
+   pre .paren {
+     color: rgb(104, 118, 135)
+   }
+
+   pre .literal {
+     color: #990073
+   }
+
+   pre .number {
+     color: #099;
+   }
+
+   pre .comment {
+     color: #998;
+     font-style: italic
+   }
+
+   pre .keyword {
+     color: #900;
+     font-weight: bold
+   }
+
+   pre .identifier {
+     color: rgb(0, 0, 0);
+   }
+
+   pre .string {
+     color: #d14;
+   }
+</style>
+
+<!-- R syntax highlighter -->
+<script type="text/javascript">
+var hljs=new function(){function m(p){return p.replace(/&/gm,"&amp;").replace(/</gm,"&lt;")}function f(r,q,p){return RegExp(q,"m"+(r.cI?"i":"")+(p?"g":""))}function b(r){for(var p=0;p<r.childNodes.length;p++){var q=r.childNodes[p];if(q.nodeName=="CODE"){return q}if(!(q.nodeType==3&&q.nodeValue.match(/\s+/))){break}}}function h(t,s){var p="";for(var r=0;r<t.childNodes.length;r++){if(t.childNodes[r].nodeType==3){var q=t.childNodes[r].nodeValue;if(s){q=q.replace(/\n/g,"")}p+=q}else{if(t.childNodes[r].nodeName=="BR"){p+="\n"}else{p+=h(t.childNodes[r])}}}if(/MSIE [678]/.test(navigator.userAgent)){p=p.replace(/\r/g,"\n")}return p}function a(s){var r=s.className.split(/\s+/);r=r.concat(s.parentNode.className.split(/\s+/));for(var q=0;q<r.length;q++){var p=r[q].replace(/^language-/,"");if(e[p]){return p}}}function c(q){var p=[];(function(s,t){for(var r=0;r<s.childNodes.length;r++){if(s.childNodes[r].nodeType==3){t+=s.childNodes[r].nodeValue.length}else{if(s.childNodes[r].nodeName=="BR"){t+=1}else{if(s.childNodes[r].nodeType==1){p.push({event:"start",offset:t,node:s.childNodes[r]});t=arguments.callee(s.childNodes[r],t);p.push({event:"stop",offset:t,node:s.childNodes[r]})}}}}return t})(q,0);return p}function k(y,w,x){var q=0;var z="";var s=[];function u(){if(y.length&&w.length){if(y[0].offset!=w[0].offset){return(y[0].offset<w[0].offset)?y:w}else{return w[0].event=="start"?y:w}}else{return y.length?y:w}}function t(D){var A="<"+D.nodeName.toLowerCase();for(var B=0;B<D.attributes.length;B++){var C=D.attributes[B];A+=" "+C.nodeName.toLowerCase();if(C.value!==undefined&&C.value!==false&&C.value!==null){A+='="'+m(C.value)+'"'}}return A+">"}while(y.length||w.length){var v=u().splice(0,1)[0];z+=m(x.substr(q,v.offset-q));q=v.offset;if(v.event=="start"){z+=t(v.node);s.push(v.node)}else{if(v.event=="stop"){var p,r=s.length;do{r--;p=s[r];z+=("</"+p.nodeName.toLowerCase()+">")}while(p!=v.node);s.splice(r,1);while(r<s.length){z+=t(s[r]);r++}}}}return z+m(x.substr(q))}function j(){function q(x,y,v){if(x.compiled){return}var u;var s=[];if(x.k){x.lR=f(y,x.l||hljs.IR,true);for(var w in x.k){if(!x.k.hasOwnProperty(w)){continue}if(x.k[w] instanceof Object){u=x.k[w]}else{u=x.k;w="keyword"}for(var r in u){if(!u.hasOwnProperty(r)){continue}x.k[r]=[w,u[r]];s.push(r)}}}if(!v){if(x.bWK){x.b="\\b("+s.join("|")+")\\s"}x.bR=f(y,x.b?x.b:"\\B|\\b");if(!x.e&&!x.eW){x.e="\\B|\\b"}if(x.e){x.eR=f(y,x.e)}}if(x.i){x.iR=f(y,x.i)}if(x.r===undefined){x.r=1}if(!x.c){x.c=[]}x.compiled=true;for(var t=0;t<x.c.length;t++){if(x.c[t]=="self"){x.c[t]=x}q(x.c[t],y,false)}if(x.starts){q(x.starts,y,false)}}for(var p in e){if(!e.hasOwnProperty(p)){continue}q(e[p].dM,e[p],true)}}function d(B,C){if(!j.called){j();j.called=true}function q(r,M){for(var L=0;L<M.c.length;L++){if((M.c[L].bR.exec(r)||[null])[0]==r){return M.c[L]}}}function v(L,r){if(D[L].e&&D[L].eR.test(r)){return 1}if(D[L].eW){var M=v(L-1,r);return M?M+1:0}return 0}function w(r,L){return L.i&&L.iR.test(r)}function K(N,O){var M=[];for(var L=0;L<N.c.length;L++){M.push(N.c[L].b)}var r=D.length-1;do{if(D[r].e){M.push(D[r].e)}r--}while(D[r+1].eW);if(N.i){M.push(N.i)}return f(O,M.join("|"),true)}function p(M,L){var N=D[D.length-1];if(!N.t){N.t=K(N,E)}N.t.lastIndex=L;var r=N.t.exec(M);return r?[M.substr(L,r.index-L),r[0],false]:[M.substr(L),"",true]}function z(N,r){var L=E.cI?r[0].toLowerCase():r[0];var M=N.k[L];if(M&&M instanceof Array){return M}return false}function F(L,P){L=m(L);if(!P.k){return L}var r="";var O=0;P.lR.lastIndex=0;var M=P.lR.exec(L);while(M){r+=L.substr(O,M.index-O);var N=z(P,M);if(N){x+=N[1];r+='<span class="'+N[0]+'">'+M[0]+"</span>"}else{r+=M[0]}O=P.lR.lastIndex;M=P.lR.exec(L)}return r+L.substr(O,L.length-O)}function J(L,M){if(M.sL&&e[M.sL]){var r=d(M.sL,L);x+=r.keyword_count;return r.value}else{return F(L,M)}}function I(M,r){var L=M.cN?'<span class="'+M.cN+'">':"";if(M.rB){y+=L;M.buffer=""}else{if(M.eB){y+=m(r)+L;M.buffer=""}else{y+=L;M.buffer=r}}D.push(M);A+=M.r}function G(N,M,Q){var R=D[D.length-1];if(Q){y+=J(R.buffer+N,R);return false}var P=q(M,R);if(P){y+=J(R.buffer+N,R);I(P,M);return P.rB}var L=v(D.length-1,M);if(L){var O=R.cN?"</span>":"";if(R.rE){y+=J(R.buffer+N,R)+O}else{if(R.eE){y+=J(R.buffer+N,R)+O+m(M)}else{y+=J(R.buffer+N+M,R)+O}}while(L>1){O=D[D.length-2].cN?"</span>":"";y+=O;L--;D.length--}var r=D[D.length-1];D.length--;D[D.length-1].buffer="";if(r.starts){I(r.starts,"")}return R.rE}if(w(M,R)){throw"Illegal"}}var E=e[B];var D=[E.dM];var A=0;var x=0;var y="";try{var s,u=0;E.dM.buffer="";do{s=p(C,u);var t=G(s[0],s[1],s[2]);u+=s[0].length;if(!t){u+=s[1].length}}while(!s[2]);if(D.length>1){throw"Illegal"}return{r:A,keyword_count:x,value:y}}catch(H){if(H=="Illegal"){return{r:0,keyword_count:0,value:m(C)}}else{throw H}}}function g(t){var p={keyword_count:0,r:0,value:m(t)};var r=p;for(var q in e){if(!e.hasOwnProperty(q)){continue}var s=d(q,t);s.language=q;if(s.keyword_count+s.r>r.keyword_count+r.r){r=s}if(s.keyword_count+s.r>p.keyword_count+p.r){r=p;p=s}}if(r.language){p.second_best=r}return p}function i(r,q,p){if(q){r=r.replace(/^((<[^>]+>|\t)+)/gm,function(t,w,v,u){return w.replace(/\t/g,q)})}if(p){r=r.replace(/\n/g,"<br>")}return r}function n(t,w,r){var x=h(t,r);var v=a(t);var y,s;if(v){y=d(v,x)}else{return}var q=c(t);if(q.length){s=document.createElement("pre");s.innerHTML=y.value;y.value=k(q,c(s),x)}y.value=i(y.value,w,r);var u=t.className;if(!u.match("(\\s|^)(language-)?"+v+"(\\s|$)")){u=u?(u+" "+v):v}if(/MSIE [678]/.test(navigator.userAgent)&&t.tagName=="CODE"&&t.parentNode.tagName=="PRE"){s=t.parentNode;var p=document.createElement("div");p.innerHTML="<pre><code>"+y.value+"</code></pre>";t=p.firstChild.firstChild;p.firstChild.cN=s.cN;s.parentNode.replaceChild(p.firstChild,s)}else{t.innerHTML=y.value}t.className=u;t.result={language:v,kw:y.keyword_count,re:y.r};if(y.second_best){t.second_best={language:y.second_best.language,kw:y.second_best.keyword_count,re:y.second_best.r}}}function o(){if(o.called){return}o.called=true;var r=document.getElementsByTagName("pre");for(var p=0;p<r.length;p++){var q=b(r[p]);if(q){n(q,hljs.tabReplace)}}}function l(){if(window.addEventListener){window.addEventListener("DOMContentLoaded",o,false);window.addEventListener("load",o,false)}else{if(window.attachEvent){window.attachEvent("onload",o)}else{window.onload=o}}}var e={};this.LANGUAGES=e;this.highlight=d;this.highlightAuto=g;this.fixMarkup=i;this.highlightBlock=n;this.initHighlighting=o;this.initHighlightingOnLoad=l;this.IR="[a-zA-Z][a-zA-Z0-9_]*";this.UIR="[a-zA-Z_][a-zA-Z0-9_]*";this.NR="\\b\\d+(\\.\\d+)?";this.CNR="\\b(0[xX][a-fA-F0-9]+|(\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";this.BNR="\\b(0b[01]+)";this.RSR="!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|\\.|-|-=|/|/=|:|;|<|<<|<<=|<=|=|==|===|>|>=|>>|>>=|>>>|>>>=|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";this.ER="(?![\\s\\S])";this.BE={b:"\\\\.",r:0};this.ASM={cN:"string",b:"'",e:"'",i:"\\n",c:[this.BE],r:0};this.QSM={cN:"string",b:'"',e:'"',i:"\\n",c:[this.BE],r:0};this.CLCM={cN:"comment",b:"//",e:"$"};this.CBLCLM={cN:"comment",b:"/\\*",e:"\\*/"};this.HCM={cN:"comment",b:"#",e:"$"};this.NM={cN:"number",b:this.NR,r:0};this.CNM={cN:"number",b:this.CNR,r:0};this.BNM={cN:"number",b:this.BNR,r:0};this.inherit=function(r,s){var p={};for(var q in r){p[q]=r[q]}if(s){for(var q in s){p[q]=s[q]}}return p}}();hljs.LANGUAGES.cpp=function(){var a={keyword:{"false":1,"int":1,"float":1,"while":1,"private":1,"char":1,"catch":1,"export":1,virtual:1,operator:2,sizeof:2,dynamic_cast:2,typedef:2,const_cast:2,"const":1,struct:1,"for":1,static_cast:2,union:1,namespace:1,unsigned:1,"long":1,"throw":1,"volatile":2,"static":1,"protected":1,bool:1,template:1,mutable:1,"if":1,"public":1,friend:2,"do":1,"return":1,"goto":1,auto:1,"void":2,"enum":1,"else":1,"break":1,"new":1,extern:1,using:1,"true":1,"class":1,asm:1,"case":1,typeid:1,"short":1,reinterpret_cast:2,"default":1,"double":1,register:1,explicit:1,signed:1,typename:1,"try":1,"this":1,"switch":1,"continue":1,wchar_t:1,inline:1,"delete":1,alignof:1,char16_t:1,char32_t:1,constexpr:1,decltype:1,noexcept:1,nullptr:1,static_assert:1,thread_local:1,restrict:1,_Bool:1,complex:1},built_in:{std:1,string:1,cin:1,cout:1,cerr:1,clog:1,stringstream:1,istringstream:1,ostringstream:1,auto_ptr:1,deque:1,list:1,queue:1,stack:1,vector:1,map:1,set:1,bitset:1,multiset:1,multimap:1,unordered_set:1,unordered_map:1,unordered_multiset:1,unordered_multimap:1,array:1,shared_ptr:1}};return{dM:{k:a,i:"</",c:[hljs.CLCM,hljs.CBLCLM,hljs.QSM,{cN:"string",b:"'\\\\?.",e:"'",i:"."},{cN:"number",b:"\\b(\\d+(\\.\\d*)?|\\.\\d+)(u|U|l|L|ul|UL|f|F)"},hljs.CNM,{cN:"preprocessor",b:"#",e:"$"},{cN:"stl_container",b:"\\b(deque|list|queue|stack|vector|map|set|bitset|multiset|multimap|unordered_map|unordered_set|unordered_multiset|unordered_multimap|array)\\s*<",e:">",k:a,r:10,c:["self"]}]}}}();hljs.LANGUAGES.r={dM:{c:[hljs.HCM,{cN:"number",b:"\\b0[xX][0-9a-fA-F]+[Li]?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+(?:[eE][+\\-]?\\d*)?L\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\b\\d+\\.(?!\\d)(?:i\\b)?",e:hljs.IMMEDIATE_RE,r:1},{cN:"number",b:"\\b\\d+(?:\\.\\d*)?(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"number",b:"\\.\\d+(?:[eE][+\\-]?\\d*)?i?\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"keyword",b:"(?:tryCatch|library|setGeneric|setGroupGeneric)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\.",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\.\\.\\d+(?![\\w.])",e:hljs.IMMEDIATE_RE,r:10},{cN:"keyword",b:"\\b(?:function)",e:hljs.IMMEDIATE_RE,r:2},{cN:"keyword",b:"(?:if|in|break|next|repeat|else|for|return|switch|while|try|stop|warning|require|attach|detach|source|setMethod|setClass)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"literal",b:"(?:NA|NA_integer_|NA_real_|NA_character_|NA_complex_)\\b",e:hljs.IMMEDIATE_RE,r:10},{cN:"literal",b:"(?:NULL|TRUE|FALSE|T|F|Inf|NaN)\\b",e:hljs.IMMEDIATE_RE,r:1},{cN:"identifier",b:"[a-zA-Z.][a-zA-Z0-9._]*\\b",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"<\\-(?!\\s*\\d)",e:hljs.IMMEDIATE_RE,r:2},{cN:"operator",b:"\\->|<\\-",e:hljs.IMMEDIATE_RE,r:1},{cN:"operator",b:"%%|~",e:hljs.IMMEDIATE_RE},{cN:"operator",b:">=|<=|==|!=|\\|\\||&&|=|\\+|\\-|\\*|/|\\^|>|<|!|&|\\||\\$|:",e:hljs.IMMEDIATE_RE,r:0},{cN:"operator",b:"%",e:"%",i:"\\n",r:1},{cN:"identifier",b:"`",e:"`",r:0},{cN:"string",b:'"',e:'"',c:[hljs.BE],r:0},{cN:"string",b:"'",e:"'",c:[hljs.BE],r:0},{cN:"paren",b:"[[({\\])}]",e:hljs.IMMEDIATE_RE,r:0}]}};
+hljs.initHighlightingOnLoad();
+</script>
+
+
+
+<style type="text/css">
+body, td {
+   font-family: sans-serif;
+   background-color: white;
+   font-size: 13px;
+}
+
+body {
+  max-width: 800px;
+  margin: auto;
+  padding: 1em;
+  line-height: 20px;
+}
+
+tt, code, pre {
+   font-family: 'DejaVu Sans Mono', 'Droid Sans Mono', 'Lucida Console', Consolas, Monaco, monospace;
+}
+
+h1 {
+   font-size:2.2em;
+}
+
+h2 {
+   font-size:1.8em;
+}
+
+h3 {
+   font-size:1.4em;
+}
+
+h4 {
+   font-size:1.0em;
+}
+
+h5 {
+   font-size:0.9em;
+}
+
+h6 {
+   font-size:0.8em;
+}
+
+a:visited {
+   color: rgb(50%, 0%, 50%);
+}
+
+pre, img {
+  max-width: 100%;
+}
+pre {
+  overflow-x: auto;
+}
+pre code {
+   display: block; padding: 0.5em;
+}
+
+code {
+  font-size: 92%;
+  border: 1px solid #ccc;
+}
+
+code[class] {
+  background-color: #F8F8F8;
+}
+
+table, td, th {
+  border: none;
+}
+
+blockquote {
+   color:#666666;
+   margin:0;
+   padding-left: 1em;
+   border-left: 0.5em #EEE solid;
+}
+
+hr {
+   height: 0px;
+   border-bottom: none;
+   border-top-width: thin;
+   border-top-style: dotted;
+   border-top-color: #999999;
+}
+
+@media print {
+   * {
+      background: transparent !important;
+      color: black !important;
+      filter:none !important;
+      -ms-filter: none !important;
+   }
+
+   body {
+      font-size:12pt;
+      max-width:100%;
+   }
+
+   a, a:visited {
+      text-decoration: underline;
+   }
+
+   hr {
+      visibility: hidden;
+      page-break-before: always;
+   }
+
+   pre, blockquote {
+      padding-right: 1em;
+      page-break-inside: avoid;
+   }
+
+   tr, img {
+      page-break-inside: avoid;
+   }
+
+   img {
+      max-width: 100% !important;
+   }
+
+   @page :left {
+      margin: 15mm 20mm 15mm 10mm;
+   }
+
+   @page :right {
+      margin: 15mm 10mm 15mm 20mm;
+   }
+
+   p, h2, h3 {
+      orphans: 3; widows: 3;
+   }
+
+   h2, h3 {
+      page-break-after: avoid;
+   }
+}
+</style>
+
+
+
+</head>
+
+<body>
+<!--
+%\VignetteEngine{knitr::knitr}
+%\VignetteIndexEntry{Custom Item Models (HTML)}
+-->
+
+<h1>Overview</h1>
+
+<p>This document describes the process of adding custom
+item models to rpf as was done by a contributor to
+the rpf package (Carl F. Falk) with assistance from
+the package author (Joshua N. Pritikin) for the logistic
+function of a monotonic polynomial (LMP)
+item model <a href="https://dx.doi.org/10.1007/s11336-014-9428-7">(Falk &amp; Cai, in press)</a>.</p>
+
+<p>This document assumes experience in editing R and C++ code and
+installing R packages from source. In addition, use of
+versioning control software (e.g., git) is also helpful.
+Not mentioned are platform-specific tools or compilers
+that need to be in place in order to compile/install
+packages from source.</p>
+
+<p>The rpf package is modular in the sense that one
+only needs to write the underlying functions specific
+to the item model, such as the traceline (ICC, IRF, etc.),
+derivatives w.r.t. item parameters and the latent trait(s), and
+a few utility functions. As a byproduct, estimation of a
+measurement model that utilizes the item model may be
+possible via use of an external package
+(e.g., <a href="https://openmx.ssri.psu.edu/">OpenMx</a>)</p>
+
+<h1>Procedure</h1>
+
+<h2>Outline</h2>
+
+<p>Obtain rpf source code from <a href="https://cran.r-project.org/package=rpf">CRAN</a>
+or another source such as <a href="https://github.com/cran/rpf">GitHub</a>.
+I used the latter as I wanted to use git to track my own changes
+and then later merge with the rpf package.</p>
+
+<p>Most work needs to be done in C++ using the first file
+mentioned in the subsequent section. Testing appears to be
+easiest from R, however, with some functions in the rpf
+package yielding access to the underlying C++ functions.
+It is therefore possible to also glean some insight into
+what the underyling C++ functions ought to do, and their
+input by examining rpf documentation and experimenting
+with associated functions.</p>
+
+<h2>Edit src/libifa-rpf.cpp</h2>
+
+<p>The bulk of work that needs to be done to implement an item
+model takes place in the src/libifa-rpf.cpp file.</p>
+
+<p>For example, <code>librpf_model[]</code> towards the end of the
+file contains available item models with associated C++
+functions required to implement each item model. As a
+concrete example, the following code chunk
+effectively lists all functions used by the
+unidimensional LMP item model:</p>
+
+<pre><code>{&quot;lmp&quot;,
+    irt_rpf_1dim_lmp_numSpec,
+    irt_rpf_1dim_lmp_numParam,
+    irt_rpf_1dim_lmp_paramInfo,
+    irt_rpf_1dim_lmp_prob,
+    irt_rpf_logprob_adapter,
+    irt_rpf_1dim_lmp_deriv1,
+    irt_rpf_1dim_lmp_deriv2,
+    irt_rpf_1dim_lmp_dTheta,
+    irt_rpf_1dim_lmp_rescale,
+}
+</code></pre>
+
+<p>To add a novel item model, one would need to add an
+analogous chunk of code to <code>librpf_model[]</code> with
+the given functions pertaining to those used by the
+novel item model. Each type of function takes input
+in the same way regardless of the item model. This
+is a feature that helps make rpf modular.</p>
+
+<p>It is easiest to understand the purpose of each function by
+focusing on the suffixes for the functions above. These
+suffixes are referenced below. The prefixes often tell us
+which item model the function pertains to.
+Below also effectively contains stubs that could be
+used to start constructing a new item model.</p>
+
+<h3><code>numSpec</code></h3>
+
+<p>Each item model (e.g., when created by R) contains
+a vector that contains a specification for the item
+model. This will contain information such as the
+number of categories, factors, and other item-specific
+information. I will discuss how this specification is
+constructed from R input at a later section of this
+document. I assume the <code>numSpec</code> function
+merely returns the number of elements of this vector.</p>
+
+<p>For example:</p>
+
+<pre><code>static int
+irt_rpf_1dim_lmp_numSpec(const double *spec)
+{ return RPF_ISpecCount; }
+</code></pre>
+
+<h3><code>numParam</code></h3>
+
+<p>Based only on information in the item specification,
+return an integer that indicates how many parameters
+the item has. For example, the LMP model has a
+user-specified integer <em>k</em> that determines the
+number of parameters and appears as the last element
+in the specification vector.</p>
+
+<pre><code>static int
+irt_rpf_1dim_lmp_numParam(const double *spec)
+{
+  int k = spec[RPF_ISpecCount];
+  return(2+2*k);
+}
+</code></pre>
+
+<h3><code>paramInfo</code></h3>
+
+<p>Returns information (in pointers) regarding a single
+item parameter based on the item specification <code>*spec</code>,
+the index of the item parameter <code>param</code>. This generally assumes
+that the item parameters always appear in a particular
+order for the item model, which can be determined based
+only on the item specification. For instance, a
+two-parameter logistic item model will always have a
+slope and intercept term, which appear in that order,
+and the number of slopes depends on the number of factors.</p>
+
+<p>Returned information may include the type of
+parameter <code>**type</code> which is a text description of
+the item parameter (e.g., &ldquo;Slope&rdquo; or &ldquo;Intercept&rdquo;), and
+the upper and lower bounds for the item parameter, <code>*upper</code>
+and <code>*lower</code>, which may be set to <code>nan(&quot;unset&quot;)</code> if
+bounds are not applicable. Below is only a stub, not the full
+function for the LMP model.</p>
+
+<pre><code>static void
+irt_rpf_1dim_lmp_paramInfo(const double *spec, const int param,
+               const char **type, double *upper, double *lower)
+{
+  \\ Code implementing paramInfo goes here
+}
+</code></pre>
+
+<h3><code>prob</code></h3>
+
+<p>The traceline (ICC, IRF, etc.) function for the item model.
+This function should compute the probability of response
+to each category (stored in <code>*out</code> in that order),
+based on a fixed vector of item parameters,<code>*param</code>, and
+at a single point of the latent space, <code>*th</code>. That is,
+if the item model is dichotomous, <code>*out</code> will contain
+two values, and if the latent trait has three dimensions,
+<code>*th</code> will have three values. In unidimensional models,
+<code>*th</code> will have only a single value.</p>
+
+<pre><code>static void
+irt_rpf_1dim_lmp_prob(const double *spec,
+              const double *param, const double *th,
+              double *out)
+{
+  \\ Code implementing prob goes here
+}
+</code></pre>
+
+<h3><code>logprob_adapter</code> or <code>logprob</code></h3>
+
+<p>I assume this function computes the log of the traceline,
+which in some cases can be done simply by obtaining
+information from the <code>prob</code> function corresponding
+to the item model and is what <code>logprob_adapter</code> does.</p>
+
+<pre><code>irt_rpf_logprob_adapter(const double *spec,
+            const double *param, const double *th,
+            double *out)
+{
+  \\ Code implementing logprob goes here
+}
+</code></pre>
+
+<h3><code>deriv1</code></h3>
+
+<p>This function computes first <em>and</em> second-order complete
+data derivatives the negative log-likelihood for a
+single item with respect to item parameters.
+e.g., for use in optimization at the M-Step of the EM
+algorithm.</p>
+
+<p>This function assumes complete data on the latent trait as
+is often the case after the E-Step of the EM algorithm
+has effectively computed expected counts for each possible
+category at each quadrature node.</p>
+
+<p>Note that derivatives are at a single point of the latent
+trait, <code>*where</code> which is analogous to <code>*th</code> from
+the traceline function. This may represent a single
+quadrature node, or if complete data were available it
+might represent a single respondent&#39;s score on the
+latent trait.</p>
+
+<p><code>*weight</code> is a vector that determines how much
+weight to give to each response category. If input to
+the function were to assume a single respondent, this
+vector is effectively an indicator function that will
+have a &ldquo;1&rdquo; in the proper location indicating the
+person&#39;s response. In the case of EM, the weight vector
+may contain expected counts at this particular quadrature
+node for each of the item&#39;s possible response categories.</p>
+
+<p><code>*out</code> will contain the derivatives for use
+elsewhere. Note that this vector may not be empty
+when entering the function, e.g., in the case that
+<code>deriv1</code> is repeatedly called to compute
+derivatives summing across multiple
+quadrature points or respondents. From the rpf
+documentation, the order of elements in <code>*out</code> is&hellip;
+&ldquo;For p parameters, the first p values are the first
+derivative and the next p(p+1)/2 columns are the lower
+triangle of the second derivative.&rdquo;</p>
+
+<pre><code>static void
+irt_rpf_1dim_lmp_deriv1(const double *spec,
+                  const double *param,
+                  const double *where,
+                  const double *weight, double *out)
+{
+  // Code implementing deriv1 goes here
+
+}
+</code></pre>
+
+<h3><code>deriv2</code></h3>
+
+<p>This function implements derivatives or computations
+that may occur once any time derivatives are taken,
+regardless of how many quadrature nodes or respondents.
+Whereas <code>deriv1</code> for example, may be called repeatedly
+(once for for each quadrature node, <code>deriv2</code> would
+only be called once when computing derivatives across
+such quadrature nodes. That is, currently the
+<code>rpf.dLL</code> function in R from rpf may do <code>deriv1</code>
+multiple times followed by <code>deriv2</code>
+before returning derivatives to the user.</p>
+
+<pre><code>static void irt_rpf_1dim_lmp_deriv2(const double *spec,
+                  const double *param,
+                  double *out)
+{
+   \\ Code implementing deriv2 goes here
+}
+</code></pre>
+
+<h3><code>dTheta</code></h3>
+
+<p>Compute derivatives of the traceline w.r.t. the
+latent trait, e.g., for use in computing
+item information.</p>
+
+<p>These derivative computations happen at a single point
+of the latent trait, <code>*where</code>. Derivatives
+for each category response function should appear,
+in order from least to gretest, in <code>*grad</code> (first-order),
+and <code>*hess</code> (second-order).</p>
+
+<p>The vector <code>*dir</code> is a basis vector used in the
+case of multidimensional models.</p>
+
+<pre><code>static void irt_rpf_1dim_lmp_dTheta(const double *spec, const double *param,
+            const double *where, const double *dir,
+            double *grad, double *hess)
+{
+  \\ Code implementing dTheta goes here
+
+}
+</code></pre>
+
+<h3><code>rescale</code></h3>
+
+<p>Currently this function is not <em>yet</em> used and could go
+unimplemented. However, the intuition behind it was based
+on <a href="https://dx.doi.org/10.1007/s11336-003-1141-x">Schilling &amp; Bock (2005)</a>, equations 22 and 23 for
+implementation of adaptive quadrature.</p>
+
+<pre><code>static void
+irt_rpf_1dim_lmp_rescale(const double *spec, double *param, const int *paramMask,
+             const double *mean, const double *cov)
+{
+  error(&quot;Rescale for LMP model not implemented&quot;);
+}
+</code></pre>
+
+<h2>Edit other, mostly R files</h2>
+
+<h3>Add R functions to create item specification</h3>
+
+<p>The the R/ subfolder, each item model or class of item
+models has their own associated R file. For example,
+&ldquo;grm.R&rdquo; or lmp.R&quot; for the Graded Response model and
+the LMP item model.</p>
+
+<p>A function common to each of these files is one that
+will construct the item specification based on user input.
+An example for the Graded Response Models is:</p>
+
+<pre><code>rpf.grm &lt;- function(outcomes=2, factors=1, multidimensional=TRUE) {
+  if (!multidimensional &amp;&amp; factors &gt; 1) {
+    stop(&quot;More than 1 dimension must use a multidimensional model&quot;)
+  }
+  m &lt;- NULL
+  id &lt;- -1
+  if (!multidimensional) {
+    stop(&quot;The old parameterization is no longer available&quot;)
+  } else {
+    id &lt;- rpf.id_of(&quot;grm&quot;)
+    m &lt;- new(&quot;rpf.mdim.grm&quot;,
+             outcomes=outcomes,
+             factors=factors)
+  }
+  m@spec &lt;- c(id, m@outcomes, m@factors)
+  m
+}
+</code></pre>
+
+<p>Note that input to the function may be item specific,
+however, what the function returns ought to be in a
+standard format. Specifically, a list containing the id
+of the item model (as determined by <code>rpf.id_of</code>, which
+requires a String that matches that added to the end
+of <code>librpf_model[]</code>), the number of categories (or
+outcomes), and number of factors is required. Additional
+optional elements may be appended to the specification
+as required by the item model. For example, LMP requires
+that <em>k</em> be added to the end of the specification to
+determine the order of a polynomial and number of item
+parameters, and does not currently have a multidimensional
+version.</p>
+
+<pre><code>rpf.lmp &lt;- function(q=1, multidimensional=FALSE) {
+  if(!(q%%1==0)){
+    stop(&quot;q must be an integer &gt;= 0&quot;)
+  }
+  if(multidimensional){
+      stop(&quot;Multidimensional LMP model is not yet supported&quot;)
+  }
+  m &lt;- NULL
+  id &lt;- -1
+  id &lt;- rpf.id_of(&quot;lmp&quot;)
+  m &lt;- new(&quot;rpf.1dim.lmp&quot;,
+           outcomes=2,
+           factors=1)
+  m@spec &lt;- c(id, 2, m@factors, q)
+  m
+}
+</code></pre>
+
+<p>Other functions in such an .R file appear to be
+optional, but may include those that specify how random
+parameters be generated for the item model, e.g.,
+<code>rpf.rparam</code>, or how an item model may be modified
+to create a similar item model <code>rpf.modify</code></p>
+
+<p>Note also that these functions ought to have documentation
+for the item model that is in a format usable by
+<a href="https://cran.r-project.org/package=roxygen2">roxygen2</a></p>
+
+<h3>Edit DESCRIPTION</h3>
+
+<p>Any new files created in the previous step ought to be
+added to the &ldquo;Collate&rdquo; statement in the DESCRIPTION file.</p>
+
+<h3>Edit R/Classes.R</h3>
+
+<p>A class ought to be added to this file for the item model.
+This will allow generic functions or wrappers to access
+item specific C++ code. It is difficult to provide specific
+recommendations on how to add the class other than to
+look at other examples. For instance, the following
+code snippet defines the LMP dichotomous response model,
+&ldquo;rpf.lmp.drm&rdquo;, as a subclass of the unidimensional
+response model superclass, &ldquo;rpf.1dim&rdquo;.</p>
+
+<pre><code>##&#39; Unidimensional logistic function of a monotonic polynomial
+##&#39;
+##&#39; @export
+##&#39; @name Class rpf.1dim.lmp
+##&#39; @rdname rpf.1dim.lmp-class
+##&#39; @aliases rpf.1dim.lmp-class
+##&#39;
+setClass(&quot;rpf.1dim.lmp&quot;, contains=&#39;rpf.1dim&#39;)
+</code></pre>
+
+<p>Thus, the above is all that was required to add a
+class for the LMP item model. Alternative item
+models may use the multidimensional superclass,
+&ldquo;rpf.mdim&rdquo; or a specialized class for graded
+response models.</p>
+
+<h2>Putting things together and testing</h2>
+
+<p>To avoid headaches in debugging, it may be useful
+to write code incrementally and test/debug before
+continuing to write more. For instance, after
+writing stubs for C++ code, see if the code will
+compile, perhaps by using <code>R CMD check rpf</code>
+or some such from the command line of the OS.</p>
+
+<p>Not all pieces need to be in place before testing
+in R. For instance, it may make practical sense
+to implement the traceline function in C++, with
+suffix, <code>prob</code>, and test via R (see below)
+before continuing to write <code>deriv1</code>
+and <code>dTheta</code> functions and so on.
+Examination of the accompanying R functions,
+their documentation in the rpf package,
+and their output for well-known item models
+may also provide insight into how the underlyling
+C++ functions operate.</p>
+
+<h3>Installing and testing from R</h3>
+
+<p>To test the underlying C++ from R, all
+modifications to R files as mentioned in the
+previous section ought to be done. However,
+only C++ functions that you want to test
+need to be implemented. Compile and install
+the package for testing, e.g.,
+<code>R CMD INSTALL rpf</code>.</p>
+
+<p>Fire up R and begin testing.</p>
+
+<pre><code class="r">library(rpf)
+
+lmp.item&lt;-rpf.lmp(q=2) # create item w/ 5th order polynomial
+par&lt;-c(.69,.71,-.5,-8.48,.52,-3.32) # item parameters
+theta&lt;-seq(-3,3,.1) # grid for latent trait
+
+## Test the traceline or &quot;prob&quot; C++ function
+P&lt;-rpf.prob(lmp.item, par, theta)
+
+## Prettier plots than this are of course possible
+plot(theta, P[2,], type=&quot;l&quot;, ylim=c(0,1), xlab=&quot;Theta&quot;, ylab=&quot;P(Theta)&quot;)
+</code></pre>
+
+<p><img src="data:image/png;base64,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" alt="plot of chunk unnamed-chunk-1"/></p>
+
+<p>The plot above should look like Example 2 from
+<a href="https://dx.doi.org/10.1007/s11336-014-9428-7">Falk and Cai (in press)</a>.</p>
+
+<p>Access to derivatives w.r.t. item parameters and
+latent traits is also possible. Note that <code>rpf.dLL</code>
+appears to call both <code>deriv1</code> and <code>deriv2</code>
+C++ functions.</p>
+
+<pre><code class="r">## Derivatives of negative log-likelihood at arbitrary point with arbitrary weights
+## Rounding only for easy reading for tutorial
+round(rpf.dLL(lmp.item, par, theta[1], weight=c(5,7)),2)
+</code></pre>
+
+<pre><code>##  [1]   19.73   -6.11  -58.72    0.11   25.32    0.40   28.35   -2.67    0.83
+## [10]  -84.40    7.95 1171.18    0.16   -0.02   -0.15    0.11   36.40   -3.43
+## [19] -190.32    0.29   36.38    0.58   -0.05   -4.09    0.01    0.22    0.40
+</code></pre>
+
+<p>For latent traits, with easy ways of testing
+accuracy against numerical derivatives - at
+least for a unidimensional model.</p>
+
+<pre><code class="r">## Analytical derivatives &quot;deriv1&quot; followed by &quot;deriv2&quot;
+rpf.dTheta(lmp.item, par, where=-.5, dir=1)
+</code></pre>
+
+<pre><code>## $gradient
+## [1] -0.4404183  0.4404183
+## 
+## $hessian
+## [1] -0.3160515  0.3160515
+</code></pre>
+
+<pre><code class="r">## Numerical derivatives
+library(numDeriv)
+dTheta.wrap&lt;-function(theta, spec, par, cat=1){
+  rpf.prob(spec, par, theta)[cat]
+}
+
+## should match first element of gradient from rpf.dTheta
+grad(dTheta.wrap, -.5, spec=lmp.item, par=par)
+</code></pre>
+
+<pre><code>## [1] -0.4404183
+</code></pre>
+
+<pre><code class="r">## should match first element of hessian from rpf.dTheta
+hessian(dTheta.wrap, -.5, spec=lmp.item, par=par)
+</code></pre>
+
+<pre><code>##            [,1]
+## [1,] -0.3160515
+</code></pre>
+
+<p>One could also test numerical derivatives of the
+log-likelihood w.r.t. item parameters in a similar manner.
+However, this may take a little extra work, and
+note that numerical derivatives may not always
+work well, especially when testing during
+estimation and when parameter estimates are far
+from the MLE.</p>
+
+<h3>Add formal testing files</h3>
+
+<p>If any formal testing is done that the
+user wishes to be reproducible, which is
+highly encouraged and some may argue is
+necessary, these formal tests can currently
+be added to inst/tests/</p>
+
+<h3>Testing estimation</h3>
+
+<p>Forthcoming.</p>
+
+<h3>Generating documentation</h3>
+
+<p>Forthcoming.</p>
+
+</body>
+
+</html>

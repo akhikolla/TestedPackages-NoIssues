@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./fast_countequal_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/rlas/inst/testfiles/fast_countequal/fast_countequal_output/8a3032e239bf143e172b58272ecdd9f6426754a8.pass</line>
+</preamble>
+
+<pid>993469</pid>
+<ppid>993468</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/rlas/inst/testfiles/fast_countequal/fast_countequal_output/log_8a3032e239bf143e172b58272ecdd9f6426754a8/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./fast_countequal_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/rlas/inst/testfiles/fast_countequal/fast_countequal_output/8a3032e239bf143e172b58272ecdd9f6426754a8.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.040 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:10.520 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:11.437 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

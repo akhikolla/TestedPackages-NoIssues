@@ -1,0 +1,15 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+set -o noclobber
+
+if [ ! -x tools/rcpp ]; then
+  echo "$0 must be run from the top of the package directory"
+  exit 1
+fi
+
+R --no-restore --no-save --no-readline <<EOF
+library(Rcpp)
+Rcpp::compileAttributes(verbose=TRUE)
+EOF

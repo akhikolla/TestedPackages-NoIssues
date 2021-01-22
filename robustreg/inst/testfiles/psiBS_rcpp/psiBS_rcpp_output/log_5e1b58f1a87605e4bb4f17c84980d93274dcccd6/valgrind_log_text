@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (robustreg_deepstate_test_psiBS_rcpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/robustreg/inst/testfiles/psiBS_rcpp/psiBS_rcpp_output/5e1b58f1a87605e4bb4f17c84980d93274dcccd6.pass`
+TRACE: Running: robustreg_deepstate_test_psiBS_rcpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/robustreg/inst/testfiles/psiBS_rcpp/psiBS_rcpp_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+r values: 1.27891e-188 7.52749e+12 -2.14488e+105 inf -2.02048e-44 nan 3.42032e-93 8.27932e-269 -4.36409e-38 inf 0
+c values: 4.38983e+276
+input ends
+TRACE: Passed: robustreg_deepstate_test_psiBS_rcpp_test

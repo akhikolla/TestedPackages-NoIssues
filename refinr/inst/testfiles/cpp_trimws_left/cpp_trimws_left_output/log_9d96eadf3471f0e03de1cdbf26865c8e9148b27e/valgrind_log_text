@@ -1,0 +1,9 @@
+WARNING: No test specified, defaulting to first test defined (refinr_deepstate_test_cpp_trimws_left_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/refinr/inst/testfiles/cpp_trimws_left/cpp_trimws_left_output/9d96eadf3471f0e03de1cdbf26865c8e9148b27e.pass`
+TRACE: Running: refinr_deepstate_test_cpp_trimws_left_test from /home/akhila/fuzzer_packages/fuzzedpackages/refinr/inst/testfiles/cpp_trimws_left/cpp_trimws_left_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+vect values: "dxzacqdxrb" "afoykrklhomoufedlot" "hfltbndpjtppqwzocxzk" "wrvwmnjhqkhmpltvcl" "fooexjrodohhsxee" "NA" "NA" "wkcsnahvixeejdkyhaqo" "xnpitiwyalvhnjmtfxin" "gutvlotwtrsvevfrkbs" "vjhdxpfahts"
+input ends
+TRACE: Passed: refinr_deepstate_test_cpp_trimws_left_test

@@ -1,0 +1,10 @@
+
+# manual entries for Rcpp
+# exportPattern("^[[:alpha:]]+") ... this causes errors ... therefore add explicit exports
+importFrom(Rcpp, evalCpp)
+useDynLib(rwfec)
+export(sinc,rcpp_hello)
+
+# manual exports
+export(hello)
+

@@ -1,0 +1,15 @@
+CXX_STD = CXX14
+
+#DEBUG_CXXFLAGS=-DDEBUG -D_GLIBCXX_DEBUG -g3 -fno-inline -O0 -UNDEBUG
+#OPT_CXXFLAGS=-O2
+#GCC_CXXFLAGS=-Wall -Wextra -Wno-unknown-pragmas -Wno-unused-parameter -Wvla -Wno-ignored-attributes -Wno-deprecated-copy -Wno-cast-function-type
+
+# DEBUG_CXXFLAGS=-UNDEBUG -DEIGEN_INITIALIZE_MATRICES_BY_NAN -UEIGEN_NO_DEBUG
+
+PKG_CXXFLAGS=$(SHLIB_OPENMP_CXXFLAGS) $(DEBUG_CXXFLAGS) $(GCC_CXXFLAGS) $(OPT_CXXFLAGS)
+
+PKG_LIBS = $(SHLIB_OPENMP_CXXFLAGS) ${LAPACK_LIBS} $(BLAS_LIBS) ${FLIBS}
+
+all: $(SHLIB)   # otherwise confused by autodep
+
+-include autodep

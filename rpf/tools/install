@@ -1,0 +1,19 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+set -o noclobber
+
+if [ ! -e ./tools/install ]; then
+  echo "$0 must be run from the top of the project tree"
+  exit
+fi
+
+pkg=rpf
+
+CPUS=1
+if [ -f /proc/cpuinfo ]; then
+  CPUS=$(grep ^processor /proc/cpuinfo  | wc -l)
+fi
+
+MAKEFLAGS="-j $CPUS" R CMD INSTALL .

@@ -1,0 +1,13 @@
+#!/bin/sh
+
+set -o errexit
+set -o nounset
+set -o noclobber
+
+if [ ! -e src/rpf.c ]; then
+  echo "$0 must be run from the top of the package directory"
+  exit 1
+fi
+
+rm -f src/*.o src/*.so
+find -name .Rhistory -print0 | xargs -0 rm
