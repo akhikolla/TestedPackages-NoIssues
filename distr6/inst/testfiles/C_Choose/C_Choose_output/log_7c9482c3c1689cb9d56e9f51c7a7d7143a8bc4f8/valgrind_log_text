@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (distr6_deepstate_test_C_Choose_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/distr6/inst/testfiles/C_Choose/C_Choose_output/7c9482c3c1689cb9d56e9f51c7a7d7143a8bc4f8.pass`
+TRACE: Running: distr6_deepstate_test_C_Choose_test from /home/akhila/fuzzer_packages/fuzzedpackages/distr6/inst/testfiles/C_Choose/C_Choose_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+x values: -498905818
+y values: 569042049
+input ends
+TRACE: Passed: distr6_deepstate_test_C_Choose_test

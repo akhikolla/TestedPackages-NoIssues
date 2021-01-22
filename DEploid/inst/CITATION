@@ -1,0 +1,12 @@
+bibentry(
+  bibtype = 'Article',
+  title = 'Deconvoluting multiple infections in \\emph{Plasmodium falciparum} from high throughput sequencing data',
+  author = c(person('Sha Joe Zhu'),
+             person('Jacob Almagro-Garcia'),
+             person('Gil McVean')),
+  year = 2017,
+  journal = 'bioRxiv',
+  doi = '10.1101/099499',
+  publisher = 'Cold Spring Harbor Labs Journals',
+  url = 'http://www.biorxiv.org/content/early/2017/01/10/099499'
+)

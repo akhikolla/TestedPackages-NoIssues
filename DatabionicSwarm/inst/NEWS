@@ -1,0 +1,32 @@
+Version 1.1.3 (2020-02-02 CRAN)
+    o Bugfix: deleted dependcy rowr because it was taken down from CRAN.
+
+Version 1.1.2 (2019-12-06 CRAN)
+    o Improvement: DBSclustering has now a colored dendrogram using package dendextend.
+    o RobustNorm_BackTrafo added: transforms the Robust Normalization back.
+    o bugfix: Delaunay4Points uses inherits instead of class to check for matrix (see https://developer.r-project.org/Blog/public/2019/11/09/when-you-think-class.-think-again/index.html)
+		
+Version 1.1.1 (2019-01-27 CRAN)
+    o bugfix: RelativeDifference now stops if non finite values in either x and y expaining the error.
+    o bugfix: RobustNormalization fixed in some special cases like non finite values.
+    o NoLevels of GeneralizedUmatrix integrated for fast plotting.
+	
+Version 1.1.0 (2018-06-26 CRAN)
+    o Delaunay Classification Error (DCE) added. DCE evaluates projection methods unbiased.
+    
+Version 1.0.7 (GitHub)
+    o ClusteringAccuracy added. Given a prior Classification this function evaluates a clustering algorithm unbiased.
+    o Now on GitHub.
+    
+Version 1.0.6 (Local)
+	o Bugfix: error: Cube::operator(): index out of bounds
+    
+Version 1.0.5 (Local)
+	o RelativeDifference added which calculates the difference of a positive x and y value in the range [-2,2].
+    
+Version 1.0.4 (Local)
+    o Minor bugfixes
+	o Vignette added
+    
+Version 1.0.3 (2018-05-06 CRAN)
+    o Added distance methods of ParallelCpp package

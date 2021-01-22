@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (dvmisc_deepstate_test_moving_mean_n_max_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/moving_mean_n_max/moving_mean_n_max_output/035d2adf760ee1f35d5d025cb5b300e043d6ea55.pass`
+TRACE: Running: dvmisc_deepstate_test_moving_mean_n_max_test from /home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/moving_mean_n_max/moving_mean_n_max_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: 2.34705e+85 -1.8376e-93 -5.07645e-108 6.52126e+264 0.00207618 -9.4901e+10 -4.65259e-298 -9.85091e-281 -5.9039e-271 -1.13821e-81 -1.50638e-137 1.88176e+123 -1.95461e+186 -1.07714e-96 1.69736e+214 2.2772e-209 1.413e+34 9.50583e-246 1.43055e+178 7.21098e+124 1.09105e-22 5.05485e+243 5.94024e-40 -1.98699e-280 -8.97733e-189 -8.64837e-145 9.47035e-233 1.74142e+277 4.51767e-197 -1.6188e+50 5.08695e+272 2.84571e+91 -1.74189e-201 1.19647e+24 1.69999e-59 5.59005e-100 -3.50022e-182 1.50832e+55 -1.7501e+200 2.71021e+95 6.39706e-71 -2.67347e-08 -8.45573e-91 -1.38714e+129 -2.18452e+101 -inf inf 1.65081e+211 3.9291e+239 -1.53179e+305 1.326e+206 3.66006e-258 2.5426e+69 8.88179e-126 nan -5.31005e+91 -1.03531e-188 1.61707e-46 -1.40735e+54 -4.57501e-214 6.37097e-142 -7.07046e-166 1.37727e-120 3.31987e-214 -3.87452e-200 1.96467e-307 3.01876e-74 5.87626e-31 9.98132e+173 -1.6305e-145 -3.29057e-270 -inf -1.85785e+26 -inf 8.18253e-224 7.54672e-303 -1.28172e+124 -2.89044e-289 7.0314e-169 -1.12876e-12 -1.69486e-127 6.98152e+130 -7.7493e+174 -1.31782e+262 3.84439e-175 -6.02575e-221 -5.78871e+266 -8.19993e-99 1.72971e+272 3.00436e+202 6.54167e+283 7.06682e+105 1.64601e+246 -7.78168e+248 1.14531e+191 0
+window values: 8.51509e-283
+input ends
+TRACE: Passed: dvmisc_deepstate_test_moving_mean_n_max_test

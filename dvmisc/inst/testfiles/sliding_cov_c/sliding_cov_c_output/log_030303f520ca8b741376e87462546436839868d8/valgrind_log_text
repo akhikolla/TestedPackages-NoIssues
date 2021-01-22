@@ -1,0 +1,12 @@
+WARNING: No test specified, defaulting to first test defined (dvmisc_deepstate_test_sliding_cov_c_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/sliding_cov_c/sliding_cov_c_output/030303f520ca8b741376e87462546436839868d8.pass`
+TRACE: Running: dvmisc_deepstate_test_sliding_cov_c_test from /home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/sliding_cov_c/sliding_cov_c_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+shortvec values: inf -0.000683577 5.63807e-266 1.2802e-248 2.72054e-243 -5.45272e-211 4.74958e-165 5.95345e+15 3.33073e+132 7.41539e+236 1.12359e+27 2.65834e+109 4.10446e-219 -2.17786e+158 -1.49282e+111 1.68351e-20 nan 8.52741e-39 -1.20982e+143
+Missing value
+longvec values: -1.10878e-09 8.57952e+21 -2.58157e+228 -4.65683e-56 -7.66116e-232 -2.01567e+246 1.06519e-140 -6.26962e-161 -2.17714e+204 6.90786e+63 4.55817e-06 -4.48809e+15 -391922 -1.83271e-37 1.18056e+163 3.60388e+199 3.05785e-204 -5.46613e+35 6.99084e+38 2.27637e-35 4.921e+294 -3.20444e-234 -3.07248e+276 -1.66012e-99 -1.19127e+173 3.85926e+203 -2.2112e-66 -5.46613e+35 -3.6424e-09 -2.64325e+202 7.18886e+15 1.21724e+144 6.97356e+25 4.5949e-23 9.36016e-31 1.27517e+24 -1.24757e-53 -0.000835603 8.08561e-120 5.27658e-05 -9.5035e+35 -5.05277e+33 -inf 1.19738e-262 4.69137e-300 -5.46613e+35 2.64867e-84 -2.95767e+166 -4.12684e+293 inf 2.08e+303 -1.81332e+278 -6.06342e-217 -4.9398e+291 2.1903e+184 2.86463e+79 -6.54416e+165 -3.5833e-197 2.88612e+291 1.70944e-180 1.72281e+80 -1.80292e-243 3.88912e-292 3.74994e+204 -1.69904e+56 3.38799e-93 0
+input ends
+TRACE: Passed: dvmisc_deepstate_test_sliding_cov_c_test

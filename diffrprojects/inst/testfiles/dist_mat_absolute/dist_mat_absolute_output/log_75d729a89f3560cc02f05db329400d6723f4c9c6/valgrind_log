@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./dist_mat_absolute_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/diffrprojects/inst/testfiles/dist_mat_absolute/dist_mat_absolute_output/75d729a89f3560cc02f05db329400d6723f4c9c6.pass</line>
+</preamble>
+
+<pid>784065</pid>
+<ppid>784064</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/diffrprojects/inst/testfiles/dist_mat_absolute/dist_mat_absolute_output/log_75d729a89f3560cc02f05db329400d6723f4c9c6/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./dist_mat_absolute_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/diffrprojects/inst/testfiles/dist_mat_absolute/dist_mat_absolute_output/75d729a89f3560cc02f05db329400d6723f4c9c6.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.031 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:09.391 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:09.908 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

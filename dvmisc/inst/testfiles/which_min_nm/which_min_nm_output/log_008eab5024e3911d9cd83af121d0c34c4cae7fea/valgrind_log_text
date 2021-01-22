@@ -1,0 +1,14 @@
+WARNING: No test specified, defaulting to first test defined (dvmisc_deepstate_test_which_min_nm_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/which_min_nm/which_min_nm_output/008eab5024e3911d9cd83af121d0c34c4cae7fea.pass`
+TRACE: Running: dvmisc_deepstate_test_which_min_nm_test from /home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/which_min_nm/which_min_nm_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values:     nan 2.29920e-114 4.33128e+295 1.79266e-177 1.89702e+138 1.70965e+08
+7.49712e+286 3.93884e+157 2.72642e-127     nan 5.62521e-77 3.39569e-187
+   -inf 1.34346e-126 1.53844e+294 2.93013e+183 2.75330e+24 3.54892e+27
+4.34914e-88 4.78238e-169     inf 3.80051e-215 6.71462e-263 1.92072e-135
+
+input ends
+TRACE: Passed: dvmisc_deepstate_test_which_min_nm_test

@@ -1,0 +1,21 @@
+Functions:
+=========
+
+checkChains             Check Markov chain Monte Carlo samples
+dMarronWand             Marron and Wand density function
+densEstBayes            Density estimation via Bayesian inference
+                        engines
+densEstBayes.control    Controlling density estimation via Bayesian
+                        inference engines
+plot.densEstBayes       Plot the Bayesian density estimate from a
+                        'densEstBayes()' fit
+predict.densEstBayes    Obtain the Bayesian density estimate from a
+                        'densEstBayes()' fit at new abscissae
+rMarronWand             Marron and Wand random sample
+
+
+Datasets:
+========
+
+OldFaithful2011         Intervals between geyser eruptions
+incomeUK                Incomes of United Kingdom citizens

@@ -1,0 +1,28 @@
+OBJECTS.dEploidr = rvcf.o dEploidr.o test_exports.o RcppExports.o init.o
+
+OBJECTS.dEploid = DEploid/dEploidIO.o \
+    DEploid/ibd.o \
+    DEploid/mcmc.o \
+    DEploid/panel.o \
+    DEploid/txtReader.o \
+    DEploid/updateHap.o \
+    DEploid/utility.o \
+    DEploid/variantIndex.o \
+    DEploid/vcfReader.o \
+    DEploid/gzstream/gzstream.o \
+    DEploid/random/fastfunc.o \
+    DEploid/random/random_generator.o \
+    DEploid/random/mersenne_twister.o \
+    DEploid/export/dEploidIOExportPosteriorProb.o \
+    DEploid/export/writeMcmcRelated.o \
+    DEploid/lasso/dEploidLasso.o \
+    DEploid/lasso/lasso.o \
+    DEploid/lasso/lassoDBG.o \
+    DEploid/debug/vcfReaderDebug.o \
+    DEploid/debug/mcmcDebug.o
+
+
+OBJECTS = $(OBJECTS.dEploidr) $(OBJECTS.dEploid)
+CXX_STD = CXX11
+PKG_CXXFLAGS = -I/usr/share/R/include/ -IDEploid/ -IDEploid/codeCogs/ -IDEploid/random/ -IDEploid/gzstream/ -IDEploid/lasso/  -DVERSION="\"R\"" -DRBUILD -DSTRICT_R_HEADERS
+PKG_LIBS = -lz

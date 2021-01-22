@@ -1,0 +1,10 @@
+WARNING: No test specified, defaulting to first test defined (DescTools_deepstate_test_compute_GCD_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/DescTools/inst/testfiles/compute_GCD/compute_GCD_output/045224616b7912e9a404e93797c37ca70fa2403a.pass`
+TRACE: Running: DescTools_deepstate_test_compute_GCD_test from /home/akhila/fuzzer_packages/fuzzedpackages/DescTools/inst/testfiles/compute_GCD/compute_GCD_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+a values: -293123844
+b values: -555281357
+input ends
+TRACE: Passed: DescTools_deepstate_test_compute_GCD_test

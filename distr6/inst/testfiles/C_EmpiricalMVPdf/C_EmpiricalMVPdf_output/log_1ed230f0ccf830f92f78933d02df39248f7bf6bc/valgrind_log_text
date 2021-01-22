@@ -1,0 +1,14 @@
+WARNING: No test specified, defaulting to first test defined (distr6_deepstate_test_C_EmpiricalMVPdf_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/distr6/inst/testfiles/C_EmpiricalMVPdf/C_EmpiricalMVPdf_output/1ed230f0ccf830f92f78933d02df39248f7bf6bc.pass`
+TRACE: Running: distr6_deepstate_test_C_EmpiricalMVPdf_test from /home/akhila/fuzzer_packages/fuzzedpackages/distr6/inst/testfiles/C_EmpiricalMVPdf/C_EmpiricalMVPdf_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values:     nan    -inf    -inf     nan    -inf 1.55275e+40
+
+Missing value
+data values: 4.19790e+140    -inf     inf 2.00396e-158 2.91601e+272     inf     nan     nan
+
+input ends
+TRACE: Passed: distr6_deepstate_test_C_EmpiricalMVPdf_test

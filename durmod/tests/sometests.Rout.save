@@ -1,0 +1,177 @@
+
+R Under development (unstable) (2019-08-21 r77049) -- "Unsuffered Consequences"
+Copyright (C) 2019 The R Foundation for Statistical Computing
+Platform: x86_64-pc-linux-gnu (64-bit)
+
+R is free software and comes with ABSOLUTELY NO WARRANTY.
+You are welcome to redistribute it under certain conditions.
+Type 'license()' or 'licence()' for distribution details.
+
+R is a collaborative project with many contributors.
+Type 'contributors()' for more information and
+'citation()' on how to cite R or R packages in publications.
+
+Type 'demo()' for some demos, 'help()' for on-line help, or
+'help.start()' for an HTML browser interface to help.
+Type 'q()' to quit R.
+
+> library(durmod)
+> data.table::setDTthreads(1)
+> set.seed(42)
+> dataset <- datagen(4000,1200)
+> print(dataset)
+         id         x1         x2 alpha       d    duration     state
+    1:    1  1.3709584 -0.1418087     0     job  1.26241296     unemp
+    2:    2 -0.5646982 -0.8138981     0     job  7.62670638     unemp
+    3:    3  0.3631284 -0.3255406     0     job  7.43731642     unemp
+    4:    4  0.6328626  0.3781574     0    none 17.29848885     unemp
+    5:    4  1.0400484  0.3061439     0    none 10.01972491     unemp
+   ---                                                               
+10344: 3999  0.8504394  1.3854584     0    none  0.12460178     unemp
+10345: 3999  1.5737882  2.0354354     0    none  2.71525885     unemp
+10346: 3999  0.2756904 -0.3102229     0     job  9.26768420     unemp
+10347: 4000 -0.4080361 -1.1617422     0 program  0.01954401     unemp
+10348: 4000 -0.4080361 -1.1617422     1     job  1.41847637 onprogram
+> risksets <- list(c('job','program'), c('job'))
+> options(digits=3)
+> # just two iterations to save time
+> 
+> opt <- mphcrm(d ~ x1+x2+C(job,alpha)+D(duration)+S(alpha+1)+ID(id), data=dataset, risksets=risksets,
++               control=mphcrm.control(threads=1,iters=2,callback=NULL))
+> best <- opt[[1]]
+> print(best)
+Estimate with 2 points, log-likelihood: -19080.6082
+    job.x1     job.x2  job.alpha program.x1 program.x2 
+    0.9943    -0.9038    -0.0917     0.9629     0.4030 
+
+Proportional hazard distribution
+          prob   job program
+point  1 0.675 0.152  0.0885
+point  2 0.325 0.025  0.0203
+> summary(best)
+$loglik
+[1] -19081
+
+$coefs
+             value     se      t Pr(>|t|)
+job.x1      0.9943 0.0145  68.53 0.00e+00
+job.x2     -0.9038 0.0130 -69.52 0.00e+00
+job.alpha  -0.0917 0.0415  -2.21 2.71e-02
+program.x1  0.9629 0.0226  42.57 0.00e+00
+program.x2  0.4030 0.0237  16.99 7.20e-64
+
+$moments
+          mean variance     sd
+job     0.1109  0.00355 0.0596
+program 0.0664  0.00102 0.0319
+
+> mphdist(best)
+          prob   job program
+point  1 0.675 0.152  0.0885
+point  2 0.325 0.025  0.0203
+> mphcov(best)
+            job program
+job     0.00355 0.00190
+program 0.00190 0.00102
+> 
+> # Then make a state factor
+> dataset$state <- dataset[,factor(alpha+1,labels=c('unemp','onprogram'))]
+> names(risksets) <- levels(dataset$state)
+> # reset seed, the previous mphcrm may have slightly different behaviour on different architectures.
+> set.seed(42)
+> dataset[, f := factor(sample(1:6,.N,replace=TRUE))]
+> dataset[, g := factor(sample(1:4,.N,replace=TRUE))]
+> opt <- mphcrm(d ~ x1+x2+C(job,alpha+f)+D(duration)+C(program,f*g) + S(state)+ID(id), data=dataset, 
++               risksets=risksets, control=mphcrm.control(threads=1,iters=1,callback=NULL))
+> 
+> summary(opt[[1]])
+$loglik
+[1] -19817
+
+$coefs
+                   value      se         t  Pr(>|t|)
+job.x1           0.89634 0.00931   96.2537  0.00e+00
+job.x2          -0.80995 0.00759 -106.7509  0.00e+00
+job.alpha       -0.17688 0.02670   -6.6241  3.67e-11
+job.f.2          0.07449 0.04287    1.7377  8.23e-02
+job.f.3         -0.06195 0.04409   -1.4049  1.60e-01
+job.f.4          0.11317 0.04148    2.7287  6.37e-03
+job.f.5          0.01854 0.04311    0.4301  6.67e-01
+job.f.6         -0.06108 0.04632   -1.3185  1.87e-01
+program.x1       0.91250 0.01807   50.5045  0.00e+00
+program.x2       0.37743 0.01749   21.5830 4.31e-101
+program.f.2      0.20536 0.13447    1.5271  1.27e-01
+program.f.3      0.02068 0.13735    0.1505  8.80e-01
+program.f.4      0.00632 0.12036    0.0525  9.58e-01
+program.f.5     -0.13482 0.14185   -0.9505  3.42e-01
+program.f.6      0.28122 0.14694    1.9138  5.57e-02
+program.g.2      0.03025 0.13082    0.2312  8.17e-01
+program.g.3      0.14083 0.13864    1.0157  3.10e-01
+program.g.4     -0.02071 0.14072   -0.1472  8.83e-01
+program.f:g.2:2 -0.30106 0.19641   -1.5328  1.25e-01
+program.f:g.2:3 -0.24366 0.19296   -1.2627  2.07e-01
+program.f:g.2:4  0.03646 0.20306    0.1796  8.58e-01
+program.f:g.3:2  0.10878 0.19535    0.5568  5.78e-01
+program.f:g.3:3 -0.17411 0.19189   -0.9073  3.64e-01
+program.f:g.3:4  0.16215 0.19720    0.8223  4.11e-01
+program.f:g.4:2 -0.00186 0.17351   -0.0107  9.91e-01
+program.f:g.4:3  0.18890 0.19390    0.9742  3.30e-01
+program.f:g.4:4  0.12597 0.20180    0.6242  5.32e-01
+program.f:g.5:2  0.19735 0.20546    0.9605  3.37e-01
+program.f:g.5:3  0.21733 0.20211    1.0753  2.82e-01
+program.f:g.5:4  0.14749 0.19955    0.7391  4.60e-01
+program.f:g.6:2  0.09271 0.20553    0.4511  6.52e-01
+program.f:g.6:3 -0.48317 0.22859   -2.1137  3.46e-02
+program.f:g.6:4 -0.02355 0.21621   -0.1089  9.13e-01
+
+$moments
+          mean variance sd
+job     0.0629        0  0
+program 0.0380        0  0
+
+> 
+> # reorder some factor levels
+> set.seed(42)
+> dataset$state=factor(dataset$state, levels=rev(levels(dataset$state)))
+> dataset[, ix := rnorm(.N)]
+> dataset[state=='unemp' & g == 3, ix := 0]
+> opt <- mphcrm(d ~ x1+x2+C(job,alpha+f)+D(duration)+C(program,f*g:ix) + S(state)+ID(id), data=dataset, 
++               risksets=risksets, control=mphcrm.control(threads=1,iters=1,callback=NULL))
+*** Removing level 3 from g:ix in transition program, no variation
+
+*** Removing level 2:3 from f:g:ix in transition program, no variation
+*** Removing level 3:3 from f:g:ix in transition program, no variation
+*** Removing level 4:3 from f:g:ix in transition program, no variation
+*** Removing level 5:3 from f:g:ix in transition program, no variation
+*** Removing level 6:3 from f:g:ix in transition program, no variation
+
+> round(mphmoments(opt[[1]]),5)
+          mean variance sd
+job     0.0630        0  0
+program 0.0395        0  0
+> 
+> # single risk
+> dataset <- dataset[state=='onprogram']
+> opt <- mphcrm(d ~ x1+x2+D(duration)+ID(id), data=dataset, 
++               control=mphcrm.control(threads=1,iters=3,callback=NULL))
+> summary(opt[[1]]$par)
+$value
+job.x1 job.x2 
+ 0.932 -0.947 
+
+$mphdist
+          prob    job
+point  1 0.619 0.0802
+point  2 0.207 0.3845
+point  3 0.173 0.0161
+
+> mphmoments(opt[[1]])
+     mean variance    sd
+job 0.132   0.0172 0.131
+> mphcov(opt[[1]])
+       job
+job 0.0172
+> 
+> proc.time()
+   user  system elapsed 
+   6.87    0.24    4.31 

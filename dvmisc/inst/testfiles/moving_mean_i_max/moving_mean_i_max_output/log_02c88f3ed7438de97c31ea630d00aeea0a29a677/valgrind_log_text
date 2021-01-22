@@ -1,0 +1,11 @@
+WARNING: No test specified, defaulting to first test defined (dvmisc_deepstate_test_moving_mean_i_max_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/moving_mean_i_max/moving_mean_i_max_output/02c88f3ed7438de97c31ea630d00aeea0a29a677.pass`
+TRACE: Running: dvmisc_deepstate_test_moving_mean_i_max_test from /home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/moving_mean_i_max/moving_mean_i_max_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: -1393033821 -2147483648 -43586519 1943818208 1951210214 -450015945 -812301308 -1247556511 -1698101865 -1190179401 1966792936 372230282 2095280225 280860895 1390273543 -2135922406 2037297459 2113858290 -2147483648 -106768011 -2058692970 124679514 1264148939 164291971 949401269 -1784633395
+window values: 7.64409e-277
+input ends
+TRACE: Passed: dvmisc_deepstate_test_moving_mean_i_max_test

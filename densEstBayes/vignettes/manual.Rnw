@@ -1,0 +1,16 @@
+\documentclass[a4paper]{article}
+%\VignetteIndexEntry{densEstBayes User Manual}
+%\VignettePackage{densEstBayes} 
+\usepackage{pdfpages}
+
+\begin{document}
+
+\newread\PDFtoInclude
+\openin\PDFtoInclude=densEstBayes.pdf
+\ifeof\PDFtoInclude
+\typeout{No file densEstBayes.pdf}
+\else
+\includepdf[fitpaper=true,pages=-]{densEstBayes.pdf}
+\fi
+
+\end{document}

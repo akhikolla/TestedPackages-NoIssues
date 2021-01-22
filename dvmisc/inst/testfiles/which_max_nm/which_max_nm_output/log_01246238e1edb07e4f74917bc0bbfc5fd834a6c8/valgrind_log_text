@@ -1,0 +1,14 @@
+WARNING: No test specified, defaulting to first test defined (dvmisc_deepstate_test_which_max_nm_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/which_max_nm/which_max_nm_output/01246238e1edb07e4f74917bc0bbfc5fd834a6c8.pass`
+TRACE: Running: dvmisc_deepstate_test_which_max_nm_test from /home/akhila/fuzzer_packages/fuzzedpackages/dvmisc/inst/testfiles/which_max_nm/which_max_nm_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: 9.48823e+66    -inf 4.68209e+209 8.42738e+87     inf 4.55330e-257 3.81309e-140
+1.16572e+53 4.18275e-142 5.81943e-180 8.46501e-180 9.19319e+177 1.73651e+249     nan
+   -inf 5.87287e+51 1.08873e-170 1.47211e+267 5.23584e+159 1.73585e-241 3.81240e+178
+    nan 0.269954 1.12073e-151 6.05993e+15 1.95886e+32 1.04737e+49 1.09849e+32
+
+input ends
+TRACE: Passed: dvmisc_deepstate_test_which_max_nm_test

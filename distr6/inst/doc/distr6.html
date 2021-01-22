@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+
+<meta name="date" content="2020-12-12" />
+
+<title>distr6</title>
+
+<script>// Hide empty <a> tag within highlighted CodeBlock for screen reader accessibility (see https://github.com/jgm/pandoc/issues/6352#issuecomment-626106786) -->
+// v0.0.1
+// Written by JooYoung Seo (jooyoung@psu.edu) and Atsushi Yasumoto on June 1st, 2020.
+
+document.addEventListener('DOMContentLoaded', function() {
+  const codeList = document.getElementsByClassName("sourceCode");
+  for (var i = 0; i < codeList.length; i++) {
+    var linkList = codeList[i].getElementsByTagName('a');
+    for (var j = 0; j < linkList.length; j++) {
+      if (linkList[j].innerHTML === "") {
+        linkList[j].setAttribute('aria-hidden', 'true');
+      }
+    }
+  }
+});
+</script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+code.sourceCode > span { display: inline-block; line-height: 1.25; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">distr6</h1>
+<h4 class="date">2020-12-12</h4>
+
+
+
+<p>distr6 is a unified, self-contained and scalable interface to probability distributions in R. Making use of the R6 paradigm, distr6 implements a fully object-oriented (OO) interface complete with distribution construction, full inheritance and more complex design patterns. The API is built to be scalable and intuitive, ensuring that every distribution has the same interface and that more complex properties are abstracted from the core functionality. A full set of tutorials can be found <a href="https://alan-turing-institute.github.io/distr6/index.html">here</a>. In this introductory vignette we briefly demonstrate how to construct a distribution, view and edit its parameters and evaluate different in-built methods. The <a href="https://alan-turing-institute.github.io/distr6/index.html">website</a> covers more complex use-cases including composite distributions and decorators for numeric methods.</p>
+<div id="getting-started" class="section level2">
+<h2>Getting Started</h2>
+<p>We think the best place to get started is to pick a probability distribution and work through constructing the distribution via different parameterisations and querying the distribution for different methods. Below is a running example with the Normal distribution.</p>
+<div id="construction-and-parameterisation" class="section level3">
+<h3>Construction and Parameterisation</h3>
+<p>All distributions are constructed using R6 dollar sign notation The default Normal distribution is the Standard Normal parameterised with mean and var</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1"></a>Normal<span class="op">$</span><span class="kw">new</span>()</span>
+<span id="cb1-2"><a href="#cb1-2"></a><span class="co">#&gt; Norm(mean = 0, var = 1, sd = 1, prec = 1)</span></span></code></pre></div>
+<p>But we could also parameterise with standard deviation or precision. Note that whichever we choose is clearly printed.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1"></a>Normal<span class="op">$</span><span class="kw">new</span>(<span class="dt">mean =</span> <span class="dv">2</span>, <span class="dt">sd =</span> <span class="dv">2</span>)</span>
+<span id="cb2-2"><a href="#cb2-2"></a><span class="co">#&gt; Norm(mean = 2, var = 4, sd = 2, prec = 0.25)</span></span>
+<span id="cb2-3"><a href="#cb2-3"></a>Normal<span class="op">$</span><span class="kw">new</span>(<span class="dt">mean =</span> <span class="dv">3</span>, <span class="dt">prec =</span> <span class="fl">0.5</span>)</span>
+<span id="cb2-4"><a href="#cb2-4"></a><span class="co">#&gt; Norm(mean = 3, var = 2, sd = 1.4142135623731, prec = 0.5)</span></span></code></pre></div>
+<p>But all parameters are available to us via the parameters method. Note how all available parameters are displayed, but only the ones chosen in construction are shown in the print method.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1"></a>N &lt;-<span class="st"> </span>Normal<span class="op">$</span><span class="kw">new</span>()</span>
+<span id="cb3-2"><a href="#cb3-2"></a>N<span class="op">$</span><span class="kw">print</span>()</span>
+<span id="cb3-3"><a href="#cb3-3"></a><span class="co">#&gt; Norm(mean = 0, var = 1, sd = 1, prec = 1)</span></span>
+<span id="cb3-4"><a href="#cb3-4"></a>N<span class="op">$</span><span class="kw">parameters</span>()</span>
+<span id="cb3-5"><a href="#cb3-5"></a><span class="co">#&gt;      id value support                                 description</span></span>
+<span id="cb3-6"><a href="#cb3-6"></a><span class="co">#&gt; 1: mean     0       ℝ                   Mean - Location Parameter</span></span>
+<span id="cb3-7"><a href="#cb3-7"></a><span class="co">#&gt; 2:  var     1      ℝ+          Variance - Squared Scale Parameter</span></span>
+<span id="cb3-8"><a href="#cb3-8"></a><span class="co">#&gt; 3:   sd     1      ℝ+        Standard Deviation - Scale Parameter</span></span>
+<span id="cb3-9"><a href="#cb3-9"></a><span class="co">#&gt; 4: prec     1      ℝ+ Precision - Inverse Squared Scale Parameter</span></span></code></pre></div>
+</div>
+<div id="parameters-in-distr6" class="section level3">
+<h3>Parameters in distr6</h3>
+<p>Parameters are accessed with getParameterValue and edited with setParameterValue</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1"></a>N<span class="op">$</span><span class="kw">setParameterValue</span>(<span class="dt">prec =</span> <span class="dv">2</span>)</span>
+<span id="cb4-2"><a href="#cb4-2"></a>N<span class="op">$</span><span class="kw">getParameterValue</span>(<span class="st">&quot;prec&quot;</span>)</span>
+<span id="cb4-3"><a href="#cb4-3"></a><span class="co">#&gt; [1] 2</span></span></code></pre></div>
+<p>Note how all parameters that are related also update</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1"></a>N<span class="op">$</span><span class="kw">parameters</span>()</span>
+<span id="cb5-2"><a href="#cb5-2"></a><span class="co">#&gt;      id     value support                                 description</span></span>
+<span id="cb5-3"><a href="#cb5-3"></a><span class="co">#&gt; 1: mean         0       ℝ                   Mean - Location Parameter</span></span>
+<span id="cb5-4"><a href="#cb5-4"></a><span class="co">#&gt; 2:  var       0.5      ℝ+          Variance - Squared Scale Parameter</span></span>
+<span id="cb5-5"><a href="#cb5-5"></a><span class="co">#&gt; 3:   sd 0.7071068      ℝ+        Standard Deviation - Scale Parameter</span></span>
+<span id="cb5-6"><a href="#cb5-6"></a><span class="co">#&gt; 4: prec         2      ℝ+ Precision - Inverse Squared Scale Parameter</span></span></code></pre></div>
+<p>To view the functions that relate these parameters add the following</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1"></a>N<span class="op">$</span><span class="kw">parameters</span>()<span class="op">$</span><span class="kw">print</span>(<span class="dt">hide_cols =</span> <span class="ot">NULL</span>)</span>
+<span id="cb6-2"><a href="#cb6-2"></a><span class="co">#&gt;      id     value support settable                                 description</span></span>
+<span id="cb6-3"><a href="#cb6-3"></a><span class="co">#&gt; 1: mean         0       ℝ     TRUE                   Mean - Location Parameter</span></span>
+<span id="cb6-4"><a href="#cb6-4"></a><span class="co">#&gt; 2:  var       0.5      ℝ+     TRUE          Variance - Squared Scale Parameter</span></span>
+<span id="cb6-5"><a href="#cb6-5"></a><span class="co">#&gt; 3:   sd 0.7071068      ℝ+     TRUE        Standard Deviation - Scale Parameter</span></span>
+<span id="cb6-6"><a href="#cb6-6"></a><span class="co">#&gt; 4: prec         2      ℝ+     TRUE Precision - Inverse Squared Scale Parameter</span></span></code></pre></div>
+<p>The line above introduces ‘method chaining’, this occurs when one method is added to another. As another example, let’s edit and then access another parameter in the Normal distribution</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1"></a>N<span class="op">$</span><span class="kw">setParameterValue</span>(<span class="dt">var =</span> <span class="dv">3</span>)<span class="op">$</span><span class="kw">getParameterValue</span>(<span class="st">&quot;var&quot;</span>)</span>
+<span id="cb7-2"><a href="#cb7-2"></a><span class="co">#&gt; [1] 3</span></span></code></pre></div>
+</div>
+<div id="representing-a-distribution" class="section level3">
+<h3>Representing a distribution</h3>
+<p>In keeping with R conventions, distributions have a print and summary method to view key details. We have already seen how the print method displays the distribution short_name and the parameterisation.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1"></a>N<span class="op">$</span><span class="kw">print</span>()</span>
+<span id="cb8-2"><a href="#cb8-2"></a><span class="co">#&gt; Norm(mean = 0, var = 3, sd = 1.73205080756888, prec = 0.333333333333333)</span></span></code></pre></div>
+<p>The summary method can also show basic statistics and distribution properties and traits. Adding the argument full = F, suppresses the output slightly.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1"></a>N<span class="op">$</span><span class="kw">summary</span>()</span>
+<span id="cb9-2"><a href="#cb9-2"></a><span class="co">#&gt; Normal Probability Distribution. Parameterised with:</span></span>
+<span id="cb9-3"><a href="#cb9-3"></a><span class="co">#&gt;   mean = 0, var = 3, sd = 1.73205080756888, prec = 0.333333333333333</span></span>
+<span id="cb9-4"><a href="#cb9-4"></a><span class="co">#&gt; </span></span>
+<span id="cb9-5"><a href="#cb9-5"></a><span class="co">#&gt;   Quick Statistics </span></span>
+<span id="cb9-6"><a href="#cb9-6"></a><span class="co">#&gt;  Mean:       0</span></span>
+<span id="cb9-7"><a href="#cb9-7"></a><span class="co">#&gt;  Variance:   3</span></span>
+<span id="cb9-8"><a href="#cb9-8"></a><span class="co">#&gt;  Skewness:   0</span></span>
+<span id="cb9-9"><a href="#cb9-9"></a><span class="co">#&gt;  Ex. Kurtosis:   0</span></span>
+<span id="cb9-10"><a href="#cb9-10"></a><span class="co">#&gt; </span></span>
+<span id="cb9-11"><a href="#cb9-11"></a><span class="co">#&gt;  Support: ℝ  Scientific Type: ℝ </span></span>
+<span id="cb9-12"><a href="#cb9-12"></a><span class="co">#&gt; </span></span>
+<span id="cb9-13"><a href="#cb9-13"></a><span class="co">#&gt;  Traits: continuous; univariate</span></span>
+<span id="cb9-14"><a href="#cb9-14"></a><span class="co">#&gt;  Properties: symmetric; mesokurtic; no skew</span></span>
+<span id="cb9-15"><a href="#cb9-15"></a>N<span class="op">$</span><span class="kw">summary</span>(<span class="dt">full =</span> F)</span>
+<span id="cb9-16"><a href="#cb9-16"></a><span class="co">#&gt; Norm(mean = 0, var = 3, sd = 1.73205080756888, prec = 0.333333333333333)</span></span>
+<span id="cb9-17"><a href="#cb9-17"></a><span class="co">#&gt; Scientific Type: ℝ    See $traits for more</span></span>
+<span id="cb9-18"><a href="#cb9-18"></a><span class="co">#&gt; Support: ℝ    See $properties for more</span></span></code></pre></div>
+<p>All distributions are also comprised of properties and traits. Traits are ways of describing a class whereas properties describe an object. In simpler terms, this means that a trait is present independent of the distribution’s parameterisation whereas a property depends on the constructed parameters.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1"></a>N<span class="op">$</span>properties</span>
+<span id="cb10-2"><a href="#cb10-2"></a><span class="co">#&gt; $support</span></span>
+<span id="cb10-3"><a href="#cb10-3"></a><span class="co">#&gt; ℝ </span></span>
+<span id="cb10-4"><a href="#cb10-4"></a><span class="co">#&gt; </span></span>
+<span id="cb10-5"><a href="#cb10-5"></a><span class="co">#&gt; $symmetry</span></span>
+<span id="cb10-6"><a href="#cb10-6"></a><span class="co">#&gt; [1] &quot;symmetric&quot;</span></span>
+<span id="cb10-7"><a href="#cb10-7"></a>N<span class="op">$</span>traits</span>
+<span id="cb10-8"><a href="#cb10-8"></a><span class="co">#&gt; $valueSupport</span></span>
+<span id="cb10-9"><a href="#cb10-9"></a><span class="co">#&gt; [1] &quot;continuous&quot;</span></span>
+<span id="cb10-10"><a href="#cb10-10"></a><span class="co">#&gt; </span></span>
+<span id="cb10-11"><a href="#cb10-11"></a><span class="co">#&gt; $variateForm</span></span>
+<span id="cb10-12"><a href="#cb10-12"></a><span class="co">#&gt; [1] &quot;univariate&quot;</span></span>
+<span id="cb10-13"><a href="#cb10-13"></a><span class="co">#&gt; </span></span>
+<span id="cb10-14"><a href="#cb10-14"></a><span class="co">#&gt; $type</span></span>
+<span id="cb10-15"><a href="#cb10-15"></a><span class="co">#&gt; ℝ</span></span></code></pre></div>
+</div>
+<div id="dpqr" class="section level3">
+<h3>d/p/q/r</h3>
+<p>distr6 is intended not to replace R stats distributions but to be a different way of interfacing them. All distributions in R stats can be found in distr6 and all their d/p/q/r functions which refer to density/cumulative distribution/quantile/random are all available in distr6. Continuing our Normal distribution example:</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1"></a>N<span class="op">$</span><span class="kw">pdf</span>(<span class="dv">2</span>) <span class="co"># dnorm(2)</span></span>
+<span id="cb11-2"><a href="#cb11-2"></a><span class="co">#&gt; [1] 0.1182551</span></span>
+<span id="cb11-3"><a href="#cb11-3"></a>N<span class="op">$</span><span class="kw">cdf</span>(<span class="dv">2</span>) <span class="co"># pnorm(2)</span></span>
+<span id="cb11-4"><a href="#cb11-4"></a><span class="co">#&gt; [1] 0.8758935</span></span>
+<span id="cb11-5"><a href="#cb11-5"></a>N<span class="op">$</span><span class="kw">quantile</span>(<span class="fl">0.42</span>) <span class="co"># qnorm(2)</span></span>
+<span id="cb11-6"><a href="#cb11-6"></a><span class="co">#&gt; [1] -0.3496898</span></span>
+<span id="cb11-7"><a href="#cb11-7"></a>N<span class="op">$</span><span class="kw">rand</span>(<span class="dv">2</span>) <span class="co"># rnorm(2)</span></span>
+<span id="cb11-8"><a href="#cb11-8"></a><span class="co">#&gt; [1]  2.3745697 -0.9780859</span></span></code></pre></div>
+<p>distr6 makes it easy to query these results by only requiring the distribution to be constructed once and then the specific parameterisation can be forgotten. In the case of the Normal distribution this may not seem like a big difference to R stats but now look at the difference when we construct a distribution without default parameters</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1"></a>B &lt;-<span class="st"> </span>Beta<span class="op">$</span><span class="kw">new</span>(<span class="dt">shape1 =</span> <span class="fl">0.582</span>, <span class="dt">shape2 =</span> <span class="fl">1.2490</span>)</span>
+<span id="cb12-2"><a href="#cb12-2"></a>B<span class="op">$</span><span class="kw">pdf</span>(<span class="dv">2</span>) <span class="co"># dbeta(2, 0.582, 1.2490)</span></span>
+<span id="cb12-3"><a href="#cb12-3"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb12-4"><a href="#cb12-4"></a>B<span class="op">$</span><span class="kw">cdf</span>(<span class="dv">2</span>) <span class="co"># pbeta(2, 0.582, 1.2490)</span></span>
+<span id="cb12-5"><a href="#cb12-5"></a><span class="co">#&gt; [1] 1</span></span>
+<span id="cb12-6"><a href="#cb12-6"></a>B<span class="op">$</span><span class="kw">quantile</span>(<span class="fl">0.42</span>) <span class="co"># qbeta(2, 0.582, 1.2490)</span></span>
+<span id="cb12-7"><a href="#cb12-7"></a><span class="co">#&gt; [1] 0.1790523</span></span>
+<span id="cb12-8"><a href="#cb12-8"></a>B<span class="op">$</span><span class="kw">rand</span>(<span class="dv">2</span>) <span class="co"># rbeta(2, 0.582, 1.2490)</span></span>
+<span id="cb12-9"><a href="#cb12-9"></a><span class="co">#&gt; [1] 0.14613311 0.07374848</span></span></code></pre></div>
+<p>Finally distr6 includes log/log.p and lower.tail arguments to be consistent with R stats.</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1"></a>N<span class="op">$</span><span class="kw">cdf</span>(<span class="dv">3</span>, <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>, <span class="dt">log.p =</span> <span class="ot">TRUE</span>) <span class="op">==</span><span class="st"> </span><span class="kw">pnorm</span>(<span class="dv">3</span>, <span class="dt">lower.tail =</span> <span class="ot">FALSE</span>, <span class="dt">log.p =</span> <span class="ot">TRUE</span>)</span>
+<span id="cb13-2"><a href="#cb13-2"></a><span class="co">#&gt; [1] FALSE</span></span></code></pre></div>
+</div>
+<div id="mathematical-and-statistical-results" class="section level3">
+<h3>Mathematical and Statistical Results</h3>
+<p>The final part of this tutorial looks at how to access mathematical and statistical results for probability distributions. This is another advantage of distr6 as it collects not only the results for the 17 distributions in R stats but also for all others implemented in distr6. Continuing with the Normal distribution:</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1"></a>N<span class="op">$</span><span class="kw">mean</span>()</span>
+<span id="cb14-2"><a href="#cb14-2"></a><span class="co">#&gt; [1] 0</span></span>
+<span id="cb14-3"><a href="#cb14-3"></a>N<span class="op">$</span><span class="kw">variance</span>()</span>
+<span id="cb14-4"><a href="#cb14-4"></a><span class="co">#&gt; [1] 3</span></span>
+<span id="cb14-5"><a href="#cb14-5"></a>N<span class="op">$</span><span class="kw">entropy</span>() <span class="co"># Note default is base 2</span></span>
+<span id="cb14-6"><a href="#cb14-6"></a><span class="co">#&gt; [1] 2.839577</span></span>
+<span id="cb14-7"><a href="#cb14-7"></a>N<span class="op">$</span><span class="kw">mgf</span>(<span class="dv">2</span>)</span>
+<span id="cb14-8"><a href="#cb14-8"></a><span class="co">#&gt; [1] 403.4288</span></span>
+<span id="cb14-9"><a href="#cb14-9"></a>N<span class="op">$</span><span class="kw">cf</span>(<span class="dv">1</span>)</span>
+<span id="cb14-10"><a href="#cb14-10"></a><span class="co">#&gt; [1] 0.2231302+0i</span></span></code></pre></div>
+<p>For a full list of methods available use the help documentation for any distribution</p>
+</div>
+<div id="listing-in-distr6" class="section level3">
+<h3>Listing in distr6</h3>
+<p>Instead of having to worry about remembering every distribution in R, distr6 provides a way of listing all of these, and filtering by traits or package. We only show the first 5 rows of this to save space.</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1"></a><span class="kw">head</span>(<span class="kw">listDistributions</span>())</span>
+<span id="cb15-2"><a href="#cb15-2"></a><span class="co">#&gt;    ShortName      ClassName Type ValueSupport VariateForm Package   Tags</span></span>
+<span id="cb15-3"><a href="#cb15-3"></a><span class="co">#&gt; 1:       Arc        Arcsine    ℝ   continuous  univariate       - limits</span></span>
+<span id="cb15-4"><a href="#cb15-4"></a><span class="co">#&gt; 2:      Bern      Bernoulli   ℕ0     discrete  univariate   stats       </span></span>
+<span id="cb15-5"><a href="#cb15-5"></a><span class="co">#&gt; 3:      Beta           Beta   ℝ+   continuous  univariate   stats       </span></span>
+<span id="cb15-6"><a href="#cb15-6"></a><span class="co">#&gt; 4:    BetaNC BetaNoncentral   ℝ+   continuous  univariate   stats       </span></span>
+<span id="cb15-7"><a href="#cb15-7"></a><span class="co">#&gt; 5:     Binom       Binomial   ℕ0     discrete  univariate   stats limits</span></span>
+<span id="cb15-8"><a href="#cb15-8"></a><span class="co">#&gt; 6:       Cat    Categorical    V     discrete  univariate       -</span></span>
+<span id="cb15-9"><a href="#cb15-9"></a><span class="kw">head</span>(<span class="kw">listDistributions</span>(<span class="dt">simplify =</span> <span class="ot">TRUE</span>))</span>
+<span id="cb15-10"><a href="#cb15-10"></a><span class="co">#&gt; [1] &quot;Arcsine&quot;        &quot;Bernoulli&quot;      &quot;Beta&quot;           &quot;BetaNoncentral&quot;</span></span>
+<span id="cb15-11"><a href="#cb15-11"></a><span class="co">#&gt; [5] &quot;Binomial&quot;       &quot;Categorical&quot;</span></span>
+<span id="cb15-12"><a href="#cb15-12"></a><span class="co"># Lists discrete distributions only</span></span>
+<span id="cb15-13"><a href="#cb15-13"></a><span class="kw">head</span>(<span class="kw">listDistributions</span>(<span class="dt">filter =</span> <span class="kw">list</span>(<span class="dt">valuesupport =</span> <span class="st">&quot;discrete&quot;</span>)))</span>
+<span id="cb15-14"><a href="#cb15-14"></a><span class="co">#&gt;    ShortName       ClassName Type ValueSupport VariateForm    Package   Tags</span></span>
+<span id="cb15-15"><a href="#cb15-15"></a><span class="co">#&gt; 1:      Bern       Bernoulli   ℕ0     discrete  univariate      stats       </span></span>
+<span id="cb15-16"><a href="#cb15-16"></a><span class="co">#&gt; 2:     Binom        Binomial   ℕ0     discrete  univariate      stats limits</span></span>
+<span id="cb15-17"><a href="#cb15-17"></a><span class="co">#&gt; 3:       Cat     Categorical    V     discrete  univariate          -       </span></span>
+<span id="cb15-18"><a href="#cb15-18"></a><span class="co">#&gt; 4:     Degen      Degenerate    ℝ     discrete  univariate          - limits</span></span>
+<span id="cb15-19"><a href="#cb15-19"></a><span class="co">#&gt; 5:     DUnif DiscreteUniform    ℤ     discrete  univariate extraDistr limits</span></span>
+<span id="cb15-20"><a href="#cb15-20"></a><span class="co">#&gt; 6:       Emp       Empirical    ℝ     discrete  univariate          -</span></span>
+<span id="cb15-21"><a href="#cb15-21"></a></span>
+<span id="cb15-22"><a href="#cb15-22"></a><span class="co"># Multiple filters can be used, note this is case-insensitive</span></span>
+<span id="cb15-23"><a href="#cb15-23"></a><span class="kw">head</span>(<span class="kw">listDistributions</span>(<span class="dt">filter =</span> <span class="kw">list</span>(<span class="dt">VaLueSupport =</span> <span class="st">&quot;continuous&quot;</span>, <span class="dt">package =</span> <span class="st">&quot;extraDistr&quot;</span>)))</span>
+<span id="cb15-24"><a href="#cb15-24"></a><span class="co">#&gt;    ShortName    ClassName    Type ValueSupport  VariateForm    Package     Tags</span></span>
+<span id="cb15-25"><a href="#cb15-25"></a><span class="co">#&gt; 1:      Diri    Dirichlet [0,1]^K   continuous multivariate extraDistr         </span></span>
+<span id="cb15-26"><a href="#cb15-26"></a><span class="co">#&gt; 2:      Frec      Frechet       ℝ   continuous   univariate extraDistr locscale</span></span>
+<span id="cb15-27"><a href="#cb15-27"></a><span class="co">#&gt; 3:      Gumb       Gumbel      ℝ+   continuous   univariate extraDistr locscale</span></span>
+<span id="cb15-28"><a href="#cb15-28"></a><span class="co">#&gt; 4:  InvGamma InverseGamma      ℝ+   continuous   univariate extraDistr         </span></span>
+<span id="cb15-29"><a href="#cb15-29"></a><span class="co">#&gt; 5:       Lap      Laplace       ℝ   continuous   univariate extraDistr locscale</span></span>
+<span id="cb15-30"><a href="#cb15-30"></a><span class="co">#&gt; 6:      Pare       Pareto      ℝ+   continuous   univariate extraDistr</span></span></code></pre></div>
+</div>
+<div id="r6-s3-and-magrittr" class="section level3">
+<h3>R6, S3 and Magrittr</h3>
+<p>As a final point, distr6 allows the use of R6 or S3 to call methods, which means that the package magrittr can also be used for ‘piping’. Returning to the Normal distribution</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1"></a><span class="kw">library</span>(magrittr)</span>
+<span id="cb16-2"><a href="#cb16-2"></a>N<span class="op">$</span><span class="kw">print</span>()</span>
+<span id="cb16-3"><a href="#cb16-3"></a><span class="co">#&gt; Norm(mean = 0, var = 3, sd = 1.73205080756888, prec = 0.333333333333333)</span></span>
+<span id="cb16-4"><a href="#cb16-4"></a><span class="kw">print</span>(N)</span>
+<span id="cb16-5"><a href="#cb16-5"></a><span class="co">#&gt; Norm(mean = 0, var = 3, sd = 1.73205080756888, prec = 0.333333333333333)</span></span>
+<span id="cb16-6"><a href="#cb16-6"></a>N <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">print</span>()</span>
+<span id="cb16-7"><a href="#cb16-7"></a><span class="co">#&gt; Norm(mean = 0, var = 3, sd = 1.73205080756888, prec = 0.333333333333333)</span></span>
+<span id="cb16-8"><a href="#cb16-8"></a></span>
+<span id="cb16-9"><a href="#cb16-9"></a>N<span class="op">$</span><span class="kw">pdf</span>(<span class="dv">2</span>)</span>
+<span id="cb16-10"><a href="#cb16-10"></a><span class="co">#&gt; [1] 0.1182551</span></span>
+<span id="cb16-11"><a href="#cb16-11"></a><span class="kw">pdf</span>(N, <span class="dv">2</span>)</span>
+<span id="cb16-12"><a href="#cb16-12"></a><span class="co">#&gt; [1] 0.1182551</span></span>
+<span id="cb16-13"><a href="#cb16-13"></a>N <span class="op">%&gt;%</span><span class="st"> </span><span class="kw">pdf</span>(<span class="dv">2</span>)</span>
+<span id="cb16-14"><a href="#cb16-14"></a><span class="co">#&gt; [1] 0.1182551</span></span></code></pre></div>
+</div>
+</div>
+<div id="further-documentation" class="section level2">
+<h2>Further Documentation</h2>
+<ul>
+<li><a href="https://alan-turing-institute.github.io/distr6/articles/webs/intro_to_r6.html">Tutorials</a></li>
+<li><a href="https://alan-turing-institute.github.io/distr6/articles/webs/preliminaries.html">Extension guidelines</a></li>
+<li><a href="https://github.com/alan-turing-institute/distr6/wiki">Project Wiki</a></li>
+</ul>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

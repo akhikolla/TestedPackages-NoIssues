@@ -1,0 +1,15 @@
+WARNING: No test specified, defaulting to first test defined (ddsPLS_deepstate_test_scaleRcpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/ddsPLS/inst/testfiles/scaleRcpp/scaleRcpp_output/4ebf16c25170f6d66768ebdc771b3177f270932e.pass`
+TRACE: Running: ddsPLS_deepstate_test_scaleRcpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/ddsPLS/inst/testfiles/scaleRcpp/scaleRcpp_DeepState_TestHarness.cpp(13)
+input starts
+Missing value
+EXTERNAL: qs v0.23.4.
+
+x values: 1.02532e+261 1.12756e-57     nan
+1.46340e+288     inf 4.12846e-51
+5.67165e-306 4.85713e-272     inf
+    nan     inf 61.3403
+5.43908e-105 3.30698e+94 6.30847e-13
+
+input ends
+TRACE: Passed: ddsPLS_deepstate_test_scaleRcpp_test

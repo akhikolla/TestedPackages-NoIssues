@@ -1,0 +1,13 @@
+WARNING: No test specified, defaulting to first test defined (DtD_deepstate_test_BS_call_cpp_test)
+TRACE: Initialized test input buffer with data from `/home/akhila/fuzzer_packages/fuzzedpackages/DtD/inst/testfiles/BS_call_cpp/BS_call_cpp_output/337bb9ccf3b5fcbe98aa8ad366f37e2b1a6d3393.pass`
+TRACE: Running: DtD_deepstate_test_BS_call_cpp_test from /home/akhila/fuzzer_packages/fuzzedpackages/DtD/inst/testfiles/BS_call_cpp/BS_call_cpp_DeepState_TestHarness.cpp(13)
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: 1.27048e-62
+D values: -2.88162e-134
+T values: 8.18711e+299
+r values: 0.00468189
+vol values: 9.28697e-257
+input ends
+TRACE: Passed: DtD_deepstate_test_BS_call_cpp_test

@@ -1,0 +1,66 @@
+<?xml version="1.0"?>
+
+<valgrindoutput>
+
+<protocolversion>4</protocolversion>
+<protocoltool>memcheck</protocoltool>
+
+<preamble>
+  <line>Memcheck, a memory error detector</line>
+  <line>Copyright (C) 2002-2017, and GNU GPL'd, by Julian Seward et al.</line>
+  <line>Using Valgrind-3.15.0 and LibVEX; rerun with -h for copyright info</line>
+  <line>Command: ./numSmaller_DeepState_TestHarness --input_test_file /home/akhila/fuzzer_packages/fuzzedpackages/diversityForest/inst/testfiles/numSmaller/numSmaller_output/a78160a2cfde1c87a3c508d760744e9e510b1add.pass</line>
+</preamble>
+
+<pid>792140</pid>
+<ppid>792139</ppid>
+<tool>memcheck</tool>
+
+<args>
+  <vargv>
+    <exe>/usr/bin/valgrind.bin</exe>
+    <arg>--xml=yes</arg>
+    <arg>--xml-file=/home/akhila/fuzzer_packages/fuzzedpackages/diversityForest/inst/testfiles/numSmaller/numSmaller_output/log_a78160a2cfde1c87a3c508d760744e9e510b1add/valgrind_log</arg>
+    <arg>--tool=memcheck</arg>
+    <arg>--leak-check=yes</arg>
+  </vargv>
+  <argv>
+    <exe>./numSmaller_DeepState_TestHarness</exe>
+    <arg>--input_test_file</arg>
+    <arg>/home/akhila/fuzzer_packages/fuzzedpackages/diversityForest/inst/testfiles/numSmaller/numSmaller_output/a78160a2cfde1c87a3c508d760744e9e510b1add.pass</arg>
+  </argv>
+</args>
+
+<status>
+  <state>RUNNING</state>
+  <time>00:00:00:00.042 </time>
+</status>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:09.388 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+
+
+<status>
+  <state>FINISHED</state>
+  <time>00:00:00:10.086 </time>
+</status>
+
+<errorcounts>
+</errorcounts>
+
+<suppcounts>
+</suppcounts>
+
+</valgrindoutput>
+

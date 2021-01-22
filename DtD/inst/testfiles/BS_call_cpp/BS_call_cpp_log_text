@@ -1,0 +1,66 @@
+INFO: Starting fuzzing
+WARNING: No test specified, defaulting to first test defined (DtD_deepstate_test_BS_call_cpp_test)
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: -2.43318e-187
+D values: -1.64581e+174
+T values: -1.66668e-49
+r values: 1.91698e-80
+vol values: 2.93871e+294
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: -1.5615e-299
+D values: -1.20777e+13
+T values: 2.79236e-196
+r values: 1.26379e+187
+vol values: 1.42068e+49
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: 1.27048e-62
+D values: -2.88162e-134
+T values: 8.18711e+299
+r values: 0.00468189
+vol values: 9.28697e-257
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: 3.16522e+06
+D values: 3.72126e-82
+T values: 5.29799e-243
+r values: 7.52749e+12
+vol values: -2.14488e+105
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: -1.92672e-302
+D values: -4.2952e-278
+T values: 4.24195e+22
+r values: -1.34847e-218
+vol values: 8.07634e-201
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: -8.5119e-07
+D values: -5.48117e-145
+T values: 4.79212e-250
+r values: 9.60637e+283
+vol values: 5.00463e-274
+input ends
+input starts
+EXTERNAL: qs v0.23.4.
+
+V values: -5.84486e+130
+D values: 7.96752e+95
+T values: -4.40542e-65
+r values: 9.93765e+292
+vol values: 2.32003e+83
+input ends
+INFO: Done fuzzing! Ran 7 tests (3 tests/second) with 0 failed/7 passed/0 abandoned tests
