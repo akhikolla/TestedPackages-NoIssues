@@ -1,0 +1,3 @@
+list(rate = numeric(0), shape = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0), x = numeric(0))
+testlist <- list(rate = numeric(0), shape = c(0, 0, 0, 0, 0, 0, 0, 0, 0,  0), x = numeric(0))

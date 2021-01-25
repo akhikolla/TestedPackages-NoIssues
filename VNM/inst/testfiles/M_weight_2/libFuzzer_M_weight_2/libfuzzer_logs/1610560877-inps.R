@@ -1,0 +1,4 @@
+list(T = numeric(0), W = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
+0, 0, 0, 0, 0, 0, 0, 0, 0, 0), X = numeric(0), dt = 0, inv = structure(0, .Dim = c(1L, 
+1L)), lambda = numeric(0), order = 0L)
+testlist <- list(T = numeric(0), W = c(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,  0, 0, 0, 0, 0, 0, 0, 0, 0, 0), X = numeric(0), dt = 0, inv = structure(0, .Dim = c(1L,  1L)), lambda = numeric(0), order = 0L)
